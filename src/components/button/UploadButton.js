@@ -40,10 +40,9 @@ function getFileContent(file, setFileContent) {
  * @returns {JSX.Element}
  * @constructor
  */
-function UploadButton({ ipfs }) {
+function UploadButton({ ipfs, setFileHash }) {
     const [filename, setFilename] = useState("");
     const [fileContent, setFileContent] = useState("");
-    const [fileHash, setFileHash] = useState("");
 
     const inputOnChange = async (event) => {
         extractFilename(event.target.value, setFilename);
@@ -62,8 +61,6 @@ function UploadButton({ ipfs }) {
                 <input id="upload_input" onChange={inputOnChange} type="file"/>
                 <Button id="upload_button" onClick={buttonOnClick} variant="contained" color="primary">Upload</Button>
             </div>
-            <br/>
-            {fileHash ? <div id="success">{'Success: ' + fileHash}</div> : null}
         </div>
     );
 }
