@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
 
 /**
  * Upload the content of a file to IPFS via the client and save the file's hash.
@@ -30,7 +29,7 @@ function extractFilename(filepath, setFilename) {
  * @param setFileContent - Setter from `React.useState` to retrieve the content of the file.
  */
 function getFileContent(file, setFileContent) {
-    let reader = new window.FileReader();
+    const reader = new window.FileReader();
     reader.onload = (event) => setFileContent(event.target.result);
     reader.readAsText(file);
 }
@@ -42,15 +41,13 @@ function getFileContent(file, setFileContent) {
  * @constructor
  */
 function UploadButton({ ipfs }) {
-    const [filename, setFilename] = React.useState("");
-    const [fileContent, setFileContent] = React.useState("");
-    const [fileHash, setFileHash] = React.useState("");
-    const [fileField, setFileField] = React.useState(null);
+    const [filename, setFilename] = useState("");
+    const [fileContent, setFileContent] = useState("");
+    const [fileHash, setFileHash] = useState("");
 
     const inputOnChange = async (event) => {
         extractFilename(event.target.value, setFilename);
         getFileContent(event.target.files[0], setFileContent);
-        console.log(fileContent)
     };
 
     const buttonOnClick = async () => {
@@ -62,7 +59,6 @@ function UploadButton({ ipfs }) {
     return (
         <div>
             <div id="upload">
-                <Input placeholder='Field' onChange={(event) => setFileField(event.target.value)} />
                 <input id="upload_input" onChange={inputOnChange} type="file"/>
                 <Button id="upload_button" onClick={buttonOnClick} variant="contained" color="primary">Upload</Button>
             </div>
