@@ -37,6 +37,7 @@ function getFileContent(file, setFileContent) {
 /**
  * Component Function used to retrieve a file from the user's machine & upload it to IPFS.
  * @param ipfs - IPFS Client.
+ * @param setFileHash
  * @returns {JSX.Element}
  * @constructor
  */
