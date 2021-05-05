@@ -1,0 +1,19 @@
+.app {
+    min-height: 100vh;
+}
+
+.signup-route {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: 80vh;
+}
+
+.login-route {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: 80vh;
+}
