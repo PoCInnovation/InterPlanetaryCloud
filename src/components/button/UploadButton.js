@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
+import './UploadButton.css'
 
 /**
  * Upload the content of a file to IPFS via the client and save the file's hash.

@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import './DownloadButton.css'
 
 const fileDownload = require('js-file-download');
 const all = require('it-all')

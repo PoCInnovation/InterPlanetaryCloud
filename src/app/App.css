@@ -2,7 +2,7 @@
     min-height: 100vh;
 }
 
-.signup-route {
+.route-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,10 +10,7 @@
     min-height: 80vh;
 }
 
-.login-route {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    min-height: 80vh;
+.dashboard-box {
+    width: 90%;
+    max-width: 500px;
 }

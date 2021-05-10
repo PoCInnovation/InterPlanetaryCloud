@@ -21,23 +21,30 @@ function App() {
                         <Home></Home>
                     </Route>
                     <Route path="/signup">
-                        <div className="signup-route">
+                        <div className="route-container">
                             <h3>Inter Planetary Cloud</h3>
                             <Signup></Signup>
                         </div>
                     </Route>
                     <Route path="/login">
-                        <div className="login-route">
+                        <div className="route-container">
                             <h3>Inter Planetary Cloud</h3>
                             <Login></Login>
                         </div>
                     </Route>
                     <Route path="/dashboard">
-                        <h1>Inter Planetary Cloud</h1>
-                        <h3>Upload a file</h3>
-                        <UploadButton ipfs={ipfs} setFileHash={setFileHash}/>
-                        {fileHash ? <div id="success">{'Success: ' + fileHash}</div> : null}
-                        <DownloadButton ipfs={ipfs}/>
+                        <div className="route-container">
+                            <h1>Inter Planetary Cloud</h1>
+                            <div className="dashboard-box">
+                                <h3>Upload a file</h3>
+                                <UploadButton ipfs={ipfs} setFileHash={setFileHash}/>
+                                {fileHash ? <div id="success">{'Success: ' + fileHash}</div> : null}
+                            </div>
+                            <div className="dashboard-box">
+                                <h3>Downlod a file</h3>
+                                <DownloadButton ipfs={ipfs}/>
+                            </div>
+                        </div>
                     </Route>
                 </Switch>
             </BrowserRouter>
