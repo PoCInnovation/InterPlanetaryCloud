@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import OrbitDB from "orbit-db";
 import UploadButton from '../components/button/UploadButton.js';
 import {DownloadButton} from '../components/button/DownloadButton';
 import {Signup} from '../components/forms/Signup';
@@ -32,26 +33,33 @@ identitiesTests();
 
 function App() {
     const ipfs = IPFS('http://localhost:5001');
+    const [orbit_db, setOrbitDB] = useState(null)
     const [fileHash, setFileHash] = useState("");
 
+    useEffect(() => {
+        async function initInstance() {
+            setOrbitDB(await OrbitDB.createInstance(ipfs))
+        }
+        initInstance()
+    }, [ipfs])
 
     return (
         <div className="app">
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/">
-                        <Home></Home>
+                        <Home/>
                     </Route>
                     <Route path="/signup">
                         <div className="route-container">
                             <h3>Inter Planetary Cloud</h3>
-                            <Signup></Signup>
+                            <Signup orbit_db={orbit_db}/>
                         </div>
                     </Route>
                     <Route path="/login">
                         <div className="route-container">
                             <h3>Inter Planetary Cloud</h3>
-                            <Login></Login>
+                            <Login/>
                         </div>
                     </Route>
                     <Route path="/dashboard">
@@ -63,7 +71,7 @@ function App() {
                                 {fileHash ? <div id="success">{'Success: ' + fileHash}</div> : null}
                             </div>
                             <div className="dashboard-box">
-                                <h3>Downlod a file</h3>
+                                <h3>Download a file</h3>
                                 <DownloadButton ipfs={ipfs}/>
                             </div>
                         </div>
