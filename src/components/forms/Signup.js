@@ -39,7 +39,7 @@ export function Signup() {
                     <input type="text" id="name" name="user_conf_password" onChange={confPasswordChange}></input>
                 </div>
                 <div className="signup-submit-btn">
-                    <button type="submit" onClick={displayInfos} >Sign Up</button>
+                    <button type="submit" onClick={displayInfos}>Sign Up</button>
                 </div>
             </form>
         </div>
