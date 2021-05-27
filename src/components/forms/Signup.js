@@ -15,25 +15,29 @@ export function Signup({orbit_db}) {
     const repeatPasswordChange = (event) => setRepeatPassword(event.target.value)
 
     const signUp = async (e) => {
+        var hashedPassword = "";
         e.preventDefault()
 
-        console.log("here 1")
-        const db = await orbit_db.docs('/orbitdb/zdpuAwTKuRHqs7m5ecoD3yXJ6csM26MWmakdUJKCyKyDPyaDy/ipc.users',
-            {indexBy: 'email'});
-        const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
+        /* const db = await orbit_db.docs('/orbitdb/zdpuAwTKuRHqs7m5ecoD3yXJ6csM26MWmakdUJKCyKyDPyaDy/ipc.users',
+            {indexBy: 'email'}); */
 
-        await db.load()
-        if (db.get(email) !== null) {
+        /* await db.load() */
+        /* if (db.get(email) !== null) {
             console.log("user exist!")
             return
-        }
+        } */
         if (password !== repeatPassword) {
             console.log("password doesn't matches with repeat password")
             return
         }
-        await db.put({_id: email, email: email, username: username, password: hashedPassword})
-        console.log('user created')
-        console.log(db.get(email))
+        hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
+        /* await db.put({_id: email, email: email, username: username, password: hashedPassword}) */
+        /* console.log('user created')
+        console.log(db.get(email)) */
+        console.log(`email = ${email}`)
+        console.log(`username = ${username}`)
+        console.log(`password = ${password}`)
+        console.log(`hashedPassword = ${hashedPassword}`)
     }
 
     return (
@@ -49,11 +53,11 @@ export function Signup({orbit_db}) {
                 </div>
                 <div className="signup-form-field">
                     <label>password</label>
-                    <input type="password" id="name" name="user_password" onChange={passwordChange}/>
+                    <input type="password" id="password" name="user_password" onChange={passwordChange}/>
                 </div>
                 <div className="signup-form-field">
                     <label>confirm-password</label>
-                    <input type="password" id="name" name="user_repeat_password" onChange={repeatPasswordChange}/>
+                    <input type="password" id="confirm-password" name="user_repeat_password" onChange={repeatPasswordChange}/>
                 </div>
                 <div className="signup-submit-btn">
                     <button type="submit">Sign Up</button>
