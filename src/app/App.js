@@ -9,27 +9,6 @@ import Home from '../components/Home';
 import './App.css';
 
 const IPFS = require('ipfs-http-client');
-const Identities = require('orbit-db-identity-provider');
-
-async function identitiesTests() {
-    var options = { id: 'my personnal id 1' };
-    var identity = await Identities.createIdentity(options);
-    console.log(identity.toJSON());
-    var id = await identity.id;
-    console.log(id);
-    var valid = await Identities.verifyIdentity(identity);
-    console.log(valid);
-
-    var options = { id: 'my personnal id 2' };
-    var identity = await Identities.createIdentity(options);
-    console.log(identity.toJSON());
-    var id = await identity.id;
-    console.log(id);
-    var valid = await Identities.verifyIdentity(identity);
-    console.log(valid);
-}
-
-identitiesTests();
 
 function App() {
     const ipfs = IPFS('http://localhost:5001');

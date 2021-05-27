@@ -17,6 +17,25 @@ export function Signup({orbit_db}) {
     const signUp = async (e) => {
         e.preventDefault()
 
+        const users = await orbit_db.keyvalue('/orbitdb/zdpuAvYaDhCxMxk9ATkUWLCkMYkm1oXfR1H2GNAKssWHPmBaA/ipc.users');
+
+        await users.load()
+        if (password !== repeatPassword) {
+            console.log("password doesn't matches with repeat password")
+        } else if (users.get(email) !== undefined) {
+            console.log("user already exists")
+        } else {
+            const user = await orbit_db.docs('ipc.user.' + email)
+
+            await user.put({_id: email, password: password, data: {}})
+            await users.put(email, {_id: user.address.toString()})
+            console.log(user)
+        }
+    }
+
+    /*const signUp = async (e) => {
+        e.preventDefault()
+
         console.log("here 1")
         const db = await orbit_db.docs('/orbitdb/zdpuAwTKuRHqs7m5ecoD3yXJ6csM26MWmakdUJKCyKyDPyaDy/ipc.users',
             {indexBy: 'email'});
@@ -34,7 +53,7 @@ export function Signup({orbit_db}) {
         await db.put({_id: email, email: email, username: username, password: hashedPassword})
         console.log('user created')
         console.log(db.get(email))
-    }
+    } */
 
     return (
         <div className="signup-container">
