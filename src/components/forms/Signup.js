@@ -14,6 +14,22 @@ export function Signup({orbit_db}) {
     const repeatPasswordChange = (event) => setRepeatPassword(event.target.value)
 
     const signUp = async (e) => {
+        e.preventDefault()
+
+        const users = await orbit_db.keyvalue('/orbitdb/zdpuAsw4HXJNPKRXWKmT78HpFmHyLkwbaXS3LKeZXQF6rLHsC/ipc.users');
+
+        await users.load()
+        if (password !== repeatPassword) {
+            console.log("password doesn't matches with repeat password")
+        } else if (users.get(email) !== undefined) {
+            console.log("user already exists")
+        } else {
+            const user = await orbit_db.docs('ipc.user.' + email)
+
+            await user.put({_id: email, password: password, data: {}})
+            await users.put(email, {_id: user.address.toString()})
+            console.log(user)
+        }
     }
 
     return (
