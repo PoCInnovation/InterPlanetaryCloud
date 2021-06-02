@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import './Signup.css'
 
 const bcrypt = require('bcryptjs');
-const interfaceIpfsCore = require('interface-ipfs-core');
+const salt = bcrypt.genSaltSync(10);
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.REACT_APP_JWT_SECRET
+const KEYVALUE_DB_ADDRESS = process.env.REACT_APP_KEYVALUE_DB_ADDRESS;
 
-export function Signup({orbit_db}) {
+export function Signup({orbit_db, setToken}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
@@ -16,7 +19,7 @@ export function Signup({orbit_db}) {
     const signUp = async (e) => {
         e.preventDefault()
 
-        const users = await orbit_db.keyvalue('/orbitdb/zdpuAsw4HXJNPKRXWKmT78HpFmHyLkwbaXS3LKeZXQF6rLHsC/ipc.users');
+        const users = await orbit_db.keyvalue(KEYVALUE_DB_ADDRESS);
 
         await users.load()
         if (password !== repeatPassword) {
@@ -25,10 +28,17 @@ export function Signup({orbit_db}) {
             console.log("user already exists")
         } else {
             const user = await orbit_db.docs('ipc.user.' + email)
+            const hash = bcrypt.hashSync(password, salt)
 
-            await user.put({_id: email, password: password, data: {}})
+            await user.put({ _id: email, password: hash, data:{} })
             await users.put(email, {_id: user.address.toString()})
-            console.log(user)
+            const playload = {
+                email: email,
+                password: password
+            }
+            const token = jwt.sign(playload, JWT_SECRET)
+            setToken(token)
+            console.log(token)
         }
     }
 

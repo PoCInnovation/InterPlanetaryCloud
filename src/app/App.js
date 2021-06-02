@@ -14,6 +14,7 @@ function App() {
     const ipfs = IPFS('http://localhost:5001');
     const [orbit_db, setOrbitDB] = useState(null)
     const [fileHash, setFileHash] = useState("");
+    const [token, setToken] = useState("no token");
 
     useEffect(() => {
         async function initInstance() {
@@ -32,13 +33,13 @@ function App() {
                     <Route path="/signup">
                         <div className="route-container">
                             <h3>Inter Planetary Cloud</h3>
-                            <Signup orbit_db={orbit_db}/>
+                            <Signup orbit_db={orbit_db} setToken={setToken}/>
                         </div>
                     </Route>
                     <Route path="/login">
                         <div className="route-container">
                             <h3>Inter Planetary Cloud</h3>
-                            <Login/>
+                            <Login orbit_db={orbit_db} setToken={setToken}/>
                         </div>
                     </Route>
                     <Route path="/dashboard">
