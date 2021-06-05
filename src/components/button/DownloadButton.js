@@ -3,8 +3,12 @@ import Button from '@material-ui/core/Button';
 import './DownloadButton.css'
 
 const fileDownload = require('js-file-download');
-const all = require('it-all')
-const concat = require('it-concat')
+const all = require('it-all');
+const concat = require('it-concat');
+
+const CryptoJS = require("crypto-js");
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
 
 /**
  * Download the content of a file from IPFS via the client & hash, then extract it via the setter.
@@ -14,8 +18,12 @@ const concat = require('it-concat')
  */
 async function downloadFromIPFS(ipfs, hash) {
     const result = await all(ipfs.get(hash));
-    console.log(result)
-    const fileContent = await concat(result[0].content);
+    const bufferList = await concat(result[0].content);
+    const hashFileContent = bufferList._bufs[0].toString();
+    const password = jwt.verify(localStorage.token, JWT_SECRET).password;
+    const bytes = CryptoJS.AES.decrypt(hashFileContent, password);
+    const fileContent = bytes.toString(CryptoJS.enc.Utf8);
+
     return (fileContent);
 }
 
@@ -36,7 +44,15 @@ export function DownloadButton({ipfs}) {
         const blob = new Blob([data]);
         fileDownload(blob, hash + '.txt');
     }
-    const inputOnChange = (event) => setHash(event.target.value);
+    const inputOnChange = (event) => {
+        const token = localStorage.token;
+
+        if (token !== undefined) {
+            setHash(event.target.value);
+        } else {
+            console.log("user has no token")
+        }
+    }
 
     return (
         <div>

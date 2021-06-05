@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import './UploadButton.css'
 
+const CryptoJS = require("crypto-js");
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
+
 /**
  * Upload the content of a file to IPFS via the client and save the file's hash.
  * @param ipfs - IPFS Client.
@@ -11,6 +15,7 @@ import './UploadButton.css'
  */
 async function uploadToIPFS(ipfs, fileContent, setFileHash) {
     const result = await ipfs.add(fileContent);
+
     await setFileHash(result.path);
 }
 
@@ -21,6 +26,7 @@ async function uploadToIPFS(ipfs, fileContent, setFileHash) {
  */
 function extractFilename(filepath, setFilename) {
     const result = /[^\\]*$/.exec(filepath)[0];
+
     setFilename(result);
 }
 
@@ -31,7 +37,13 @@ function extractFilename(filepath, setFilename) {
  */
 function getFileContent(file, setFileContent) {
     const reader = new window.FileReader();
-    reader.onload = (event) => setFileContent(event.target.result);
+    const token = localStorage.token;
+    const password = jwt.verify(token, JWT_SECRET).password;
+
+    reader.onload = (event) => {
+        const hashFileContent = CryptoJS.AES.encrypt(event.target.result, password).toString();
+        setFileContent(hashFileContent);
+    }
     reader.readAsText(file);
 }
 
@@ -47,8 +59,14 @@ function UploadButton({ ipfs, setFileHash }) {
     const [fileContent, setFileContent] = useState("");
 
     const inputOnChange = async (event) => {
-        extractFilename(event.target.value, setFilename);
-        getFileContent(event.target.files[0], setFileContent);
+        const token = localStorage.token;
+
+        if (token !== undefined) {
+            extractFilename(event.target.value, setFilename);
+            getFileContent(event.target.files[0], setFileContent);
+        } else {
+            console.log("user has no token")
+        }
     };
 
     const buttonOnClick = async () => {

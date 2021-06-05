@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const KEYVALUE_DB_ADDRESS = process.env.REACT_APP_KEYVALUE_DB_ADDRESS
 const JWT_SECRET = process.env.REACT_APP_JWT_SECRET
 
-export function Login({orbit_db, setToken}) {
+export function Login({orbit_db}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -36,8 +36,8 @@ export function Login({orbit_db, setToken}) {
                 password: password
             }
             const token = jwt.sign(playload, JWT_SECRET)
-            setToken(token)
-            console.log(token)
+            localStorage.setItem('token', token);
+            console.log(localStorage.token)
         }
     }
 
