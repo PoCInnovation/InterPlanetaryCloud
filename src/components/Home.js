@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import './Home.css'
+import { Link } from "react-router-dom";
+import "./Home.css";
 
 function Home() {
     return (
@@ -13,7 +13,7 @@ function Home() {
                 <Link className="home-btn border-green" to="/signup">
                     Sign Up
                 </Link>
-                <div id="home-login-container">
+                <div className="home-login-container">
                     <p>Already an account ?</p>
                     <Link className="home-btn border-blue" to="/login">
                         Log in

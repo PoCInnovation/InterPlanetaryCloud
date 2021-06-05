@@ -1,13 +1,15 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import './DownloadButton.css'
+import React from "react";
+import Button from "@material-ui/core/Button";
+import "./DownloadButton.css";
 
-const fileDownload = require('js-file-download');
-const all = require('it-all');
-const concat = require('it-concat');
+import fileDownload from "js-file-download";
+import all from "it-all";
+import concat from "it-concat";
 
-const CryptoJS = require("crypto-js");
-const jwt = require('jsonwebtoken');
+import CryptoJS from "crypto-js";
+
+import jwt from "jsonwebtoken";
+
 const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
 
 /**
@@ -24,7 +26,7 @@ async function downloadFromIPFS(ipfs, hash) {
     const bytes = CryptoJS.AES.decrypt(hashFileContent, password);
     const fileContent = bytes.toString(CryptoJS.enc.Utf8);
 
-    return (fileContent);
+    return fileContent;
 }
 
 /**
@@ -34,34 +36,45 @@ async function downloadFromIPFS(ipfs, hash) {
  * @returns {JSX.Element}
  * @constructor
  */
-export function DownloadButton({ipfs}) {
+function DownloadButton({ ipfs }) {
     const [hash, setHash] = React.useState("");
 
     const handleClick = async () => {
-        if (!hash)
-            return;
+        if (!hash) return;
         const data = await downloadFromIPFS(ipfs, hash);
         const blob = new Blob([data]);
-        fileDownload(blob, hash + '.txt');
-    }
+        fileDownload(blob, hash + ".txt");
+    };
     const inputOnChange = (event) => {
         const token = localStorage.token;
 
-        if (token !== undefined) {
+        if (token) {
             setHash(event.target.value);
         } else {
-            console.log("user has no token")
+            console.log("user has no token");
         }
-    }
+    };
 
     return (
         <div>
-            <div id="download">
-                <input id="download_input" onChange={inputOnChange} type="text" name="HashField"/>
-                <Button id="download_button" onClick={handleClick} variant="contained" color="primary">
+            <div className="download">
+                <input
+                    className="download_input"
+                    onChange={inputOnChange}
+                    type="text"
+                    name="HashField"
+                />
+                <Button
+                    className="download_button"
+                    onClick={handleClick}
+                    variant="contained"
+                    color="primary"
+                >
                     Download
                 </Button>
             </div>
         </div>
     );
 }
+
+export default DownloadButton;

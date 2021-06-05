@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import './UploadButton.css'
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import "./UploadButton.css";
 
-const CryptoJS = require("crypto-js");
-const jwt = require('jsonwebtoken');
+import CryptoJS from "crypto-js";
+
+import jwt from "jsonwebtoken";
+
 const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
 
 /**
@@ -41,9 +43,12 @@ function getFileContent(file, setFileContent) {
     const password = jwt.verify(token, JWT_SECRET).password;
 
     reader.onload = (event) => {
-        const hashFileContent = CryptoJS.AES.encrypt(event.target.result, password).toString();
+        const hashFileContent = CryptoJS.AES.encrypt(
+            event.target.result,
+            password
+        ).toString();
         setFileContent(hashFileContent);
-    }
+    };
     reader.readAsText(file);
 }
 
@@ -61,25 +66,31 @@ function UploadButton({ ipfs, setFileHash }) {
     const inputOnChange = async (event) => {
         const token = localStorage.token;
 
-        if (token !== undefined) {
+        if (token) {
             extractFilename(event.target.value, setFilename);
             getFileContent(event.target.files[0], setFileContent);
         } else {
-            console.log("user has no token")
+            console.log("user has no token");
         }
     };
 
     const buttonOnClick = async () => {
-        if (!filename || !fileContent || !ipfs)
-            return;
+        if (!filename || !fileContent || !ipfs) return;
         await uploadToIPFS(ipfs, fileContent, setFileHash);
     };
 
     return (
         <div>
             <div id="upload">
-                <input id="upload_input" onChange={inputOnChange} type="file"/>
-                <Button id="upload_button" onClick={buttonOnClick} variant="contained" color="primary">Upload</Button>
+                <input id="upload_input" onChange={inputOnChange} type="file" />
+                <Button
+                    id="upload_button"
+                    onClick={buttonOnClick}
+                    variant="contained"
+                    color="primary"
+                >
+                    Upload
+                </Button>
             </div>
         </div>
     );
