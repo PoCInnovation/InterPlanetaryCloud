@@ -23,26 +23,29 @@ function Signup({ orbit_db }) {
     const signUp = async (e) => {
         e.preventDefault();
 
-        const users = await orbit_db.keyvalue(KEYVALUE_DB_ADDRESS);
+        try {
+            const users = await orbit_db.keyvalue(KEYVALUE_DB_ADDRESS);
+            await users.load();
+            if (password !== repeatPassword) {
+                console.log("password doesn't matches with repeat password");
+            } else if (users.get(email)) {
+                console.log("user already exists");
+            } else {
+                const user = await orbit_db.docs("ipc.user." + email);
+                const hash = bcrypt.hashSync(password, salt);
 
-        await users.load();
-        if (password !== repeatPassword) {
-            console.log("password doesn't matches with repeat password");
-        } else if (users.get(email)) {
-            console.log("user already exists");
-        } else {
-            const user = await orbit_db.docs("ipc.user." + email);
-            const hash = bcrypt.hashSync(password, salt);
-
-            await user.put({ _id: email, password: hash, data: {} });
-            await users.put(email, { _id: user.address.toString() });
-            const playload = {
-                email,
-                password,
-            };
-            const token = jwt.sign(playload, JWT_SECRET);
-            localStorage.setItem("token", token);
-            console.log(localStorage.token);
+                await user.put({_id: email, password: hash, data: {}});
+                await users.put(email, {_id: user.address.toString()});
+                const payload = {
+                    email,
+                    password,
+                };
+                const token = jwt.sign(payload, JWT_SECRET);
+                localStorage.setItem("token", token);
+                console.log(localStorage.token);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
