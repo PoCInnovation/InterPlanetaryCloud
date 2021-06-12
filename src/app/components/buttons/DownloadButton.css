@@ -1,11 +1,11 @@
-.download_input {
+.download-input {
     width: calc(100% - 4px);
     border: 1px solid black;
     border-radius: 2px;
     padding: 2px 2px;
 }
 
-.download_button {
+.download-button {
     margin-top: 10px;
     width: 100%;
 }

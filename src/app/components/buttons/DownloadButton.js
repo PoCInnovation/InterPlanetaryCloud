@@ -68,23 +68,21 @@ function DownloadButton({ ipfs }) {
     };
 
     return (
-        <div>
-            <div className="download">
-                <input
-                    className="download_input"
-                    onChange={inputOnChange}
-                    type="text"
-                    name="HashField"
-                />
-                <Button
-                    className="download_button"
-                    onClick={handleClick}
-                    variant="contained"
-                    color="primary"
-                >
-                    Download
-                </Button>
-            </div>
+        <div className="download-container">
+            <input
+                className="download-input"
+                onChange={inputOnChange}
+                type="text"
+                name="HashField"
+            />
+            <Button
+                className="download-button"
+                onClick={handleClick}
+                variant="contained"
+                color="primary"
+            >
+                Download
+            </Button>
         </div>
     );
 }

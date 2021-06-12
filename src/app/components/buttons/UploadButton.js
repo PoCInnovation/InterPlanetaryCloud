@@ -88,18 +88,20 @@ function UploadButton({ ipfs, setFileHash }) {
     };
 
     return (
-        <div>
-            <div id="upload">
-                <input id="upload_input" onChange={inputOnChange} type="file" />
-                <Button
-                    id="upload_button"
-                    onClick={buttonOnClick}
-                    variant="contained"
-                    color="primary"
-                >
-                    Upload
-                </Button>
-            </div>
+        <div className="upload-container">
+            <input
+                className="upload-input"
+                onChange={inputOnChange}
+                type="file"
+            />
+            <Button
+                className="upload-button"
+                onClick={buttonOnClick}
+                variant="contained"
+                color="primary"
+            >
+                Upload
+            </Button>
         </div>
     );
 }
