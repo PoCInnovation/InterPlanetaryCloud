@@ -5,8 +5,7 @@ import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
-const KEYVALUE_DB_ADDRESS = process.env.REACT_APP_KEYVALUE_DB_ADDRESS;
+import { JWT_SECRET, KEYVALUE_DB_ADDRESS } from "../../../config/Environment";
 
 function Login({ orbit_db }) {
     const [email, setEmail] = useState("");
@@ -18,22 +17,20 @@ function Login({ orbit_db }) {
     const logIn = async (e) => {
         e.preventDefault();
 
-        let user = undefined;
-        let validPassword = false;
-
         try {
             const users = await orbit_db.keyvalue(KEYVALUE_DB_ADDRESS);
+            let validPassword = undefined;
 
             await users.load();
-            const user_id = await users.get(email);
+            const userId = await users.get(email);
 
-            if (user_id) {
-                user = await orbit_db.docs(user_id._id);
+            if (userId) {
+                const user = await orbit_db.docs(userId._id);
                 await user.load();
                 const hash = await user.get(email)[0].password;
                 validPassword = bcrypt.compareSync(password, hash);
             }
-            if (!user_id || !validPassword) {
+            if (!userId || !validPassword) {
                 console.log("Invalid email or password");
                 return;
             }

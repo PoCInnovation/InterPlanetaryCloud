@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js";
 
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
+import { JWT_SECRET } from "../../../config/Environment";
 
 /**
  * Download the content of a file from IPFS via the client & hash, then extract it via the setter.
@@ -19,12 +19,18 @@ const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
  * @returns {Promise<void>}
  */
 async function downloadFromIPFS(ipfs, hash) {
-    const result = await all(ipfs.get(hash));
-    const bufferList = await concat(result[0].content);
-    const hashFileContent = bufferList._bufs[0].toString();
-    const password = jwt.verify(localStorage.token, JWT_SECRET).password;
-    const bytes = CryptoJS.AES.decrypt(hashFileContent, password);
-    const fileContent = bytes.toString(CryptoJS.enc.Utf8);
+    let fileContent = undefined;
+
+    try {
+        const result = await all(ipfs.get(hash));
+        const bufferList = await concat(result[0].content);
+        const hashFileContent = bufferList._bufs[0].toString();
+        const password = jwt.verify(localStorage.token, JWT_SECRET).password;
+        const bytes = CryptoJS.AES.decrypt(hashFileContent, password);
+        fileContent = bytes.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+        console.log(error);
+    }
 
     return fileContent;
 }
@@ -41,10 +47,16 @@ function DownloadButton({ ipfs }) {
 
     const handleClick = async () => {
         if (!hash) return;
-        const data = await downloadFromIPFS(ipfs, hash);
-        const blob = new Blob([data]);
-        fileDownload(blob, hash + ".txt");
+
+        try {
+            const data = await downloadFromIPFS(ipfs, hash);
+            const blob = new Blob([data]);
+            fileDownload(blob, hash + ".txt");
+        } catch (error) {
+            console.log(error);
+        }
     };
+
     const inputOnChange = (event) => {
         const token = localStorage.token;
 

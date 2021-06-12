@@ -6,7 +6,7 @@ import CryptoJS from "crypto-js";
 
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
+import { JWT_SECRET } from "../../../config/Environment";
 
 /**
  * Upload the content of a file to IPFS via the client and save the file's hash.
@@ -16,9 +16,12 @@ const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
  * @returns {Promise<void>}
  */
 async function uploadToIPFS(ipfs, fileContent, setFileHash) {
-    const result = await ipfs.add(fileContent);
-
-    await setFileHash(result.path);
+    try {
+        const result = await ipfs.add(fileContent);
+        await setFileHash(result.path);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 /**
@@ -76,7 +79,12 @@ function UploadButton({ ipfs, setFileHash }) {
 
     const buttonOnClick = async () => {
         if (!filename || !fileContent || !ipfs) return;
-        await uploadToIPFS(ipfs, fileContent, setFileHash);
+
+        try {
+            await uploadToIPFS(ipfs, fileContent, setFileHash);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (

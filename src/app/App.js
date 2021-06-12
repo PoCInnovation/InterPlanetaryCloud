@@ -1,69 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import IPFS from "ipfs-http-client";
 import OrbitDB from "orbit-db";
 
-import UploadButton from "../components/button/UploadButton.js";
-import DownloadButton from "../components/button/DownloadButton";
-import Signup from "../components/forms/Signup";
-import Login from "../components/forms/Login";
-import Home from "../components/Home";
+import Ipfs from "../config/Ipfs";
+
+import HomePage from "./pages/HomePage";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
 import "./App.css";
 
 function App() {
-    const ipfs = IPFS("http://localhost:5001");
     const [orbit_db, setOrbitDB] = useState(null);
-    const [fileHash, setFileHash] = useState("");
 
     useEffect(() => {
         async function initInstance() {
-            setOrbitDB(await OrbitDB.createInstance(ipfs));
+            setOrbitDB(await OrbitDB.createInstance(Ipfs));
         }
         initInstance();
-    }, [ipfs]);
+    });
 
     return (
         <div className="app">
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/">
-                        <Home />
+                        <HomePage />
                     </Route>
                     <Route path="/signup">
-                        <div className="route-container">
-                            <h3>Inter Planetary Cloud</h3>
-                            <Signup orbit_db={orbit_db} />
-                        </div>
+                        <SignupPage orbit_db={orbit_db} />
                     </Route>
                     <Route path="/login">
-                        <div className="route-container">
-                            <h3>Inter Planetary Cloud</h3>
-                            <Login orbit_db={orbit_db} />
-                        </div>
+                        <LoginPage orbit_db={orbit_db} />
                     </Route>
                     <Route path="/dashboard">
-                        <div className="route-container">
-                            <h1>Inter Planetary Cloud</h1>
-                            <div className="dashboard-box">
-                                <h3>Upload a file</h3>
-                                <UploadButton
-                                    ipfs={ipfs}
-                                    setFileHash={setFileHash}
-                                />
-                                {fileHash ? (
-                                    <div id="success">
-                                        {"Success: " + fileHash}
-                                    </div>
-                                ) : (
-                                    <div />
-                                )}
-                            </div>
-                            <div className="dashboard-box">
-                                <h3>Download a file</h3>
-                                <DownloadButton ipfs={ipfs} />
-                            </div>
-                        </div>
+                        <DashboardPage ipfs={Ipfs} />
                     </Route>
                 </Switch>
             </BrowserRouter>

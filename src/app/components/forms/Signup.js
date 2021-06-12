@@ -5,10 +5,9 @@ import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
-const salt = bcrypt.genSaltSync(10);
+import { JWT_SECRET, KEYVALUE_DB_ADDRESS } from "../../../config/Environment";
 
-const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
-const KEYVALUE_DB_ADDRESS = process.env.REACT_APP_KEYVALUE_DB_ADDRESS;
+const salt = bcrypt.genSaltSync(10);
 
 function Signup({ orbit_db }) {
     const [email, setEmail] = useState("");
@@ -28,22 +27,24 @@ function Signup({ orbit_db }) {
             await users.load();
             if (password !== repeatPassword) {
                 console.log("password doesn't matches with repeat password");
-            } else if (users.get(email)) {
-                console.log("user already exists");
-            } else {
-                const user = await orbit_db.docs("ipc.user." + email);
-                const hash = bcrypt.hashSync(password, salt);
-
-                await user.put({_id: email, password: hash, data: {}});
-                await users.put(email, {_id: user.address.toString()});
-                const payload = {
-                    email,
-                    password,
-                };
-                const token = jwt.sign(payload, JWT_SECRET);
-                localStorage.setItem("token", token);
-                console.log(localStorage.token);
+                return;
             }
+            if (users.get(email)) {
+                console.log("user already exists");
+                return;
+            }
+            const user = await orbit_db.docs("ipc.user." + email);
+            const hash = bcrypt.hashSync(password, salt);
+
+            await user.put({ _id: email, password: hash, data: {} });
+            await users.put(email, { _id: user.address.toString() });
+            const payload = {
+                email,
+                password,
+            };
+            const token = jwt.sign(payload, JWT_SECRET);
+            localStorage.setItem("token", token);
+            console.log(localStorage.token);
         } catch (error) {
             console.log(error);
         }
