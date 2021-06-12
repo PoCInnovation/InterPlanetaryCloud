@@ -1,20 +1,44 @@
-import React, { useState } from 'react';
-import UploadButton from '../components/button/UploadButton.js';
-import {DownloadButton} from "../components/button/DownloadButton";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-const IPFS = require('ipfs-http-client');
+import OrbitDB from "orbit-db";
+
+import Ipfs from "../config/Ipfs";
+
+import HomePage from "./pages/HomePage";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import "./App.css";
 
 function App() {
-    const ipfs = IPFS('http://localhost:5001');
-    const [fileHash, setFileHash] = useState("");
+    const [orbit_db, setOrbitDB] = useState(null);
+
+    useEffect(() => {
+        async function initInstance() {
+            setOrbitDB(await OrbitDB.createInstance(Ipfs));
+        }
+        initInstance();
+    });
 
     return (
-        <div className="App">
-            <h1>Inter Planetary Cloud</h1>
-            <h3>Upload a file</h3>
-            <UploadButton ipfs={ipfs} setFileHash={setFileHash}/>
-            {fileHash ? <div id="success">{'Success: ' + fileHash}</div> : null}
-            <DownloadButton ipfs={ipfs}/>
+        <div className="app">
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/">
+                        <HomePage />
+                    </Route>
+                    <Route path="/signup">
+                        <SignupPage orbit_db={orbit_db} />
+                    </Route>
+                    <Route path="/login">
+                        <LoginPage orbit_db={orbit_db} />
+                    </Route>
+                    <Route path="/dashboard">
+                        <DashboardPage ipfs={Ipfs} />
+                    </Route>
+                </Switch>
+            </BrowserRouter>
         </div>
     );
 }

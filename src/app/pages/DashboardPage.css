@@ -1,0 +1,12 @@
+.dashboard-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: 80vh;
+}
+
+.dashboard-box {
+    width: 90%;
+    max-width: 500px;
+}

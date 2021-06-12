@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html, body, #root {
+    min-height: 100vh;
+}
+
+input:focus-visible {
+    outline: none;
+}
+
+form:focus-visible {
+    outline: none;
+}
