@@ -1,11 +1,15 @@
 import Login from "../components/forms/Login";
 import "./LoginPage.css";
 
-function LoginPage({ orbit_db }) {
+function LoginPage({ orbitDB, usersKV, setUserDocs }) {
     return (
         <div className="login-page-container">
             <h3>Inter Planetary Cloud</h3>
-            <Login orbit_db={orbit_db} />
+            <Login
+                orbitDB={orbitDB}
+                usersKV={usersKV}
+                setUserDocs={setUserDocs}
+            />
         </div>
     );
 }

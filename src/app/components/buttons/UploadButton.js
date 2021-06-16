@@ -6,23 +6,9 @@ import CryptoJS from "crypto-js";
 
 import jwt from "jsonwebtoken";
 
-import { JWT_SECRET } from "../../../config/Environment";
+import { nanoid } from "nanoid";
 
-/**
- * Upload the content of a file to IPFS via the client and save the file's hash.
- * @param ipfs - IPFS Client.
- * @param fileContent {string} - Content of the file to upload.
- * @param setFileHash - Setter from `React.useState` to retrieve the ipfs hash of the file.
- * @returns {Promise<void>}
- */
-async function uploadToIPFS(ipfs, fileContent, setFileHash) {
-    try {
-        const result = await ipfs.add(fileContent);
-        await setFileHash(result.path);
-    } catch (error) {
-        console.log(error);
-    }
-}
+import { JWT_SECRET } from "../../../config/Environment";
 
 /**
  * Extract the filename from a filepath.
@@ -62,26 +48,26 @@ function getFileContent(file, setFileContent) {
  * @returns {JSX.Element}
  * @constructor
  */
-function UploadButton({ ipfs, setFileHash }) {
+function UploadButton({ userDocs, setUserDocs, setFiles }) {
     const [filename, setFilename] = useState("");
     const [fileContent, setFileContent] = useState("");
 
     const inputOnChange = async (event) => {
-        const token = localStorage.token;
-
-        if (token) {
-            extractFilename(event.target.value, setFilename);
-            getFileContent(event.target.files[0], setFileContent);
-        } else {
-            console.log("user has no token");
-        }
+        extractFilename(event.target.value, setFilename);
+        getFileContent(event.target.files[0], setFileContent);
     };
 
     const buttonOnClick = async () => {
-        if (!filename || !fileContent || !ipfs) return;
-
+        if (filename === "" || fileContent === "") return;
         try {
-            await uploadToIPFS(ipfs, fileContent, setFileHash);
+            await userDocs.put({
+                _id: nanoid(),
+                name: filename,
+                created_at: Date.now(),
+                data: { content: fileContent },
+            });
+            setUserDocs(userDocs);
+            setFiles(await userDocs.get(""));
         } catch (error) {
             console.log(error);
         }
