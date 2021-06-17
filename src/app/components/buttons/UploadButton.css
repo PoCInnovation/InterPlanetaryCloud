@@ -1,4 +1,38 @@
-.upload-button {
+/*.upload-input {
+    opacity: 0.7;
+    transition: all 0.3s ease-out;
     margin-top: 10px;
-    width: 100%;
+    width: 75%;
+    border: 1px solid #009718 !important;
+    box-shadow: 0px 0px 1px #009718 !important;
+    background-color: #FFFF !important;
+    border-radius: 24px !important;
+    height: 40px;
+    color: #009718 !important;
+    font-weight: bold !important;
+}
+
+.upload-input:hover {
+    transition: all 0.3s ease-out;
+    opacity: 1;
+    transform: scale(1.1);
+}*/
+
+.upload-input {
+  color: transparent;
+}
+
+.upload-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.upload-input::before {
+  content: 'Upload a file';
+  color: black;
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
 }

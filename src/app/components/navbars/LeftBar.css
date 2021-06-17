@@ -1,0 +1,7 @@
+.left-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 5px 0px 24px rgba(0, 0, 0, 0.15);
+    border-radius: 0px 16px 16px 0px;
+}

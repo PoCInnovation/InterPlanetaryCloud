@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import "./Login.css";
+import { Redirect } from "react-router-dom";
 
 import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
+
+import "./Login.css";
 
 import { JWT_SECRET } from "../../../config/Environment";
 
@@ -41,11 +43,23 @@ function Login({ orbitDB, usersKV, setUserDocs }) {
             const token = jwt.sign(payload, JWT_SECRET);
             localStorage.setItem("token", token);
             setUserDocs(userDocs);
-            console.log(localStorage.token);
         } catch (error) {
             console.log(error);
         }
     };
+
+    const isUserLog = () => {
+        return jwt.verify(
+            localStorage.token,
+            JWT_SECRET,
+            function (err, decoded) {
+                if (!err && decoded.docsAddress) return true;
+                return false;
+            }
+        );
+    };
+
+    if (isUserLog()) return <Redirect to={"/dashboard"} />;
 
     return (
         <div className="login-container">

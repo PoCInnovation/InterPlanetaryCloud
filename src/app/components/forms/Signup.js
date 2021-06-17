@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import "./Signup.css";
+import { Redirect } from "react-router-dom";
 
 import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
+
+import "./Signup.css";
 
 import { JWT_SECRET } from "../../../config/Environment";
 
@@ -46,11 +48,23 @@ function Signup({ orbitDB, usersKV, setUsersKV, setUserDocs }) {
             localStorage.setItem("token", token);
             setUsersKV(usersKV);
             setUserDocs(userDocs);
-            console.log(localStorage.token);
         } catch (error) {
             console.log(error);
         }
     };
+
+    const isUserLog = () => {
+        return jwt.verify(
+            localStorage.token,
+            JWT_SECRET,
+            function (err, decoded) {
+                if (!err && decoded.docsAddress) return true;
+                return false;
+            }
+        );
+    };
+
+    if (isUserLog()) return <Redirect to={"/dashboard"} />;
 
     return (
         <div className="signup-container">
