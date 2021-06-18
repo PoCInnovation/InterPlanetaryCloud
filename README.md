@@ -2,12 +2,12 @@
 A personal file storage and management system built on top of [IPFS](https://ipfs.io/), protecting your data.
 
 ## Table of contents
-+ [Installation](/README.md/#installation)
-+ [Features](/README.md/#features)
-+ [How ?](/README.md/#how-?)
-+ [Upcoming](/README.md/#upcoming)
-+ [Contribute](/README.md/#contribute)
-+ [Our PoC team](/README.md/#our-poc-team)
++ [Installation](/README.md/#-installation)
++ [Features](/README.md/#-features)
++ [How ?](/README.md/#-how-?)
++ [Upcoming](/README.md/#-upcoming)
++ [Contribute](/README.md/#-contribute)
++ [Our PoC team](/README.md/#-our-poc-team)
 
 ## Installation :wrench:
 
@@ -80,7 +80,7 @@ We hope our work pleased you 🍀
 The Developers:
 + [Adrien Fort](https://github.com/adrienfort)
 + [Diego Rojas](https://github.com/rojasdiegopro)
-+ [Lorenzo Insigne](https://github.com/MrZalTy)
++ [Lorenzo Carneli](https://github.com/MrZalTy)
 
 The Manager:
 + [Luca Georges Francois](https://github.com/PtitLuca)
