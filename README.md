@@ -2,12 +2,12 @@
 A personal file storage and management system built on top of [IPFS](https://ipfs.io/), protecting your data.
 
 ## Table of contents
-+ [Installation](/README.md/#-installation)
-+ [Features](/README.md/#-features)
-+ [How ?](/README.md/#-how-?)
-+ [Upcoming](/README.md/#-upcoming)
-+ [Contribute](/README.md/#-contribute)
-+ [Our PoC team](/README.md/#-our-poc-team)
++ [Installation](#-installation)
++ [Features](#-features)
++ [How ?](#-how-?)
++ [Upcoming](#-upcoming)
++ [Contribute](#-contribute)
++ [Our PoC team](#-our-poc-team)
 
 ## Installation :wrench:
 
