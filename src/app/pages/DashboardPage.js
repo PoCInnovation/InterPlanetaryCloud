@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
-import LeftBar from "../components/navbars/LeftBar";
-import FilesGrid from "../components/grids/FilesGrid";
-import "./DashboardPage.css";
+import LeftBar from "../../views/dashboard/LeftBar";
+import FilesGrid from "../../views/dashboard/FilesGrid";
+import "../../views/dashboard/DashboardPage.css";
 
 import jwt from "jsonwebtoken";
 
