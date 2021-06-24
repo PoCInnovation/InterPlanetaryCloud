@@ -4,7 +4,9 @@ import FilesGrid from "./FilesGrid";
 import jwt, {Secret} from "jsonwebtoken";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { JWT_SECRET } from "config/environment";
-import "./DashboardPage.css";
+import "./DashboardView.css";
+import {OrbitDocuments} from "../../types/Orbit";
+import FullPageLoader from "../../app/components/loaders/FullPageLoader";
 
 async function loadUserDocs(userDocs: any) {
     if (userDocs) {
@@ -32,8 +34,8 @@ async function getFiles(userDocs: any, setFiles: React.Dispatch<any>) {
 }
 
 export type DashboardViewProps = RouteComponentProps & {
-    userDocs: any,
-    setUserDocs: React.Dispatch<any>,
+    userDocs: OrbitDocuments,
+    setUserDocs: React.Dispatch<OrbitDocuments>,
 };
 
 const DashboardPage: React.FC<DashboardViewProps> = props => {
@@ -58,9 +60,9 @@ const DashboardPage: React.FC<DashboardViewProps> = props => {
                 setLoading(false);
             });
         });
-    }, []);
+    });
 
-    if (loading) return (<div>Loading...</div>);
+    if (loading) return (<FullPageLoader />);
 
     return (
         <div className="dashboard-page-container">

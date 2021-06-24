@@ -1,3 +1,4 @@
+import React from "react";
 import FileCard from "../../app/components/cards/FileCard";
 import {IPCFile} from "../../types/File";
 import "./FilesGrid.css";

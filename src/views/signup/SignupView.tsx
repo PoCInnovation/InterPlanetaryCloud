@@ -2,14 +2,15 @@ import React from "react";
 import bcrypt from "bcryptjs";
 import jwt, {Secret} from "jsonwebtoken";
 import { JWT_SECRET, KEYVALUE_DB_ADDRESS } from "config/environment";
+import {OrbitDatabase, OrbitDocuments, OrbitKeyValue} from "../../types/Orbit";
 
 const salt = bcrypt.genSaltSync(10);
 
 export type SignupViewProps = {
-    orbitDB: any,
-    usersKV: any,
-    setUsersKV: React.Dispatch<any>,
-    setUserDocs: React.Dispatch<any>,
+    orbitDB: OrbitDatabase,
+    usersKV: OrbitKeyValue,
+    setUsersKV: React.Dispatch<OrbitKeyValue>,
+    setUserDocs: React.Dispatch<OrbitDocuments>,
 };
 
 const SignupView: React.FC<SignupViewProps> = props => {

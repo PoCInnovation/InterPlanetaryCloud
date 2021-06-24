@@ -1,11 +1,12 @@
 import React from "react";
 import bcrypt from "bcryptjs";
-import jwt, {Secret} from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 import { Redirect } from "react-router-dom";
 import { JWT_SECRET } from "config/environment";
+import { OrbitDatabase } from "../../types/Orbit";
 
 export type LoginViewProps = {
-    orbitDB: any,
+    orbitDB: OrbitDatabase,
     usersKV: any,
     setUserDocs: React.Dispatch<any>,
 };

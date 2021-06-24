@@ -9,6 +9,7 @@ import DashboardView from "views/dashboard/DashboardView";
 import LoginView from "views/login/LoginView";
 import SignupView from "views/signup/SignupView";
 import HomeView from "views/home/HomeView";
+import FullPageLoader from "./app/components/loaders/FullPageLoader";
 
 async function initOrbitDB(orbitDB: any, setOrbitDB: React.Dispatch<any>) {
     if (!orbitDB) {
@@ -70,7 +71,7 @@ const App: React.FC = () => {
     return (
         <div>
             {
-                loading ? "Loading..." :
+                loading ? <FullPageLoader /> :
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/">
