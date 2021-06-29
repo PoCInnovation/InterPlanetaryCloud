@@ -1,11 +1,16 @@
 import Signup from "../components/forms/Signup";
 import "./SignupPage.css";
 
-function SignupPage({ orbit_db }) {
+function SignupPage({ orbitDB, usersKV, setUsersKV, setUserDocs }) {
     return (
         <div className="signup-page-container">
             <h3>Inter Planetary Cloud</h3>
-            <Signup orbit_db={orbit_db} />
+            <Signup
+                orbitDB={orbitDB}
+                usersKV={usersKV}
+                setUsersKV={setUsersKV}
+                setUserDocs={setUserDocs}
+            />
         </div>
     );
 }

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import "./Login.css";
+import { Redirect } from "react-router-dom";
 
 import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
-import { JWT_SECRET, KEYVALUE_DB_ADDRESS } from "../../../config/Environment";
+import "./Login.css";
 
-function Login({ orbit_db }) {
+import { JWT_SECRET } from "../../../config/Environment";
+
+function Login({ orbitDB, usersKV, setUserDocs }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -18,16 +20,15 @@ function Login({ orbit_db }) {
         e.preventDefault();
 
         try {
-            const users = await orbit_db.keyvalue(KEYVALUE_DB_ADDRESS);
+            await usersKV.load();
+            const userId = await usersKV.get(email);
             let validPassword = undefined;
-
-            await users.load();
-            const userId = await users.get(email);
+            let userDocs = undefined;
 
             if (userId) {
-                const user = await orbit_db.docs(userId._id);
-                await user.load();
-                const hash = await user.get(email)[0].password;
+                userDocs = await orbitDB.docs(userId._id);
+                await userDocs.load();
+                const hash = await userDocs.get(email)[0].password;
                 validPassword = bcrypt.compareSync(password, hash);
             }
             if (!userId || !validPassword) {
@@ -37,18 +38,32 @@ function Login({ orbit_db }) {
             const payload = {
                 email,
                 password,
+                docsAddress: userId._id,
             };
             const token = jwt.sign(payload, JWT_SECRET);
             localStorage.setItem("token", token);
-            console.log(localStorage.token);
+            setUserDocs(userDocs);
         } catch (error) {
             console.log(error);
         }
     };
 
+    const isUserLog = () => {
+        return jwt.verify(
+            localStorage.token,
+            JWT_SECRET,
+            function (err, decoded) {
+                if (!err && decoded.docsAddress) return true;
+                return false;
+            }
+        );
+    };
+
+    if (isUserLog()) return <Redirect to={"/dashboard"} />;
+
     return (
         <div className="login-container">
-            <form className="login-form" onSubmit={(e) => logIn(e)}>
+            <form className="login-form" onSubmit={async (e) => await logIn(e)}>
                 <div className="login-form-field">
                     <label>email</label>
                     <input

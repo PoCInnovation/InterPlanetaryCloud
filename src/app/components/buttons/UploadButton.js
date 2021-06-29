@@ -1,58 +1,42 @@
-import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
 import "./UploadButton.css";
 
 import CryptoJS from "crypto-js";
 
 import jwt from "jsonwebtoken";
 
-import { JWT_SECRET } from "../../../config/Environment";
+import { nanoid } from "nanoid";
 
-/**
- * Upload the content of a file to IPFS via the client and save the file's hash.
- * @param ipfs - IPFS Client.
- * @param fileContent {string} - Content of the file to upload.
- * @param setFileHash - Setter from `React.useState` to retrieve the ipfs hash of the file.
- * @returns {Promise<void>}
- */
-async function uploadToIPFS(ipfs, fileContent, setFileHash) {
-    try {
-        const result = await ipfs.add(fileContent);
-        await setFileHash(result.path);
-    } catch (error) {
-        console.log(error);
-    }
-}
+import { JWT_SECRET } from "../../../config/Environment";
 
 /**
  * Extract the filename from a filepath.
  * @param filepath {string} - Source of the name.
  * @param setFilename - Setter from `React.useState` to retrieve the name of the file.
  */
-function extractFilename(filepath, setFilename) {
+function extractFilename(filepath) {
     const result = /[^\\]*$/.exec(filepath)[0];
 
-    setFilename(result);
+    return result;
 }
 
-/**
- * Creates a FileReader to read a file and use the setter to extract it.
- * @param file - File to retrieve the content from.
- * @param setFileContent - Setter from `React.useState` to retrieve the content of the file.
- */
-function getFileContent(file, setFileContent) {
-    const reader = new window.FileReader();
-    const token = localStorage.token;
-    const password = jwt.verify(token, JWT_SECRET).password;
+function getFileContent(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new window.FileReader();
+        const password = jwt.verify(localStorage.token, JWT_SECRET).password;
+        let hashFileContent = "";
 
-    reader.onload = (event) => {
-        const hashFileContent = CryptoJS.AES.encrypt(
-            event.target.result,
-            password
-        ).toString();
-        setFileContent(hashFileContent);
-    };
-    reader.readAsText(file);
+        reader.onload = function (event) {
+            hashFileContent = CryptoJS.AES.encrypt(
+                event.target.result,
+                password
+            ).toString();
+            resolve(hashFileContent);
+        };
+        reader.onerror = function (event) {
+            reject(event);
+        };
+        reader.readAsText(file);
+    });
 }
 
 /**
@@ -62,26 +46,21 @@ function getFileContent(file, setFileContent) {
  * @returns {JSX.Element}
  * @constructor
  */
-function UploadButton({ ipfs, setFileHash }) {
-    const [filename, setFilename] = useState("");
-    const [fileContent, setFileContent] = useState("");
-
-    const inputOnChange = async (event) => {
-        const token = localStorage.token;
-
-        if (token) {
-            extractFilename(event.target.value, setFilename);
-            getFileContent(event.target.files[0], setFileContent);
-        } else {
-            console.log("user has no token");
-        }
-    };
-
-    const buttonOnClick = async () => {
-        if (!filename || !fileContent || !ipfs) return;
-
+function UploadButton({ userDocs, setUserDocs, setFiles }) {
+    const uploadFile = async (event) => {
         try {
-            await uploadToIPFS(ipfs, fileContent, setFileHash);
+            const filename = extractFilename(event.target.value);
+            const fileContent = await getFileContent(event.target.files[0]);
+            if (filename === "" || fileContent === "") return;
+            await userDocs.put({
+                _id: nanoid(),
+                name: filename,
+                created_at: Date.now(),
+                content: fileContent,
+                data: {},
+            });
+            setUserDocs(userDocs);
+            setFiles(await userDocs.get(""));
         } catch (error) {
             console.log(error);
         }
@@ -89,19 +68,7 @@ function UploadButton({ ipfs, setFileHash }) {
 
     return (
         <div className="upload-container">
-            <input
-                className="upload-input"
-                onChange={inputOnChange}
-                type="file"
-            />
-            <Button
-                className="upload-button"
-                onClick={buttonOnClick}
-                variant="contained"
-                color="primary"
-            >
-                Upload
-            </Button>
+            <input className="upload-input" onChange={uploadFile} type="file" />
         </div>
     );
 }

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import "./Signup.css";
+import { Redirect } from "react-router-dom";
 
 import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
-import { JWT_SECRET, KEYVALUE_DB_ADDRESS } from "../../../config/Environment";
+import "./Signup.css";
+
+import { JWT_SECRET } from "../../../config/Environment";
 
 const salt = bcrypt.genSaltSync(10);
 
-function Signup({ orbit_db }) {
+function Signup({ orbitDB, usersKV, setUsersKV, setUserDocs }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
@@ -23,32 +25,46 @@ function Signup({ orbit_db }) {
         e.preventDefault();
 
         try {
-            const users = await orbit_db.keyvalue(KEYVALUE_DB_ADDRESS);
-            await users.load();
             if (password !== repeatPassword) {
                 console.log("password doesn't matches with repeat password");
                 return;
             }
-            if (users.get(email)) {
+            await usersKV.load();
+            let userDocs = await usersKV.get(email);
+            if (userDocs) {
                 console.log("user already exists");
                 return;
             }
-            const user = await orbit_db.docs("ipc.user." + email);
+            userDocs = await orbitDB.docs("ipc.user." + email);
             const hash = bcrypt.hashSync(password, salt);
-
-            await user.put({ _id: email, password: hash, data: {} });
-            await users.put(email, { _id: user.address.toString() });
+            await userDocs.put({ _id: email, password: hash, data: {} });
+            await usersKV.put(email, { _id: userDocs.address.toString() });
             const payload = {
                 email,
                 password,
+                docsAddress: userDocs.address.toString(),
             };
             const token = jwt.sign(payload, JWT_SECRET);
             localStorage.setItem("token", token);
-            console.log(localStorage.token);
+            setUsersKV(usersKV);
+            setUserDocs(userDocs);
         } catch (error) {
             console.log(error);
         }
     };
+
+    const isUserLog = () => {
+        return jwt.verify(
+            localStorage.token,
+            JWT_SECRET,
+            function (err, decoded) {
+                if (!err && decoded.docsAddress) return true;
+                return false;
+            }
+        );
+    };
+
+    if (isUserLog()) return <Redirect to={"/dashboard"} />;
 
     return (
         <div className="signup-container">

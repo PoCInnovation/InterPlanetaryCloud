@@ -58,13 +58,7 @@ function DownloadButton({ ipfs }) {
     };
 
     const inputOnChange = (event) => {
-        const token = localStorage.token;
-
-        if (token) {
-            setHash(event.target.value);
-        } else {
-            console.log("user has no token");
-        }
+        setHash(event.target.value);
     };
 
     return (
