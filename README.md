@@ -1,14 +1,6 @@
 # InterPlanetaryCloud
 A personal file storage and management system built on top of [IPFS](https://ipfs.io/), protecting your data.
 
-## Table of contents
-+ [Installation](#-installation)
-+ [Features](#-features)
-+ [How ?](#-how-?)
-+ [Upcoming](#-upcoming)
-+ [Contribute](#-contribute)
-+ [Our PoC team](#-our-poc-team)
-
 ## Installation :wrench:
 
 #### 1) Install IPFS
@@ -77,13 +69,13 @@ Don't hesitate to open an issue !
 We hope our work pleased you 🍀
 
 ## Our [PoC](https://www.poc-innovation.fr/) team :ok_hand:
-The Developers:
+Developers:
 + [Adrien Fort](https://github.com/adrienfort)
 + [Diego Rojas](https://github.com/rojasdiegopro)
 + [Lorenzo Carneli](https://github.com/MrZalTy)
 
-The Manager:
+Product Managers:
++ [Adina Cazalens](https://github.com/NaadiQmmr)
 + [Luca Georges Francois](https://github.com/PtitLuca)
 
-The Reviewer:
-+ [Tom Chauveau](https://github.com/TomChv)
+Thanks to [Tom Chauveau](https://github.com/TomChv) for contributing to this project by submitting his review to our code !
