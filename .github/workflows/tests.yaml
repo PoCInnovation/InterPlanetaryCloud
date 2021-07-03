@@ -15,11 +15,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Launch IPC
-        run: npm start
-
       - name: Cypress run
         run: npm run cypress:run > cypress-results
+        with:
+          start: npm start
+          wait-on: http://localhost:3000
 
       - name: Get cypress results
         if: ${{ always() }}
