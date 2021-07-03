@@ -16,6 +16,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: npm start
+          wait-on: "http://localhost:3000"
 
       - name: Get screenshots
         uses: actions/upload-artifact@v1
