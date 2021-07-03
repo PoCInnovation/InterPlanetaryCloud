@@ -1,0 +1,16 @@
+name: End-to-end tests
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+
+    env:
+      - REACT_APP_JWT_SECRET: "1234"
+      - REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
