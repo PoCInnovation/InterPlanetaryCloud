@@ -5,8 +5,8 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      - REACT_APP_JWT_SECRET: "1234"
-      - REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
+      REACT_APP_JWT_SECRET: "1234"
+      REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
 
     steps:
       - name: Checkout repository
