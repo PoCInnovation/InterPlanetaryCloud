@@ -12,5 +12,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Launch IPC
+        run: npm start
+
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        run: npm run cypress:run > cypress-results
+
+      - name: Get cypress results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress-results
+          path: ./cypress-results
+
+      - name: Get cypress screenshots
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress-screenshots
+          path: ./cypress/screenshots
