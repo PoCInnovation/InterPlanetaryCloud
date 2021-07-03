@@ -12,25 +12,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: npm install
+      - name: Run cypress
+        uses: cypress-io/github-action@v2
 
-      - name: Cypress run
-        run: npm run cypress:run > cypress-results
-        with:
-          start: npm start
-          wait-on: http://localhost:3000
-
-      - name: Get cypress results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: cypress-results
-          path: ./cypress-results
-
-      - name: Get cypress screenshots
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+      - name: Get screenshots
+        uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: cypress-screenshots
-          path: ./cypress/screenshots
+          path: cypress/screenshots
+
+      - name: Get videos
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
