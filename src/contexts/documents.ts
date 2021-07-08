@@ -5,11 +5,8 @@ export type TDocumentsContext = null | {
     refresh: () => void,
 };
 
-/// Holds the orbit-db database instance.
 const DocumentsContext = React.createContext<TDocumentsContext>(null);
 
-/// TODO: Implement the context inside the React components.
-/// Safely obtain the database context. Ensures a context provider is declared higher up in the component tree.
 export function useDocumentsContext() {
     const context = React.useContext(DocumentsContext);
 
