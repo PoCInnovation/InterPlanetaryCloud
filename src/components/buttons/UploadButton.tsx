@@ -1,11 +1,10 @@
 import CryptoJS from "crypto-js";
 import React from "react";
-import jwt, {JwtPayload, Secret} from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { nanoid } from "nanoid";
 import { JWT_SECRET } from "config/environment";
-import "./UploadButton.css";
-import {OrbitDocuments} from "../../../types/Orbit";
-import {IPCFile} from "../../../types/File";
+import { IPCFile } from "../../types/file";
+import {useDocumentsContext} from "../../contexts/documents";
 
 /// Extract the filename from a filepath.
 function extractFilename(filepath: string) {
@@ -36,34 +35,34 @@ function getFileContent(file: any) {
 }
 
 export type UploadButtonProps = {
-    userDocs: OrbitDocuments,
-    setUserDocs: React.Dispatch<OrbitDocuments>,
     setFiles: React.Dispatch<Array<IPCFile> | null>,
 };
 
 const UploadButton: React.FC<UploadButtonProps> = props => {
+    const { userDocs, refresh } = useDocumentsContext();
+
     const uploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
         try {
             const filename = extractFilename(event.target.value);
             const fileContent = await getFileContent(event.target.files ? event.target.files[0] : []);
             if (filename === "" || fileContent === "") return;
-            await props.userDocs.put({
+            await userDocs.put({
                 _id: nanoid(),
                 name: filename,
                 created_at: Date.now(),
                 content: fileContent,
                 data: {},
             });
-            props.setUserDocs(props.userDocs);
-            props.setFiles(await props.userDocs.get(""));
+            refresh();
+            props.setFiles(await userDocs.get(""));
         } catch (error) {
             console.log(error);
         }
     };
 
     return (
-        <div className="upload-container">
-            <input className="upload-input" onChange={uploadFile} type="file" />
+        <div>
+            <input onChange={uploadFile} type="file" />
         </div>
     );
 }

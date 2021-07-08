@@ -1,12 +1,13 @@
 import React from "react";
-import LeftBar from "./LeftBar";
+import Sidebar from "./Sidebar";
 import FilesGrid from "./FilesGrid";
 import jwt, {Secret} from "jsonwebtoken";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { JWT_SECRET } from "config/environment";
-import "./DashboardView.css";
-import {OrbitDocuments} from "../../types/Orbit";
-import FullPageLoader from "../../app/components/loaders/FullPageLoader";
+import FullPageLoader from "components/loaders/FullPageLoader";
+import DashboardWidgets from "./DashboardWidgets";
+import {useDocumentsContext} from "../../contexts/documents";
+import {IPCFile} from "../../types/file";
 
 async function loadUserDocs(userDocs: any) {
     if (userDocs) {
@@ -33,21 +34,19 @@ async function getFiles(userDocs: any, setFiles: React.Dispatch<any>) {
     }
 }
 
-export type DashboardViewProps = RouteComponentProps & {
-    userDocs: OrbitDocuments,
-    setUserDocs: React.Dispatch<OrbitDocuments>,
-};
+export type DashboardViewProps = RouteComponentProps;
 
 const DashboardPage: React.FC<DashboardViewProps> = props => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [files, setFiles] = React.useState<Array<any> | null>(null);
+    const [files, setFiles] = React.useState<IPCFile[] | null>(null);
     const [loading, setLoading] = React.useState(true);
+    const { userDocs } = useDocumentsContext();
 
     const setVariables = async (decoded: any) => {
         if (!email) setEmail(decoded.email);
         if (!password) setPassword(decoded.password);
-        if (!files) await getFiles(props.userDocs, setFiles);
+        if (!files) await getFiles(userDocs, setFiles);
     };
 
     React.useEffect(() => {
@@ -65,13 +64,10 @@ const DashboardPage: React.FC<DashboardViewProps> = props => {
     if (loading) return (<FullPageLoader />);
 
     return (
-        <div className="dashboard-page-container">
-            <LeftBar
-                email={email}
-                userDocs={props.userDocs}
-                setUserDocs={props.setUserDocs}
-                setFiles={setFiles}
-            />
+        <div className="grid grid-cols-[300px,1fr] h-screen">
+            <Sidebar email={email}
+                     setFiles={setFiles} />
+            <DashboardWidgets />
             <FilesGrid files={files || []} />
         </div>
     );

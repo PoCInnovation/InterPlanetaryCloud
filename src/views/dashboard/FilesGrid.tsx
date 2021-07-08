@@ -1,7 +1,6 @@
 import React from "react";
-import FileCard from "../../app/components/cards/FileCard";
-import {IPCFile} from "../../types/File";
-import "./FilesGrid.css";
+import FileCard from "../../components/cards/FileCard";
+import { IPCFile } from "../../types/file";
 
 export type FilesGridProps = {
     files: IPCFile[];
@@ -9,7 +8,7 @@ export type FilesGridProps = {
 
 const FilesGrid: React.FC<FilesGridProps> = props => {
     return (
-        <div className="files-grid-container">
+        <div>
             <h3>{props.files.length - 1} files</h3>
             {props.files.map((file, i) => <FileCard key={i} file={file} /> )}
         </div>

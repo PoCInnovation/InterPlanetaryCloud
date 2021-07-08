@@ -4,12 +4,13 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import jwt, {Secret} from "jsonwebtoken";
 import IPFSClient from "config/ipfs";
-import {KEYVALUE_DB_ADDRESS, JWT_SECRET} from "config/environment";
+import { KEYVALUE_DB_ADDRESS, JWT_SECRET } from "config/environment";
+import DocumentsContext from "contexts/documents";
 import DashboardView from "views/dashboard/DashboardView";
 import LoginView from "views/login/LoginView";
 import SignupView from "views/signup/SignupView";
 import HomeView from "views/home/HomeView";
-import FullPageLoader from "./app/components/loaders/FullPageLoader";
+import FullPageLoader from "./components/loaders/FullPageLoader";
 
 async function initOrbitDB(orbitDB: any, setOrbitDB: React.Dispatch<any>) {
     if (!orbitDB) {
@@ -93,10 +94,9 @@ const App: React.FC = () => {
                             />
                         </Route>
                         <Route path="/dashboard">
-                            <DashboardView
-                                userDocs={userDocs}
-                                setUserDocs={setUserDocs}
-                            />
+                            <DocumentsContext.Provider value={{userDocs: userDocs, refresh: () => setUserDocs(userDocs)}}>
+                                <DashboardView />
+                            </DocumentsContext.Provider>
                         </Route>
                     </Switch>
                 </BrowserRouter>

@@ -3,13 +3,11 @@ import fileDownload from "js-file-download";
 import all from "it-all";
 import concat from "it-concat";
 import CryptoJS from "crypto-js";
-import jwt, {JwtPayload, Secret} from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { JWT_SECRET } from "config/environment";
-import { IPFSClient } from "types/IPFS";
-import "./DownloadButton.css";
 
 /// Download the content of a file from IPFS via the client & hash, then extract it via the setter.
-async function downloadFromIPFS(ipfs: IPFSClient, hash: string): Promise<string | undefined> {
+async function downloadFromIPFS(ipfs: any, hash: string): Promise<string | undefined> {
     let fileContent;
     try {
         /// TODO: Find better type annotations for this section.
@@ -27,7 +25,7 @@ async function downloadFromIPFS(ipfs: IPFSClient, hash: string): Promise<string 
 }
 
 export type DownloadButtonProps = {
-    ipfs: IPFSClient,
+    ipfs: any,
 };
 
 /// Retrieves file from IPFS.
