@@ -10,28 +10,15 @@ import FullPageLoader from "components/loaders/FullPageLoader";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 
 async function loadUserDocs(userDocs: any) {
-    if (userDocs) {
-        console.log("Loading userDocs ...");
-        try {
-            await userDocs.load();
-            return true;
-        } catch (error) {
-            console.log(error);
-            return false;
-        }
-    }
-    return false;
+    console.log("Loading userDocs ...");
+    console.log(userDocs);
+    await userDocs.load();
 }
 
 async function getFiles(userDocs: any, setFiles: React.Dispatch<any>) {
-    if (await loadUserDocs(userDocs)) {
-        console.log("Getting user files ...");
-        try {
-            setFiles(await userDocs.get(""));
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    await loadUserDocs(userDocs);
+    console.log("Getting user files ...");
+    setFiles(await userDocs.get(""));
 }
 
 export type TDashboardProps = RouteComponentProps;
@@ -44,9 +31,9 @@ const Dashboard: React.FC<TDashboardProps> = props => {
     const {userDocs} = useDocumentsContext();
 
     const load = async (decoded: any) => {
-        if (!email) setEmail(decoded.email);
-        if (!password) setPassword(decoded.password);
-        if (!files) await getFiles(userDocs, setFiles);
+        setEmail(decoded.email);
+        setPassword(decoded.password);
+        await getFiles(userDocs, setFiles);
     };
 
     React.useEffect(() => {
@@ -59,16 +46,18 @@ const Dashboard: React.FC<TDashboardProps> = props => {
                 setLoading(false);
             });
         });
-    });
+    }, []);
 
     if (loading) return (<FullPageLoader />);
 
     return (
-        <UserContext.Provider value={{email: "", password: ""}}>
+        <UserContext.Provider value={{email: email, password: password}}>
             <FilesContext.Provider value={{files: files, setFiles: setFiles}}>
                 <div className="grid grid-cols-[300px,1fr] h-screen overflow-hidden">
                     <Sidebar />
-                    {props.children}
+                    <div className={"p-12"}>
+                        {props.children}
+                    </div>
                 </div>
             </FilesContext.Provider>
         </UserContext.Provider>

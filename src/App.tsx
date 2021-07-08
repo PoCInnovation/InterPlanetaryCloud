@@ -12,42 +12,20 @@ import SignupView from "views/signup/SignupView";
 import HomeView from "views/home/HomeView";
 import FullPageLoader from "./components/loaders/FullPageLoader";
 
-async function initOrbitDB(orbitDB: any, setOrbitDB: React.Dispatch<any>) {
-    if (!orbitDB) {
-        console.log("Getting orbitDB ...");
-        try {
-            setOrbitDB(await OrbitDB.createInstance(IPFSClient));
-        } catch (error) {
-            console.error(error);
-        }
-    }
-}
-
-async function initUsersKV(orbitDB: any, usersKV: any, setUsersKV: React.Dispatch<any>) {
-    if (orbitDB && !usersKV) {
-        console.log("Getting usersKV ...");
-        try {
-            setUsersKV(await orbitDB.keyvalue(KEYVALUE_DB_ADDRESS));
-        } catch (error) {
-            console.error(error);
-        }
-    }
-}
-
-async function initUserDocs(orbitDB: any, userDocs: any, setUserDocs: React.Dispatch<any>) {
+async function initOrbitDB(setOrbitDB: React.Dispatch<any>, setUsersKV: React.Dispatch<any>, setUsersDocs: React.Dispatch<any>) {
     const token = localStorage.token;
-
-    if (orbitDB && token && !userDocs) {
-        console.log("Getting userDocs ...");
-        /// TODO: Perform a cleaner conversion of JWT_SECRET to Secret and fix the type annotations inside the callback.
+    try {
+        const orbitDB = await OrbitDB.createInstance(IPFSClient);
+        const usersKV = await orbitDB.keyvalue(KEYVALUE_DB_ADDRESS);
         jwt.verify(token, JWT_SECRET as Secret, async function (err: any, decoded: any) {
-            if (err) return;
-            try {
-                setUserDocs(await orbitDB.docs(decoded.docsAddress));
-            } catch (error) {
-                console.log(error);
-            }
+            if (err) throw err;
+            const userDocs = await orbitDB.docs(decoded.docsAddress);
+            setOrbitDB(orbitDB);
+            setUsersKV(usersKV);
+            setUsersDocs(userDocs);
         });
+    } catch (error) {
+        throw error;
     }
 }
 
@@ -55,24 +33,17 @@ const App: React.FC = () => {
     const [orbitDB, setOrbitDB] = React.useState<any>(null);
     const [usersKV, setUsersKV] = React.useState<any>(null);
     const [userDocs, setUserDocs] = React.useState<any>(null);
-    const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         (async () => {
-            if (!loading) {
-                return;
-            }
-            await initOrbitDB(orbitDB, setOrbitDB);
-            await initUsersKV(orbitDB, usersKV, setUsersKV);
-            await initUserDocs(orbitDB, userDocs, setUserDocs);
-            setLoading(false);
+            await initOrbitDB(setOrbitDB, setUsersKV, setUserDocs);
         })();
-    }, [orbitDB, userDocs, usersKV, loading]);
+    }, []);
 
     return (
         <div>
             {
-                loading ? <FullPageLoader /> :
+                (!orbitDB || !usersKV || !userDocs) ? <FullPageLoader /> :
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/">

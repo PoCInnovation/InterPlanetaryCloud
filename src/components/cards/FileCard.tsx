@@ -11,7 +11,7 @@ const FileCard: React.FC<FileCardProps> = props => {
         <div>
             <h3>name: {props.file.name}</h3>
             <h6>date: {new Date(props.file.created_at).toDateString()}</h6>
-            <p className="temp" >content: {props.file.content} </p>
+            <p>content: {props.file.content} </p>
         </div>
     );
 };

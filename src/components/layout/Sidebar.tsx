@@ -1,10 +1,12 @@
 import React from "react";
 import {useHistory} from "react-router-dom";
+import SmallProfileCard from "../cards/SmallProfileCard";
 
 const SidebarHeader: React.FC = props => {
     return (
         <div>
-            <h1 className="text-xl">InterPlanetaryCloud</h1>
+            <h1 className="text-xl mb-4 text-center">InterPlanetaryCloud</h1>
+            <SmallProfileCard />
         </div>
     )
 };
