@@ -7,8 +7,10 @@ const FilesGrid: React.FC = props => {
 
     return (
         <div>
-            <h3>{files.length - 1} files</h3>
-            {files.map((file, i) => <FileCard key={i} file={file} /> )}
+            <h1 className={"uppercase text-gray-600 mb-2"}>All files</h1>
+            <div className={"grid grid-cols-[repeat(3,minmax(0,1fr))] gap-4"}>
+                {files.map((file, i) => <FileCard key={i} file={file} /> )}
+            </div>
         </div>
     );
 }
