@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { JWT_SECRET } from "config/environment";
 import { IPCFile } from "../../types/file";
 import {useDocumentsContext} from "../../contexts/documents";
+import {useFilesContext} from "../../contexts/files";
 
 /// Extract the filename from a filepath.
 function extractFilename(filepath: string) {
@@ -34,12 +35,9 @@ function getFileContent(file: any) {
     });
 }
 
-export type UploadButtonProps = {
-    setFiles: React.Dispatch<Array<IPCFile> | null>,
-};
-
-const UploadButton: React.FC<UploadButtonProps> = props => {
+const UploadButton: React.FC = props => {
     const { userDocs, refresh } = useDocumentsContext();
+    const { files, setFiles } = useFilesContext();
 
     const uploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
         try {
@@ -54,7 +52,7 @@ const UploadButton: React.FC<UploadButtonProps> = props => {
                 data: {},
             });
             refresh();
-            props.setFiles(await userDocs.get(""));
+            setFiles(await userDocs.get(""));
         } catch (error) {
             console.log(error);
         }
