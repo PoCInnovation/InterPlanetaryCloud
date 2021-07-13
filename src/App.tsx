@@ -1,7 +1,7 @@
 // @ts-ignore
 import OrbitDB from "orbit-db";
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import jwt, {Secret} from "jsonwebtoken";
 import IPFSClient from "config/ipfs";
 import {KEYVALUE_DB_ADDRESS, JWT_SECRET} from "config/environment";
@@ -16,12 +16,12 @@ async function initOrbitDB(setOrbitDB: React.Dispatch<any>, setUsersKV: React.Di
     const token = localStorage.token;
     try {
         const orbitDB = await OrbitDB.createInstance(IPFSClient);
+        setOrbitDB(orbitDB);
         const usersKV = await orbitDB.keyvalue(KEYVALUE_DB_ADDRESS);
-        jwt.verify(token, JWT_SECRET as Secret, async function (err: any, decoded: any) {
+        setUsersKV(usersKV);
+        await jwt.verify(token, JWT_SECRET as Secret, async function (err: any, decoded: any) {
             if (err) throw err;
             const userDocs = await orbitDB.docs(decoded.docsAddress);
-            setOrbitDB(orbitDB);
-            setUsersKV(usersKV);
             setUsersDocs(userDocs);
         });
     } catch (error) {
@@ -33,44 +33,45 @@ const App: React.FC = () => {
     const [orbitDB, setOrbitDB] = React.useState<any>(null);
     const [usersKV, setUsersKV] = React.useState<any>(null);
     const [userDocs, setUserDocs] = React.useState<any>(null);
+    const [loading, setLoading] = React.useState()
+    const history = useHistory();
 
     React.useEffect(() => {
         (async () => {
-            await initOrbitDB(setOrbitDB, setUsersKV, setUserDocs);
+            await initOrbitDB(setOrbitDB, setUsersKV, setUserDocs).catch((e) => {
+                history.push("/login")
+            });
         })();
     }, []);
 
     return (
         <div>
-            {
-                (!orbitDB || !usersKV || !userDocs) ? <FullPageLoader /> :
-                <BrowserRouter>
-                    <Switch>
-                        <Route exact path="/">
-                            <HomeView />
-                        </Route>
-                        <Route path="/signup">
-                            <SignupView
-                                orbitDB={orbitDB}
-                                usersKV={usersKV}
-                                setUsersKV={setUsersKV}
-                                setUserDocs={setUserDocs}
-                            />
-                        </Route>
-                        <Route path="/login">
-                            <LoginView
-                                orbitDB={orbitDB}
-                                usersKV={usersKV}
-                                setUserDocs={setUserDocs}
-                            />
-                        </Route>
-                        <Route path="/dashboard">
-                            <DocumentsContext.Provider value={{userDocs: userDocs, refresh: () => setUserDocs(userDocs)}}>
-                                <DashboardView />
-                            </DocumentsContext.Provider>
-                        </Route>
-                    </Switch>
-                </BrowserRouter>
+            {(!orbitDB || !usersKV) ? <FullPageLoader /> :
+                <Switch>
+                    <Route exact path="/">
+                        <HomeView />
+                    </Route>
+                    <Route path="/signup">
+                        <SignupView
+                            orbitDB={orbitDB}
+                            usersKV={usersKV}
+                            setUsersKV={setUsersKV}
+                            setUserDocs={setUserDocs}
+                        />
+                    </Route>
+                    <Route path="/login">
+                        <LoginView
+                            orbitDB={orbitDB}
+                            usersKV={usersKV}
+                            setUserDocs={setUserDocs}
+                        />
+                    </Route>
+                    {userDocs && <Route path="/dashboard">
+                        <DocumentsContext.Provider value={{userDocs: userDocs, refresh: () => setUserDocs(userDocs)}}>
+                            <DashboardView />
+                        </DocumentsContext.Provider>
+                    </Route>}
+                </Switch>
             }
         </div>
     );

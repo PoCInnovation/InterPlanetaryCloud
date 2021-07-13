@@ -3,4 +3,5 @@ export type IPCFile = {
     created_at: string,
     name: string,
     password: string,
+    _id: string,
 };
