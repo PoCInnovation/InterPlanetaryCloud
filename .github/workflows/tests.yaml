@@ -19,9 +19,24 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: |
-            ipfs daemon --enable-pubsub-experiment >/dev/null 2>temp &
+            ipfs daemon --enable-pubsub-experiment >ipfs-daemon-std-logs 2>ipfs-daemon-err-logs &
             npm start
           wait-on: "http://localhost:3000"
+
+      - name: Get ipfs-daemon-std-logs
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: ipfs-daemon-std-logs
+          path: ipfs-daemon-std-logs
+
+      - name: Get ipfs-daemon-err-logs
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: ipfs-daemon-err-logs
+          path: ipfs-daemon-err-logs
+
 
       - name: Get screenshots
         uses: actions/upload-artifact@v1
