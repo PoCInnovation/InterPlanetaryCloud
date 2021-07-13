@@ -16,7 +16,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           run: |
-            ipfs daemon --enable-pubsub-experiment >/dev/null &
+            ipfs daemon --enable-pubsub-experiment >/dev/null 2>temp &
             npm start
           wait-on: "http://localhost:3000"
 
