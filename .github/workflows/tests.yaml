@@ -9,6 +9,9 @@ jobs:
       REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
 
     steps:
+      - name: Install dependencies
+        uses: npm install
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
