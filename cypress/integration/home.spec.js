@@ -1,7 +1,7 @@
 describe('testing home ...', () => {
     beforeEach(() => {
         cy.visit('http://localhost:3000')
-        cy.wait(5000)
+        cy.wait(1000)
     })
     it('can see app name', () => {
         cy.get('h1').first().should('contain', 'Inter Planetary Cloud')

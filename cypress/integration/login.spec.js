@@ -1,7 +1,7 @@
 describe('testing login ...', () => {
     beforeEach(() => {
         cy.visit('http://localhost:3000/login')
-        cy.wait(5000)
+        cy.wait(1000)
     })
     it('can see login title', () => {
         cy.get('p').first().should('contain', 'Log in')

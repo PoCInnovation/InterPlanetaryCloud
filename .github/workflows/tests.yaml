@@ -15,7 +15,9 @@ jobs:
       - name: Run cypress
         uses: cypress-io/github-action@v2
         with:
-          start: npm start
+          run: |
+            ipfs daemon --enable-pubsub-experiment > dev/null
+            npm start
           wait-on: "http://localhost:3000"
 
       - name: Get screenshots
