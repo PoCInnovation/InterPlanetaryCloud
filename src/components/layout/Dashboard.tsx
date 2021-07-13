@@ -10,14 +10,11 @@ import FullPageLoader from "components/loaders/FullPageLoader";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 
 async function loadUserDocs(userDocs: any) {
-    console.log("Loading userDocs ...");
-    console.log(userDocs);
     await userDocs.load();
 }
 
 async function getFiles(userDocs: any, setFiles: React.Dispatch<any>) {
     await loadUserDocs(userDocs);
-    console.log("Getting user files ...");
     setFiles(await userDocs.get(""));
 }
 
