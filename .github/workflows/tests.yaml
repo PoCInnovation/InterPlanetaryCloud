@@ -15,6 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Check ipfs
+        run: ipfs --help
+
       - name: Run cypress
         uses: cypress-io/github-action@v2
         with:
