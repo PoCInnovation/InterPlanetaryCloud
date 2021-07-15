@@ -17,8 +17,6 @@ jobs:
 
       - name: Run ipfs daemon
         uses: ibnesayeed/setup-ipfs@master
-        with:
-          run_daemon: true
 
       - name: Check ipfs
         run: ipfs --help
