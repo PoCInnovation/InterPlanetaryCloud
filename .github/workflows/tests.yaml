@@ -20,10 +20,13 @@ jobs:
         with:
           run_daemon: true
 
+      - name: Check ipfs
+        run: ipfs --help
+
       - name: Run cypress
         uses: cypress-io/github-action@v2
         with:
-          start: npm start
+          start: ipfs daemon --enable-pubsub-experiment, npm start
           wait-on: "http://localhost:3000"
 
       - name: Get screenshots
