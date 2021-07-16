@@ -9,17 +9,16 @@ jobs:
       REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
 
     steps:
-      - name: Install dependencies
-        run: npm install
-
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Run ipfs daemon
         uses: ibnesayeed/setup-ipfs@master
+        with:
+          run_daemon: true
 
       - name: Check ipfs
-        run: ipfs --help
+        run: ipfs get QmRGdDkbUCUsesHVCmPhDr5F3ZStGwpumjs41eFGNUEJmf
 
       - name: Run cypress
         uses: cypress-io/github-action@v2
