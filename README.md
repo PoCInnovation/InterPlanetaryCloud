@@ -21,16 +21,16 @@ You are now ready to access to your decentralized cloud :boom: !
 ## Features :dizzy:
 
 #### Home Page
-![](public/homePage.png)
+![](assets/homePage.png)
 
 #### Signup Page
-![](public/signupPage.png)
+![](assets/signupPage.png)
 
 #### Login Page
-![](public/loginPage.png)
+![](assets/loginPage.png)
 
 #### Dashboard
-![](public/dashboardActual.png)
+![](assets/dashboardActual.png)
 
 ## How ? :thinking:
 
@@ -53,7 +53,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 ## Upcoming :new:
 A new version in TypeScript, functionnal tests as well as a more user friendly dashboard (with the possibility to download) will be available soon !  
   
-![](public/dashboardFigma.png)
+![](assets/dashboardFigma.png)
 
 ## Contribute 💛
 

@@ -1,0 +1,41 @@
+name: End-to-end tests
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+
+    env:
+      REACT_APP_JWT_SECRET: "1234"
+      REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run ipfs daemon
+        uses: ibnesayeed/setup-ipfs@master
+        with:
+          run_daemon: true
+
+      - name: Check ipfs
+        run: ipfs --help
+
+      - name: Run cypress
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+          wait-on: "http://localhost:3000"
+
+      - name: Get screenshots
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Get videos
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
