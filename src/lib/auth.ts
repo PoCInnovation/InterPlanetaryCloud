@@ -25,7 +25,6 @@ export default class Auth {
         if (!id) {
             throw new AuthError("no account is linked to this email");
         }
-
         return new User();
     }
 };

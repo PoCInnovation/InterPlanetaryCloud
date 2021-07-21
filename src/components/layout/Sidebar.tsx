@@ -1,6 +1,7 @@
 import React from "react";
 import {useHistory} from "react-router-dom";
 import SmallProfileCard from "../cards/SmallProfileCard";
+import {useAuthContext} from "../../contexts/auth";
 
 const SidebarHeader: React.FC = props => {
     return (
@@ -20,9 +21,10 @@ const SidebarMenu: React.FC = props => {
 
 const SidebarFooter: React.FC = props => {
     const history = useHistory();
+    const auth = useAuthContext();
 
     const logout = () => {
-        window.localStorage.clear();
+        auth.logout().then();
         history.push("/")
     };
 

@@ -5,9 +5,7 @@ import AddFileModal from "../cards/AddFileModal";
 const UploadFileFloatingButton: React.FC = props => {
     const [modalOpen, setModalOpen] = React.useState(false);
 
-    const showUploadMenu = () => {
-        setModalOpen(true);
-    };
+    const showUploadMenu = () => setModalOpen(true);
 
     return (
         <div>
