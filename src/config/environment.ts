@@ -1,5 +1,5 @@
-export const JWT_SECRET = process.env.REACT_APP_JWT_SECRET;
-export const KEYVALUE_DB_ADDRESS = process.env.REACT_APP_KEYVALUE_DB_ADDRESS;
+export const JWT_SECRET = process.env.REACT_APP_JWT_SECRET as string;
+export const KEYVALUE_DB_ADDRESS = process.env.REACT_APP_KEYVALUE_DB_ADDRESS as string;
 
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET env variable is undefined.");
