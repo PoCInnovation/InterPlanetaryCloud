@@ -1,21 +1,23 @@
-import Database from "./database";
-
 class Drive {
-    constructor(database: Database) {}
+    public files: any[];
 
-    public async fetch() {}
+    constructor() {
+        this.files = [];
+    }
 
-    public async post() {}
-};
+    public async load() {}
+
+    public async add() {}
+}
 
 export default class User {
     public email: string | null;
     public password: string | null;
     public drive: Drive;
 
-    constructor(database: Database, email: string, password: string) {
-        this.drive = new Drive(database);
-        this.email = email;
-        this.password = password;
+    constructor() {
+        this.password = null;
+        this.email = null;
+        this.drive = new Drive();
     }
-};
+}

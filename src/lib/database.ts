@@ -8,14 +8,16 @@ type OrbitStore = {
 };
 
 type OrbitKVStore = OrbitStore & {
-    get: (key: string) => {},
-    set: (key: string, value: string) => {},
+    get: (key: string) => string | undefined,
+    set: (key: string, value: string) => void,
 };
 
 type OrbitDocStore = OrbitStore & {
-    get: (key: string) => {},
-    set: (key: string, value: any) => {},
+    get: (key: string) => string | undefined,
+    set: (key: string, value: string) => void,
 };
+
+export class DatabaseError extends Error {}
 
 export class KVStore {
     private store: OrbitKVStore;
@@ -32,7 +34,7 @@ export class KVStore {
     public async set(key: string, value: string) {
         return this.store.set(key, value);
     }
-};
+}
 
 export class DocStore {
     private store: OrbitDocStore;
@@ -55,15 +57,15 @@ export class Database {
     
     public async makeKVStore(address: string) {
         if (this.orbit === null) {
-            throw "Database has not yet been initialised";
+            throw new DatabaseError("Database has not yet been initialised");
         }
         return new KVStore(await this.orbit.keyvalue(address));
     }
 
     public async makeDocStore(address: string) {
         if (this.orbit === null) {
-            throw "Database has not yet been initialised";
+            throw new DatabaseError("Database has not yet been initialised");
         }
         return new DocStore(await this.orbit.docs(address));
     }
-};
+}
