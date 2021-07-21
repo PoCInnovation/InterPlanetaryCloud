@@ -1,68 +1,31 @@
 import React from "react";
-import bcrypt from "bcryptjs";
-import jwt, { Secret } from "jsonwebtoken";
-import { Redirect } from "react-router-dom";
-import { JWT_SECRET } from "config/environment";
+import {AuthError} from "../../lib/auth";
+import {useAuthContext} from "../../contexts/auth";
+import {useUserContext} from "../../contexts/user";
 
-export type LoginViewProps = {
-    orbitDB: any,
-    usersKV: any,
-    setUserDocs: React.Dispatch<any>,
-};
-
-const LoginView: React.FC<LoginViewProps> = props => {
+const LoginView: React.FC = props => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [loggedIn, setLoggedIn] = React.useState(false);
+    const auth = useAuthContext();
+    const {setUser} = useUserContext();
 
     const emailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
     const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
     const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            await props.usersKV.load();
-            const userId = await props.usersKV.get(email);
-            let validPassword = undefined;
-            let userDocs = undefined;
-
-            if (userId) {
-                userDocs = await props.orbitDB.docs(userId._id);
-                await userDocs.load();
-                const hash = await userDocs.get(email)[0].password;
-                validPassword = bcrypt.compareSync(password, hash);
-            }
-            if (!userId || !validPassword) {
-                console.log("Invalid email or password");
-                return;
-            }
-            const payload = {
-                email,
-                password,
-                docsAddress: userId._id,
-            };
-            const token = jwt.sign(payload, JWT_SECRET as Secret);
-            localStorage.setItem("token", token);
-            props.setUserDocs(userDocs);
-        } catch (error) {
-            console.log(error);
-        }
+        auth.login(email, password)
+            .then((user) => {
+                setUser(user);
+            })
+            .catch((e: AuthError) => {
+                console.error(e);
+            })
     };
-
-    React.useEffect(() => {
-        jwt.verify(
-            localStorage.token,
-            JWT_SECRET as Secret,
-            function (err: any, decoded: any) {
-                setLoggedIn(!err && decoded.docsAddress)
-            });
-    })
-
-    if (loggedIn) return <Redirect to={"/dashboard"} />;
 
     return (
         <div className={"flex items-center justify-center"}>
-            <form onSubmit={(e) => loginUser(e)} className={"mt-24 bg-white p-6 rounded-md border border-gray-200 w-[400px] shadow-md"}>
+            <form onSubmit={loginUser} className={"mt-24 bg-white p-6 rounded-md border border-gray-200 w-[400px] shadow-md"}>
                 <div className={""}>
                     <p className={"text-xl"}>
                         Log in
