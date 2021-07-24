@@ -42,6 +42,11 @@ export class DocStore {
     constructor(store: OrbitDocStore) {
         this.store = store;
     }
+
+    public async get(key: string) {
+        await this.store.load();
+        return this.store.get(key);
+    }
 }
 
 export class Database {
