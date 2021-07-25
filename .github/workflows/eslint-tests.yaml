@@ -1,0 +1,24 @@
+name: Lint tests
+
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm Install
+
+      - name: Run Eslint
+        run: npm run lint > lint-results
+
+      - name: Get lint results
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: lint-results
+          path: lint-results
