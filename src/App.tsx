@@ -19,7 +19,6 @@ import FullPageLoader from './components/loaders/FullPageLoader';
 import { KEYVALUE_DB_ADDRESS } from './config/environment';
 
 const App: React.FC = () => {
-	
 	const [database, setDatabase] = React.useState<Database | null>(null);
 	const [auth, setAuth] = React.useState<Auth | null>(null);
 	const [user, setUser] = React.useState<User | null>(null);
