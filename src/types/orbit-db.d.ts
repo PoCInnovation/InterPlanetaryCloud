@@ -1,1 +1,1 @@
-export module "orbit-db";
+export module 'orbit-db';

@@ -1,23 +1,31 @@
 class Drive {
-    public files: any[];
+	// TODO: find appropriate type
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public files: any[];
 
-    constructor() {
-        this.files = [];
-    }
+	constructor() {
+		this.files = [];
+	}
 
-    public async load() {}
+	// TODO: implement this function
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public async load() {}
 
-    public async add() {}
+	// TODO: implement this function
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public async add() {}
 }
 
 export default class User {
-    public email: string | null;
-    public password: string | null;
-    public drive: Drive;
+	public email: string | null;
 
-    constructor() {
-        this.password = null;
-        this.email = null;
-        this.drive = new Drive();
-    }
+	public password: string | null;
+
+	public drive: Drive;
+
+	constructor() {
+		this.password = null;
+		this.email = null;
+		this.drive = new Drive();
+	}
 }

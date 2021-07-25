@@ -1,5 +1,6 @@
 export default class FileUtils {
-    static extractFilename(filename: string) {
-        return "";
-    }
+	// TODO: implement this function
+	static extractFilename(): string {
+		return '';
+	}
 }

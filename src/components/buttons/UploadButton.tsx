@@ -1,13 +1,15 @@
-import React from "react";
+import React from 'react';
 
-const UploadButton: React.FC = props => {
-    const uploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {};
+const UploadButton: React.FC = () => {
+	const uploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		console.log(event);
+	};
 
-    return (
-        <div>
-            <input onChange={uploadFile} type="file" />
-        </div>
-    );
-}
+	return (
+		<div>
+			<input onChange={uploadFile} type="file" />
+		</div>
+	);
+};
 
 export default UploadButton;

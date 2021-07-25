@@ -1,16 +1,19 @@
-import React from "react";
-import Auth from "../lib/auth";
+import React from 'react';
 
-export type TAuthContext = null | Auth;
+import Auth from '../lib/auth';
+
+type TAuthContext = null | Auth;
 
 const AuthContext = React.createContext<TAuthContext>(null);
 
-export function useAuthContext() {
-    const context = React.useContext(AuthContext);
-    if (context === null) {
-        throw new Error("context used outside of provider.");
-    }
-    return context;
-}
+const useAuthContext = (): Auth => {
+	const context = React.useContext(AuthContext);
+	if (context === null) {
+		throw new Error('context used outside of provider.');
+	}
+	return context;
+};
 
+export type { TAuthContext };
+export { useAuthContext };
 export default AuthContext;

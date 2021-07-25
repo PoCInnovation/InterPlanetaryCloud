@@ -1,1 +1,1 @@
-export module "ipfs-http-client";
+export module 'ipfs-http-client';
