@@ -13,12 +13,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Eslint
-        run: npm run lint > lint-results
+      - name: Run eslint
+        run: npm run lint > eslint-results
 
-      - name: Get lint results
+      - name: Get eslint results
         uses: actions/upload-artifact@v1
         if: always()
         with:
-          name: lint-results
-          path: lint-results
+          name: eslint-results
+          path: eslint-results
