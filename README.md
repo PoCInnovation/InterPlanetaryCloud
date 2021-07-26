@@ -72,19 +72,6 @@ A new version in TypeScript, functionnal tests as well as a more user friendly d
   
 ![](public/dashboardFigma.png)
 
-## Contribute 💛
-
-We would be very happy to accept your PRs !  
-> Fork the project, your remote repo on Github is called `origin`.  
-> Create a new branch from `dev` if it exists, else from `master`.  
-> Implement your feature, following our coding style.  
-> Run tests if it exists.  
-> Write tests.  
-> Push your work and open a PR !  
-
-Don't hesitate to open an issue !  
-We hope our work pleased you 🍀
-
 ## Our [PoC](https://www.poc-innovation.fr/) team :ok_hand:
 Developers:
 + [Adrien Fort](https://github.com/adrienfort)
