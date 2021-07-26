@@ -13,24 +13,41 @@ git clone git@github.com:PoCInnovation/InterPlanetaryCloud.git
 cd InterPlanetaryCloud
 npm install
 ```
-#### 3) Run the project :rocket:
+## Quickstart ⏩
+#### Run the project :rocket:
 In order to put your node online, run `ipfs daemon --enable-pubsub-experiment`.  
 Then in another window, run `npm start`.  
 You are now ready to access to your decentralized cloud :boom: !
 
 ## Features :dizzy:
 
-#### Home Page
-![](public/homePage.png)
+<details>
+  <summary>Home Page</summary>
+  
+ ![](public/homePage.png)
 
-#### Signup Page
-![](public/signupPage.png)
+</details>
 
-#### Login Page
-![](public/loginPage.png)
+<details>
+  <summary>Signup Page</summary>
+  
+ ![](public/signupPage.png)
+ 
+</details>
 
-#### Dashboard
-![](public/dashboardActual.png)
+<details>
+  <summary>Login Page</summary>
+  
+ ![](public/loginPage.png)
+ 
+</details>
+
+<details>
+  <summary>Dashboard</summary>
+  
+ ![](public/dashboardActual.png)
+ 
+</details>
 
 ## How ? :thinking:
 
@@ -74,7 +91,7 @@ Developers:
 + [Diego Rojas](https://github.com/rojasdiegopro)
 + [Lorenzo Carneli](https://github.com/MrZalTy)
 
-Product Managers:
+Project Managers:
 + [Adina Cazalens](https://github.com/NaadiQmmr)
 + [Luca Georges Francois](https://github.com/PtitLuca)
 
