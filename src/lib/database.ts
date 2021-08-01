@@ -15,8 +15,10 @@ type OrbitKVStore = OrbitStore & {
 };
 
 type OrbitDocStore = OrbitStore & {
-	get: (key: string) => string | undefined;
-	set: (key: string, value: string) => void;
+	// eslint-disable-next-line
+	get: (key: string) => any | undefined;
+	put: (value: unknown) => void;
+	address: string;
 };
 
 export class DatabaseError extends Error {}
@@ -28,16 +30,12 @@ export class KVStore {
 		this.store = store;
 	}
 
-	// TODO: add returned value
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(key: string) {
+	public async get(key: string): Promise<string | undefined> {
 		await this.store.load();
 		return this.store.get(key);
 	}
 
-	// TODO: add returned value
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async set(key: string, value: string) {
+	public async set(key: string, value: string): Promise<void> {
 		return this.store.set(key, value);
 	}
 }
@@ -45,45 +43,44 @@ export class KVStore {
 export class DocStore {
 	private store: OrbitDocStore;
 
+	public address: string;
+
 	constructor(store: OrbitDocStore) {
 		this.store = store;
+		this.address = store.address;
 	}
 
-	// TODO: add returned value
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(key: string) {
+	// eslint-disable-next-line
+	public async get(key: string): Promise<any> {
 		await this.store.load();
 		return this.store.get(key);
+	}
+
+	public async put(value: unknown): Promise<void> {
+		return this.store.put(value);
 	}
 }
 
 export class Database {
-	// TODO: select better type
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	private orbit: { docs: Function; keyvalue: Function } | null;
+	// eslint-disable-next-line
+	private orbit: any | null;
 
 	constructor() {
 		this.orbit = null;
 	}
 
-	// TODO: add returned value
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async init() {
+	public async init(): Promise<void> {
 		this.orbit = await OrbitDB.createInstance(IPFS('http://localhost:5001'));
 	}
 
-	// TODO: add returned value
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async makeKVStore(address: string) {
+	public async makeKVStore(address: string): Promise<KVStore> {
 		if (this.orbit === null) {
 			throw new DatabaseError('Database has not yet been initialised');
 		}
 		return new KVStore(await this.orbit.keyvalue(address));
 	}
 
-	// TODO: add returned value
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async makeDocStore(address: string) {
+	public async makeDocStore(address: string): Promise<DocStore> {
 		if (this.orbit === null) {
 			throw new DatabaseError('Database has not yet been initialised');
 		}

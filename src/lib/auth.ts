@@ -21,9 +21,7 @@ export default class Auth {
 		this.salt = bcrypt.genSaltSync(10);
 	}
 
-	// TODO: add return type
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async logout() {
+	public async logout(): Promise<void> {
 		window.localStorage.clear();
 	}
 
@@ -31,13 +29,11 @@ export default class Auth {
 		if (await this.kv.get(email)) {
 			throw new AuthError('account already exists');
 		}
-		// TODO: use this variable
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const userData = await this.db.makeDocStore(`ipc.user.${email}`);
 		const hashedPassword = bcrypt.hashSync(password, this.salt);
 
-		// TODO PUT
-		// await this.kv.set(email, { userData.address});
+		await userData.put({ _id: email, password: hashedPassword, data: {} });
+		await this.kv.set(email, userData.address);
 
 		const user = new User();
 		user.email = email;
@@ -49,15 +45,14 @@ export default class Auth {
 
 	public async login(email: string, password: string): Promise<User> {
 		const userId = await this.kv.get(email);
+
 		if (!userId) {
 			throw new AuthError('invalid email or password');
 		}
-		// TODO: use this variable
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const userData = await this.db.makeDocStore(userId);
-		// TODO: fix this error
-		// const hashedPassword = await userData.get(email)[0].password;
-		const hashedPassword = '';
+		const userDocs = await this.db.makeDocStore(userId);
+		const userData = await userDocs.get(email);
+		const hashedPassword = userData[0].password;
+
 		if (!bcrypt.compareSync(password, hashedPassword)) {
 			throw new AuthError('invalid email or password');
 		}
