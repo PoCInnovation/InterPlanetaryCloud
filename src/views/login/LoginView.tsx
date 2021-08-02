@@ -1,6 +1,3 @@
-// TODO: add type to buttons
-/* eslint-disable react/button-has-type */
-// TODO: add control to labels
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { AuthError } from '../../lib/auth';
@@ -24,7 +21,6 @@ const LoginView: React.FC = () => {
 				setUser(user);
 			})
 			.catch((error: AuthError) => {
-				// TODO: tell the user invalid credentials or internal server error
 				console.error(error);
 			});
 	};
@@ -37,22 +33,28 @@ const LoginView: React.FC = () => {
 				</div>
 
 				<div className="flex flex-col mt-6">
-					<label className="text-sm text-gray-600 mb-1">Email</label>
-					<input
-						className="p-2 text-sm bg-gray-100 border border-gray-300 rounded mb-4"
-						onChange={emailChange}
-						type="text"
-					/>
-					<label className="text-sm text-gray-600 mb-1">Password</label>
-					<input
-						className="p-2 text-sm bg-gray-100 border border-gray-300 rounded"
-						onChange={passwordChange}
-						type="password"
-					/>
+					<label className="text-sm text-gray-600 mb-1">
+						Email
+						<input
+							className="p-2 text-sm bg-gray-100 border border-gray-300 rounded mb-4"
+							onChange={emailChange}
+							type="text"
+						/>
+					</label>
+					<label className="text-sm text-gray-600 mb-1">
+						Password
+						<input
+							className="p-2 text-sm bg-gray-100 border border-gray-300 rounded"
+							onChange={passwordChange}
+							type="password"
+						/>
+					</label>
 				</div>
-
 				<div className="flex justify-end mt-6">
-					<button className="shadow p-2 px-4 text-sm bg-blue-600 text-white rounded transition duration-200 hover:bg-blue-700">
+					<button
+						type="submit"
+						className="shadow p-2 px-4 text-sm bg-blue-600 text-white rounded transition duration-200 hover:bg-blue-700"
+					>
 						Submit
 					</button>
 				</div>

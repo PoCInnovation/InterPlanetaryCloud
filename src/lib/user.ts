@@ -1,7 +1,5 @@
 class Drive {
-	// TODO: find appropriate type
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public files: any[];
+	public files: unknown[];
 
 	constructor() {
 		this.files = [];

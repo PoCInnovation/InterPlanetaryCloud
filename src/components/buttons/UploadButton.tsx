@@ -1,9 +1,7 @@
 import React from 'react';
 
 const UploadButton: React.FC = () => {
-	const uploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(event);
-	};
+	const uploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {};
 
 	return (
 		<div>

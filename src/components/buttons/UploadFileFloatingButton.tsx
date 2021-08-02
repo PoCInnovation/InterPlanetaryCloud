@@ -1,5 +1,3 @@
-// TODO: add type to buttons
-/* eslint-disable react/button-has-type */
 import React from 'react';
 import { PlusIcon } from '@heroicons/react/solid';
 
@@ -13,6 +11,7 @@ const UploadFileFloatingButton: React.FC = () => {
 	return (
 		<div>
 			<button
+				type="submit"
 				className="absolute bottom-12 right-12 bg-blue-600 hover:bg-blue-700 transition duration-200 text-white px-4 py-3 rounded-full flex items-center shadow-lg cursor-pointer"
 				onClick={showUploadMenu}
 			>
