@@ -1,5 +1,3 @@
-// TODO: add type to buttons
-/* eslint-disable react/button-has-type */
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +10,10 @@ const HomeView: React.FC = () => (
 		</div>
 		<div className="flex mt-8">
 			<Link to="/login">
-				<button className="shadow-md border bg-white border-gray-200 p-2 px-4 rounded-md transition duration-200 hover:bg-gray-100">
+				<button
+					type="submit"
+					className="shadow-md border bg-white border-gray-200 p-2 px-4 rounded-md transition duration-200 hover:bg-gray-100"
+				>
 					Login
 				</button>
 			</Link>

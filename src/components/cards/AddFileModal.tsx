@@ -4,9 +4,7 @@ import Modal from '../layout/Modal';
 import UploadButton from '../buttons/UploadButton';
 
 type TAddFileModalProps = {
-	// TODO: select a better type
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	close: Function;
+	close: () => void;
 };
 
 const AddFileModal: React.FC<TAddFileModalProps> = ({ close }: TAddFileModalProps) => (
