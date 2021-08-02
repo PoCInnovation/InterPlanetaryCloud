@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-export type TUserContext = null | {
-    email: string,
-    password: string,
-};
+import User from 'lib/user';
+
+type TUserContext = null | { user: User; setUser: React.Dispatch<User | null> };
 
 const UserContext = React.createContext<TUserContext>(null);
 
-export function useUserContext() {
-    const context = React.useContext(UserContext);
+const useUserContext = (): { user: User; setUser: React.Dispatch<User | null> } => {
+	const context = React.useContext(UserContext);
+	if (context === null) {
+		throw new Error('context used outside of provider.');
+	}
+	return context;
+};
 
-    if (context === null) {
-        throw new Error("context used outside of provider.");
-    }
-    return context;
-}
-
+export type { TUserContext };
+export { useUserContext };
 export default UserContext;

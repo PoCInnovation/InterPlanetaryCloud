@@ -34,7 +34,9 @@
     "cypress:run": "cypress run",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src",
+    "lintfix": "eslint src --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -61,7 +63,12 @@
     "@types/react-router-dom": "^5.1.7",
     "autoprefixer": "^9.8.6",
     "cypress": "^7.6.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "postcss": "^7.0.36",
+    "prettier": "^2.3.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.2"
   }
 }
