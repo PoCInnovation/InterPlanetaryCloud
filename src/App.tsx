@@ -16,8 +16,6 @@ import AuthContext from './contexts/auth';
 import DatabaseContext from './contexts/database';
 import FullPageLoader from './components/loaders/FullPageLoader';
 
-import { KEYVALUE_DB_ADDRESS } from './config/environment';
-
 const App: React.FC = () => {
 	const [database, setDatabase] = React.useState<Database | null>(null);
 	const [auth, setAuth] = React.useState<Auth | null>(null);
@@ -28,10 +26,10 @@ const App: React.FC = () => {
 		if ((!database || !auth) && !error) {
 			(async () => {
 				try {
-					const db = new Database();
-					await db.init();
-					setDatabase(db);
-					setAuth(new Auth(db, await db.makeKVStore(KEYVALUE_DB_ADDRESS)));
+					// const db = new Database();
+					// await db.init();
+					// setDatabase(db);
+					// setAuth(new Auth(db, await db.makeKVStore(KEYVALUE_DB_ADDRESS)));
 				} catch (e) {
 					setError(e);
 				}
