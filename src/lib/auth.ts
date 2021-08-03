@@ -1,25 +1,17 @@
-import bcrypt from 'bcryptjs';
-
-import User from './user';
-import { Database } from './database';
+import { account } from 'aleph-ts';
 
 export class AuthError extends Error {}
 
 export default class Auth {
-	private db: Database;
-
-	private readonly salt: string;
-
-	constructor(db: Database) {
-		this.db = db;
-		this.salt = bcrypt.genSaltSync(10);
-	}
-
 	public async logout(): Promise<void> {
 		window.localStorage.clear();
 	}
 
-	public async signup(email: string, password: string): Promise<User> {
+	public async signup(username: string): Promise<void> {
+		const newAccount = await account.ethereum.newAccount({ name: username });
+
+		console.log(newAccount);
+
 		// if (await this.kv.get(email)) {
 		// 	throw new AuthError('account already exists');
 		// }
@@ -35,10 +27,14 @@ export default class Auth {
 		// const token = jwt.sign({ email, password }, JWT_SECRET);
 		// window.localStorage.setItem('token', token);
 		// return user;
-		return new User();
 	}
 
-	public async login(email: string, password: string): Promise<User> {
+	public async login(username: string, mnemonics: string): Promise<void> {
+		const importedAccount = await account.ethereum.importAccount({
+			mnemonics,
+			name: username,
+		});
+		console.log(importedAccount);
 		// const userId = await this.kv.get(email);
 		//
 		// if (!userId) {
@@ -54,10 +50,8 @@ export default class Auth {
 		// const user = new User();
 		// user.email = email;
 		// user.password = hashedPassword;
-		// // TODO: Load drive
 		// const token = jwt.sign({ email, password }, JWT_SECRET);
 		// window.localStorage.setItem('token', token);
 		// return user;
-		return new User();
 	}
 }

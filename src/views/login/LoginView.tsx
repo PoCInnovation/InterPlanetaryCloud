@@ -2,27 +2,20 @@
 import React from 'react';
 import { AuthError } from '../../lib/auth';
 import { useAuthContext } from '../../contexts/auth';
-import { useUserContext } from '../../contexts/user';
 
 const LoginView: React.FC = () => {
-	const [email, setEmail] = React.useState('');
-	const [password, setPassword] = React.useState('');
+	const [username, setUsername] = React.useState('');
+	const [mnemonics, setMnemonics] = React.useState('');
 	const auth = useAuthContext();
-	const { setUser } = useUserContext()!;
 
-	const emailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-	const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+	const usernameChange = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value);
+	const mnemonicsChange = (e: React.ChangeEvent<HTMLInputElement>) => setMnemonics(e.target.value);
 
 	const loginUser = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		auth
-			.login(email, password)
-			.then((user) => {
-				setUser(user);
-			})
-			.catch((error: AuthError) => {
-				console.error(error);
-			});
+		auth.login(username, mnemonics).catch((error: AuthError) => {
+			console.error(error);
+		});
 	};
 
 	return (
@@ -34,18 +27,18 @@ const LoginView: React.FC = () => {
 
 				<div className="flex flex-col mt-6">
 					<label className="text-sm text-gray-600 mb-1">
-						Email
+						Username
 						<input
 							className="p-2 text-sm bg-gray-100 border border-gray-300 rounded mb-4"
-							onChange={emailChange}
+							onChange={usernameChange}
 							type="text"
 						/>
 					</label>
 					<label className="text-sm text-gray-600 mb-1">
-						Password
+						Mnemonics
 						<input
 							className="p-2 text-sm bg-gray-100 border border-gray-300 rounded"
-							onChange={passwordChange}
+							onChange={mnemonicsChange}
 							type="password"
 						/>
 					</label>

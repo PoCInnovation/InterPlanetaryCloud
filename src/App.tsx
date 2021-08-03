@@ -9,27 +9,24 @@ import DashboardView from 'views/dashboard/DashboardView';
 
 import User from './lib/user';
 import Auth from './lib/auth';
-import { Database } from './lib/database';
 
 import UserContext from './contexts/user';
 import AuthContext from './contexts/auth';
-import DatabaseContext from './contexts/database';
 import FullPageLoader from './components/loaders/FullPageLoader';
 
 const App: React.FC = () => {
-	const [database, setDatabase] = React.useState<Database | null>(null);
 	const [auth, setAuth] = React.useState<Auth | null>(null);
 	const [user, setUser] = React.useState<User | null>(null);
 	const [error, setError] = React.useState<null | Error>(null);
 
 	React.useEffect(() => {
-		if ((!database || !auth) && !error) {
+		if (!auth && !error) {
 			(async () => {
 				try {
 					// const db = new Database();
 					// await db.init();
 					// setDatabase(db);
-					// setAuth(new Auth(db, await db.makeKVStore(KEYVALUE_DB_ADDRESS)));
+					setAuth(new Auth());
 				} catch (e) {
 					setError(e);
 				}
@@ -41,34 +38,32 @@ const App: React.FC = () => {
 		return <div>Something bad happened: {error.message}</div>;
 	}
 
+	if (!auth) {
+		return <FullPageLoader />;
+	}
+
 	return (
 		<>
-			{!auth || !database ? (
-				<FullPageLoader />
-			) : (
-				<DatabaseContext.Provider value={database}>
-					<AuthContext.Provider value={auth}>
-						<UserContext.Provider value={{ user: user as User, setUser }}>
-							<Switch>
-								<Route exact path="/">
-									<HomeView />
-								</Route>
-								<Route path="/signup">
-									<SignupView />
-								</Route>
-								<Route path="/login">
-									<LoginView />
-								</Route>
-								{user && (
-									<Route path="/dashboard">
-										<DashboardView />
-									</Route>
-								)}
-							</Switch>
-						</UserContext.Provider>
-					</AuthContext.Provider>
-				</DatabaseContext.Provider>
-			)}
+			<AuthContext.Provider value={auth}>
+				<UserContext.Provider value={{ user: user as User, setUser }}>
+					<Switch>
+						<Route exact path="/">
+							<HomeView />
+						</Route>
+						<Route path="/signup">
+							<SignupView />
+						</Route>
+						<Route path="/login">
+							<LoginView />
+						</Route>
+						{user && (
+							<Route path="/dashboard">
+								<DashboardView />
+							</Route>
+						)}
+					</Switch>
+				</UserContext.Provider>
+			</AuthContext.Provider>
 		</>
 	);
 };

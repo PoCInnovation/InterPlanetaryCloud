@@ -19,7 +19,10 @@ const HomeView: React.FC = () => (
 			</Link>
 			<div className="w-4" />
 			<Link to="/signup">
-				<button className="shadow-md p-2 px-4 bg-blue-600 text-white rounded-md transition duration-200 hover:bg-blue-700">
+				<button
+					type="submit"
+					className="shadow-md p-2 px-4 bg-blue-600 text-white rounded-md transition duration-200 hover:bg-blue-700"
+				>
 					Create an account
 				</button>
 			</Link>

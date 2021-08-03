@@ -2,27 +2,18 @@
 import React from 'react';
 import { useAuthContext } from '../../contexts/auth';
 import { AuthError } from '../../lib/auth';
-import { useUserContext } from '../../contexts/user';
 
 const SignupView: React.FC = () => {
-	const [email, setEmail] = React.useState('');
-	const [password, setPassword] = React.useState('');
-	const { setUser } = useUserContext();
+	const [username, setUsername] = React.useState('');
 	const auth = useAuthContext();
 
-	const emailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-	const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+	const usernameChange = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value);
 
 	const signupUser = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		auth
-			.signup(email, password)
-			.then((user) => {
-				setUser(user);
-			})
-			.catch((error: AuthError) => {
-				console.error(error);
-			});
+		auth.signup(username).catch((error: AuthError) => {
+			console.error(error);
+		});
 	};
 
 	return (
@@ -36,21 +27,14 @@ const SignupView: React.FC = () => {
 				</div>
 				<div className="flex flex-col mt-6">
 					<label className="text-sm text-gray-600 mb-1">
-						Email
+						Username
 						<input
 							className="p-2 text-sm bg-gray-100 border border-gray-300 rounded mb-4"
-							onChange={emailChange}
+							onChange={usernameChange}
 							type="text"
 						/>
 					</label>
-					<label className="text-sm text-gray-600 mb-1">
-						Password
-						<input
-							className="p-2 text-sm bg-gray-100 border border-gray-300 rounded"
-							onChange={passwordChange}
-							type="password"
-						/>
-					</label>
+					<label className="text-sm text-gray-600 mb-1">Mnemonics</label>
 				</div>
 				<div className="flex justify-end mt-6">
 					<button
