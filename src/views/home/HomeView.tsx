@@ -1,33 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Button, Link, Text, VStack } from '@chakra-ui/react';
 
-const HomeView: React.FC = () => (
-	<div className="flex flex-col justify-center items-center w-full pt-[20vh]">
-		<div className="flex flex-col items-center">
-			<p className="text-lg">Welcome to</p>
-			<h1 className="text-5xl font-bold">Inter Planetary Cloud</h1>
-			<p className="text-blue-600 mt-4">The first cloud unsealing your data</p>
-		</div>
-		<div className="flex mt-8">
-			<Link to="/login">
-				<button
-					type="submit"
-					className="shadow-md border bg-white border-gray-200 p-2 px-4 rounded-md transition duration-200 hover:bg-gray-100"
-				>
-					Login
-				</button>
-			</Link>
-			<div className="w-4" />
-			<Link to="/signup">
-				<button
-					type="submit"
-					className="shadow-md p-2 px-4 bg-blue-600 text-white rounded-md transition duration-200 hover:bg-blue-700"
-				>
+const HomeView = (): JSX.Element => (
+	<VStack spacing="56px" mt="120px">
+		<VStack>
+			<Text color="blue.500" fontSize="24px">
+				Welcome to
+			</Text>
+			<Text color="blue.500" fontSize="64px" fontWeight="extrabold">
+				Inter Planetary Cloud
+			</Text>
+			<Text color="blue.500">The first cloud unsealing your data</Text>
+		</VStack>
+		<VStack mt="3000px" w="496px">
+			<Link to="/signup" w="100%">
+				<Button color="blue.100" size="md" w="100%">
 					Create an account
-				</button>
+				</Button>
 			</Link>
-		</div>
-	</div>
+			<Link to="/login" w="100%">
+				<Button color="blue.700" bg="blue.100" size="sm" w="100%">
+					Login
+				</Button>
+			</Link>
+		</VStack>
+	</VStack>
 );
 
 export default HomeView;

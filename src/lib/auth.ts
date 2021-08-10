@@ -8,11 +8,11 @@ export default class Auth {
 		window.localStorage.clear();
 	}
 
-	public async signup(username: string): Promise<boolean> {
+	public async signup(username: string): Promise<string | undefined> {
 		const newAccount = await account.ethereum.newAccount({ name: username });
+		console.log(newAccount);
 
-		if (newAccount) window.localStorage.setItem('username', username);
-		return newAccount !== undefined;
+		return newAccount.mnemonics?.phrase;
 	}
 
 	public async login(): Promise<void> {

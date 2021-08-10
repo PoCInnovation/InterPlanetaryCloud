@@ -4,20 +4,20 @@ import { useAuthContext } from '../../contexts/auth';
 
 const SignupView: React.FC = () => {
 	const [username, setUsername] = React.useState('');
+	const [mnemonics, setMnemonics] = React.useState('Click register to see your mnemonics');
 	const auth = useAuthContext();
-
-	const usernameChange = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value);
 
 	const signupUser = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
 		try {
-			const execution = await auth.signup(username);
+			const signup = await auth.signup(username);
+			if (signup) setMnemonics(signup);
 			// TODO: ajouter retour utilisateur
-			if (execution) window.location.assign('/login');
-		} catch (error) {
+			else console.log('Please try again');
+		} catch {
 			// TODO: ajouter retour utilisateur
-			console.error(error);
+			console.error('Please try again');
 		}
 	};
 
@@ -31,11 +31,21 @@ const SignupView: React.FC = () => {
 					<p className="text-xl">Sign up</p>
 				</div>
 				<div className="flex flex-col mt-6">
-					<label className="text-sm text-gray-600 mb-1">Username</label>
+					<label form="username" className="text-sm text-gray-600 mb-1">
+						Username
+					</label>
 					<input
 						className="p-2 text-sm bg-gray-100 border border-gray-300 rounded mb-4"
-						onChange={usernameChange}
+						onChange={(e) => setUsername(e.target.value)}
 						type="text"
+					/>
+				</div>
+				<div className="flex flex-col mt-6 h-32">
+					<label className="text-sm text-gray-600 mb-1">Mnemonics</label>
+					<textarea
+						className="select-all h-full cursor-text p-2 text-sm bg-gray-100 border border-gray-300 rounded mb-4"
+						value={mnemonics}
+						disabled
 					/>
 				</div>
 				<div className="flex justify-end mt-6">
