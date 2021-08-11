@@ -1,3 +1,5 @@
+import { account } from 'aleph-ts';
+
 // class Drive {
 // 	public files: unknown[];
 
@@ -13,9 +15,9 @@
 // }
 
 export default class User {
-	public name: string | null;
+	public importedAccount: account.ethereum.ETHAccount | undefined;
 
-	constructor(name: string) {
-		this.name = name;
+	constructor(importedAccount: account.ethereum.ETHAccount) {
+		this.importedAccount = importedAccount;
 	}
 }
