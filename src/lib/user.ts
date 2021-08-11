@@ -15,9 +15,9 @@ import { account } from 'aleph-ts';
 // }
 
 export default class User {
-	public importedAccount: account.ethereum.ETHAccount | undefined;
+	public account: account.ethereum.ETHAccount | undefined;
 
 	constructor(importedAccount: account.ethereum.ETHAccount) {
-		this.importedAccount = importedAccount;
+		this.account = importedAccount;
 	}
 }
