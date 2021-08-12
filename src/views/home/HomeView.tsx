@@ -1,4 +1,4 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Link as RouteLink } from 'react-router-dom';
 import { Button, Link, Text, VStack } from '@chakra-ui/react';
 
 const HomeView = (): JSX.Element => (
@@ -14,12 +14,12 @@ const HomeView = (): JSX.Element => (
 				<Text color="blue.500">The first cloud unsealing your data</Text>
 			</VStack>
 			<VStack mt="3000px" w="496px">
-				<Link to="/signup" w="100%">
+				<Link as={RouteLink} to="/signup" w="100%">
 					<Button color="blue.100" size="md" w="100%">
 						Create an account
 					</Button>
 				</Link>
-				<Link to="/login" w="100%">
+				<Link as={RouteLink} to="/login" w="100%">
 					<Button color="blue.700" bg="blue.100" size="sm" w="100%">
 						Login
 					</Button>

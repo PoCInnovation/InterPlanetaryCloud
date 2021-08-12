@@ -13,20 +13,10 @@ type RoutesPropsType = {
 
 const Routes = ({ user }: RoutesPropsType): JSX.Element => (
 	<Switch>
-		<Route exact path="/">
-			<HomeView />
-		</Route>
-		<Route path="/signup">
-			<SignupView />
-		</Route>
-		<Route path="/login">
-			<LoginView />
-		</Route>
-		{user && (
-			<Route path="/dashboard">
-				<DashboardView />
-			</Route>
-		)}
+		<Route exact path="/" component={HomeView} />
+		<Route path="/signup" component={SignupView} />
+		<Route path="/login" component={LoginView} />
+		{user && <Route path="/dashboard" component={DashboardView} />}
 	</Switch>
 );
 

@@ -12,7 +12,7 @@ const LoginView = (): JSX.Element => {
 	const [mnemonics, setMnemonics] = useState('');
 
 	const loginWithMetamask = async (): Promise<void> => {
-		const login = await auth.login_with_metamask();
+		const login = await auth.loginWithMetamask();
 
 		if (login.user) {
 			setUser(login.user);
@@ -25,7 +25,7 @@ const LoginView = (): JSX.Element => {
 	};
 
 	const loginWithCredentials = async (): Promise<void> => {
-		const login = await auth.login_with_credentials(username, mnemonics);
+		const login = await auth.loginWithCredentials(username, mnemonics);
 
 		if (login.user) {
 			setUser(login.user);
