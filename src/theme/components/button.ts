@@ -11,10 +11,6 @@ const Button = {
 		_hover: {
 			opacity: '90%',
 		},
-		_focus: {
-			border: '0px solid rgba(0, 0, 0, 0)',
-			boxShadow: `0px 0px 0px 2px ${colors.blue[700]}`,
-		},
 	},
 	sizes: {
 		sm: {

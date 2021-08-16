@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { Box, Button, FormControl, FormLabel, Input, Textarea } from '@chakra-ui/react';
+import { Button, Center, FormControl, FormLabel, Input, Textarea, useToast, VStack } from '@chakra-ui/react';
 
+import colors from 'theme/foundations/colors';
 import { useAuthContext } from '../../contexts/auth';
 import { useUserContext } from '../../contexts/user';
 
@@ -10,17 +11,26 @@ const LoginView = (): JSX.Element => {
 	const { setUser } = useUserContext();
 	const [username, setUsername] = useState('');
 	const [mnemonics, setMnemonics] = useState('');
+	const toast = useToast();
 
 	const loginWithMetamask = async (): Promise<void> => {
 		const login = await auth.loginWithMetamask();
 
 		if (login.user) {
 			setUser(login.user);
-			// TODO: ajouter retour utilisateur
-			console.log('Login success');
+			toast({
+				title: 'Welcome back !',
+				status: 'success',
+				duration: 2000,
+				isClosable: true,
+			});
 		} else {
-			// TODO: ajouter retour utilisateur
-			console.log('Login failed');
+			toast({
+				title: 'Unable to login with metamask',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
 		}
 	};
 
@@ -29,27 +39,53 @@ const LoginView = (): JSX.Element => {
 
 		if (login.user) {
 			setUser(login.user);
-			// TODO: ajouter retour utilisateur
-			console.log('Login success');
+			toast({
+				title: 'Welcome back !',
+				status: 'success',
+				duration: 2000,
+				isClosable: true,
+			});
 		} else {
-			// TODO: ajouter retour utilisateur
-			console.log('Login failed');
+			toast({
+				title: 'Invalid credentials ',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
 		}
 	};
 
 	return (
-		<Box>
-			<Button onClick={() => loginWithMetamask()}>Login with Metamask</Button>
-			<FormControl>
-				<FormLabel>Username</FormLabel>
-				<Input onChange={(e) => setUsername(e.target.value)} />
-				<FormLabel>Mnemonics</FormLabel>
-				<Textarea onChange={(e) => setMnemonics(e.target.value)} />
-				<Button type="submit" onClick={() => loginWithCredentials()}>
-					Login with credentials
-				</Button>
-			</FormControl>
-		</Box>
+		<Center>
+			<VStack spacing="80px" mt="220px" w="496px">
+				<VStack spacing="16px" w="100%">
+					<Button onClick={() => loginWithMetamask()}>Login with Metamask</Button>
+				</VStack>
+				<FormControl>
+					<FormLabel>Username</FormLabel>
+					<Input
+						_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+						onChange={(e) => setUsername(e.target.value)}
+					/>
+					<FormLabel mt="8px">Mnemonics</FormLabel>
+					<Textarea
+						_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+						cursor="text"
+						onChange={(e) => setMnemonics(e.target.value)}
+					/>
+					<Button
+						color="green.700"
+						bg="green.300"
+						mt="16px"
+						w="100%"
+						type="submit"
+						onClick={() => loginWithCredentials()}
+					>
+						Login with credentials
+					</Button>
+				</FormControl>
+			</VStack>
+		</Center>
 	);
 };
 
