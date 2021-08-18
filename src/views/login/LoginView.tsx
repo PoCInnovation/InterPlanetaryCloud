@@ -59,33 +59,30 @@ const LoginView = (): JSX.Element => {
 	return (
 		<VStack spacing="80px" w="496px">
 			<VStack spacing="16px" w="100%">
-				<Button onClick={() => loginWithMetamask()}>Login with Metamask</Button>
+				<Button variant="inline" w="100%" onClick={() => loginWithMetamask()}>
+					Login with Metamask
+				</Button>
 			</VStack>
 			<FormControl>
 				<FormLabel>Username</FormLabel>
 				<Input
-					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<FormLabel mt="8px">Mnemonics</FormLabel>
 				<Textarea
-					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					cursor="text"
 					onChange={(e) => setMnemonics(e.target.value)}
 				/>
-				<Button
-					color="green.700"
-					bg="green.300"
-					mt="16px"
-					w="100%"
-					type="submit"
-					onClick={() => loginWithCredentials()}
-				>
+				<Button variant="inline" mt="16px" w="100%" type="submit" onClick={() => loginWithCredentials()}>
 					Login with credentials
 				</Button>
 			</FormControl>
 			<Link as={RouteLink} to="/signup" w="100%">
-				<Button>Signup</Button>
+				<Button variant="outline" size="sm" w="100%">
+					Signup
+				</Button>
 			</Link>
 		</VStack>
 	);

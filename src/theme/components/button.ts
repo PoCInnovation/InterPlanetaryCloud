@@ -7,7 +7,6 @@ const Button = {
 		fontWeight: 500,
 		fontSize: '16px',
 		lineHeight: '24px',
-		color: `${colors.blue[300]}`,
 		_hover: {
 			opacity: '90%',
 		},
@@ -21,16 +20,42 @@ const Button = {
 		md: {
 			padding: '16px 32px',
 			height: '56px',
+			fontSize: '16px',
 		},
 	},
 	variants: {
-		primary: {
-			background: `${colors.blue[700]}`,
+		gray: {
+			background: `${colors.gray[300]}`,
+			color: `${colors.gray[700]}`,
+		},
+		inline: {
+			bgGradient: `linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`,
+			color: 'white',
+		},
+		outline: {
+			_hover: {
+				bg: 'white',
+				opacity: '100%',
+			},
+			_before: {
+				content: `''`,
+				position: 'absolute',
+				top: 0,
+				right: 0,
+				bottom: 0,
+				left: 0,
+				zIndex: -1,
+				margin: -1,
+				borderRadius: `${radius.base}`,
+				bgGradient: `linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`,
+			},
+			bg: 'white',
+			color: `${colors.blue[900]}`,
 		},
 	},
 	defaultProps: {
 		size: 'md',
-		variant: 'primary',
+		variant: 'gray',
 	},
 };
 

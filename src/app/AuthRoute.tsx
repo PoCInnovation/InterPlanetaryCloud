@@ -1,6 +1,8 @@
 import { Route, RouteProps } from 'react-router-dom';
 
-import { Box, Text, VStack } from '@chakra-ui/react';
+import { Text, VStack } from '@chakra-ui/react';
+
+import colors from 'theme/foundations/colors';
 
 interface AuthRouteProps {
 	children: JSX.Element;
@@ -8,20 +10,19 @@ interface AuthRouteProps {
 
 const AuthRoute = ({ children, ...rest }: AuthRouteProps & RouteProps): JSX.Element => (
 	<Route {...rest}>
-		<VStack spacing="80px" mt="132px">
-			<VStack>
-				<Text color="blue.500" fontSize="64px" fontWeight="extrabold">
-					<Box opacity="0.95" padding="0px 5px">
-						Inter Planetary Cloud
-					</Box>
+		<VStack spacing="56px" mt="132px">
+			<VStack spacing="16px">
+				<Text
+					fontSize="64px"
+					fontWeight="extrabold"
+					bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
+					bgClip="text"
+				>
+					Inter Planetary Cloud
 				</Text>
-				<Text fontSize="24px" color="blue.500">
-					The first cloud unsealing your data
-				</Text>
+				<Text fontSize="16px">The first cloud unsealing your data</Text>
 			</VStack>
-			<VStack mt="3000px" w="496px">
-				{children}
-			</VStack>
+			<VStack w="496px">{children}</VStack>
 		</VStack>
 	</Route>
 );

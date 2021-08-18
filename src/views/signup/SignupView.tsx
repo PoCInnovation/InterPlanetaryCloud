@@ -63,7 +63,7 @@ const SignupView = (): JSX.Element => {
 	return (
 		<VStack spacing="80px" w="496px">
 			<VStack spacing="16px" w="100%">
-				<Button onClick={() => signupWithMetamask()} color="yellow.100" bg="yellow.500" w="100%">
+				<Button variant="inline" onClick={() => signupWithMetamask()} w="100%">
 					Signup with metamask
 				</Button>
 			</VStack>
@@ -71,30 +71,25 @@ const SignupView = (): JSX.Element => {
 			<FormControl>
 				<FormLabel>Username</FormLabel>
 				<Input
-					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<FormLabel mt="8px">Mnemonics</FormLabel>
 				<Textarea
-					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					cursor="text"
 					value={mnemonics}
 					readOnly
 				/>
 				{/* TODO: ajouter un button pour copier le mnemonics */}
-				<Button
-					color="green.700"
-					bg="green.300"
-					mt="16px"
-					w="100%"
-					type="submit"
-					onClick={() => signupWithCredentials()}
-				>
+				<Button variant="inline" mt="16px" w="100%" type="submit" onClick={() => signupWithCredentials()}>
 					Signup with credentials
 				</Button>
 			</FormControl>
 			<Link as={RouteLink} to="/login" w="100%">
-				<Button>Login</Button>
+				<Button variant="outline" size="sm" w="100%">
+					Login
+				</Button>
 			</Link>
 		</VStack>
 	);
