@@ -1,14 +1,17 @@
-import React from 'react';
+import { useUserContext } from 'contexts/user';
 
-import Dashboard from 'components/layout/Dashboard';
-import UploadFileFloatingButton from 'components/buttons/UploadFileFloatingButton';
-import FilesGrid from './FilesGrid';
+import { Text } from '@chakra-ui/react';
 
-const DashboardPage: React.FC = () => (
-	<Dashboard>
-		<FilesGrid />
-		<UploadFileFloatingButton />
-	</Dashboard>
-);
+const Dashboard = (): JSX.Element => {
+	const { user } = useUserContext();
 
-export default DashboardPage;
+	console.log(user);
+
+	return (
+		<>
+			<Text>This is the dashboard</Text>
+		</>
+	);
+};
+
+export default Dashboard;

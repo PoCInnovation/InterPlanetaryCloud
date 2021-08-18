@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { Link as RouteLink } from 'react-router-dom';
 
-import { Button, Center, FormControl, FormLabel, Input, Textarea, useToast, VStack } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, Link, Textarea, useToast, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
-import { useAuthContext } from '../../contexts/auth';
-import { useUserContext } from '../../contexts/user';
+import { useAuthContext } from 'contexts/auth';
+import { useUserContext } from 'contexts/user';
 
 const LoginView = (): JSX.Element => {
 	const auth = useAuthContext();
@@ -56,36 +57,37 @@ const LoginView = (): JSX.Element => {
 	};
 
 	return (
-		<Center>
-			<VStack spacing="80px" mt="220px" w="496px">
-				<VStack spacing="16px" w="100%">
-					<Button onClick={() => loginWithMetamask()}>Login with Metamask</Button>
-				</VStack>
-				<FormControl>
-					<FormLabel>Username</FormLabel>
-					<Input
-						_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
-						onChange={(e) => setUsername(e.target.value)}
-					/>
-					<FormLabel mt="8px">Mnemonics</FormLabel>
-					<Textarea
-						_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
-						cursor="text"
-						onChange={(e) => setMnemonics(e.target.value)}
-					/>
-					<Button
-						color="green.700"
-						bg="green.300"
-						mt="16px"
-						w="100%"
-						type="submit"
-						onClick={() => loginWithCredentials()}
-					>
-						Login with credentials
-					</Button>
-				</FormControl>
+		<VStack spacing="80px" w="496px">
+			<VStack spacing="16px" w="100%">
+				<Button onClick={() => loginWithMetamask()}>Login with Metamask</Button>
 			</VStack>
-		</Center>
+			<FormControl>
+				<FormLabel>Username</FormLabel>
+				<Input
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+					onChange={(e) => setUsername(e.target.value)}
+				/>
+				<FormLabel mt="8px">Mnemonics</FormLabel>
+				<Textarea
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.green[300]}` }}
+					cursor="text"
+					onChange={(e) => setMnemonics(e.target.value)}
+				/>
+				<Button
+					color="green.700"
+					bg="green.300"
+					mt="16px"
+					w="100%"
+					type="submit"
+					onClick={() => loginWithCredentials()}
+				>
+					Login with credentials
+				</Button>
+			</FormControl>
+			<Link as={RouteLink} to="/signup" w="100%">
+				<Button>Signup</Button>
+			</Link>
+		</VStack>
 	);
 };
 

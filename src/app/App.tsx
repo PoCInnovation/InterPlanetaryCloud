@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 import Routes from './Routes';
 
@@ -10,11 +10,12 @@ import AuthContext from '../contexts/auth';
 import FullPageLoader from '../components/loaders/FullPageLoader';
 
 const App = (): JSX.Element => {
-	const [auth, setAuth] = React.useState<Auth | null>(null);
-	const [user, setUser] = React.useState<User | null>(null);
-	const [error, setError] = React.useState<null | Error>(null);
+	// QUESTION: À t'on vraiment besoin de ça ? (écho au contexte provider)
+	const [auth, setAuth] = useState<Auth | null>(null);
+	const [user, setUser] = useState<User | null>(null);
+	const [error, setError] = useState<null | Error>(null);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!auth && !error) {
 			(async () => {
 				try {
@@ -32,9 +33,13 @@ const App = (): JSX.Element => {
 
 	return (
 		<>
+			{/* QUESTION: C'est pour quoi le AuthContext provider ? À quoi sert le param auth ?
+									Faut-il passer le auth au travers de tous les children ? */}
 			<AuthContext.Provider value={auth}>
+				{/* QUESTION: C'est pour quoi le UserContext.Provider ? À quoi servent les params user et setUser ?
+											Faut-il passer le setUser au travers de tous les children ? */}
 				<UserContext.Provider value={{ user: user as User, setUser }}>
-					<Routes user={user} />
+					<Routes />
 				</UserContext.Provider>
 			</AuthContext.Provider>
 		</>
