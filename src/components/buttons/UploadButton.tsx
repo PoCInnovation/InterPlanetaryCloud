@@ -1,6 +1,7 @@
 import React from 'react';
 
 const UploadButton: React.FC = () => {
+	// eslint-disable-next-line
 	const uploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {};
 
 	return (

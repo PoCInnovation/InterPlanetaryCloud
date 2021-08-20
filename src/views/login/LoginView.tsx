@@ -20,14 +20,14 @@ const LoginView = (): JSX.Element => {
 		if (login.user) {
 			setUser(login.user);
 			toast({
-				title: 'Welcome back !',
+				title: login.message,
 				status: 'success',
 				duration: 2000,
 				isClosable: true,
 			});
 		} else {
 			toast({
-				title: 'Unable to login with metamask',
+				title: login.message,
 				status: 'error',
 				duration: 2000,
 				isClosable: true,
@@ -41,14 +41,14 @@ const LoginView = (): JSX.Element => {
 		if (login.user) {
 			setUser(login.user);
 			toast({
-				title: 'Welcome back !',
+				title: login.message,
 				status: 'success',
 				duration: 2000,
 				isClosable: true,
 			});
 		} else {
 			toast({
-				title: 'Invalid credentials ',
+				title: login.message,
 				status: 'error',
 				duration: 2000,
 				isClosable: true,

@@ -11,7 +11,7 @@ const SignupView = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
 	const [username, setUsername] = React.useState('');
-	const [mnemonics, setMnemonics] = React.useState('Click register to see your mnemonics');
+	const [mnemonics, setMnemonics] = React.useState('Click to signup button to see your mnemonics');
 	const toast = useToast();
 
 	const signupWithMetamask = async (): Promise<void> => {
@@ -20,14 +20,14 @@ const SignupView = (): JSX.Element => {
 		if (login.user) {
 			setUser(login.user);
 			toast({
-				title: 'Welcome back !',
+				title: login.message,
 				status: 'success',
 				duration: 2000,
 				isClosable: true,
 			});
 		} else {
 			toast({
-				title: 'Unable to signup with metamask',
+				title: login.message,
 				status: 'error',
 				duration: 2000,
 				isClosable: true,
@@ -45,14 +45,14 @@ const SignupView = (): JSX.Element => {
 			setMnemonics(returnedMnemonics);
 			setUser(signup.user);
 			toast({
-				title: 'Welcome !',
+				title: signup.message,
 				status: 'success',
 				duration: 2000,
 				isClosable: true,
 			});
 		} else {
 			toast({
-				title: 'Please try again',
+				title: signup.message,
 				status: 'error',
 				duration: 2000,
 				isClosable: true,

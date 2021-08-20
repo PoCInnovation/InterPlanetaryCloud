@@ -1,5 +1,6 @@
 import { account } from 'aleph-ts';
 import Web3 from 'web3';
+
 import User from './user';
 
 type AuthReturnType = {
@@ -15,10 +16,13 @@ export default class Auth {
 	public async signup(username: string): Promise<AuthReturnType> {
 		try {
 			const newAccount = await account.ethereum.newAccount({ name: username });
-			return { user: new User(newAccount), message: 'Signup successful' };
+			const user = new User(newAccount);
+
+			await user.drive.load();
+			return { user, message: 'Successfully signup' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Signup failed' };
+			return { user: undefined, message: 'Failed to signup' };
 		}
 	}
 
@@ -28,10 +32,13 @@ export default class Auth {
 				mnemonics,
 				name: username,
 			});
-			return { user: new User(importedAccount), message: 'Login successful' };
+			const user = new User(importedAccount);
+
+			await user.drive.load();
+			return { user, message: 'Successfully logged in' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Login failed' };
+			return { user: undefined, message: 'Failed to login' };
 		}
 	}
 
@@ -41,12 +48,15 @@ export default class Auth {
 			if (typeof (window as any).ethereum !== 'undefined') {
 				await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
 				const importedFromProvider = await account.ethereum.fromProvider(Web3.givenProvider);
-				return { user: new User(importedFromProvider), message: 'Login successful' };
+				const user = new User(importedFromProvider);
+
+				await user.drive.load();
+				return { user, message: 'Successfully logged in' };
 			}
-			return { user: undefined, message: 'Please install metamask' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Login failed' };
+			return { user: undefined, message: 'Failed to login' };
 		}
+		return { user: undefined, message: 'Failed to login, please install Metamask' };
 	}
 }
