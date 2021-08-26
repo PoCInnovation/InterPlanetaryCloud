@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 
-import HomeView from 'views/home/HomeView';
-import LoginView from 'views/login/LoginView';
-import SignupView from 'views/signup/SignupView';
-import DashboardView from 'views/dashboard/DashboardView';
+import HomeView from 'views/HomeView';
+import LoginView from 'views/LoginView';
+import SignupView from 'views/SignupView';
+import DashboardView from 'views/DashboardView';
 import AuthRoute from './AuthRoute';
 import PrivateRoute from './PrivateRoute';
 
+// TODO: if User redirect to dashboard
 const Routes = (): JSX.Element => (
 	<Router>
 		<Switch>
