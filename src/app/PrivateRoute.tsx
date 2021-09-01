@@ -11,6 +11,7 @@ const PrivateRoute = ({ children, ...rest }: PrivateRouteProps & RouteProps): JS
 	const { user } = useUserContext();
 	const history = useHistory();
 
+	// TODO: find better way
 	if (!user) history.push('/');
 
 	return (
