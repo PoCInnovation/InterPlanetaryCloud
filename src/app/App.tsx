@@ -12,9 +12,10 @@ import FullPageLoader from '../components/loaders/FullPageLoader';
 const App = (): JSX.Element => {
 	const [auth, setAuth] = useState<Auth | null>(null);
 	const [user, setUser] = useState<User | null>(null);
-	const [error, setError] = useState<null | Error>(null);
+	const [error, setError] = useState<Error | null>(null);
 
 	useEffect(() => {
+		console.log('Refreshing', user);
 		if (!auth && !error) {
 			(async () => {
 				try {
@@ -24,7 +25,7 @@ const App = (): JSX.Element => {
 				}
 			})();
 		}
-	});
+	}, []);
 
 	// TODO: better error messages
 	if (error) return <div>Something bad happened: {error.message}</div>;

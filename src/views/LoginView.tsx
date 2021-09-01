@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link as RouteLink } from 'react-router-dom';
+import { Link as RouteLink, useHistory } from 'react-router-dom';
 
 import { Button, FormControl, FormLabel, Input, Link, Textarea, useToast, VStack } from '@chakra-ui/react';
 
@@ -13,6 +13,7 @@ const LoginView = (): JSX.Element => {
 	const [username, setUsername] = useState('');
 	const [mnemonics, setMnemonics] = useState('');
 	const toast = useToast();
+	const history = useHistory();
 
 	const loginWithMetamask = async (): Promise<void> => {
 		const login = await auth.loginWithMetamask();
@@ -25,6 +26,7 @@ const LoginView = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
+			history.push('/dashboard');
 		} else {
 			toast({
 				title: login.message,
@@ -46,6 +48,7 @@ const LoginView = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
+			history.push('/dashboard');
 		} else {
 			toast({
 				title: login.message,
