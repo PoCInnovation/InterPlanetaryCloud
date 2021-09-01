@@ -15,7 +15,6 @@ const App = (): JSX.Element => {
 	const [error, setError] = useState<Error | null>(null);
 
 	useEffect(() => {
-		console.log('Refreshing', user);
 		if (!auth && !error) {
 			(async () => {
 				try {

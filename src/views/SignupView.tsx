@@ -43,7 +43,7 @@ const SignupView = (): JSX.Element => {
 				? signup.user.account.mnemonics.phrase
 				: 'No mnemonics provided.';
 			setMnemonics(returnedMnemonics);
-			setUser(signup.user);
+			setTimeout(() => setUser(signup.user!), 5000);
 			toast({
 				title: signup.message,
 				status: 'success',

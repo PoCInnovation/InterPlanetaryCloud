@@ -1,19 +1,26 @@
-import { Route, RouteProps } from 'react-router-dom';
+import { Route, RouteProps, useHistory } from 'react-router-dom';
 
 import { Text, VStack } from '@chakra-ui/react';
+import { useUserContext } from 'contexts/user';
 
-interface AuthRouteProps {
+interface PrivateRouteProps {
 	children: JSX.Element;
 }
 
-// TODO: Update this component to check if the user is logged
-const AuthRoute = ({ children, ...rest }: AuthRouteProps & RouteProps): JSX.Element => (
-	<Route {...rest}>
-		<VStack>
-			<Text>This is a private Route</Text>
-			{children}
-		</VStack>
-	</Route>
-);
+const PrivateRoute = ({ children, ...rest }: PrivateRouteProps & RouteProps): JSX.Element => {
+	const { user } = useUserContext();
+	const history = useHistory();
 
-export default AuthRoute;
+	if (!user) history.push('/');
+
+	return (
+		<Route {...rest}>
+			<VStack>
+				<Text>This is a private Route</Text>
+				{children}
+			</VStack>
+		</Route>
+	);
+};
+
+export default PrivateRoute;
