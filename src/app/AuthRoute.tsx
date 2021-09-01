@@ -39,6 +39,6 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps & RouteProps): JSX.Elem
 			</VStack>
 		</Route>
 	);
-}
+};
 
 export default AuthRoute;
