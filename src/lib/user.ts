@@ -1,5 +1,6 @@
 import { account, message } from 'aleph-ts';
 import CryptoJS from 'crypto-js';
+import fileDownload from 'js-file-download';
 
 type UserData = {
 	files: IPCFile[];
@@ -88,13 +89,13 @@ class Drive {
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account !== undefined) {
-				// eslint-disable-next-line
 				const decryptedFile: IPCFile = {
 					name: file.name,
 					content: CryptoJS.AES.decrypt(file.content, this.account.private_key).toString(CryptoJS.enc.Utf8),
 					created_at: file.created_at,
 				};
-				// TODO Download file or return file
+				const blob = new Blob([decryptedFile.content]);
+				fileDownload(blob, decryptedFile.name);
 				return { success: true, message: 'Successfully downloaded file' };
 			}
 		} catch (err) {
