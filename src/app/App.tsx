@@ -19,6 +19,10 @@ const App = (): JSX.Element => {
 			(async () => {
 				try {
 					setAuth(new Auth());
+					const userString = localStorage.getItem('user');
+					if (userString) {
+						setUser(JSON.parse(userString));
+					}
 				} catch (e) {
 					setError(e);
 				}

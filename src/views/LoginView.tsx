@@ -18,6 +18,7 @@ const LoginView = (): JSX.Element => {
 		const login = await auth.loginWithMetamask();
 
 		if (login.user) {
+			// localStorage.setItem('user', JSON.stringify(login.user));
 			setUser(login.user);
 			toast({
 				title: login.message,
@@ -39,6 +40,7 @@ const LoginView = (): JSX.Element => {
 		const login = await auth.loginWithCredentials(username, mnemonics);
 
 		if (login.user) {
+			// localStorage.setItem('user', JSON.stringify(login.user));
 			setUser(login.user);
 			toast({
 				title: login.message,

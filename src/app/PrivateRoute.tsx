@@ -1,27 +1,15 @@
-import { Route, RouteProps, useHistory } from 'react-router-dom';
+import { Route, RouteProps } from 'react-router-dom';
 
-import { Text, VStack } from '@chakra-ui/react';
-import { useUserContext } from 'contexts/user';
+import { VStack } from '@chakra-ui/react';
 
 interface PrivateRouteProps {
 	children: JSX.Element;
 }
 
-const PrivateRoute = ({ children, ...rest }: PrivateRouteProps & RouteProps): JSX.Element => {
-	const { user } = useUserContext();
-	const history = useHistory();
-
-	// TODO: find better way
-	if (!user) history.push('/');
-
-	return (
-		<Route {...rest}>
-			<VStack>
-				<Text>This is a private Route</Text>
-				{children}
-			</VStack>
-		</Route>
-	);
-};
+const PrivateRoute = ({ children, ...rest }: PrivateRouteProps & RouteProps): JSX.Element => (
+	<Route {...rest}>
+		<VStack>{children}</VStack>
+	</Route>
+);
 
 export default PrivateRoute;
