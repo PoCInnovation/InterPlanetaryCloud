@@ -1,8 +1,7 @@
-import CryptoJS from 'crypto-js';
 import React from 'react';
 import { Box, VStack, Input, Button } from '@chakra-ui/react';
+
 import { useUserContext } from 'contexts/user';
-import fileDownload from 'js-file-download';
 
 function extractFilename(filepath: string) {
 	const result = /[^\\]*$/.exec(filepath);
@@ -12,11 +11,9 @@ function extractFilename(filepath: string) {
 function getFileContent(file: unknown): Promise<string> {
 	return new Promise((resolve, reject) => {
 		const reader = new window.FileReader();
-		const password = 'secret';
-		let hashFileContent = '';
 		reader.onload = (event: unknown) => {
-			hashFileContent = CryptoJS.AES.encrypt((event as any).target.result as string, password).toString();
-			resolve(hashFileContent);
+			// eslint-disable-next-line
+			resolve((event as any).target.result);
 		};
 		reader.onerror = (event) => {
 			reject(event);
@@ -27,7 +24,7 @@ function getFileContent(file: unknown): Promise<string> {
 
 const Dashboard = (): JSX.Element => {
 	const [fileEvent, setFileEvent] = React.useState<React.ChangeEvent<HTMLInputElement> | null>(null);
-	const { user, setUser } = useUserContext();
+	const { user } = useUserContext();
 
 	React.useEffect(() => {
 		user.drive.load();
@@ -39,11 +36,10 @@ const Dashboard = (): JSX.Element => {
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		if (filename === '' || fileContent === '') return;
 		await user.drive.upload({
+			name: filename,
 			content: fileContent,
 			created_at: Date.now(),
-			name: filename,
 		});
-		setUser(user);
 	};
 
 	return (
@@ -76,9 +72,8 @@ const Dashboard = (): JSX.Element => {
 					>
 						{file.name}
 						<Button
-							onClick={() => {
-								const blob = new Blob([file.content], { type: 'text/plain;charset=utf-8' });
-								fileDownload(blob, file.name);
+							onClick={async () => {
+								await user.drive.download(file);
 							}}
 						>
 							Download
