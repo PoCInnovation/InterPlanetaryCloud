@@ -49,7 +49,7 @@ class Drive {
 				return { success: true, message: 'Successfully loaded drive' };
 			}
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to load drive' };
 		}
 		return { success: false, message: 'Failed to load drive' };
@@ -80,7 +80,7 @@ class Drive {
 				}
 			}
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to upload file' };
 		}
 		return { success: false, message: 'Failed to upload file' };
@@ -99,7 +99,7 @@ class Drive {
 				return { success: true, message: 'Successfully downloaded file' };
 			}
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to download file' };
 		}
 		return { success: false, message: 'Failed to download file' };

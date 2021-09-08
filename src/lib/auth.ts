@@ -3,14 +3,14 @@ import Web3 from 'web3';
 
 import User from './user';
 
-type AuthReturnType = {
+export type AuthReturnType = {
 	user: User | undefined;
 	message: string;
 };
 
 export default class Auth {
 	public async logout(): Promise<void> {
-		window.localStorage.clear();
+		localStorage.clear();
 	}
 
 	public async signup(username: string): Promise<AuthReturnType> {
@@ -18,7 +18,6 @@ export default class Auth {
 			const newAccount = await account.ethereum.newAccount({ name: username });
 			const user = new User(newAccount);
 
-			await user.drive.load();
 			return { user, message: 'Successfully signup' };
 		} catch (err) {
 			console.error(err);
@@ -34,7 +33,6 @@ export default class Auth {
 			});
 			const user = new User(importedAccount);
 
-			await user.drive.load();
 			return { user, message: 'Successfully logged in' };
 		} catch (err) {
 			console.error(err);
@@ -50,7 +48,6 @@ export default class Auth {
 				const importedFromProvider = await account.ethereum.fromProvider(Web3.givenProvider);
 				const user = new User(importedFromProvider);
 
-				await user.drive.load();
 				return { user, message: 'Successfully logged in' };
 			}
 		} catch (err) {

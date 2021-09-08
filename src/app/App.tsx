@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 
+import { Center, Spinner, useToast } from '@chakra-ui/react';
+
+import User from 'lib/user';
+import Auth from 'lib/auth';
+
+import UserContext from 'contexts/user';
+import AuthContext from 'contexts/auth';
+
 import Routes from './Routes';
 
-import User from '../lib/user';
-import Auth from '../lib/auth';
-
-import UserContext from '../contexts/user';
-import AuthContext from '../contexts/auth';
-import FullPageLoader from '../components/loaders/FullPageLoader';
-
 const App = (): JSX.Element => {
-	const [auth, setAuth] = useState<Auth | null>(null);
-	const [user, setUser] = useState<User | null>(null);
-	const [error, setError] = useState<Error | null>(null);
+	const [auth, setAuth] = useState<Auth | undefined>(undefined);
+	const [user, setUser] = useState<User | undefined>(undefined);
+	const [error, setError] = useState<Error | undefined>(undefined);
+	const toast = useToast();
 
 	useEffect(() => {
 		if (!auth && !error) {
@@ -30,9 +32,20 @@ const App = (): JSX.Element => {
 		}
 	}, []);
 
-	// TODO: better error messages
-	if (error) return <div>Something bad happened: {error.message}</div>;
-	if (!auth) return <FullPageLoader />;
+	if (!auth || error) {
+		if (error) {
+			toast({
+				title: 'Internal Server Error',
+				status: 'error',
+				isClosable: true,
+			});
+			return (
+				<Center mt="160px">
+					<Spinner w="160px" />
+				</Center>
+			);
+		}
+	}
 
 	return (
 		<>

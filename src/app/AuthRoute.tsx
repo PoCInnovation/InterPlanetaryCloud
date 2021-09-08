@@ -7,18 +7,14 @@ import { Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 
-interface AuthRouteProps {
-	children: JSX.Element;
-}
+type AuthRouteProps = { children: JSX.Element } & RouteProps;
 
-const AuthRoute = ({ children, ...rest }: AuthRouteProps & RouteProps): JSX.Element => {
+const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 	const { user } = useUserContext();
 	const history = useHistory();
 
 	useEffect(() => {
-		if (user) {
-			(() => history.push('/dashboard'))();
-		}
+		if (localStorage.getItem('user') || user) (() => history.push('/dashboard'))();
 	}, [user]);
 
 	return (

@@ -23,11 +23,11 @@ function getFileContent(file: unknown): Promise<string> {
 }
 
 const Dashboard = (): JSX.Element => {
-	const [fileEvent, setFileEvent] = React.useState<React.ChangeEvent<HTMLInputElement> | null>(null);
+	const [fileEvent, setFileEvent] = React.useState<React.ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const { user } = useUserContext();
 
 	React.useEffect(() => {
-		user.drive.load();
+		(() => user.drive.load())();
 	}, []);
 
 	const uploadFile = async () => {

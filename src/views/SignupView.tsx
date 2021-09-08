@@ -1,30 +1,44 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 
-import { Button, FormControl, FormLabel, Input, Link, Textarea, useToast, VStack } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, Link, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
-import colors from 'theme/foundations/colors';
+import { AuthReturnType } from 'lib/auth';
+
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
+
+import OutlineButton from 'components/OutlineButton';
+import MnemonicsModal from 'components/MnemonicsModal';
+
+import colors from 'theme/foundations/colors';
 
 const SignupView = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
-	const [username, setUsername] = React.useState('');
-	const [mnemonics, setMnemonics] = React.useState('Click to signup button to see your mnemonics');
+
+	const [username, setUsername] = useState('');
+	const [mnemonics, setMnemonics] = useState('Click to signup button to see your mnemonics');
+	const [signupResult, setSignupResult] = useState<AuthReturnType | undefined>(undefined);
+	const [isLoadingMetamask, setIsLoadingMetamask] = useState(false);
+	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const toast = useToast();
 
 	const signupWithMetamask = async (): Promise<void> => {
+		setIsLoadingMetamask(true);
 		const login = await auth.loginWithMetamask();
+		setIsLoadingMetamask(false);
 
 		if (login.user) {
-			setUser(login.user);
 			toast({
 				title: login.message,
 				status: 'success',
 				duration: 2000,
 				isClosable: true,
 			});
+			localStorage.setItem('user', JSON.stringify(login.user));
+			setUser(login.user);
 		} else {
 			toast({
 				title: login.message,
@@ -36,20 +50,17 @@ const SignupView = (): JSX.Element => {
 	};
 
 	const signupWithCredentials = async (): Promise<void> => {
+		setIsLoadingCredentials(true);
 		const signup = await auth.signup(username);
+		setIsLoadingCredentials(false);
 
 		if (signup.user) {
 			const returnedMnemonics = signup.user.account?.mnemonics
 				? signup.user.account.mnemonics.phrase
 				: 'No mnemonics provided.';
 			setMnemonics(returnedMnemonics);
-			setTimeout(() => setUser(signup.user!), 5000);
-			toast({
-				title: signup.message,
-				status: 'success',
-				duration: 2000,
-				isClosable: true,
-			});
+			setSignupResult(signup);
+			onOpen();
 		} else {
 			toast({
 				title: signup.message,
@@ -60,37 +71,50 @@ const SignupView = (): JSX.Element => {
 		}
 	};
 
+	const closeModal = () => {
+		onClose();
+		if (!signupResult) return;
+		toast({
+			title: signupResult.message,
+			status: 'success',
+			duration: 2000,
+			isClosable: true,
+		});
+		localStorage.setItem('user', JSON.stringify(signupResult.user));
+		setUser(signupResult.user);
+	};
+
 	return (
 		<VStack spacing="80px" w="496px">
 			<VStack spacing="16px" w="100%">
-				<Button variant="inline" onClick={() => signupWithMetamask()} w="100%">
+				<Button variant="inline" onClick={() => signupWithMetamask()} w="100%" isLoading={isLoadingMetamask}>
 					Signup with metamask
 				</Button>
+				<Link href="https://metamask.io" isExternal>
+					<u>What is metamask ?</u>
+				</Link>
 			</VStack>
-			{/* TODO: ajouter un lien vers metamask */}
 			<FormControl>
 				<FormLabel>Username</FormLabel>
 				<Input
 					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					onChange={(e) => setUsername(e.target.value)}
 				/>
-				<FormLabel mt="8px">Mnemonics</FormLabel>
-				<Textarea
-					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
-					cursor="text"
-					value={mnemonics}
-					readOnly
-				/>
-				{/* TODO: ajouter un button pour copier le mnemonics */}
-				<Button variant="inline" mt="16px" w="100%" type="submit" onClick={() => signupWithCredentials()}>
+				<Button
+					variant="inline"
+					mt="16px"
+					w="100%"
+					type="submit"
+					onClick={() => signupWithCredentials()}
+					isLoading={isLoadingCredentials}
+				>
 					Signup with credentials
 				</Button>
 			</FormControl>
 			<Link as={RouteLink} to="/login" w="100%">
-				<Button variant="outline" size="sm" w="100%">
-					Login
-				</Button>
+				<OutlineButton w="100%" text="Login" />
 			</Link>
+			<MnemonicsModal mnemonics={mnemonics} isOpen={isOpen} onClose={closeModal} />
 		</VStack>
 	);
 };
