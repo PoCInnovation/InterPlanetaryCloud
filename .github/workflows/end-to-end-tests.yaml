@@ -14,14 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run ipfs daemon
-        uses: ibnesayeed/setup-ipfs@master
-        with:
-          run_daemon: true
-
-      - name: Check ipfs
-        run: ipfs --help
-
       - name: Run cypress
         uses: cypress-io/github-action@v2
         with:
