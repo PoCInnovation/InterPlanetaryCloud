@@ -8,9 +8,7 @@ const UserContext = createContext<UserContextType>(undefined);
 
 const useUserContext = (): { user: User; setUser: Dispatch<User | undefined> } => {
 	const context = useContext(UserContext);
-	if (context === undefined) {
-		throw new Error('context used outside of provider.');
-	}
+	if (!context) throw new Error('context used outside of provider.');
 	return context;
 };
 

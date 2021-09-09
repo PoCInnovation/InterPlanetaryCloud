@@ -1,24 +1,18 @@
 import { useEffect } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router-dom';
 
-import { Center, Spinner, VStack } from '@chakra-ui/react';
+import { Center, Spinner } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
 type PrivateRouteProps = { children: JSX.Element } & RouteProps;
 
 const PrivateRoute = ({ children, ...rest }: PrivateRouteProps): JSX.Element => {
-	const { user, setUser } = useUserContext();
+	const { user } = useUserContext();
 	const history = useHistory();
 
 	useEffect(() => {
-		(() => {
-			const userString = localStorage.getItem('user');
-
-			if (!userString) history.push('/');
-
-			setUser(JSON.parse(userString!));
-		})();
+		if (!user) history.push('/');
 	}, []);
 
 	if (!user)
@@ -28,11 +22,7 @@ const PrivateRoute = ({ children, ...rest }: PrivateRouteProps): JSX.Element => 
 			</Center>
 		);
 
-	return (
-		<Route {...rest}>
-			<VStack>{children}</VStack>
-		</Route>
-	);
+	return <Route {...rest}>{children}</Route>;
 };
 
 export default PrivateRoute;

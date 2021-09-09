@@ -1,15 +1,25 @@
 import { useState } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 
-import { Button, FormControl, FormLabel, Input, Link, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import {
+	Button,
+	FormControl,
+	FormLabel,
+	Input,
+	Link,
+	Textarea,
+	useDisclosure,
+	useToast,
+	VStack,
+} from '@chakra-ui/react';
 
 import { AuthReturnType } from 'lib/auth';
 
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
 
+import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
-import MnemonicsModal from 'components/MnemonicsModal';
 
 import colors from 'theme/foundations/colors';
 
@@ -18,11 +28,13 @@ const SignupView = (): JSX.Element => {
 	const { setUser } = useUserContext();
 
 	const [username, setUsername] = useState('');
-	const [mnemonics, setMnemonics] = useState('Click to signup button to see your mnemonics');
-	const [signupResult, setSignupResult] = useState<AuthReturnType | undefined>(undefined);
 	const [isLoadingMetamask, setIsLoadingMetamask] = useState(false);
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
+	const [signupResult, setSignupResult] = useState<AuthReturnType | undefined>(undefined);
+	const [mnemonics, setMnemonics] = useState('Click to signup button to see your mnemonics');
+
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
 	const toast = useToast();
 
 	const signupWithMetamask = async (): Promise<void> => {
@@ -37,7 +49,6 @@ const SignupView = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
-			localStorage.setItem('user', JSON.stringify(login.user));
 			setUser(login.user);
 		} else {
 			toast({
@@ -80,8 +91,17 @@ const SignupView = (): JSX.Element => {
 			duration: 2000,
 			isClosable: true,
 		});
-		localStorage.setItem('user', JSON.stringify(signupResult.user));
 		setUser(signupResult.user);
+	};
+
+	const onClick = () => {
+		navigator.clipboard.writeText(mnemonics);
+		toast({
+			title: 'Copy to clipboard !',
+			status: 'success',
+			duration: 2000,
+			isClosable: true,
+		});
 	};
 
 	return (
@@ -114,7 +134,23 @@ const SignupView = (): JSX.Element => {
 			<Link as={RouteLink} to="/login" w="100%">
 				<OutlineButton w="100%" text="Login" />
 			</Link>
-			<MnemonicsModal mnemonics={mnemonics} isOpen={isOpen} onClose={closeModal} />
+			<Modal
+				isOpen={isOpen}
+				onClose={closeModal}
+				title="Your Mnemonics"
+				CTA={
+					<Button variant="inline" onClick={onClick} w="100%" mb="16px">
+						Copy my mnemonics
+					</Button>
+				}
+			>
+				<Textarea
+					value={mnemonics}
+					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
+					cursor="text"
+					readOnly
+				/>
+			</Modal>
 		</VStack>
 	);
 };

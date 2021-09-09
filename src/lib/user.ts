@@ -1,6 +1,14 @@
 import { account, message } from 'aleph-ts';
+
 import CryptoJS from 'crypto-js';
+
 import fileDownload from 'js-file-download';
+
+type IPCFile = {
+	name: string;
+	content: string;
+	created_at: number;
+};
 
 type UserData = {
 	files: IPCFile[];
@@ -9,12 +17,6 @@ type UserData = {
 type ResponseType = {
 	success: boolean;
 	message: string;
-};
-
-type IPCFile = {
-	name: string;
-	content: string;
-	created_at: number;
 };
 
 class Drive {
@@ -29,12 +31,12 @@ class Drive {
 
 	public async load(): Promise<ResponseType> {
 		try {
-			if (this.account !== undefined) {
+			if (this.account) {
 				const userDataAddress = `ipc.user.${this.account.address}`;
 				let userData = await message.post.getPosts<UserData>(userDataAddress);
 
 				if (userData.posts.length === 0) {
-					const newUserData: UserData = { files: this.files };
+					const newUserData = { files: this.files };
 
 					await message.post.submit(this.account.address, userDataAddress, newUserData, {
 						userAccount: this.account,
@@ -46,7 +48,7 @@ class Drive {
 				} else {
 					this.files = userData.posts[userData.posts.length - 1].content.files;
 				}
-				return { success: true, message: 'Successfully loaded drive' };
+				return { success: true, message: 'Drive loaded' };
 			}
 		} catch (err) {
 			console.error(err);
@@ -57,12 +59,12 @@ class Drive {
 
 	public async upload(file: IPCFile): Promise<ResponseType> {
 		try {
-			if (this.account !== undefined) {
+			if (this.account) {
 				const userDataAddress = `ipc.user.${this.account.address}`;
 				const userData = await message.post.getPosts<UserData>(userDataAddress);
 
 				if (userData.posts.length > 0) {
-					const encryptedFile: IPCFile = {
+					const encryptedFile = {
 						name: file.name,
 						content: CryptoJS.AES.encrypt(file.content, this.account.private_key).toString(),
 						created_at: file.created_at,
@@ -76,7 +78,7 @@ class Drive {
 						api_server: message.constants.DEFAULT_SERVER_V2,
 						ref: userData.posts[userData.posts.length - 1].item_hash,
 					});
-					return { success: true, message: 'Successfully uploaded file' };
+					return { success: true, message: 'File uploaded' };
 				}
 			}
 		} catch (err) {
@@ -88,7 +90,7 @@ class Drive {
 
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
-			if (this.account !== undefined) {
+			if (this.account) {
 				const decryptedFile: IPCFile = {
 					name: file.name,
 					content: CryptoJS.AES.decrypt(file.content, this.account.private_key).toString(CryptoJS.enc.Utf8),
@@ -96,7 +98,7 @@ class Drive {
 				};
 				const blob = new Blob([decryptedFile.content]);
 				fileDownload(blob, decryptedFile.name);
-				return { success: true, message: 'Successfully downloaded file' };
+				return { success: true, message: 'File downloaded' };
 			}
 		} catch (err) {
 			console.error(err);
@@ -106,7 +108,7 @@ class Drive {
 	}
 }
 
-export default class User {
+class User {
 	public account: account.ethereum.ETHAccount | undefined;
 
 	public drive: Drive;
@@ -116,3 +118,6 @@ export default class User {
 		this.drive = new Drive(this.account);
 	}
 }
+
+export type { IPCFile };
+export default User;

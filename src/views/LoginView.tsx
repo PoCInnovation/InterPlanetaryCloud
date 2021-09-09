@@ -13,6 +13,7 @@ import colors from 'theme/foundations/colors';
 const LoginView = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
+
 	const [username, setUsername] = useState('');
 	const [mnemonics, setMnemonics] = useState('');
 	const [isLoadingMetamask, setIsLoadingMetamask] = useState(false);
@@ -32,7 +33,6 @@ const LoginView = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
-			localStorage.setItem('user', JSON.stringify(login.user));
 			setUser(login.user);
 		} else {
 			toast({
@@ -56,7 +56,6 @@ const LoginView = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
-			localStorage.setItem('user', JSON.stringify(login.user));
 			setUser(login.user);
 		} else {
 			toast({
@@ -74,6 +73,9 @@ const LoginView = (): JSX.Element => {
 				<Button variant="inline" w="100%" onClick={() => loginWithMetamask()} isLoading={isLoadingMetamask}>
 					Login with Metamask
 				</Button>
+				<Link href="https://metamask.io" isExternal>
+					<u>What is metamask ?</u>
+				</Link>
 			</VStack>
 			<FormControl>
 				<FormLabel>Username</FormLabel>

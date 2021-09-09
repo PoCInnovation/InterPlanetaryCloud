@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Route, RouteProps, useHistory } from 'react-router-dom';
 
-import { useUserContext } from 'contexts/user';
-
 import { Text, VStack } from '@chakra-ui/react';
+
+import { useUserContext } from 'contexts/user';
 
 import colors from 'theme/foundations/colors';
 
@@ -14,7 +14,7 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 	const history = useHistory();
 
 	useEffect(() => {
-		if (localStorage.getItem('user') || user) (() => history.push('/dashboard'))();
+		if (user) history.push('/dashboard');
 	}, [user]);
 
 	return (

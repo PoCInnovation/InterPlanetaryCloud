@@ -18,17 +18,11 @@ const App = (): JSX.Element => {
 
 	useEffect(() => {
 		if (!auth && !error) {
-			(async () => {
-				try {
-					setAuth(new Auth());
-					const userString = localStorage.getItem('user');
-					if (userString) {
-						setUser(JSON.parse(userString));
-					}
-				} catch (e) {
-					setError(e);
-				}
-			})();
+			try {
+				setAuth(new Auth());
+			} catch (e) {
+				setError(e);
+			}
 		}
 	}, []);
 

@@ -1,15 +1,24 @@
-import React from 'react';
-import { Box, VStack, Input, Button } from '@chakra-ui/react';
+import { ChangeEvent, useEffect, useState } from 'react';
+
+import { Box, VStack, Button, HStack, useDisclosure, useToast, Input } from '@chakra-ui/react';
+import { DownloadIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
-function extractFilename(filepath: string) {
+import { IPCFile } from 'lib/user';
+
+import Modal from 'components/Modal';
+import Sidebar from 'components/SideBar';
+import FileCard from 'components/FileCard';
+import UploadButton from 'components/UploadButton';
+
+const extractFilename = (filepath: string) => {
 	const result = /[^\\]*$/.exec(filepath);
 	return result && result.length ? result[0] : '';
-}
+};
 
-function getFileContent(file: unknown): Promise<string> {
-	return new Promise((resolve, reject) => {
+const getFileContent = (file: unknown): Promise<string> =>
+	new Promise((resolve, reject) => {
 		const reader = new window.FileReader();
 		reader.onload = (event: unknown) => {
 			// eslint-disable-next-line
@@ -20,68 +29,92 @@ function getFileContent(file: unknown): Promise<string> {
 		};
 		reader.readAsText(file as Blob);
 	});
-}
 
 const Dashboard = (): JSX.Element => {
-	const [fileEvent, setFileEvent] = React.useState<React.ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const toast = useToast();
 	const { user } = useUserContext();
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [isUploadLoading, setIsUploadLoading] = useState(false);
+	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
+	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 
-	React.useEffect(() => {
-		(() => user.drive.load())();
-	}, []);
+	useEffect(() => {
+		user.drive.load();
+	});
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
-		if (filename === '' || fileContent === '') return;
-		await user.drive.upload({
-			name: filename,
-			content: fileContent,
-			created_at: Date.now(),
-		});
+		if (!filename || !fileContent) return;
+
+		setIsUploadLoading(true);
+		try {
+			await user.drive.upload({
+				name: filename,
+				content: fileContent,
+				created_at: Date.now(),
+			});
+			toast({
+				title: 'File uploaded',
+				status: 'success',
+				duration: 2000,
+				isClosable: true,
+			});
+			onClose();
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to upload the file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsUploadLoading(false);
+	};
+
+	const downloadFile = async (file: IPCFile) => {
+		setIsDownloadLoading(true);
+		user.drive.download(file);
+		setIsDownloadLoading(false);
 	};
 
 	return (
-		<Box marginTop="150px">
-			<Box w="200px" marginBottom="64px">
-				<Input type="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFileEvent(e)} />
-				<Button colorScheme="blue" color="white" background="blue" onClick={uploadFile}>
-					Upload file
-				</Button>
+		<HStack minH="100vh" minW="100vw" align="start">
+			<Sidebar
+				uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
+			/>
+			<Box w="100%" m="32px !important">
+				<VStack w="100%" maxW="400px" id="test" spacing="16px">
+					{user.drive.files.map((file) => (
+						<FileCard file={file}>
+							<Button variant="inline" size="sm" onClick={async () => downloadFile(file)} isLoading={isDownloadLoading}>
+								<DownloadIcon />
+							</Button>
+						</FileCard>
+					))}
+				</VStack>
 			</Box>
-			<VStack
-				style={{
-					width: '900px',
-				}}
+			<Modal
+				isOpen={isOpen}
+				onClose={onClose}
+				title="Upload a file"
+				CTA={
+					<Button variant="inline" w="100%" mb="16px" onClick={uploadFile} isLoading={isUploadLoading}>
+						Upload file
+					</Button>
+				}
 			>
-				{user.drive.files.map((file) => (
-					<div
-						key={file.created_at}
-						style={{
-							padding: '16px',
-							background: 'white',
-							width: '100%',
-							boxShadow: '0px 2px 3px 3px rgb(240, 240, 240)',
-							borderRadius: '4px',
-							border: '1px solid rgb(200, 200, 200)',
-							marginBottom: '8px',
-							display: 'flex',
-							justifyContent: 'space-between',
-						}}
-					>
-						{file.name}
-						<Button
-							onClick={async () => {
-								await user.drive.download(file);
-							}}
-						>
-							Download
-						</Button>
-					</div>
-				))}
-			</VStack>
-		</Box>
+				<Input
+					type="file"
+					h="100%"
+					w="100%"
+					p="10px"
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+				/>
+			</Modal>
+		</HStack>
 	);
 };
 
