@@ -17,7 +17,8 @@ cd InterPlanetaryCloud
 docker build . -t ipc:latest
 ```
 
-**3) Run IPC :rocket:**  
+## Quickstart ⏩
+**Run IPC :rocket:**  
 ```
 # Run IPC docker image
 docker run -p 3000:3000 ipc:latest
