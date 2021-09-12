@@ -18,6 +18,7 @@ docker build . -t ipc:latest
 ```
 
 ## Quickstart ⏩
+
 **Run IPC :rocket:**  
 ```
 # Run IPC docker image
@@ -26,7 +27,7 @@ docker run -p 3000:3000 ipc:latest
 You are now ready to access to your decentralized cloud :boom: !
 
 ## Features :dizzy:
-
+  
 <details>
   <summary>Home Page</summary>
   
@@ -38,6 +39,13 @@ You are now ready to access to your decentralized cloud :boom: !
   <summary>Signup Page</summary>
   
  ![Signup Page](.github/assets/signup.png)
+ 
+</details>
+
+<details>
+  <summary>Signup Page - Mnemonics given</summary>
+  
+ ![Signup Page Mnemonics](.github/assets/signupMnemonics.png)
  
 </details>
 
@@ -55,6 +63,13 @@ You are now ready to access to your decentralized cloud :boom: !
  
 </details>
 
+<details>
+  <summary>Dashboard - Upload document</summary>
+  
+ ![Dashboard Upload](.github/assets/dashboardUpload.png)
+ 
+</details>
+
 ## How ? :thinking:
 
 **Technologies 🧑‍💻**
@@ -69,6 +84,7 @@ Your password is hashed with [bcrypt](https://www.npmjs.com/package/bcrypt).
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
 ## Our [PoC](https://www.poc-innovation.fr/) team :ok_hand:
+
 Developers:
 + [Adrien Fort](https://github.com/adrienfort)
 + [Diego Rojas](https://github.com/rojasdiegopro)
