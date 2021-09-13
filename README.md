@@ -75,6 +75,7 @@ You are now ready to access to your decentralized cloud :boom: !
 **Technologies 🧑‍💻**
 + [React](https://reactjs.org/docs/getting-started.html)
 + [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
++ [Chakra UI](https://chakra-ui.com)
 
 **Database :file_folder:**  
 We use [Aleph TS](https://github.com/PtitLuca/aleph-ts#readme).

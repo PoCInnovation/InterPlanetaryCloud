@@ -26,19 +26,22 @@ const App = (): JSX.Element => {
 		}
 	}, []);
 
-	if (!auth || error) {
+	useEffect(() => {
 		if (error) {
 			toast({
 				title: 'Internal Server Error',
 				status: 'error',
 				isClosable: true,
 			});
-			return (
-				<Center mt="160px">
-					<Spinner w="160px" />
-				</Center>
-			);
 		}
+	}, [error]);
+
+	if (!auth) {
+		return (
+			<Center mt="160px">
+				<Spinner w="160px" />
+			</Center>
+		);
 	}
 
 	return (
