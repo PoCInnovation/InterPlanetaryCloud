@@ -88,7 +88,7 @@ const Dashboard = (): JSX.Element => {
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px">
 					{user.drive.files.map((file) => (
-						<FileCard file={file}>
+						<FileCard key={file.created_at} file={file}>
 							<Button variant="inline" size="sm" onClick={async () => downloadFile(file)} isLoading={isDownloadLoading}>
 								<DownloadIcon />
 							</Button>
