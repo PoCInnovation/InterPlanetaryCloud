@@ -1,0 +1,24 @@
+name: Eslint tests
+
+on: [push]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run eslint
+        run: npm run lint > eslint-results
+
+      - name: Get eslint results
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: eslint-results
+          path: eslint-results
