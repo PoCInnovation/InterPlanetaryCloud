@@ -18,6 +18,9 @@ extends:
 plugins:
   - prettier
 
+globals:
+  "cy": true
+
 rules:
   prettier/prettier: warn
 

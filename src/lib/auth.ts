@@ -1,63 +1,64 @@
-import bcrypt from 'bcryptjs';
+import { account } from 'aleph-ts';
+
+import Web3 from 'web3';
 
 import User from './user';
-import { Database } from './database';
 
-export class AuthError extends Error {}
+type AuthReturnType = {
+	user: User | undefined;
+	message: string;
+};
 
-export default class Auth {
-	private db: Database;
-
-	private readonly salt: string;
-
-	constructor(db: Database) {
-		this.db = db;
-		this.salt = bcrypt.genSaltSync(10);
-	}
-
+class Auth {
 	public async logout(): Promise<void> {
-		window.localStorage.clear();
+		localStorage.clear();
 	}
 
-	public async signup(email: string, password: string): Promise<User> {
-		// if (await this.kv.get(email)) {
-		// 	throw new AuthError('account already exists');
-		// }
-		// const userData = await this.db.makeDocStore(`ipc.user.${email}`);
-		// const hashedPassword = bcrypt.hashSync(password, this.salt);
-		//
-		// await userData.put({ _id: email, password: hashedPassword, data: {} });
-		// await this.kv.set(email, userData.address);
-		//
-		// const user = new User();
-		// user.email = email;
-		// user.password = hashedPassword;
-		// const token = jwt.sign({ email, password }, JWT_SECRET);
-		// window.localStorage.setItem('token', token);
-		// return user;
-		return new User();
+	public async signup(username: string): Promise<AuthReturnType> {
+		try {
+			const newAccount = await account.ethereum.newAccount({ name: username });
+			const user = new User(newAccount);
+
+			return { user, message: 'Successful signup' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'Failed to signup' };
+		}
 	}
 
-	public async login(email: string, password: string): Promise<User> {
-		// const userId = await this.kv.get(email);
-		//
-		// if (!userId) {
-		// 	throw new AuthError('invalid email or password');
-		// }
-		// const userDocs = await this.db.makeDocStore(userId);
-		// const userData = await userDocs.get(email);
-		// const hashedPassword = userData[0].password;
-		//
-		// if (!bcrypt.compareSync(password, hashedPassword)) {
-		// 	throw new AuthError('invalid email or password');
-		// }
-		// const user = new User();
-		// user.email = email;
-		// user.password = hashedPassword;
-		// // TODO: Load drive
-		// const token = jwt.sign({ email, password }, JWT_SECRET);
-		// window.localStorage.setItem('token', token);
-		// return user;
-		return new User();
+	public async loginWithCredentials(username: string, mnemonics: string): Promise<AuthReturnType> {
+		try {
+			const importedAccount = await account.ethereum.importAccount({
+				mnemonics,
+				name: username,
+			});
+			const user = new User(importedAccount);
+
+			return { user, message: 'Successful login' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'Failed to login' };
+		}
+	}
+
+	public async loginWithMetamask(): Promise<AuthReturnType> {
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			if (typeof (window as any).ethereum !== 'undefined') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+				const importedFromProvider = await account.ethereum.fromProvider(Web3.givenProvider);
+				const user = new User(importedFromProvider);
+
+				return { user, message: 'Successfully logged in' };
+			}
+			return { user: undefined, message: 'Please install Metamask' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'Failed to login' };
+		}
 	}
 }
+
+export type { AuthReturnType };
+export default Auth;

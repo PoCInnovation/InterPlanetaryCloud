@@ -1,0 +1,21 @@
+# Github
+.git/
+.github/
+.gitignore
+LICENSE
+README.md
+
+# JS
+.eslintrc.js
+.prettierc.js
+
+# Node
+node_modules/
+tests/
+
+# Build
+dist/
+
+# Infra
+*Dockerfile*
+*docker-compose*

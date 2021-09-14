@@ -6,26 +6,17 @@ jobs:
   cypress-run:
     runs-on: ubuntu-20.04
 
-    env:
-      REACT_APP_JWT_SECRET: "1234"
-      REACT_APP_KEYVALUE_DB_ADDRESS: "false key"
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run ipfs daemon
-        uses: ibnesayeed/setup-ipfs@master
-        with:
-          run_daemon: true
-
-      - name: Check ipfs
-        run: ipfs --help
+      - name: Create IPC docker image
+        run: docker build . -t ipc:latest
 
       - name: Run cypress
         uses: cypress-io/github-action@v2
         with:
-          start: npm start
+          start: docker run -p 3000:3000 ipc:latest
           wait-on: "http://localhost:3000"
 
       - name: Get screenshots

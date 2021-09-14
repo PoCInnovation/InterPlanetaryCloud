@@ -3,78 +3,95 @@ A personal file storage and management system built on top of [IPFS](https://ipf
 
 ## Installation :wrench:
 
-#### 1) Install IPFS
-Follow this [guide](https://docs.ipfs.io/install/command-line/) and then run `ipfs init`.  
-If you want to play a little bit with IPFS, you can follow this [tutorial](https://docs.ipfs.io/how-to/command-line-quick-start/).
+**1) Install Docker**  
+Follow this [official guide](https://docs.docker.com/get-docker/) to install Docker.  
+If you want to play a little bit with Docker, you can follow this [tutorial](https://docker-curriculum.com) or even our [workshop](https://github.com/PoCInnovation/Workshops/tree/master/software/04.Docker) !
 
-#### 2) Install the project
+**2) Install IPC**  
 ```
+# Get the project
 git clone git@github.com:PoCInnovation/InterPlanetaryCloud.git
 cd InterPlanetaryCloud
-npm install
+
+# Build IPC docker image
+docker build . -t ipc:latest
 ```
-#### 3) Run the project :rocket:
-In order to put your node online, run `ipfs daemon --enable-pubsub-experiment`.  
-Then in another window, run `npm start`.  
+
+## Quickstart ⏩
+
+**Run IPC :rocket:**  
+```
+# Run IPC docker image
+docker run -p 3000:3000 ipc:latest
+```
 You are now ready to access to your decentralized cloud :boom: !
 
 ## Features :dizzy:
+  
+<details>
+  <summary>Home Page</summary>
+  
+ ![Home Page](.github/assets/home.png)
 
-#### Home Page
-![](assets/homePage.png)
+</details>
 
-#### Signup Page
-![](assets/signupPage.png)
+<details>
+  <summary>Signup Page</summary>
+  
+ ![Signup Page](.github/assets/signup.png)
+ 
+</details>
 
-#### Login Page
-![](assets/loginPage.png)
+<details>
+  <summary>Signup Page - Mnemonics given</summary>
+  
+ ![Signup Page Mnemonics](.github/assets/signupMnemonics.png)
+ 
+</details>
 
-#### Dashboard
-![](assets/dashboardActual.png)
+<details>
+  <summary>Login Page</summary>
+  
+ ![Login Page](.github/assets/login.png)
+ 
+</details>
+
+<details>
+  <summary>Dashboard</summary>
+  
+ ![Dashboard](.github/assets/dashboard.png)
+ 
+</details>
+
+<details>
+  <summary>Dashboard - Upload document</summary>
+  
+ ![Dashboard Upload](.github/assets/dashboardUpload.png)
+ 
+</details>
 
 ## How ? :thinking:
 
-#### Technologies 🧑‍💻
-+ [Javascript](https://developer.mozilla.org/fr/docs/Learn/Getting_started_with_the_web/JavaScript_basics)
-+ [React JS](https://reactjs.org/docs/getting-started.html)
-+ [OrbitDB](https://github.com/orbitdb)
-+ [IPFS](https://ipfs.io/)
+**Technologies 🧑‍💻**
++ [React](https://reactjs.org/docs/getting-started.html)
++ [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
++ [Chakra UI](https://chakra-ui.com)
 
-#### Database :file_folder:
-We use [OrbitDB](https://github.com/orbitdb).
+**Database :file_folder:**  
+We use [Aleph TS](https://github.com/PtitLuca/aleph-ts#readme).
 
- - [Key-Value](https://github.com/orbitdb/orbit-db/blob/master/API.md#orbitdbkeyvaluenameaddress) : email-docstore.address
- - [Docstore](https://github.com/orbitdb/orbit-db/blob/master/API.md#orbitdbdocsnameaddress-options) : one per user.
-
-#### Security 🛡️
+**Security 🛡️**  
 Your password is hashed with [bcrypt](https://www.npmjs.com/package/bcrypt).  
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
-## Upcoming :new:
-A new version in TypeScript, functionnal tests as well as a more user friendly dashboard (with the possibility to download) will be available soon !  
-  
-![](assets/dashboardFigma.png)
-
-## Contribute 💛
-
-We would be very happy to accept your PRs !  
-> Fork the project, your remote repo on Github is called `origin`.  
-> Create a new branch from `dev` if it exists, else from `master`.  
-> Implement your feature, following our coding style.  
-> Run tests if it exists.  
-> Write tests.  
-> Push your work and open a PR !  
-
-Don't hesitate to open an issue !  
-We hope our work pleased you 🍀
-
 ## Our [PoC](https://www.poc-innovation.fr/) team :ok_hand:
+
 Developers:
 + [Adrien Fort](https://github.com/adrienfort)
 + [Diego Rojas](https://github.com/rojasdiegopro)
 + [Lorenzo Carneli](https://github.com/MrZalTy)
 
-Product Managers:
+Project Managers:
 + [Adina Cazalens](https://github.com/NaadiQmmr)
 + [Luca Georges Francois](https://github.com/PtitLuca)
 
