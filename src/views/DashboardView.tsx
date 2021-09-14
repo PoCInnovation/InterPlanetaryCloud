@@ -34,13 +34,37 @@ const Dashboard = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 
 	useEffect(() => {
-		user.drive.load();
-	});
+		(async () => {
+			await loadDrive();
+		})();
+	}, []);
+
+	const loadDrive = async () => {
+		try {
+			const load = await user.drive.load();
+			toast({
+				title: load.message,
+				status: load.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+			setFiles(user.drive.files);
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to load drive',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
@@ -50,18 +74,19 @@ const Dashboard = (): JSX.Element => {
 
 		setIsUploadLoading(true);
 		try {
-			await user.drive.upload({
+			const upload = await user.drive.upload({
 				name: filename,
 				content: fileContent,
 				created_at: Date.now(),
 			});
 			toast({
-				title: 'File uploaded',
-				status: 'success',
+				title: upload.message,
+				status: upload.success ? 'success' : 'error',
 				duration: 2000,
 				isClosable: true,
 			});
 			onClose();
+			await loadDrive();
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -76,7 +101,23 @@ const Dashboard = (): JSX.Element => {
 
 	const downloadFile = async (file: IPCFile) => {
 		setIsDownloadLoading(true);
-		user.drive.download(file);
+		try {
+			const download = await user.drive.download(file);
+			toast({
+				title: download.message,
+				status: download.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to download file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
 		setIsDownloadLoading(false);
 	};
 
@@ -87,7 +128,7 @@ const Dashboard = (): JSX.Element => {
 			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px">
-					{user.drive.files.map((file) => (
+					{files.map((file) => (
 						<FileCard key={file.created_at} file={file}>
 							<Button variant="inline" size="sm" onClick={async () => downloadFile(file)} isLoading={isDownloadLoading}>
 								<DownloadIcon />

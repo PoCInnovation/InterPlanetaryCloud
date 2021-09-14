@@ -13,7 +13,7 @@ import Routes from './Routes';
 const App = (): JSX.Element => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
-	const [error, setError] = useState<Error | undefined>(undefined);
+	const [error, setError] = useState<Error | unknown>(undefined);
 	const toast = useToast();
 
 	useEffect(() => {
