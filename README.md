@@ -1,7 +1,9 @@
 # InterPlanetaryCloud
-A personal file storage and management system built on top of [IPFS](https://ipfs.io/), protecting your data.
+A personal file storage and management system built on top of [IPFS](https://ipfs.io/), protecting your data.  
 
-<img src=".github/assets/ipc.gifs" width="100%" />
+<div align="center">
+  <img src=".github/assets/ipc.gif" width="80%" />
+ </div>
 
 ## Installation :wrench:
 
@@ -86,15 +88,42 @@ We use [Aleph TS](https://github.com/PtitLuca/aleph-ts#readme).
 Your password is hashed with [bcrypt](https://www.npmjs.com/package/bcrypt).  
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
-## Our [PoC](https://www.poc-innovation.fr/) team :ok_hand:
+## Our PoC team :ok_hand:
 
-Developers:
-+ [Adrien Fort](https://github.com/adrienfort)
-+ [Diego Rojas](https://github.com/rojasdiegopro)
-+ [Lorenzo Carneli](https://github.com/MrZalTy)
+Developers:  
+| [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort) | [<img src="https://github.com/rojasdiegopro.png?size=85" width=85><br><sub>Diego Rojas</sub>](https://github.com/rojasdiegopro) | [<img src="https://github.com/MrZalTy.png?size=85" width=85><br><sub>Lorenzo Carneli</sub>](https://github.com/MrZalTy)
+| :---: | :---: | :---: |
 
-Project Managers:
-+ [Adina Cazalens](https://github.com/NaadiQmmr)
-+ [Luca Georges Francois](https://github.com/PtitLuca)
+Project Managers:  
+| [<img src="https://github.com/NaadiQmmr.png?size=85" width=85><br><sub>Adina Cazalens</sub>](https://github.com/NaadiQmmr) | [<img src="https://github.com/PtitLuca.png?size=85" width=85><br><sub>Luca Georges Francois</sub>](https://github.com/PtitLuca)
+| :---: | :---: |
 
-Thanks to [Tom Chauveau](https://github.com/TomChv) for contributing to this project by submitting his review to our code !
+Reviewers :  
+| [<img src="https://github.com/TomChv.png?size=85" width=85><br><sub>Tom Chauveau</sub>](https://github.com/TomChv)
+| :---: |
+
+<h2 align=center>
+Organization
+</h2>
+<br/>
+<p align='center'>
+    <a href="https://www.linkedin.com/company/pocinnovation/mycompany/">
+        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+    </a>
+    <a href="https://www.instagram.com/pocinnovation/">
+        <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">
+    </a>
+    <a href="https://twitter.com/PoCInnovation">
+        <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
+    </a>
+    <a href="https://discord.com/invite/Yqq2ADGDS7">
+        <img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white">
+    </a>
+</p>
+<p align=center>
+    <a href="https://www.poc-innovation.fr/">
+        <img src="https://img.shields.io/badge/WebSite-1a2b6d?style=for-the-badge&logo=GitHub Sponsors&logoColor=white">
+    </a>
+</p>
+
+> :rocket: Don't hesitate to follow us on our different networks, and put a star 🌟 on `PoC's` repositories
