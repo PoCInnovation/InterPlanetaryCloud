@@ -84,8 +84,7 @@ You are now ready to access to your decentralized cloud :boom: !
 **Database :file_folder:**  
 We use [Aleph TS](https://github.com/PtitLuca/aleph-ts#readme).
 
-**Security 🛡️**  
-Your password is hashed with [bcrypt](https://www.npmjs.com/package/bcrypt).  
+**Security 🛡️**
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
 ## Our PoC team :ok_hand:
