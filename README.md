@@ -82,9 +82,9 @@ You are now ready to access to your decentralized cloud :boom: !
 + [Chakra UI](https://chakra-ui.com)
 
 **Database :file_folder:**  
-We use [Aleph TS](https://github.com/PtitLuca/aleph-ts#readme).
+We use [Aleph TS](https://github.com/aleph-im/aleph-sdk-ts).
 
-**Security 🛡️**
+**Security 🛡️**  
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
 ## Our PoC team :ok_hand:
