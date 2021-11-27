@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "aleph-sdk-ts": "^2.0.0",
     "aleph-ts": "^3.3.0",
     "crypto-js": "^4.0.0",
     "framer-motion": "^4.1.17",

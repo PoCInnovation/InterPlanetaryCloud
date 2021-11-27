@@ -1,4 +1,6 @@
-import { account, message } from 'aleph-ts';
+import { message } from 'aleph-ts';
+
+import { accounts, post, store, DEFAULT_API_V2 } from 'aleph-sdk-ts';
 
 import CryptoJS from 'crypto-js';
 
@@ -22,14 +24,14 @@ type ResponseType = {
 class Drive {
 	public files: IPCFile[];
 
-	private readonly account: account.ethereum.ETHAccount | undefined;
+	private readonly account: accounts.base.Account | undefined;
 
-	constructor(importedAccount: account.ethereum.ETHAccount) {
+	constructor(importedAccount: accounts.base.Account) {
 		this.files = [];
 		this.account = importedAccount;
 	}
 
-	public async load(): Promise<ResponseType> {
+	/* public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const userDataAddress = `ipc.user.${this.account.address}`;
@@ -55,65 +57,92 @@ class Drive {
 			return { success: false, message: 'Failed to load drive' };
 		}
 		return { success: false, message: 'Failed to load drive' };
+	} */
+
+	public async load(): Promise<ResponseType> {
+		return { success: true, message: 'Drive loaded' };
+		// try {
+		// 	if (this.account) {
+		// 		const userAddress = this.account.address;
+		//
+		// 		const userData = await post.Get({
+		// 			APIServer: DEFAULT_API_V2,
+		// 			types: "",
+		// 			pagination: 200,
+		// 			page: 1,
+		// 			refs: [],
+		// 			addresses: [userAddress],
+		// 			tags: [],
+		// 			hashes: []
+		// 		});
+		// 		this.files = userData.posts[userData.posts.length - 1].content;
+		// 		return { success: true, message: 'Drive loaded' };
+		// 	}
+		// } catch (err) {
+		// 	console.error(err);
+		// 	return { success: false, message: 'Failed to load drive' };
+		// }
+		// return { success: false, message: 'Failed to load drive' };
 	}
 
 	public async upload(file: IPCFile): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				const userDataAddress = `ipc.user.${this.account.address}`;
-				const userData = await message.post.getPosts<UserData>(userDataAddress);
-
-				if (userData.posts.length > 0) {
-					const encryptedFile = {
-						name: file.name,
-						content: CryptoJS.AES.encrypt(file.content, this.account.private_key).toString(),
-						created_at: file.created_at,
-					};
-					this.files.push(encryptedFile);
-
-					const newUserData: UserData = { files: this.files };
-					await message.post.submit(this.account.address, 'amend', newUserData, {
-						userAccount: this.account,
-						channel: 'TEST',
-						api_server: message.constants.DEFAULT_SERVER_V2,
-						ref: userData.posts[userData.posts.length - 1].item_hash,
-					});
-					return { success: true, message: 'File uploaded' };
-				}
-			}
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to upload file' };
-		}
-		return { success: false, message: 'Failed to upload file' };
+		return { success: true, message: 'File uploaded' };
+		// try {
+		// 	if (this.account) {
+		// 		const userDataAddress = `ipc.user.${this.account.address}`;
+		// 		const userData = await message.post.getPosts<UserData>(userDataAddress);
+		//
+		// 		if (userData.posts.length > 0) {
+		// 			const encryptedFile = {
+		// 				name: file.name,
+		// 				content: CryptoJS.AES.encrypt(file.content, this.account.private_key).toString(),
+		// 				created_at: file.created_at,
+		// 			};
+		// 			this.files.push(encryptedFile);
+		//
+		// 			const newUserData: UserData = { files: this.files };
+		// 			await message.post.submit(this.account.address, 'amend', newUserData, {
+		// 				userAccount: this.account,
+		// 				channel: 'TEST',
+		// 				api_server: message.constants.DEFAULT_SERVER_V2,
+		// 				ref: userData.posts[userData.posts.length - 1].item_hash,
+		// 			});
+		// 			return { success: true, message: 'File uploaded' };
+		// 		}
+		// 	}
+		// } catch (err) {
+		// 	console.error(err);
+		// 	return { success: false, message: 'Failed to upload file' };
+		// }
+		// return { success: false, message: 'Failed to upload file' };
 	}
 
 	public async download(file: IPCFile): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				const decryptedFile: IPCFile = {
-					name: file.name,
-					content: CryptoJS.AES.decrypt(file.content, this.account.private_key).toString(CryptoJS.enc.Utf8),
-					created_at: file.created_at,
-				};
-				const blob = new Blob([decryptedFile.content]);
-				fileDownload(blob, decryptedFile.name);
-				return { success: true, message: 'File downloaded' };
-			}
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to download file' };
-		}
+		// try {
+		// 	if (this.account) {
+		// 		const decryptedFile: IPCFile = {
+		// 			name: file.name,
+		// 			content: CryptoJS.AES.decrypt(file.content, this.account.private_key).toString(CryptoJS.enc.Utf8),
+		// 			created_at: file.created_at,
+		// 		};
+		// 		const blob = new Blob([decryptedFile.content]);
+		// 		fileDownload(blob, decryptedFile.name);
+		// 		return { success: true, message: 'File downloaded' };
+		// 	}
+		// } catch (err) {
+		// 	console.error(err);
+		// 	return { success: false, message: 'Failed to download file' };
+		// }
 		return { success: false, message: 'Failed to download file' };
 	}
 }
 
 class User {
-	public account: account.ethereum.ETHAccount | undefined;
+	public account: accounts.base.Account | undefined;
 
 	public drive: Drive;
 
-	constructor(importedAccount: account.ethereum.ETHAccount) {
+	constructor(importedAccount: accounts.base.Account) {
 		this.account = importedAccount;
 		this.drive = new Drive(this.account);
 	}
