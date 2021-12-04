@@ -86,7 +86,6 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 			onClose();
-			await loadDrive();
 		} catch (error) {
 			console.error(error);
 			toast({

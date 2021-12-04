@@ -5,6 +5,8 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import fileDownload from 'js-file-download';
 import { StorageEngine } from 'aleph-sdk-ts/messages/message';
 
+import CryptoJS from 'crypto-js';
+
 export function ArraybufferToString(ab: ArrayBuffer): string {
 	return new TextDecoder().decode(ab);
 }
@@ -50,7 +52,6 @@ class Drive {
 				const postMessage = userData.posts.map((postContent) => {
 					const itemContent = JSON.parse(postContent.item_content);
 					if (itemContent.content.header === 'InterPlanetaryCloud2.0 Header') {
-						this.files = [];
 						this.postsHash = postContent.hash;
 						if (itemContent.content.files.length > 0) {
 							itemContent.content.files[0].map((file: IPCFile) => {
