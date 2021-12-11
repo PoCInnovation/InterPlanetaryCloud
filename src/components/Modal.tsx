@@ -29,7 +29,7 @@ const Popup = ({ isOpen, onClose, title, children, CTA }: PopupProps): JSX.Eleme
 
 			<ModalFooter flexDirection="column" alignItems="center">
 				{CTA}
-				<OutlineButton w="100%" text="Close" onClick={onClose} />
+				<OutlineButton w="100%" text="Close" onClick={onClose} id="ipc-modal-close-button" />
 			</ModalFooter>
 		</ModalContent>
 	</Modal>

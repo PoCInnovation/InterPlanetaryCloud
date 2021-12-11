@@ -1,15 +1,7 @@
 import { useState } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 
-import {
-	Button,
-	FormControl,
-	Link,
-	Textarea,
-	useDisclosure,
-	useToast,
-	VStack,
-} from '@chakra-ui/react';
+import { Button, FormControl, Link, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { AuthReturnType } from 'lib/auth';
 
@@ -20,7 +12,6 @@ import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
 
 import colors from 'theme/foundations/colors';
-import { ETHAccount } from 'aleph-sdk-ts/accounts/ethereum';
 
 const SignupView = (): JSX.Element => {
 	const auth = useAuthContext();
@@ -88,19 +79,20 @@ const SignupView = (): JSX.Element => {
 					type="submit"
 					onClick={() => signupWithCredentials()}
 					isLoading={isLoadingCredentials}
+					id="ipc-signupView-credentials-signup-button"
 				>
 					Signup with credentials
 				</Button>
 			</FormControl>
 			<Link as={RouteLink} to="/login" w="100%">
-				<OutlineButton w="100%" text="Login" />
+				<OutlineButton w="100%" text="Login" id="ipc-signupView-login-button" />
 			</Link>
 			<Modal
 				isOpen={isOpen}
 				onClose={closeModal}
 				title="Your Mnemonics"
 				CTA={
-					<Button variant="inline" onClick={onClick} w="100%" mb="16px">
+					<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signupView-copy-mnemonics-button">
 						Copy my mnemonics
 					</Button>
 				}
@@ -110,6 +102,7 @@ const SignupView = (): JSX.Element => {
 					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					cursor="text"
 					readOnly
+					id="ipc-signupView-text-area"
 				/>
 			</Modal>
 		</VStack>

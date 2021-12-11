@@ -26,10 +26,13 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 						fontWeight="extrabold"
 						bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 						bgClip="text"
+						id="ipc-title"
 					>
 						Inter Planetary Cloud
 					</Text>
-					<Text fontSize="16px">The first cloud unsealing your data</Text>
+					<Text fontSize="16px" id="ipc-sub-title">
+						The first cloud unsealing your data
+					</Text>
 				</VStack>
 				<VStack w="496px">{children}</VStack>
 			</VStack>

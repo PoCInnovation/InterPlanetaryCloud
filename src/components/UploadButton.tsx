@@ -7,7 +7,7 @@ type UploadButtonProps = {
 };
 
 const UploadButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
-	<Button variant="inline" borderRadius="lg" onClick={onClick} isLoading={isLoading}>
+	<Button variant="inline" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-upload-button">
 		{text}
 	</Button>
 );
