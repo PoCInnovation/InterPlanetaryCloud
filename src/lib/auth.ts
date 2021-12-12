@@ -17,7 +17,7 @@ class Auth {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			const user = new User(account);
+			const user = new User(account, mnemonic);
 
 			return { user, mnemonic, message: 'Successful signup' };
 		} catch (err) {
@@ -29,7 +29,7 @@ class Auth {
 	public async loginWithCredentials(mnemonic: string): Promise<AuthReturnType> {
 		try {
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
-			const user = new User(importedAccount);
+			const user = new User(importedAccount, mnemonic);
 
 			return { user, mnemonic, message: 'Successful login' };
 		} catch (err) {
