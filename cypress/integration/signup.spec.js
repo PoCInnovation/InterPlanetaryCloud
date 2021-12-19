@@ -24,7 +24,7 @@ describe('testing signup ...', () => {
 	it('Signup with credentials Button', () => {
 		cy.get('#ipc-signupView-credentials-signup-button').click();
 		cy.get('#ipc-signupView-copy-mnemonics-button').click();
-		//cy.get('#ipc-signupView-text-area').invoke('val').should('eq', clipboard.readSync());
+		// cy.get('#ipc-signupView-text-area').invoke('val').should('eq', clipboard.readSync());
 		cy.get('#ipc-modal-close-button').click().url().should('eq', 'http://localhost:3000/dashboard');
 	});
 

@@ -1,13 +1,15 @@
-let mnemonic = '';
+let dashboardSpecMnemonic = '';
 
 describe('Create account', () => {
 	it('Connect', () => {
 		cy.visit('http://localhost:3000/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
-		cy.get('#ipc-signupView-text-area').invoke('val').then(input => {
-			mnemonic = input;
-		});
+		cy.get('#ipc-signupView-text-area')
+			.invoke('val')
+			.then((input) => {
+				dashboardSpecMnemonic = input;
+			});
 		cy.get('#ipc-modal-close-button').click();
 	});
 });
@@ -16,10 +18,10 @@ describe('testing dashboard', () => {
 	beforeEach(() => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
-		cy.get('#ipc-loginView-text-area').click().type(mnemonic);
+		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-loginView-credentials-button').click();
 	});
-	
+
 	it('Good front', () => {
 		cy.get('#ipc-sideBar-title').should('contain', 'Inter Planetary Cloud');
 		cy.get('#ipc-upload-button').should('contain', 'Upload a file');
