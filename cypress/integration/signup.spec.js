@@ -58,14 +58,21 @@ describe('Signup with credentials Button for SignupView', () => {
 		cy.visit('http://localhost:3000/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
+		cy.get(1000);
 		cy.get('#ipc-signupView-copy-mnemonics-button').click();
 	});
 
 	it('Good copied clipboard', () => {
-		// cy.get('#ipc-signupView-text-area').invoke('val').should('eq', clipboard.readSync());
+		cy.window()
+			.its('navigator.clipboard')
+			.invoke('readText')
+			.then((clipboard) => {
+				cy.get('#ipc-signupView-text-area').invoke('val').should('eq', clipboard);
+			});
 	});
 
 	it('Good URL redirect for close button', () => {
+		cy.wait(1000);
 		cy.get('#ipc-modal-close-button').click().url().should('eq', 'http://localhost:3000/dashboard');
 	});
 });
