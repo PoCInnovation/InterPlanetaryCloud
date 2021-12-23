@@ -49,6 +49,7 @@ const LoginView = (): JSX.Element => {
 					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 					cursor="text"
 					onChange={(e) => setMnemonics(e.target.value)}
+					id="ipc-loginView-text-area"
 				/>
 				<Button
 					variant="inline"
@@ -57,12 +58,13 @@ const LoginView = (): JSX.Element => {
 					type="submit"
 					onClick={() => loginWithCredentials()}
 					isLoading={isLoadingCredentials}
+					id="ipc-loginView-credentials-button"
 				>
 					Login with credentials
 				</Button>
 			</FormControl>
 			<Link as={RouteLink} to="/signup" w="100%">
-				<OutlineButton w="100%" text="Signup" />
+				<OutlineButton w="100%" text="Signup" id="ipc-loginView-signup-button" />
 			</Link>
 		</VStack>
 	);

@@ -7,8 +7,14 @@ import { StorageEngine } from 'aleph-sdk-ts/messages/message';
 
 import CryptoJS from 'crypto-js';
 
+import * as ethers from 'ethers';
+
 export function ArraybufferToString(ab: ArrayBuffer): string {
 	return new TextDecoder().decode(ab);
+}
+
+export function mnemonicToPrivateKey(mnemonic: string): string {
+	return ethers.Wallet.fromMnemonic(mnemonic).privateKey;
 }
 
 type IPCFile = {
@@ -29,10 +35,13 @@ class Drive {
 
 	private readonly account: accounts.base.Account | undefined;
 
-	constructor(importedAccount: accounts.base.Account) {
+	private private_key: string;
+
+	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
 		this.account = importedAccount;
 		this.postsHash = '';
+		this.private_key = private_key;
 	}
 
 	public async load(): Promise<ResponseType> {
@@ -94,7 +103,7 @@ class Drive {
 	public async upload(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, 'test').toString();
+				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.private_key).toString();
 
 				const newStoreFile = new File([encryptedContentFile], file.name, {
 					type: 'text/plain',
@@ -146,7 +155,7 @@ class Drive {
 					fileHash: file.content,
 				});
 
-				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), 'test').toString(
+				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), this.private_key).toString(
 					CryptoJS.enc.Utf8,
 				);
 
@@ -167,9 +176,9 @@ class User {
 
 	public drive: Drive;
 
-	constructor(importedAccount: accounts.base.Account) {
+	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
 		this.account = importedAccount;
-		this.drive = new Drive(this.account);
+		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));
 	}
 }
 
