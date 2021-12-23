@@ -9,6 +9,8 @@ import CryptoJS from 'crypto-js';
 
 import * as ethers from 'ethers';
 
+import { ALEPH_CHANNEL } from 'config/constants';
+
 export function ArraybufferToString(ab: ArrayBuffer): string {
 	return new TextDecoder().decode(ab);
 }
@@ -79,7 +81,7 @@ class Drive {
 					console.log('Create Post Message');
 					const newPostPublishResponse = await post.Publish({
 						APIServer: DEFAULT_API_V2,
-						channel: 'TEST',
+						channel: ALEPH_CHANNEL,
 						inlineRequested: true,
 						storageEngine: StorageEngine.IPFS,
 						account: this.account,
@@ -110,7 +112,7 @@ class Drive {
 				});
 
 				const fileHashPublishStore = await store.Publish({
-					channel: 'TEST',
+					channel: ALEPH_CHANNEL,
 					account: this.account,
 					fileObject: newStoreFile,
 					storageEngine: StorageEngine.IPFS,
@@ -126,7 +128,7 @@ class Drive {
 				this.files.push(newFile);
 				await post.Publish({
 					APIServer: DEFAULT_API_V2,
-					channel: 'TEST',
+					channel: ALEPH_CHANNEL,
 					inlineRequested: true,
 					storageEngine: StorageEngine.IPFS,
 					account: this.account,
