@@ -1,5 +1,5 @@
 describe('Good front for HomeView', () => {
-	beforeEach(() => {
+	it('Go to home view', () => {
 		cy.visit('http://localhost:3000');
 		cy.wait(1000);
 	});
@@ -26,7 +26,7 @@ describe('Good front for HomeView', () => {
 });
 
 describe('Create Account Button for HomeView', () => {
-	beforeEach(() => {
+	it('Go to home view', () => {
 		cy.visit('http://localhost:3000');
 		cy.wait(1000);
 	});
@@ -37,7 +37,7 @@ describe('Create Account Button for HomeView', () => {
 });
 
 describe('Login Button form HomeView', () => {
-	beforeEach(() => {
+	it('Go to home view', () => {
 		cy.visit('http://localhost:3000');
 		cy.wait(1000);
 	});

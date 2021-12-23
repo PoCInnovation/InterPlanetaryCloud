@@ -1,7 +1,7 @@
 const mnemonic = 'repair nest celery light distance coil giant pyramid poet suit trim fluid';
 
 describe('Good front for LoginView', () => {
-	beforeEach(() => {
+	it('Go to login view', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 	});
@@ -32,7 +32,7 @@ describe('Good front for LoginView', () => {
 });
 
 describe('Login with credentials Button for LoginView', () => {
-	beforeEach(() => {
+	it('Go to login view', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(mnemonic);
@@ -48,7 +48,7 @@ describe('Login with credentials Button for LoginView', () => {
 });
 
 describe('Signup Button for LoginView', () => {
-	beforeEach(() => {
+	it('Go to login view', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 	});

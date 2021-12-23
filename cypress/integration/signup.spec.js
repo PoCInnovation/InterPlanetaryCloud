@@ -1,5 +1,5 @@
 describe('Good front for SignupView', () => {
-	beforeEach(() => {
+	it('Go to signup view', () => {
 		cy.visit('http://localhost:3000/signup');
 		cy.wait(1000);
 	});
@@ -26,7 +26,7 @@ describe('Good front for SignupView', () => {
 });
 
 describe('Good Modal front for SignupView', () => {
-	beforeEach(() => {
+	it('Go to signup view', () => {
 		cy.visit('http://localhost:3000/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
@@ -54,7 +54,7 @@ describe('Good Modal front for SignupView', () => {
 });
 
 describe('Signup with credentials Button for SignupView', () => {
-	beforeEach(() => {
+	it('Go to signup view', () => {
 		cy.visit('http://localhost:3000/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
@@ -78,7 +78,7 @@ describe('Signup with credentials Button for SignupView', () => {
 });
 
 describe('Login Button for SignupView', () => {
-	beforeEach(() => {
+	it('Go to signup view', () => {
 		cy.visit('http://localhost:3000/signup');
 		cy.wait(1000);
 	});

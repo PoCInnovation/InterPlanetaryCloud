@@ -15,7 +15,7 @@ describe('Create account for DashboardView tests', () => {
 });
 
 describe('Good front for DashboardView', () => {
-	beforeEach(() => {
+	it('Go to dashboard view', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
@@ -32,7 +32,7 @@ describe('Good front for DashboardView', () => {
 });
 
 describe('Good Modal Front for DashboardView', () => {
-	beforeEach(() => {
+	it('Go to upload modal into dashboard view', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
@@ -75,7 +75,7 @@ describe('Upload a file modal for DashboardView', () => {
 	it('Good number of buttons after upload', () => {
 		cy.get('#ipc-dashboardView-upload-file').attachFile(fixtureFile);
 		cy.get('#ipc-dashboardView-upload-file-modal-button').click();
-		cy.wait(2500);
+		cy.wait(2000);
 		cy.get('button').should('have.length', 2);
 	});
 
@@ -92,7 +92,7 @@ describe('Download a file for DashboardView', () => {
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-loginView-credentials-button').click();
 		cy.get('#ipc-dashboardView-download-button').click();
-		cy.wait(3000);
+		cy.wait(1000);
 	});
 
 	it('Good content for downloaded file', () => {
