@@ -1,14 +1,14 @@
-NPX	=	npx
-DOCKER	=	docker
-CYPRESS	=	cypress
+NPX					=	npx
+DOCKER				=	docker
+CYPRESS				=	cypress
 
-RUN	=	run
-BUILD	=	build
-OPEN	=	open
+RUN					=	run
+BUILD				=	build
+OPEN				=	open
 
-BUILD_PATH	=	.
-IPC_DOCKER_NAME	=	ipc:latest
-PORT	=	3000
+BUILD_PATH			=	.
+IPC_DOCKER_NAME		=	ipc:latest
+PORT				=	3000
 
 all	:	build start
 
@@ -28,4 +28,4 @@ tests-ui	:
 	@echo "🧪 Starting tests with user interface..."
 	$(NPX) $(CYPRESS) $(OPEN)
 
-.PHONY:	all build start test
+.PHONY:	all build start tests-no-ui tests-ui
