@@ -5,7 +5,7 @@ import { DownloadIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
-import { IPCFile } from 'lib/user';
+import { IPCFile } from 'lib/drive';
 
 import Modal from 'components/Modal';
 import Sidebar from 'components/SideBar';
