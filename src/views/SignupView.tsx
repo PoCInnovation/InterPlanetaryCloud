@@ -70,7 +70,10 @@ const SignupView = (): JSX.Element => {
 	};
 
 	return (
-		<VStack spacing="80px" w="496px">
+		<VStack
+			spacing={{ '3xs': '15px', '2xs': '20px', '3sm': '40px', sm: '80px' }}
+			w={{ '3xs': '163px', '2xs': '217px', xs: '272px', '3sm': '346px', '2sm': '408px', sm: '496px' }}
+		>
 			<FormControl>
 				<Button
 					variant="inline"

@@ -12,7 +12,13 @@ import Link from './components/link';
 import Text from './components/text';
 
 const breakpoints = createBreakpoints({
+	'3xs': '192px',
+	'2xs': '256px',
+	xs: '320px',
+	'3sm': '408px',
+	'2sm': '480px',
 	sm: '576px',
+	'2md': '640px',
 	md: '768px',
 	lg: '1024px',
 	xl: '1280px',
