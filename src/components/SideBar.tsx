@@ -22,6 +22,7 @@ const SideBar = ({ uploadButton }: SideBarPropsType): JSX.Element => (
 				fontWeight="bold"
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"
+				id="ipc-sideBar-title"
 			>
 				Inter Planetary Cloud
 			</Text>

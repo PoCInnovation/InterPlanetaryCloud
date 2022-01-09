@@ -12,8 +12,10 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "aleph-ts": "^3.3.0",
+    "aleph-sdk-ts": "^2.0.2",
     "crypto-js": "^4.0.0",
+    "env-var": "^7.1.1",
+    "ethers": "^5.5.2",
     "framer-motion": "^4.1.17",
     "it-all": "^1.0.5",
     "it-concat": "^1.0.3",
@@ -39,8 +41,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -57,12 +58,12 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.0.1",
-    "@types/jest": "^26.0.23",
     "@types/node": "^12.20.15",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.8",
     "@types/react-router-dom": "^5.1.7",
-    "cypress": "^7.6.0",
+    "cypress": "^9.1.1",
+    "cypress-file-upload": "^5.0.8",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",

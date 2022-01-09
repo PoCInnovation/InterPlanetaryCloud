@@ -15,8 +15,9 @@ type PopupProps = {
 const Popup = ({ isOpen, onClose, title, children, CTA }: PopupProps): JSX.Element => (
 	<Modal isOpen={isOpen} onClose={onClose}>
 		<ModalOverlay />
-		<ModalContent>
+		<ModalContent w="75%">
 			<ModalHeader
+				fontSize={{ base: '16px', '3xs': '16px', xs: '22px' }}
 				textAlign="center"
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"
@@ -29,7 +30,7 @@ const Popup = ({ isOpen, onClose, title, children, CTA }: PopupProps): JSX.Eleme
 
 			<ModalFooter flexDirection="column" alignItems="center">
 				{CTA}
-				<OutlineButton w="100%" text="Close" onClick={onClose} />
+				<OutlineButton w="100%" text="Close" onClick={onClose} id="ipc-modal-close-button" />
 			</ModalFooter>
 		</ModalContent>
 	</Modal>

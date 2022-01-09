@@ -1,11 +1,10 @@
-import { account } from 'aleph-ts';
-
-import Web3 from 'web3';
+import { accounts } from 'aleph-sdk-ts';
 
 import User from './user';
 
 type AuthReturnType = {
 	user: User | undefined;
+	mnemonic: string | undefined;
 	message: string;
 };
 
@@ -14,48 +13,28 @@ class Auth {
 		localStorage.clear();
 	}
 
-	public async signup(username: string): Promise<AuthReturnType> {
+	public async signup(): Promise<AuthReturnType> {
 		try {
-			const newAccount = await account.ethereum.newAccount({ name: username });
-			const user = new User(newAccount);
+			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			return { user, message: 'Successful signup' };
+			const user = new User(account, mnemonic);
+
+			return { user, mnemonic, message: 'Successful signup' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Failed to signup' };
+			return { user: undefined, mnemonic: undefined, message: 'Failed to signup' };
 		}
 	}
 
-	public async loginWithCredentials(username: string, mnemonics: string): Promise<AuthReturnType> {
+	public async loginWithCredentials(mnemonic: string): Promise<AuthReturnType> {
 		try {
-			const importedAccount = await account.ethereum.importAccount({
-				mnemonics,
-				name: username,
-			});
-			const user = new User(importedAccount);
+			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
+			const user = new User(importedAccount, mnemonic);
 
-			return { user, message: 'Successful login' };
+			return { user, mnemonic, message: 'Successful login' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Failed to login' };
-		}
-	}
-
-	public async loginWithMetamask(): Promise<AuthReturnType> {
-		try {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			if (typeof (window as any).ethereum !== 'undefined') {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
-				const importedFromProvider = await account.ethereum.fromProvider(Web3.givenProvider);
-				const user = new User(importedFromProvider);
-
-				return { user, message: 'Successfully logged in' };
-			}
-			return { user: undefined, message: 'Please install Metamask' };
-		} catch (err) {
-			console.error(err);
-			return { user: undefined, message: 'Failed to login' };
+			return { user: undefined, mnemonic: undefined, message: 'Failed to login' };
 		}
 	}
 }

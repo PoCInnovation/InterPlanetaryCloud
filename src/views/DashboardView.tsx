@@ -5,7 +5,7 @@ import { DownloadIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
-import { IPCFile } from 'lib/user';
+import { IPCFile } from 'lib/drive';
 
 import Modal from 'components/Modal';
 import Sidebar from 'components/SideBar';
@@ -86,7 +86,6 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 			onClose();
-			await loadDrive();
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -130,7 +129,13 @@ const Dashboard = (): JSX.Element => {
 				<VStack w="100%" maxW="400px" id="test" spacing="16px">
 					{files.map((file) => (
 						<FileCard key={file.created_at} file={file}>
-							<Button variant="inline" size="sm" onClick={async () => downloadFile(file)} isLoading={isDownloadLoading}>
+							<Button
+								variant="inline"
+								size="sm"
+								onClick={async () => downloadFile(file)}
+								isLoading={isDownloadLoading}
+								id="ipc-dashboardView-download-button"
+							>
 								<DownloadIcon />
 							</Button>
 						</FileCard>
@@ -142,7 +147,14 @@ const Dashboard = (): JSX.Element => {
 				onClose={onClose}
 				title="Upload a file"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={uploadFile} isLoading={isUploadLoading}>
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={uploadFile}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-upload-file-modal-button"
+					>
 						Upload file
 					</Button>
 				}
@@ -153,6 +165,7 @@ const Dashboard = (): JSX.Element => {
 					w="100%"
 					p="10px"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+					id="ipc-dashboardView-upload-file"
 				/>
 			</Modal>
 		</HStack>

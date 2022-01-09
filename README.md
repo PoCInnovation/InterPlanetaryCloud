@@ -82,13 +82,23 @@ You are now ready to access to your decentralized cloud :boom: !
 + [Chakra UI](https://chakra-ui.com)
 
 **Database :file_folder:**  
-We use [Aleph TS](https://github.com/aleph-im/aleph-sdk-ts).
+We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 **Security 🛡️**  
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
 ## Our PoC team :ok_hand:
 
+### September 2021 - Today
+Developers:  
+| [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/lolboysg.png?size=85" width=85><br><sub>Matéo Viel</sub>](https://github.com/lolboysg)
+| :---: | :---: |
+
+Project Managers:  
+| [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort)
+| :---: |
+
+### March 2021 - September 2021
 Developers:  
 | [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort) | [<img src="https://github.com/rojasdiegopro.png?size=85" width=85><br><sub>Diego Rojas</sub>](https://github.com/rojasdiegopro) | [<img src="https://github.com/MrZalTy.png?size=85" width=85><br><sub>Lorenzo Carneli</sub>](https://github.com/MrZalTy)
 | :---: | :---: | :---: |

@@ -8,6 +8,9 @@ COPY . /app
 # Install dependencies
 RUN npm install
 
+# Add env variable
+ENV REACT_APP_ALEPH_CHANNEL=TEST
+
 # Expose PORT
 EXPOSE 3000
 
