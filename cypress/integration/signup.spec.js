@@ -17,7 +17,7 @@ describe('Good front for SignupView', () => {
 	});
 
 	it('Good name for signup credentials button', () => {
-		cy.get('#ipc-signupView-credentials-signup-button').should('contain', 'Signup with credentials');
+		cy.get('#ipc-signupView-credentials-signup-button').should('contain', 'Signup');
 	});
 
 	it('Good name for login button', () => {
