@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 
-import { Button, FormControl, Link, Textarea, useToast, VStack } from '@chakra-ui/react';
+import { Button, FormControl, Link, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
@@ -43,10 +43,7 @@ const LoginView = (): JSX.Element => {
 	};
 
 	return (
-		<VStack
-			spacing={{ '3xs': '15px', '2xs': '20px', '3sm': '40px', sm: '80px' }}
-			w={{ '3xs': '163px', '2xs': '217px', xs: '272px', '3sm': '346px', '2sm': '408px', sm: '496px' }}
-		>
+		<VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
 			<FormControl>
 				<Textarea
 					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
@@ -66,9 +63,12 @@ const LoginView = (): JSX.Element => {
 					Login with credentials
 				</Button>
 			</FormControl>
-			<Link as={RouteLink} to="/signup" w="100%">
-				<OutlineButton w="100%" text="Signup" id="ipc-loginView-signup-button" />
-			</Link>
+			<VStack w="100%">
+				<Text fontSize="14px">Already an account ?</Text>
+				<Link as={RouteLink} to="/signup" w="100%">
+					<OutlineButton w="100%" text="Signup" id="ipc-loginView-signup-button" />
+				</Link>
+			</VStack>
 		</VStack>
 	);
 };

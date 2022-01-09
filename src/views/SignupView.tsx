@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 
-import { Button, FormControl, Link, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import { Button, Link, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { AuthReturnType } from 'lib/auth';
 
@@ -70,26 +70,24 @@ const SignupView = (): JSX.Element => {
 	};
 
 	return (
-		<VStack
-			spacing={{ '3xs': '15px', '2xs': '20px', '3sm': '40px', sm: '80px' }}
-			w={{ '3xs': '163px', '2xs': '217px', xs: '272px', '3sm': '346px', '2sm': '408px', sm: '496px' }}
-		>
-			<FormControl>
-				<Button
-					variant="inline"
-					mt="16px"
-					w="100%"
-					type="submit"
-					onClick={() => signupWithCredentials()}
-					isLoading={isLoadingCredentials}
-					id="ipc-signupView-credentials-signup-button"
-				>
-					Signup with credentials
-				</Button>
-			</FormControl>
-			<Link as={RouteLink} to="/login" w="100%">
-				<OutlineButton w="100%" text="Login" id="ipc-signupView-login-button" />
-			</Link>
+		<VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
+			<Button
+				variant="inline"
+				mt="16px"
+				w="100%"
+				type="submit"
+				onClick={() => signupWithCredentials()}
+				isLoading={isLoadingCredentials}
+				id="ipc-signupView-credentials-signup-button"
+			>
+				Signup
+			</Button>
+			<VStack w="100%">
+				<Text fontSize="14px">Already an account ?</Text>
+				<Link as={RouteLink} to="/login" w="100%">
+					<OutlineButton w="100%" text="Login" id="ipc-signupView-login-button" />
+				</Link>
+			</VStack>
 			<Modal
 				isOpen={isOpen}
 				onClose={closeModal}

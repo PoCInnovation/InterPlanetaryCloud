@@ -19,20 +19,10 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 
 	return (
 		<Route {...rest}>
-			<VStack spacing="56px" mt={{ base: '96px', '2xs': '112px', sm: '132px' }}>
+			<VStack spacing="56px" mt={{ base: '96px', md: '132px' }}>
 				<VStack spacing="16px">
 					<Text
-						fontSize={{
-							base: '12px',
-							'3xs': '16px',
-							'2xs': '20px',
-							xs: '26px',
-							'3sm': '34px',
-							'2sm': '40px',
-							sm: '50px',
-							'2md': '56px',
-							md: '64px',
-						}}
+						fontSize={{ base: '32px', md: '56px', lg: '64px' }}
 						fontWeight="extrabold"
 						bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 						bgClip="text"
@@ -49,11 +39,7 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 						The first cloud unsealing your data
 					</Text>
 				</VStack>
-				<VStack
-					w={{ base: '96px', '3xs': '163px', '2xs': '217px', xs: '272px', '3sm': '346px', '2sm': '408px', sm: '496px' }}
-				>
-					{children}
-				</VStack>
+				<VStack w={{ base: '90%', md: '496px' }}>{children}</VStack>
 			</VStack>
 		</Route>
 	);
