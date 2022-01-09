@@ -39,6 +39,9 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "eslintConfig": {
     "extends": [
       "react-app"
