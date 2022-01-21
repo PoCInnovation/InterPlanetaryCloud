@@ -158,7 +158,7 @@ const Dashboard = (): JSX.Element => {
 				</Drawer>
 				<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
 					<HStack w="100%" h="100%" px="24px" py="32px">
-						<Button onClick={onOpen} _focus={{}} p="16px" id="ipc-dashboardView-drawer-button">
+						<Button onClick={onOpen} _focus={{}} p="16px" id="ipc-dashboardView-drawer-button" bg="transparent">
 							<Icon fontSize="24px" as={HamburgerIcon} />
 						</Button>
 
