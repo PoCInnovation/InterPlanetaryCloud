@@ -37,7 +37,7 @@ describe('Good Modal Front for DashboardView', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-loginView-credentials-button').click().wait(1000);
+		cy.get('#ipc-loginView-credentials-button').click().wait(3000);
 		cy.get('#ipc-dashboardView-drawer-button').click({force: true});
 		cy.get('#ipc-upload-button').click();
 	});
@@ -70,7 +70,7 @@ describe('Upload a file modal for DashboardView', () => {
 		cy.visit('http://localhost:3000/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-loginView-credentials-button').click().wait(1000);
+		cy.get('#ipc-loginView-credentials-button').click().wait(3000);
 		cy.get('#ipc-dashboardView-drawer-button').click({force: true});
 		cy.get('#ipc-upload-button').click();
 	});
