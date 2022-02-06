@@ -1,13 +1,12 @@
 import { accounts, post, store } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
+import { ItemType } from 'aleph-sdk-ts/messages/message';
+import { ALEPH_CHANNEL } from 'config/constants';
 
 import fileDownload from 'js-file-download';
-import { StorageEngine } from 'aleph-sdk-ts/messages/message';
 
 import CryptoJS from 'crypto-js';
-
-import { ALEPH_CHANNEL } from 'config/constants';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
@@ -75,7 +74,7 @@ class Drive {
 						APIServer: DEFAULT_API_V2,
 						channel: ALEPH_CHANNEL,
 						inlineRequested: true,
-						storageEngine: StorageEngine.IPFS,
+						storageEngine: ItemType.ipfs,
 						account: this.account,
 						postType: '',
 						content: {
@@ -107,13 +106,13 @@ class Drive {
 					channel: ALEPH_CHANNEL,
 					account: this.account,
 					fileObject: newStoreFile,
-					storageEngine: StorageEngine.IPFS,
+					storageEngine: ItemType.ipfs,
 					APIServer: DEFAULT_API_V2,
 				});
 
 				const newFile: IPCFile = {
 					name: file.name,
-					content: fileHashPublishStore,
+					content: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
 				};
 
@@ -122,7 +121,7 @@ class Drive {
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
 					inlineRequested: true,
-					storageEngine: StorageEngine.IPFS,
+					storageEngine: ItemType.ipfs,
 					account: this.account,
 					postType: 'amend',
 					content: {
