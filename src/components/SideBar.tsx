@@ -18,7 +18,7 @@ const SideBar = ({ uploadButton }: SideBarPropsType): JSX.Element => (
 	>
 		<VStack spacing="32px" textAlign="center">
 			<Text
-				fontSize="16px"
+				fontSize="20px"
 				fontWeight="bold"
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"

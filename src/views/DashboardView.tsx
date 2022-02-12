@@ -1,7 +1,23 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { Box, VStack, Button, HStack, useDisclosure, useToast, Input } from '@chakra-ui/react';
-import { DownloadIcon } from '@chakra-ui/icons';
+import {
+	Box,
+	VStack,
+	Button,
+	HStack,
+	useDisclosure,
+	useToast,
+	Input,
+	useBreakpointValue,
+	Drawer,
+	DrawerOverlay,
+	DrawerContent,
+	SlideDirection,
+	Icon,
+	Text,
+	Divider,
+} from '@chakra-ui/react';
+import { DownloadIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
@@ -11,6 +27,7 @@ import Modal from 'components/Modal';
 import Sidebar from 'components/SideBar';
 import FileCard from 'components/FileCard';
 import UploadButton from 'components/UploadButton';
+import colors from 'theme/foundations/colors';
 
 const extractFilename = (filepath: string) => {
 	const result = /[^\\]*$/.exec(filepath);
@@ -120,13 +137,61 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(false);
 	};
 
+	const LeftBar = (): JSX.Element => (
+		<Sidebar
+			uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
+		/>
+	);
+
+	const BarWithDrawer = () => {
+		// eslint-disable-next-line @typescript-eslint/no-shadow
+		const { isOpen, onOpen, onClose } = useDisclosure();
+		const placement: SlideDirection = 'left';
+
+		return (
+			<Box zIndex={100} position="relative" height="80px">
+				<Drawer isOpen={isOpen} placement={placement} onClose={onClose}>
+					<DrawerOverlay />
+					<DrawerContent w="75%">
+						<LeftBar />
+					</DrawerContent>
+				</Drawer>
+				<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
+					<HStack w="100%" h="100%" px="24px" py="32px">
+						<Button onClick={onOpen} _focus={{}} p="16px" id="ipc-dashboardView-drawer-button" bg="transparent">
+							<Icon fontSize="24px" as={HamburgerIcon} />
+						</Button>
+
+						<VStack textAlign="center" w="100%">
+							<Text
+								fontSize={{ base: '16px', sm: '24px' }}
+								fontWeight="bold"
+								bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
+								bgClip="text"
+								id="ipc-sideBar-title"
+							>
+								Inter Planetary Cloud
+							</Text>
+						</VStack>
+					</HStack>
+					<Divider />
+				</Box>
+			</Box>
+		);
+	};
+
+	const ResponsiveBar = () => {
+		const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
+
+		if (!isDrawerNeeded) return <LeftBar />;
+		return <BarWithDrawer />;
+	};
+
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
-			<Sidebar
-				uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-			/>
+			<ResponsiveBar />
 			<Box w="100%" m="32px !important">
-				<VStack w="100%" maxW="400px" id="test" spacing="16px">
+				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					{files.map((file) => (
 						<FileCard key={file.created_at} file={file}>
 							<Button
