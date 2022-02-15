@@ -3,10 +3,11 @@ import { Text, VStack } from '@chakra-ui/react';
 import colors from 'theme/foundations/colors';
 
 type SideBarPropsType = {
+	contactButton: JSX.Element;
 	uploadButton: JSX.Element;
 };
 
-const SideBar = ({ uploadButton }: SideBarPropsType): JSX.Element => (
+const SideBar = ({ contactButton, uploadButton }: SideBarPropsType): JSX.Element => (
 	<VStack
 		h="100vh"
 		minW="300px"
@@ -27,6 +28,7 @@ const SideBar = ({ uploadButton }: SideBarPropsType): JSX.Element => (
 				Inter Planetary Cloud
 			</Text>
 		</VStack>
+		{contactButton}
 		{uploadButton}
 	</VStack>
 );

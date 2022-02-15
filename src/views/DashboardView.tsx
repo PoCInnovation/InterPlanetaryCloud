@@ -21,7 +21,7 @@ import { DownloadIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
-import { IPCFile } from 'lib/drive';
+import { IPCFile, IPCContact } from 'types/types';
 
 import Modal from 'components/Modal';
 import Sidebar from 'components/SideBar';
@@ -51,14 +51,23 @@ const Dashboard = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { isOpen: isOpenContact, onOpen: onOpenContact, onClose: onCloseContact } = useDisclosure();
+	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [contacts, setContact] = useState<IPCContact[]>([]);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsAddressEvent, setContactAddressEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
+		undefined,
+	);
 
 	useEffect(() => {
 		(async () => {
 			await loadDrive();
+			await loadContact();
 		})();
 	}, []);
 
@@ -137,9 +146,69 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(false);
 	};
 
+	const loadContact = async () => {
+		try {
+			const load = await user.contact.load();
+			toast({
+				title: load.message,
+				status: load.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+
+			setContact(user.contact.contacts);
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to load contacts',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const addContact = async () => {
+		try {
+			if (contactsNameEvent && contactsAddressEvent && contactsPublicKeyEvent) {
+				console.log(contactsNameEvent.target.value);
+				const add = await user.contact.add({
+					name: contactsNameEvent.target.value,
+					address: contactsAddressEvent.target.value,
+					public_key: contactsPublicKeyEvent.target.value,
+				});
+
+				toast({
+					title: add.message,
+					status: add.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setContact(user.contact.contacts);
+			} else {
+				toast({
+					title: 'Bad contact infos',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseContactAdd();
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to add this contact',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
 	const LeftBar = (): JSX.Element => (
 		<Sidebar
 			uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
+			contactButton={<UploadButton text="Contacts" onClick={() => onOpenContact()} isLoading={isUploadLoading} />}
 		/>
 	);
 
@@ -232,6 +301,78 @@ const Dashboard = (): JSX.Element => {
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
 					id="ipc-dashboardView-upload-file"
 				/>
+			</Modal>
+			<Modal
+				isOpen={isOpenContact}
+				onClose={onCloseContact}
+				title="Contacts"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={onOpenContactAdd}
+						id="ipc-dashboardView-contact-modal-button"
+					>
+						Add Contact
+					</Button>
+				}
+			>
+				<>
+					{contacts.map((contact) => (
+						<Box key={contact.address}>
+							<Text>{contact.name}</Text>
+							<Text>{contact.address}</Text>
+						</Box>
+					))}
+				</>
+			</Modal>
+			<Modal
+				isOpen={isOpenContactAdd}
+				onClose={onCloseContactAdd}
+				title="Add the contact"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={addContact}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-add-contact-button"
+					>
+						Add the contact
+					</Button>
+				}
+			>
+				<>
+					<Input
+						type="text"
+						h="200%"
+						w="100%"
+						p="10px"
+						placeholder="Name"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
+						id="ipc-dashboardView-input-contact-name"
+					/>
+					<Input
+						type="text"
+						h="200%"
+						w="100%"
+						p="10px"
+						placeholder="Address"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactAddressEvent(e)}
+						id="ipc-dashboardView-input-contact-address"
+					/>
+					<Input
+						type="text"
+						h="200%"
+						w="100%"
+						p="10px"
+						placeholder="Public Key"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactPublicKeyEvent(e)}
+						id="ipc-dashboardView-input-contact-public-key"
+					/>
+				</>
 			</Modal>
 		</HStack>
 	);

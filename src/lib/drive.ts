@@ -10,31 +10,33 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-type IPCFile = {
-	name: string;
-	content: string;
-	created_at: number;
-};
-
-type ResponseType = {
-	success: boolean;
-	message: string;
-};
+import { IPCFile, IPCRSAKey, ResponseType } from 'types/types';
+import { generateRSAKey } from 'utils/generateRSAKey';
+import { Link } from 'react-router-dom';
 
 class Drive {
 	public files: IPCFile[];
 
-	public postsHash: string;
+	public filesPostHash: string;
+
+	public contactsPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
 
-	private private_key: string;
+	private mnemonic: string;
 
-	constructor(importedAccount: accounts.base.Account, private_key: string) {
+	private rsa_key: IPCRSAKey;
+
+	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
 		this.files = [];
 		this.account = importedAccount;
-		this.postsHash = '';
-		this.private_key = private_key;
+		this.filesPostHash = '';
+		this.contactsPostHash = '';
+		this.mnemonic = mnemonic;
+		this.rsa_key = {
+			public_key: '',
+			private_key: mnemonic,
+		};
 	}
 
 	public async load(): Promise<ResponseType> {
@@ -51,12 +53,12 @@ class Drive {
 					hashes: [],
 				});
 
-				const postMessage = userData.posts.map((postContent) => {
+				userData.posts.map((postContent) => {
 					const itemContent = JSON.parse(postContent.item_content);
-					if (itemContent.content.header === 'InterPlanetaryCloud2.0 Header') {
-						this.postsHash = postContent.hash;
+					if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Files') {
+						this.filesPostHash = postContent.hash;
 						if (itemContent.content.files.length > 0) {
-							itemContent.content.files[0].map((file: IPCFile) => {
+							itemContent.content.files.map((file: IPCFile) => {
 								this.files.push(file);
 								return true;
 							});
@@ -65,10 +67,8 @@ class Drive {
 					}
 					return false;
 				});
-				if (postMessage.length !== 1) {
-					if (postMessage.length > 1) {
-						return { success: false, message: 'Too many post messages' };
-					}
+
+				if (this.filesPostHash === '') {
 					console.log('Create Post Message');
 					const newPostPublishResponse = await post.Publish({
 						APIServer: DEFAULT_API_V2,
@@ -78,11 +78,11 @@ class Drive {
 						account: this.account,
 						postType: '',
 						content: {
-							header: 'InterPlanetaryCloud2.0 Header',
+							header: 'InterPlanetaryCloud2.0 - Files',
 							files: this.files,
 						},
 					});
-					this.postsHash = newPostPublishResponse.item_hash;
+					this.filesPostHash = newPostPublishResponse.item_hash;
 				}
 				return { success: true, message: 'Drive loaded' };
 			}
@@ -96,7 +96,7 @@ class Drive {
 	public async upload(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.private_key).toString();
+				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.rsa_key.private_key).toString();
 
 				const newStoreFile = new File([encryptedContentFile], file.name, {
 					type: 'text/plain',
@@ -125,10 +125,10 @@ class Drive {
 					account: this.account,
 					postType: 'amend',
 					content: {
-						header: 'InterPlanetaryCloud2.0 Header',
-						files: [this.files],
+						header: 'InterPlanetaryCloud2.0 - Files',
+						files: this.files,
 					},
-					ref: this.postsHash,
+					ref: this.filesPostHash,
 				});
 
 				return { success: true, message: 'File uploaded' };
@@ -148,12 +148,13 @@ class Drive {
 					fileHash: file.content,
 				});
 
-				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), this.private_key).toString(
-					CryptoJS.enc.Utf8,
-				);
+				const decryptedContentFile = CryptoJS.AES.decrypt(
+					ArraybufferToString(storeFile),
+					this.rsa_key.private_key,
+				).toString(CryptoJS.enc.Utf8);
 
 				const blob = new Blob([decryptedContentFile]);
-				fileDownload(blob, file.name);
+				fileDownload(blob, file.name, 'text/plain');
 				return { success: true, message: 'File downloaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -163,7 +164,5 @@ class Drive {
 		}
 	}
 }
-
-export type { IPCFile };
 
 export default Drive;
