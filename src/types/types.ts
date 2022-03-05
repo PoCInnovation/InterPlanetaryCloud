@@ -4,18 +4,19 @@ export type IPCFile = {
 	created_at: number;
 };
 
+export type IPCFileContact = {
+	hash: string;
+	privateKey: string;
+}
+
 export type IPCContact = {
 	name: string;
 	address: string;
-	public_key: string;
+	publicKey: string;
+	files: IPCFileContact[];
 };
 
 export type ResponseType = {
 	success: boolean;
 	message: string;
-};
-
-export type IPCRSAKey = {
-	public_key: string;
-	private_key: string;
 };

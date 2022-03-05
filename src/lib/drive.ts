@@ -10,9 +10,7 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import { IPCFile, IPCRSAKey, ResponseType } from 'types/types';
-import { generateRSAKey } from 'utils/generateRSAKey';
-import { Link } from 'react-router-dom';
+import { IPCFile, ResponseType } from 'types/types';
 
 class Drive {
 	public files: IPCFile[];
@@ -23,20 +21,14 @@ class Drive {
 
 	private readonly account: accounts.base.Account | undefined;
 
-	private mnemonic: string;
+	private private_key: string;
 
-	private rsa_key: IPCRSAKey;
-
-	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
+	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
 		this.account = importedAccount;
 		this.filesPostHash = '';
 		this.contactsPostHash = '';
-		this.mnemonic = mnemonic;
-		this.rsa_key = {
-			public_key: '',
-			private_key: mnemonic,
-		};
+		this.private_key = private_key;
 	}
 
 	public async load(): Promise<ResponseType> {
@@ -96,7 +88,7 @@ class Drive {
 	public async upload(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.rsa_key.private_key).toString();
+				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.private_key).toString(); // TODO switch to the generated key
 
 				const newStoreFile = new File([encryptedContentFile], file.name, {
 					type: 'text/plain',
@@ -148,13 +140,15 @@ class Drive {
 					fileHash: file.content,
 				});
 
-				const decryptedContentFile = CryptoJS.AES.decrypt(
-					ArraybufferToString(storeFile),
-					this.rsa_key.private_key,
-				).toString(CryptoJS.enc.Utf8);
+				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), this.private_key).toString(
+					CryptoJS.enc.Utf8,
+				);
 
-				const blob = new Blob([decryptedContentFile]);
-				fileDownload(blob, file.name, 'text/plain');
+				// const blob = new Blob([decryptedContentFile]);
+				const newFile = new File([decryptedContentFile], file.name, {
+					type: 'plain/text',
+				});
+				fileDownload(newFile, file.name);
 				return { success: true, message: 'File downloaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
