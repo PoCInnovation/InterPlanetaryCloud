@@ -17,7 +17,7 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from '../theme/foundations/colors';
 import Sidebar from './SideBar';
-import UploadButton from './UploadButton';
+import { UploadButton, ContactButton } from './CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;
@@ -28,7 +28,7 @@ type BarProps = {
 export const LeftBar = ({ onOpen, onOpenContact, isUploadLoading }: BarProps): JSX.Element => (
 	<Sidebar
 		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-		contactButton={<UploadButton text="Contacts" onClick={() => onOpenContact()} isLoading={isUploadLoading} />}
+		contactButton={<ContactButton text="Contacts" onClick={() => onOpenContact()} isLoading={isUploadLoading} />}
 	/>
 );
 
