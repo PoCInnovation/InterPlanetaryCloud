@@ -8,44 +8,25 @@ import {
 	useDisclosure,
 	useToast,
 	Input,
-	useBreakpointValue,
-	Drawer,
-	DrawerOverlay,
-	DrawerContent,
-	SlideDirection,
-	Icon,
 	Text,
-	Divider,
+	Flex,
+	Spacer,
+	Icon,
 } from '@chakra-ui/react';
-import { DownloadIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { CheckIcon, DeleteIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCContact } from 'types/types';
 
 import Modal from 'components/Modal';
-import Sidebar from 'components/SideBar';
 import FileCard from 'components/FileCard';
-import UploadButton from 'components/UploadButton';
-import colors from 'theme/foundations/colors';
 
-const extractFilename = (filepath: string) => {
-	const result = /[^\\]*$/.exec(filepath);
-	return result && result.length ? result[0] : '';
-};
+import { MdPeopleAlt } from 'react-icons/md';
+import CryptoJS from 'crypto-js';
+import { getFileContent, extractFilename } from '../utils/fileManipulation';
 
-const getFileContent = (file: unknown): Promise<string> =>
-	new Promise((resolve, reject) => {
-		const reader = new window.FileReader();
-		reader.onload = (event: unknown) => {
-			// eslint-disable-next-line
-			resolve((event as any).target.result);
-		};
-		reader.onerror = (event) => {
-			reject(event);
-		};
-		reader.readAsText(file as Blob);
-	});
+import { ResponsiveBar } from '../components/ResponsiveBar';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast();
@@ -53,8 +34,16 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { isOpen: isOpenContact, onOpen: onOpenContact, onClose: onCloseContact } = useDisclosure();
 	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
+	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
+	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
-	const [contacts, setContact] = useState<IPCContact[]>([]);
+	const [contacts, setContacts] = useState<IPCContact[]>([]);
+	const [contactInfos, setContactInfo] = useState<IPCContact>({
+		name: '',
+		address: '',
+		publicKey: '',
+		files: [],
+	});
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -63,6 +52,11 @@ const Dashboard = (): JSX.Element => {
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
+	const [selectedFile, setSelectedFile] = useState<IPCFile>({
+		name: '',
+		content: '',
+		created_at: 0,
+	});
 
 	useEffect(() => {
 		(async () => {
@@ -146,6 +140,35 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(false);
 	};
 
+	const shareFile = async (contact: IPCContact) => {
+		setIsDownloadLoading(true);
+		try {
+			const share = await user.contact.addFileToContact(contact, {
+				hash: selectedFile.content,
+				privateKey: CryptoJS.AES.encrypt(
+					'TODO: the private key generated at the uploading of the file', // TODO add private key generate at the upload of the file
+					contact.publicKey,
+				).toString(), // TODO improve to manage asymmetric keys
+			});
+			onCloseShare();
+			toast({
+				title: share.message,
+				status: share.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to share the file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsDownloadLoading(false);
+	};
+
 	const loadContact = async () => {
 		try {
 			const load = await user.contact.load();
@@ -156,7 +179,7 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 
-			setContact(user.contact.contacts);
+			setContacts(user.contact.contacts);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -171,11 +194,11 @@ const Dashboard = (): JSX.Element => {
 	const addContact = async () => {
 		try {
 			if (contactsNameEvent && contactsAddressEvent && contactsPublicKeyEvent) {
-				console.log(contactsNameEvent.target.value);
 				const add = await user.contact.add({
 					name: contactsNameEvent.target.value,
 					address: contactsAddressEvent.target.value,
-					public_key: contactsPublicKeyEvent.target.value,
+					publicKey: contactsPublicKeyEvent.target.value,
+					files: [],
 				});
 
 				toast({
@@ -184,7 +207,7 @@ const Dashboard = (): JSX.Element => {
 					duration: 2000,
 					isClosable: true,
 				});
-				setContact(user.contact.contacts);
+				setContacts(user.contact.contacts);
 			} else {
 				toast({
 					title: 'Bad contact infos',
@@ -205,73 +228,104 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
-	const LeftBar = (): JSX.Element => (
-		<Sidebar
-			uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-			contactButton={<UploadButton text="Contacts" onClick={() => onOpenContact()} isLoading={isUploadLoading} />}
-		/>
-	);
-
-	const BarWithDrawer = () => {
-		// eslint-disable-next-line @typescript-eslint/no-shadow
-		const { isOpen, onOpen, onClose } = useDisclosure();
-		const placement: SlideDirection = 'left';
-
-		return (
-			<Box zIndex={100} position="relative" height="80px">
-				<Drawer isOpen={isOpen} placement={placement} onClose={onClose}>
-					<DrawerOverlay />
-					<DrawerContent w="75%">
-						<LeftBar />
-					</DrawerContent>
-				</Drawer>
-				<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
-					<HStack w="100%" h="100%" px="24px" py="32px">
-						<Button onClick={onOpen} _focus={{}} p="16px" id="ipc-dashboardView-drawer-button" bg="transparent">
-							<Icon fontSize="24px" as={HamburgerIcon} />
-						</Button>
-
-						<VStack textAlign="center" w="100%">
-							<Text
-								fontSize={{ base: '16px', sm: '24px' }}
-								fontWeight="bold"
-								bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
-								bgClip="text"
-								id="ipc-sideBar-title"
-							>
-								Inter Planetary Cloud
-							</Text>
-						</VStack>
-					</HStack>
-					<Divider />
-				</Box>
-			</Box>
-		);
+	const updateContact = async () => {
+		try {
+			if (contactsAddressEvent) {
+				const update = await user.contact.update(
+					contactInfos,
+					contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
+				);
+				toast({
+					title: update.message,
+					status: update.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setContacts(user.contact.contacts);
+			} else {
+				toast({
+					title: 'Invalid address',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseContactUpdate();
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to update this contact',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
 	};
 
-	const ResponsiveBar = () => {
-		const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
+	const deleteContact = async (contactToDelete: IPCContact) => {
+		try {
+			const deletedContact = contacts.find((contact) => contact === contactToDelete);
 
-		if (!isDrawerNeeded) return <LeftBar />;
-		return <BarWithDrawer />;
+			if (deletedContact) {
+				const deleteResponse = await user.contact.remove(contactToDelete.address);
+
+				toast({
+					title: deleteResponse.message,
+					status: deleteResponse.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setContacts(user.contact.contacts);
+			} else {
+				toast({
+					title: 'Unable to find this contact',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseContact();
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to delete this contact',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
 	};
 
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
-			<ResponsiveBar />
+			<ResponsiveBar onOpen={onOpen} onOpenContact={onOpenContact} isUploadLoading={isUploadLoading} />
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					{files.map((file) => (
 						<FileCard key={file.created_at} file={file}>
-							<Button
-								variant="inline"
-								size="sm"
-								onClick={async () => downloadFile(file)}
-								isLoading={isDownloadLoading}
-								id="ipc-dashboardView-download-button"
-							>
-								<DownloadIcon />
-							</Button>
+							<>
+								<Button
+									variant="inline"
+									size="sm"
+									onClick={async () => downloadFile(file)}
+									isLoading={isDownloadLoading}
+									id="ipc-dashboardView-download-button"
+								>
+									<DownloadIcon />
+								</Button>
+								<Button
+									variant="inline"
+									size="sm"
+									onClick={() => {
+										setSelectedFile(file);
+										onOpenShare();
+									}}
+									isLoading={isDownloadLoading}
+									id="ipc-dashboardView-share-button"
+								>
+									<Icon as={MdPeopleAlt} />
+								</Button>
+							</>
 						</FileCard>
 					))}
 				</VStack>
@@ -318,14 +372,30 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<>
+				<VStack spacing="16px" overflowY="auto">
 					{contacts.map((contact) => (
-						<Box key={contact.address}>
-							<Text>{contact.name}</Text>
-							<Text>{contact.address}</Text>
-						</Box>
+						<Flex key={contact.address} w="100%">
+							<VStack key={contact.address}>
+								<Text fontWeight="600">{contact.name}</Text>
+								<Text fontSize="12px">{contact.address}</Text>
+							</VStack>
+							<Spacer />
+							<Button
+								p="0px"
+								mx="4px"
+								onClick={() => {
+									setContactInfo(contact);
+									onOpenContactUpdate();
+								}}
+							>
+								<EditIcon />
+							</Button>
+							<Button mx="4px" p="0px" onClick={async () => deleteContact(contact)}>
+								<DeleteIcon />
+							</Button>
+						</Flex>
 					))}
-				</>
+				</VStack>
 			</Modal>
 			<Modal
 				isOpen={isOpenContactAdd}
@@ -350,6 +420,7 @@ const Dashboard = (): JSX.Element => {
 						h="200%"
 						w="100%"
 						p="10px"
+						my="4px"
 						placeholder="Name"
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
 						id="ipc-dashboardView-input-contact-name"
@@ -359,6 +430,7 @@ const Dashboard = (): JSX.Element => {
 						h="200%"
 						w="100%"
 						p="10px"
+						my="4px"
 						placeholder="Address"
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactAddressEvent(e)}
 						id="ipc-dashboardView-input-contact-address"
@@ -368,11 +440,82 @@ const Dashboard = (): JSX.Element => {
 						h="200%"
 						w="100%"
 						p="10px"
+						my="4px"
 						placeholder="Public Key"
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactPublicKeyEvent(e)}
 						id="ipc-dashboardView-input-contact-public-key"
 					/>
 				</>
+			</Modal>
+			<Modal
+				isOpen={isOpenContactUpdate}
+				onClose={onCloseContactUpdate}
+				title="Update the contact"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={updateContact}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-update-contact-button"
+					>
+						Update the contact
+					</Button>
+				}
+			>
+				<>
+					<Text>New name *</Text>
+					<Input
+						type="text"
+						h="200%"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder={contactInfos.name}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
+						id="ipc-dashboardView-input-contact-name"
+					/>
+					<Text as="i">* Fill, to update the info</Text>
+				</>
+			</Modal>
+			<Modal
+				isOpen={isOpenShare}
+				onClose={onCloseShare}
+				title="Select your contact"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={addContact}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-share-modal-add-contact-button"
+					>
+						Add a contact
+					</Button>
+				}
+			>
+				<VStack spacing="16px" overflowY="auto">
+					{contacts.map((contact) => (
+						<Flex key={contact.address} w="100%">
+							<VStack key={contact.address}>
+								<Text fontWeight="600">{contact.name}</Text>
+								<Text fontSize="12px">{contact.address}</Text>
+							</VStack>
+							<Spacer />
+							<Button
+								p="0px"
+								mx="4px"
+								onClick={() => {
+									shareFile(contact);
+								}}
+							>
+								<CheckIcon />
+							</Button>
+						</Flex>
+					))}
+				</VStack>
 			</Modal>
 		</HStack>
 	);

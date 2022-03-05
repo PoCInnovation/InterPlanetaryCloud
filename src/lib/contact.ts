@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import { IPCContact, IPCRSAKey, ResponseType } from 'types/types';
+import { IPCContact, IPCFileContact, ResponseType } from 'types/types';
 
 class Contact {
 	public contacts: IPCContact[];
@@ -13,19 +13,13 @@ class Contact {
 
 	private readonly account: accounts.base.Account | undefined;
 
-	private mnemonic: string;
+	private private_key: string;
 
-	private rsa_key: IPCRSAKey;
-
-	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
+	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.contacts = [];
 		this.contactsPostHash = '';
 		this.account = importedAccount;
-		this.mnemonic = mnemonic;
-		this.rsa_key = {
-			public_key: '',
-			private_key: '',
-		};
+		this.private_key = private_key;
 	}
 
 	public async load(): Promise<ResponseType> {
@@ -59,6 +53,12 @@ class Contact {
 
 				if (this.contactsPostHash === '') {
 					console.log('Create Post Message for Contacts');
+					this.contacts.push({
+						name: 'Owner (Me)',
+						address: this.account.address,
+						publicKey: this.account.publicKey,
+						files: [],
+					});
 					const newPostPublishResponse = await post.Publish({
 						APIServer: DEFAULT_API_V2,
 						channel: ALEPH_CHANNEL,
@@ -82,13 +82,13 @@ class Contact {
 		}
 	}
 
-	public async add(contact: IPCContact): Promise<ResponseType> {
+	public async add(contactToAdd: IPCContact): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (this.contacts.indexOf(contact) !== -1) {
+				if (this.contacts.find((contact) => contact.address === contactToAdd.address)) {
 					return { success: false, message: 'Contact already exist' };
 				}
-				this.contacts.push(contact);
+				this.contacts.push(contactToAdd);
 
 				await post.Publish({
 					APIServer: DEFAULT_API_V2,
@@ -112,10 +112,16 @@ class Contact {
 		}
 	}
 
-	public async remove(contact: IPCContact): Promise<ResponseType> {
+	public async remove(contactAddress: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				this.contacts.splice(this.contacts.indexOf(contact), 1);
+				this.contacts.map((contact, index) => {
+					if (contact.address === contactAddress) {
+						this.contacts.splice(index, 1);
+						return true;
+					}
+					return false;
+				});
 
 				await post.Publish({
 					APIServer: DEFAULT_API_V2,
@@ -139,13 +145,13 @@ class Contact {
 		}
 	}
 
-	public async update(contact: IPCContact): Promise<ResponseType> {
+	public async update(contact: IPCContact, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				if (this.contacts.indexOf(contact) === -1) {
 					return { success: false, message: 'Contact does not exist' };
 				}
-				this.contacts[this.contacts.indexOf(contact)] = contact;
+				this.contacts[this.contacts.indexOf(contact)].name = newName;
 
 				await post.Publish({
 					APIServer: DEFAULT_API_V2,
@@ -166,6 +172,37 @@ class Contact {
 		} catch (err) {
 			console.log(err);
 			return { success: false, message: 'Failed to update this contact' };
+		}
+	}
+
+	public async addFileToContact(contact: IPCContact, fileInfos: IPCFileContact): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contactIndex = this.contacts.indexOf(contact);
+				if (contactIndex === -1) return { success: false, message: 'Contact does not exist' };
+				if (this.contacts[contactIndex].files.find((file) => file === fileInfos)) {
+					return { success: false, message: 'The file is already shared' };
+				}
+				this.contacts[contactIndex].files.push(fileInfos);
+				await post.Publish({
+					APIServer: DEFAULT_API_V2,
+					channel: ALEPH_CHANNEL,
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+					account: this.account,
+					postType: 'amend',
+					content: {
+						header: 'InterPlanetaryCloud2.0 - Contacts',
+						contacts: this.contacts,
+					},
+					ref: this.contactsPostHash,
+				});
+				return { success: true, message: 'File shared with the contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to share the file with the contact' };
 		}
 	}
 }
