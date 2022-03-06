@@ -85,10 +85,10 @@ class Drive {
 		}
 	}
 
-	public async upload(file: IPCFile): Promise<ResponseType> {
+	public async upload(file: IPCFile, key: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.private_key).toString(); // TODO switch to the generated key
+				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, key).toString();
 
 				const newStoreFile = new File([encryptedContentFile], file.name, {
 					type: 'text/plain',

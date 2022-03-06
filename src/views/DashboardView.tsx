@@ -24,6 +24,7 @@ import FileCard from 'components/FileCard';
 
 import { MdPeopleAlt } from 'react-icons/md';
 import CryptoJS from 'crypto-js';
+import { generateFileKey } from 'utils/generateFileKey';
 import { getFileContent, extractFilename } from '../utils/fileManipulation';
 
 import { ResponsiveBar } from '../components/ResponsiveBar';
@@ -90,15 +91,26 @@ const Dashboard = (): JSX.Element => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
+		const key = generateFileKey();
+
 		if (!filename || !fileContent) return;
 
 		setIsUploadLoading(true);
 		try {
-			const upload = await user.drive.upload({
-				name: filename,
-				content: fileContent,
-				created_at: Date.now(),
-			});
+			const upload = await user.drive.upload(
+				{
+					name: filename,
+					content: fileContent,
+					created_at: Date.now(),
+				},
+				key,
+			);
+			// const share = await user.contact.addFileToContact(
+			// 	{
+			// 		hash: user.drive.files[user.drive.files.length].content,
+			// 		key: key,
+			// 	},
+			// );
 			toast({
 				title: upload.message,
 				status: upload.success ? 'success' : 'error',

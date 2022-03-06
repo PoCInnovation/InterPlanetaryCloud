@@ -7,7 +7,7 @@ export type IPCFile = {
 export type IPCFileContact = {
 	hash: string;
 	key: string;
-}
+};
 
 export type IPCContact = {
 	name: string;
