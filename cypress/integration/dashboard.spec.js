@@ -96,7 +96,7 @@ describe('Download a file for DashboardView', () => {
 		cy.get('#ipc-loginView-credentials-button').click();
 		cy.wait(3000);
 		cy.get('#ipc-dashboardView-download-button').click();
-		cy.wait(1000);
+		cy.wait(3000);
 	});
 
 	it('Good content for downloaded file', () => {
