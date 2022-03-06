@@ -145,28 +145,34 @@ class Contact {
 		}
 	}
 
-	public async update(contact: IPCContact, newName: string): Promise<ResponseType> {
+	public async update(contactAddress: string, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (this.contacts.indexOf(contact) === -1) {
-					return { success: false, message: 'Contact does not exist' };
+				if (
+					this.contacts.find((contact, index) => {
+						if (contact.address === contactAddress) {
+							this.contacts[index].name = newName;
+							return true;
+						}
+						return false;
+					})
+				) {
+					await post.Publish({
+						APIServer: DEFAULT_API_V2,
+						channel: ALEPH_CHANNEL,
+						inlineRequested: true,
+						storageEngine: ItemType.ipfs,
+						account: this.account,
+						postType: 'amend',
+						content: {
+							header: 'InterPlanetaryCloud2.0 - Contacts',
+							contacts: this.contacts,
+						},
+						ref: this.contactsPostHash,
+					});
+					return { success: true, message: 'Contact updated' };
 				}
-				this.contacts[this.contacts.indexOf(contact)].name = newName;
-
-				await post.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					postType: 'amend',
-					content: {
-						header: 'InterPlanetaryCloud2.0 - Contacts',
-						contacts: this.contacts,
-					},
-					ref: this.contactsPostHash,
-				});
-				return { success: true, message: 'Contact updated' };
+				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
@@ -175,29 +181,37 @@ class Contact {
 		}
 	}
 
-	public async addFileToContact(contact: IPCContact, fileInfos: IPCFileContact): Promise<ResponseType> {
+	public async addFileToContact(contactAddress: string, fileInfos: IPCFileContact): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const contactIndex = this.contacts.indexOf(contact);
-				if (contactIndex === -1) return { success: false, message: 'Contact does not exist' };
-				if (this.contacts[contactIndex].files.find((file) => file === fileInfos)) {
-					return { success: false, message: 'The file is already shared' };
+				if (
+					this.contacts.find((contact, contactIndex) => {
+						if (contact.address === contactAddress) {
+							if (this.contacts[contactIndex].files.find((file) => file === fileInfos)) {
+								return { success: false, message: 'The file is already shared' };
+							}
+							this.contacts[contactIndex].files.push(fileInfos);
+							return true;
+						}
+						return false;
+					})
+				) {
+					await post.Publish({
+						APIServer: DEFAULT_API_V2,
+						channel: ALEPH_CHANNEL,
+						inlineRequested: true,
+						storageEngine: ItemType.ipfs,
+						account: this.account,
+						postType: 'amend',
+						content: {
+							header: 'InterPlanetaryCloud2.0 - Contacts',
+							contacts: this.contacts,
+						},
+						ref: this.contactsPostHash,
+					});
+					return { success: true, message: 'File shared with the contact' };
 				}
-				this.contacts[contactIndex].files.push(fileInfos);
-				await post.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					postType: 'amend',
-					content: {
-						header: 'InterPlanetaryCloud2.0 - Contacts',
-						contacts: this.contacts,
-					},
-					ref: this.contactsPostHash,
-				});
-				return { success: true, message: 'File shared with the contact' };
+				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
