@@ -143,7 +143,7 @@ const Dashboard = (): JSX.Element => {
 	const shareFile = async (contact: IPCContact) => {
 		setIsDownloadLoading(true);
 		try {
-			const share = await user.contact.addFileToContact(contact, {
+			const share = await user.contact.addFileToContact(contact.address, {
 				hash: selectedFile.content,
 				key: CryptoJS.AES.encrypt(
 					'TODO: the private key generated at the uploading of the file', // TODO add private key generate at the upload of the file
@@ -232,7 +232,7 @@ const Dashboard = (): JSX.Element => {
 		try {
 			if (contactsAddressEvent) {
 				const update = await user.contact.update(
-					contactInfos,
+					contactInfos.address,
 					contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
 				);
 				toast({
