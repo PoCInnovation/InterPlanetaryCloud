@@ -157,7 +157,7 @@ const Dashboard = (): JSX.Element => {
 		try {
 			const share = await user.contact.addFileToContact(contact, {
 				hash: selectedFile.content,
-				privateKey: CryptoJS.AES.encrypt(
+				key: CryptoJS.AES.encrypt(
 					'TODO: the private key generated at the uploading of the file', // TODO add private key generate at the upload of the file
 					contact.publicKey,
 				).toString(), // TODO improve to manage asymmetric keys
