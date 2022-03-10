@@ -1,3 +1,5 @@
+import { Encrypted } from 'eth-crypto';
+
 export type IPCFile = {
 	name: string;
 	content: string;
@@ -6,7 +8,7 @@ export type IPCFile = {
 
 export type IPCFileContact = {
 	hash: string;
-	key: string;
+	key: Encrypted;
 };
 
 export type IPCContact = {

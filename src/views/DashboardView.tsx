@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, DeleteIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
 
+import EthCrypto from 'eth-crypto';
+
 import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCContact } from 'types/types';
@@ -105,18 +107,25 @@ const Dashboard = (): JSX.Element => {
 				},
 				key,
 			);
-			// const share = await user.contact.addFileToContact(
-			// 	{
-			// 		hash: user.drive.files[user.drive.files.length].content,
-			// 		key: key,
-			// 	},
-			// );
 			toast({
 				title: upload.message,
 				status: upload.success ? 'success' : 'error',
 				duration: 2000,
 				isClosable: true,
 			});
+			if (user.account) {
+				const keyEncrypted = await EthCrypto.encryptWithPublicKey(user.account.publicKey.slice(2), key);
+				const share = await user.contact.addFileToContact(user.account.publicKey, {
+					hash: user.drive.files[user.drive.files.length - 1].content,
+					key: keyEncrypted,
+				});
+				toast({
+					title: share.message,
+					status: share.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
 			onClose();
 		} catch (error) {
 			console.error(error);
@@ -155,20 +164,21 @@ const Dashboard = (): JSX.Element => {
 	const shareFile = async (contact: IPCContact) => {
 		setIsDownloadLoading(true);
 		try {
-			const share = await user.contact.addFileToContact(contact.address, {
-				hash: selectedFile.content,
-				key: CryptoJS.AES.encrypt(
-					'TODO: the private key generated at the uploading of the file', // TODO add private key generate at the upload of the file
-					contact.publicKey,
-				).toString(), // TODO improve to manage asymmetric keys
-			});
-			onCloseShare();
-			toast({
-				title: share.message,
-				status: share.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			// TODO get the encryption key for the file
+			// const share = await user.contact.addFileToContact(contact.address, {
+			// 	hash: selectedFile.content,
+			// 	key: CryptoJS.AES.encrypt(
+			// 		'TODO: the private key generated at the uploading of the file', // TODO add private key generate at the upload of the file
+			// 		contact.publicKey,
+			// 	).toString(), // TODO improve to manage asymmetric keys
+			// });
+			// onCloseShare();
+			// toast({
+			// 	title: share.message,
+			// 	status: share.success ? 'success' : 'error',
+			// 	duration: 2000,
+			// 	isClosable: true,
+			// });
 		} catch (error) {
 			console.log(error);
 			toast({

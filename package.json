@@ -15,6 +15,7 @@
     "aleph-sdk-ts": "^2.2.1",
     "crypto-js": "^4.0.0",
     "env-var": "^7.1.1",
+    "eth-crypto": "^2.2.0",
     "ethers": "^5.5.2",
     "framer-motion": "^4.1.17",
     "it-all": "^1.0.5",
