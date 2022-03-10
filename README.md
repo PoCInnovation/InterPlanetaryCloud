@@ -87,6 +87,60 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 **Security 🛡️**  
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
+**How it works?**
+
+<details>
+    <summary>Upload a file</summary>
+
+![File Uploading](.github/assets/ipc-upload-a-file.png)
+
+    When a file is uploaded, a random key is generated and the content of the file is encrypt with this key.
+    The content is then push into a store message via the aleph network.
+    Then, the hash of store message and the generated key, are added to the 'Contacts' post message after being encrypt with the public key of the current user.
+</details>
+
+<details>
+    <summary>Load a file</summary>
+
+![File Loading](.github/assets/ipc-file-loading.png)
+
+    When the user is connected to IPC, all the files are loaded, to be displayed in the dashboard view.
+    For each contacts into the 'Post Message - Contacts', the post message 'Files' and 'Contact' are get. 
+    Into the 'Contact' post message, the address of the current user is searched, and once an occurence is found, the list of shared files is retrieved.
+    For each files found, metadata about the files is retrieved from the 'Files' post message of the contact.
+</details>
+
+<details>
+    <summary>Download a file</summary>
+
+![File Downloading](.github/assets/ipc-download-a-file.png)
+
+    When a file is downloaded, the content is get from the aleph network from his hash and decrypt with the key after being itself decrypt with the private key of the current user.
+</details>
+
+<details>
+    <summary>Share a file</summary>
+
+![File Sharing](.github/assets/ipc-share-a-file.png)
+
+    When a file is shared, the hash and the key encrypted with the public key of the contact, is added to the list of shared files of the contact. 
+</details>
+
+<details>
+    <summary>Post messages</summary>
+
+    When an account is created, two post messages are generated, a file for the files and the other one for the contacts list.
+
+![Post Message Files](.github/assets/ipc-post-message-files.png)
+
+    The 'Post Message - Files', contains the info about the file, the name, the content and the created date.
+
+![Post Message Contacts](.github/assets/ipc-post-message-contacts.png)
+
+    The 'Post Message - Contacts', contains the info about the contact, his name, address, public key and a list of all the files shared between this contact and the current user.
+
+</details>
+
 ## Our PoC team :ok_hand:
 
 ### September 2021 - Today
