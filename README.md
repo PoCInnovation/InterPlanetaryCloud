@@ -89,55 +89,65 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 
 **How it works?**
 
+- For each file, a random key is generated and the content of the file is encrypted with this key.
+- The content is pushed into a store message via the aleph network.
+- The hash of the store message and the key are added to the 'Contacts' post message.
+
 <details>
     <summary>Upload a file</summary>
 
-![File Uploading](.github/assets/ipc-upload-a-file.png)
+<img src=".github/assets/ipc-upload-a-file.png" width="25%" />
 
-    When a file is uploaded, a random key is generated and the content of the file is encrypt with this key.
-    The content is then push into a store message via the aleph network.
-    Then, the hash of store message and the generated key, are added to the 'Contacts' post message after being encrypt with the public key of the current user.
 </details>
+
+---
+
+- For each contacts into the 'Post Message - Contacts', the files and contacts are get.
+- An occurrence between the address of the user and the contacts is searched.
+- For each file found, metadata about the files are retrieved.
 
 <details>
     <summary>Load a file</summary>
 
-![File Loading](.github/assets/ipc-file-loading.png)
+<img src=".github/assets/ipc-file-loading.png" width="25%" />
 
-    When the user is connected to IPC, all the files are loaded, to be displayed in the dashboard view.
-    For each contacts into the 'Post Message - Contacts', the post message 'Files' and 'Contact' are get. 
-    Into the 'Contact' post message, the address of the current user is searched, and once an occurence is found, the list of shared files is retrieved.
-    For each files found, metadata about the files is retrieved from the 'Files' post message of the contact.
 </details>
+
+---
+
+- The content is retrieved from the aleph network from his hash.
+- The content is decrypt with the key, itself decrypt with the private key of the user.
 
 <details>
     <summary>Download a file</summary>
 
-![File Downloading](.github/assets/ipc-download-a-file.png)
+<img src=".github/assets/ipc-download-a-file.png" width="25%" />
 
-    When a file is downloaded, the content is get from the aleph network from his hash and decrypt with the key after being itself decrypt with the private key of the current user.
 </details>
+
+---
+
+- The hash and the key are encrypted with the public key of the contact.
+- These infos are added to the list of shared files of the contact.
 
 <details>
     <summary>Share a file</summary>
 
-![File Sharing](.github/assets/ipc-share-a-file.png)
+<img src=".github/assets/ipc-share-a-file.png" width="25%" />
 
-    When a file is shared, the hash and the key encrypted with the public key of the contact, is added to the list of shared files of the contact. 
 </details>
+
+---
+
+- One post message, with the list of contacts and the list of shared files for each contacts
+- The post message contains the info about the contact, his name, address, public key and a list of shared files
 
 <details>
     <summary>Post messages</summary>
 
-    When an account is created, two post messages are generated, a file for the files and the other one for the contacts list.
-
-![Post Message Files](.github/assets/ipc-post-message-files.png)
-
-    The 'Post Message - Files', contains the info about the file, the name, the content and the created date.
-
-![Post Message Contacts](.github/assets/ipc-post-message-contacts.png)
-
-    The 'Post Message - Contacts', contains the info about the contact, his name, address, public key and a list of all the files shared between this contact and the current user.
+<div>
+<img src=".github/assets/ipc-post-message-contacts.png" width="25%" />
+</div>
 
 </details>
 
