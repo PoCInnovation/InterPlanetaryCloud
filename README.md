@@ -96,7 +96,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 <details>
     <summary>Upload a file</summary>
 
-<img src=".github/assets/ipc-upload-a-file.png" width="25%" />
+<img src=".github/assets/ipc-upload-a-file.png" width="50%" />
 
 </details>
 
@@ -109,7 +109,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 <details>
     <summary>Load a file</summary>
 
-<img src=".github/assets/ipc-file-loading.png" width="25%" />
+<img src=".github/assets/ipc-file-loading.png" width="50%" />
 
 </details>
 
@@ -121,7 +121,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 <details>
     <summary>Download a file</summary>
 
-<img src=".github/assets/ipc-download-a-file.png" width="25%" />
+<img src=".github/assets/ipc-download-a-file.png" width="50%" />
 
 </details>
 
@@ -133,7 +133,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 <details>
     <summary>Share a file</summary>
 
-<img src=".github/assets/ipc-share-a-file.png" width="25%" />
+<img src=".github/assets/ipc-share-a-file.png" width="50%" />
 
 </details>
 
@@ -146,7 +146,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
     <summary>Post messages</summary>
 
 <div>
-<img src=".github/assets/ipc-post-message-contacts.png" width="25%" />
+<img src=".github/assets/ipc-post-message-contacts.png" width="50%" />
 </div>
 
 </details>
