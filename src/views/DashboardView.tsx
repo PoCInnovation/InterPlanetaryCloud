@@ -15,8 +15,6 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, DeleteIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
 
-import EthCrypto from 'eth-crypto';
-
 import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCContact } from 'types/types';
@@ -26,7 +24,7 @@ import FileCard from 'components/FileCard';
 
 import { MdPeopleAlt } from 'react-icons/md';
 import { generateFileKey } from 'utils/generateFileKey';
-import { sleep } from 'sleep-ts';
+
 import { getFileContent, extractFilename } from '../utils/fileManipulation';
 
 import { ResponsiveBar } from '../components/ResponsiveBar';
