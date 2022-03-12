@@ -4,6 +4,7 @@ export type IPCFile = {
 	name: string;
 	content: string;
 	created_at: number;
+	key: string;
 };
 
 export type IPCFileContact = {

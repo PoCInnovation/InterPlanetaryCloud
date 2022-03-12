@@ -25,8 +25,8 @@ import Modal from 'components/Modal';
 import FileCard from 'components/FileCard';
 
 import { MdPeopleAlt } from 'react-icons/md';
-import CryptoJS from 'crypto-js';
 import { generateFileKey } from 'utils/generateFileKey';
+import { sleep } from 'sleep-ts';
 import { getFileContent, extractFilename } from '../utils/fileManipulation';
 
 import { ResponsiveBar } from '../components/ResponsiveBar';
@@ -59,14 +59,21 @@ const Dashboard = (): JSX.Element => {
 		name: '',
 		content: '',
 		created_at: 0,
+		key: '',
 	});
 
 	useEffect(() => {
 		(async () => {
 			await loadDrive();
 			await loadContact();
+			await loadSharedDrive();
+			console.log('iuj', user.drive.files);
 		})();
 	}, []);
+
+	useEffect(() => {
+		console.log('fghf5645454545ghfghf', files);
+	}, [files]);
 
 	const loadDrive = async () => {
 		try {
@@ -89,6 +96,28 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
+	const loadSharedDrive = async () => {
+		try {
+			const loadShared = await user.drive.loadShared(user.contact.contacts);
+			toast({
+				title: loadShared.message,
+				status: loadShared.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+			console.log('fchgvjb', user.drive.files);
+			setFiles(user.drive.files);
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to load shared drive',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
 	const uploadFile = async () => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
@@ -99,14 +128,12 @@ const Dashboard = (): JSX.Element => {
 
 		setIsUploadLoading(true);
 		try {
-			const upload = await user.drive.upload(
-				{
-					name: filename,
-					content: fileContent,
-					created_at: Date.now(),
-				},
+			const upload = await user.drive.upload({
+				name: filename,
+				content: fileContent,
+				created_at: Date.now(),
 				key,
-			);
+			});
 			toast({
 				title: upload.message,
 				status: upload.success ? 'success' : 'error',
@@ -114,17 +141,18 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 			if (user.account) {
-				const keyEncrypted = await EthCrypto.encryptWithPublicKey(user.account.publicKey.slice(2), key);
-				const share = await user.contact.addFileToContact(user.account.publicKey, {
-					hash: user.drive.files[user.drive.files.length - 1].content,
-					key: keyEncrypted,
-				});
-				toast({
-					title: share.message,
-					status: share.success ? 'success' : 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				/* const share = */ await user.contact.addFileToContact(
+					user.account.address,
+					user.drive.files[user.drive.files.length - 1].content,
+					user.drive.files[user.drive.files.length - 1].key,
+				);
+				// TODO not usefully => print the message "File shared with the contact" except that the file is not shared with someone (just the owner but not need to display this info)
+				// toast({
+				//	title: share.message,
+				//	status: share.success ? 'success' : 'error',
+				//	duration: 2000,
+				//	isClosable: true,
+				// });
 			}
 			onClose();
 		} catch (error) {
@@ -164,21 +192,15 @@ const Dashboard = (): JSX.Element => {
 	const shareFile = async (contact: IPCContact) => {
 		setIsDownloadLoading(true);
 		try {
-			// TODO get the encryption key for the file
-			// const share = await user.contact.addFileToContact(contact.address, {
-			// 	hash: selectedFile.content,
-			// 	key: CryptoJS.AES.encrypt(
-			// 		'TODO: the private key generated at the uploading of the file', // TODO add private key generate at the upload of the file
-			// 		contact.publicKey,
-			// 	).toString(), // TODO improve to manage asymmetric keys
-			// });
-			// onCloseShare();
-			// toast({
-			// 	title: share.message,
-			// 	status: share.success ? 'success' : 'error',
-			// 	duration: 2000,
-			// 	isClosable: true,
-			// });
+			console.log(selectedFile.key);
+			const share = await user.contact.addFileToContact(contact.address, selectedFile.content, selectedFile.key);
+			onCloseShare();
+			toast({
+				title: share.message,
+				status: share.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -400,6 +422,7 @@ const Dashboard = (): JSX.Element => {
 							<VStack key={contact.address}>
 								<Text fontWeight="600">{contact.name}</Text>
 								<Text fontSize="12px">{contact.address}</Text>
+								<Text fontSize="12px">{contact.publicKey}</Text>
 							</VStack>
 							<Spacer />
 							<Button

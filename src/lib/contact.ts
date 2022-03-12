@@ -4,7 +4,9 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import { IPCContact, IPCFileContact, ResponseType } from 'types/types';
+import { IPCContact, ResponseType } from 'types/types';
+import EthCrypto from 'eth-crypto';
+import CryptoJS from 'crypto-js';
 
 class Contact {
 	public contacts: IPCContact[];
@@ -181,36 +183,44 @@ class Contact {
 		}
 	}
 
-	public async addFileToContact(contactAddress: string, fileInfos: IPCFileContact): Promise<ResponseType> {
+	public async addFileToContact(contactAddress: string, hash: string, key: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				if (
-					this.contacts.find((contact, contactIndex) => {
-						if (contact.address === contactAddress) {
-							if (this.contacts[contactIndex].files.find((file) => file === fileInfos)) {
-								return { success: false, message: 'The file is already shared' };
+					await Promise.all(
+						this.contacts.map(async (contact, contactIndex) => {
+							if (contact.address === contactAddress) {
+								if (this.contacts[contactIndex].files.find((file) => file.hash === hash)) {
+									return { success: false, message: 'The file is already shared' };
+								}
+								console.log(CryptoJS.AES.decrypt(key, this.private_key).toString(CryptoJS.enc.Utf8));
+								this.contacts[contactIndex].files.push({
+									hash,
+									key: await EthCrypto.encryptWithPublicKey(
+										contact.publicKey.slice(2),
+										CryptoJS.AES.decrypt(key, this.private_key).toString(CryptoJS.enc.Utf8),
+									),
+								});
+								await post.Publish({
+									APIServer: DEFAULT_API_V2,
+									channel: ALEPH_CHANNEL,
+									inlineRequested: true,
+									storageEngine: ItemType.ipfs,
+									account: this.account!,
+									postType: 'amend',
+									content: {
+										header: 'InterPlanetaryCloud2.0 - Contacts',
+										contacts: this.contacts,
+									},
+									ref: this.contactsPostHash,
+								});
+								return true;
 							}
-							this.contacts[contactIndex].files.push(fileInfos);
-							return true;
-						}
-						return false;
-					})
-				) {
-					await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: 'amend',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-						ref: this.contactsPostHash,
-					});
+							return false;
+						}),
+					)
+				)
 					return { success: true, message: 'File shared with the contact' };
-				}
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
