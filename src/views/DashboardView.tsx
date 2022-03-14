@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, DeleteIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
 
+import EthCrypto from 'eth-crypto';
+
 import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCContact } from 'types/types';
@@ -49,7 +51,6 @@ const Dashboard = (): JSX.Element => {
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [contactsAddressEvent, setContactAddressEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -235,10 +236,10 @@ const Dashboard = (): JSX.Element => {
 
 	const addContact = async () => {
 		try {
-			if (contactsNameEvent && contactsAddressEvent && contactsPublicKeyEvent) {
+			if (contactsNameEvent && contactsPublicKeyEvent) {
 				const add = await user.contact.add({
 					name: contactsNameEvent.target.value,
-					address: contactsAddressEvent.target.value,
+					address: EthCrypto.publicKey.toAddress(contactsPublicKeyEvent.target.value.slice(2)),
 					publicKey: contactsPublicKeyEvent.target.value,
 					files: [],
 				});
@@ -272,7 +273,7 @@ const Dashboard = (): JSX.Element => {
 
 	const updateContact = async () => {
 		try {
-			if (contactsAddressEvent) {
+			if (contactsPublicKeyEvent) {
 				const update = await user.contact.update(
 					contactInfos.address,
 					contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
@@ -419,7 +420,6 @@ const Dashboard = (): JSX.Element => {
 						<Flex key={contact.address} w="100%">
 							<VStack key={contact.address}>
 								<Text fontWeight="600">{contact.name}</Text>
-								<Text fontSize="12px">{contact.address}</Text>
 								<Text fontSize="12px">{contact.publicKey}</Text>
 							</VStack>
 							<Spacer />
@@ -467,16 +467,6 @@ const Dashboard = (): JSX.Element => {
 						placeholder="Name"
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
 						id="ipc-dashboardView-input-contact-name"
-					/>
-					<Input
-						type="text"
-						h="200%"
-						w="100%"
-						p="10px"
-						my="4px"
-						placeholder="Address"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactAddressEvent(e)}
-						id="ipc-dashboardView-input-contact-address"
 					/>
 					<Input
 						type="text"
