@@ -326,9 +326,9 @@ const Dashboard = (): JSX.Element => {
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBar
 				onOpen={onOpen}
-				onOpenContactAdd={onOpenContactAdd}
 				setSelectedTab={setSelectedTab}
 				isUploadLoading={isUploadLoading}
+				selectedTab={selectedTab}
 			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
@@ -343,6 +343,7 @@ const Dashboard = (): JSX.Element => {
 						onOpenShare={onOpenShare}
 						setContactInfo={setContactInfo}
 						onOpenContactUpdate={onOpenContactUpdate}
+						onOpenContactAdd={onOpenContactAdd}
 						deleteContact={deleteContact}
 					/>
 				</VStack>

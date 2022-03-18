@@ -14,6 +14,7 @@ type FileCardsProps = {
 	onOpenShare: () => void;
 	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
 	onOpenContactUpdate: () => void;
+	onOpenContactAdd: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
@@ -28,6 +29,7 @@ export const DisplayFileCards = ({
 	onOpenShare,
 	setContactInfo,
 	onOpenContactUpdate,
+	onOpenContactAdd,
 	deleteContact,
 }: FileCardsProps): JSX.Element => {
 	if (index === 0)
@@ -55,6 +57,7 @@ export const DisplayFileCards = ({
 			contacts={contacts}
 			setContactInfo={setContactInfo}
 			onOpenContactUpdate={onOpenContactUpdate}
+			onOpenContactAdd={onOpenContactAdd}
 			deleteContact={deleteContact}
 		/>
 	);

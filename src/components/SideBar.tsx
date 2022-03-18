@@ -8,8 +8,8 @@ type SideBarPropsType = {
 	myFilesTab: string;
 	sharedFilesTab: string;
 	uploadButton: JSX.Element;
-	addContactButton: JSX.Element;
 	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	currentTabIndex: number;
 };
 
 const SideBar = ({
@@ -17,8 +17,8 @@ const SideBar = ({
 	myFilesTab,
 	sharedFilesTab,
 	uploadButton,
-	addContactButton,
 	setSelectedTab,
+	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
 	<VStack
 		h="100vh"
@@ -40,7 +40,7 @@ const SideBar = ({
 			>
 				Inter Planetary Cloud
 			</Text>
-			<Tabs orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
+			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
 				<TabList>
 					<Tab
 						borderLeft={`5px solid ${colors.blue[700]}`}
@@ -68,7 +68,6 @@ const SideBar = ({
 					</Tab>
 				</TabList>
 			</Tabs>
-			{addContactButton}
 			{uploadButton}
 		</VStack>
 	</VStack>
