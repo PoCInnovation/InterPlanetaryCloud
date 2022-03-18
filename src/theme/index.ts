@@ -1,7 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
-// Foundations overrides
+// Foundation overrides
 import fonts from './foundations/fonts';
 import colors from './foundations/colors';
 import radius from './foundations/borderRadius';

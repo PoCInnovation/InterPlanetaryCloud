@@ -1,33 +1,20 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import {
-	Box,
-	VStack,
-	Button,
-	HStack,
-	useDisclosure,
-	useToast,
-	Input,
-	Text,
-	Flex,
-	Spacer,
-	Icon,
-} from '@chakra-ui/react';
-import { CheckIcon, DeleteIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
+import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Text, Flex, Spacer } from '@chakra-ui/react';
+import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCContact } from 'types/types';
 
 import Modal from 'components/Modal';
-import FileCard from 'components/FileCard';
 
-import { MdPeopleAlt } from 'react-icons/md';
 import { generateFileKey } from 'utils/generateFileKey';
 
 import { getFileContent, extractFilename } from '../utils/fileManipulation';
 
 import { ResponsiveBar } from '../components/ResponsiveBar';
+import { DisplayFileCards } from '../components/DisplayFileCards';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast();
@@ -38,6 +25,7 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
 	const [contactInfos, setContactInfo] = useState<IPCContact>({
 		name: '',
@@ -45,6 +33,7 @@ const Dashboard = (): JSX.Element => {
 		publicKey: '',
 		files: [],
 	});
+	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -68,10 +57,6 @@ const Dashboard = (): JSX.Element => {
 			console.log('iuj', user.drive.files);
 		})();
 	}, []);
-
-	useEffect(() => {
-		console.log('fghf5645454545ghfghf', files);
-	}, [files]);
 
 	const loadDrive = async () => {
 		try {
@@ -340,36 +325,22 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
-			<ResponsiveBar onOpen={onOpen} onOpenContact={onOpenContact} isUploadLoading={isUploadLoading} />
+			<ResponsiveBar onOpen={onOpen} onOpenContactAdd={onOpenContactAdd} setSelectedTab={setSelectedTab} isUploadLoading={isUploadLoading} />
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-					{files.map((file) => (
-						<FileCard key={file.created_at} file={file}>
-							<>
-								<Button
-									variant="inline"
-									size="sm"
-									onClick={async () => downloadFile(file)}
-									isLoading={isDownloadLoading}
-									id="ipc-dashboardView-download-button"
-								>
-									<DownloadIcon />
-								</Button>
-								<Button
-									variant="inline"
-									size="sm"
-									onClick={() => {
-										setSelectedFile(file);
-										onOpenShare();
-									}}
-									isLoading={isDownloadLoading}
-									id="ipc-dashboardView-share-button"
-								>
-									<Icon as={MdPeopleAlt} />
-								</Button>
-							</>
-						</FileCard>
-					))}
+					<DisplayFileCards
+						myFiles={files}
+						sharedFiles={sharedFiles}
+						contacts={contacts}
+						index={selectedTab}
+						downloadFile={downloadFile}
+						isDownloadLoading={isDownloadLoading}
+						setSelectedFile={setSelectedFile}
+						onOpenShare={onOpenShare}
+						setContactInfo={setContactInfo}
+						onOpenContactUpdate={onOpenContactUpdate}
+						deleteContact={deleteContact}
+					/>
 				</VStack>
 			</Box>
 			<Modal
