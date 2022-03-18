@@ -16,6 +16,8 @@ import EthCrypto from 'eth-crypto';
 class Drive {
 	public files: IPCFile[];
 
+	public sharedFiles: IPCFile[];
+
 	public filesPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
@@ -24,6 +26,7 @@ class Drive {
 
 	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
+		this.sharedFiles = [];
 		this.account = importedAccount;
 		this.filesPostHash = '';
 		this.private_key = private_key;
@@ -142,7 +145,7 @@ class Drive {
 																	console.log('!!3');
 																	if (contactFile.content === fileShared.hash) {
 																		console.log('!!3');
-																		this.files.push({
+																		this.sharedFiles.push({
 																			name: contactFile.name,
 																			content: contactFile.content,
 																			created_at: contactFile.created_at,

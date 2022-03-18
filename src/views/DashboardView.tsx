@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Text, Flex, Spacer } from '@chakra-ui/react';
-import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { CheckIcon } from '@chakra-ui/icons';
 
 import EthCrypto from 'eth-crypto';
 
@@ -22,7 +22,6 @@ const Dashboard = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { isOpen: isOpenContact, onOpen: onOpenContact, onClose: onCloseContact } = useDisclosure();
 	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
@@ -90,7 +89,7 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 			console.log('fchgvjb', user.drive.files);
-			setFiles(user.drive.files);
+			setSharedFiles(user.drive.sharedFiles);
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -312,7 +311,6 @@ const Dashboard = (): JSX.Element => {
 					isClosable: true,
 				});
 			}
-			onCloseContact();
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -326,7 +324,12 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
-			<ResponsiveBar onOpen={onOpen} onOpenContactAdd={onOpenContactAdd} setSelectedTab={setSelectedTab} isUploadLoading={isUploadLoading} />
+			<ResponsiveBar
+				onOpen={onOpen}
+				onOpenContactAdd={onOpenContactAdd}
+				setSelectedTab={setSelectedTab}
+				isUploadLoading={isUploadLoading}
+			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayFileCards
@@ -369,47 +372,6 @@ const Dashboard = (): JSX.Element => {
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
 					id="ipc-dashboardView-upload-file"
 				/>
-			</Modal>
-			<Modal
-				isOpen={isOpenContact}
-				onClose={onCloseContact}
-				title="Contacts"
-				CTA={
-					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
-						onClick={onOpenContactAdd}
-						id="ipc-dashboardView-contact-modal-button"
-					>
-						Add Contact
-					</Button>
-				}
-			>
-				<VStack spacing="16px" overflowY="auto">
-					{contacts.map((contact) => (
-						<Flex key={contact.address} w="100%">
-							<VStack key={contact.address}>
-								<Text fontWeight="600">{contact.name}</Text>
-								<Text fontSize="12px">{contact.publicKey}</Text>
-							</VStack>
-							<Spacer />
-							<Button
-								p="0px"
-								mx="4px"
-								onClick={() => {
-									setContactInfo(contact);
-									onOpenContactUpdate();
-								}}
-							>
-								<EditIcon />
-							</Button>
-							<Button mx="4px" p="0px" onClick={async () => deleteContact(contact)}>
-								<DeleteIcon />
-							</Button>
-						</Flex>
-					))}
-				</VStack>
 			</Modal>
 			<Modal
 				isOpen={isOpenContactAdd}
@@ -483,23 +445,7 @@ const Dashboard = (): JSX.Element => {
 					<Text as="i">* Fill, to update the info</Text>
 				</>
 			</Modal>
-			<Modal
-				isOpen={isOpenShare}
-				onClose={onCloseShare}
-				title="Select your contact"
-				CTA={
-					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
-						onClick={addContact}
-						isLoading={isUploadLoading}
-						id="ipc-dashboardView-share-modal-add-contact-button"
-					>
-						Add a contact
-					</Button>
-				}
-			>
+			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">
 					{contacts.map((contact) => (
 						<Flex key={contact.address} w="100%">
@@ -511,8 +457,8 @@ const Dashboard = (): JSX.Element => {
 							<Button
 								p="0px"
 								mx="4px"
-								onClick={() => {
-									shareFile(contact);
+								onClick={async () => {
+									await shareFile(contact);
 								}}
 							>
 								<CheckIcon />
