@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import { IPCContact, ResponseType } from 'types/types';
+import { IPCContact, IPCFile, ResponseType } from 'types/types';
 import EthCrypto from 'eth-crypto';
 import CryptoJS from 'crypto-js';
 
@@ -183,23 +183,24 @@ class Contact {
 		}
 	}
 
-	public async addFileToContact(contactAddress: string, hash: string, key: string): Promise<ResponseType> {
+	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				if (
 					await Promise.all(
 						this.contacts.map(async (contact, contactIndex) => {
 							if (contact.address === contactAddress) {
-								if (this.contacts[contactIndex].files.find((file) => file.hash === hash)) {
+								if (this.contacts[contactIndex].files.find((file) => file.hash === mainFile.hash)) {
 									return { success: false, message: 'The file is already shared' };
 								}
-								console.log(CryptoJS.AES.decrypt(key, this.private_key).toString(CryptoJS.enc.Utf8));
 								this.contacts[contactIndex].files.push({
-									hash,
+									hash: mainFile.hash,
 									key: await EthCrypto.encryptWithPublicKey(
 										contact.publicKey.slice(2),
-										CryptoJS.AES.decrypt(key, this.private_key).toString(CryptoJS.enc.Utf8),
+										await EthCrypto.decryptWithPrivateKey(this.private_key, mainFile.key),
 									),
+									created_at: mainFile.created_at,
+									name: mainFile.name,
 								});
 								await post.Publish({
 									APIServer: DEFAULT_API_V2,
