@@ -1,13 +1,25 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
+import React from 'react';
 
 type SideBarPropsType = {
-	contactButton: JSX.Element;
+	contactTab: string;
+	myFilesTab: string;
+	sharedFilesTab: string;
 	uploadButton: JSX.Element;
+	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	currentTabIndex: number;
 };
 
-const SideBar = ({ contactButton, uploadButton }: SideBarPropsType): JSX.Element => (
+const SideBar = ({
+	contactTab,
+	myFilesTab,
+	sharedFilesTab,
+	uploadButton,
+	setSelectedTab,
+	currentTabIndex,
+}: SideBarPropsType): JSX.Element => (
 	<VStack
 		h="100vh"
 		minW="300px"
@@ -24,12 +36,40 @@ const SideBar = ({ contactButton, uploadButton }: SideBarPropsType): JSX.Element
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"
 				id="ipc-sideBar-title"
+				pb="64px"
 			>
 				Inter Planetary Cloud
 			</Text>
+			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
+				<TabList>
+					<Tab
+						borderLeft={`5px solid ${colors.blue[700]}`}
+						_selected={{
+							borderLeft: `5px solid ${colors.red[700]}`,
+						}}
+					>
+						{myFilesTab}
+					</Tab>
+					<Tab
+						borderLeft={`5px solid ${colors.blue[700]}`}
+						_selected={{
+							borderLeft: `5px solid ${colors.red[700]}`,
+						}}
+					>
+						{sharedFilesTab}
+					</Tab>
+					<Tab
+						borderLeft={`5px solid ${colors.blue[700]}`}
+						_selected={{
+							borderLeft: `5px solid ${colors.red[700]}`,
+						}}
+					>
+						{contactTab}
+					</Tab>
+				</TabList>
+			</Tabs>
+			{uploadButton}
 		</VStack>
-		{contactButton}
-		{uploadButton}
 	</VStack>
 );
 

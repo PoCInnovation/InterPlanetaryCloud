@@ -15,24 +15,30 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
+import React from 'react';
 import colors from '../theme/foundations/colors';
 import Sidebar from './SideBar';
-import { UploadButton, ContactButton } from './CustomButtons';
+import { UploadButton } from './CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;
-	onOpenContact: () => void;
 	isUploadLoading: boolean;
+	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	selectedTab: number;
 };
 
-export const LeftBar = ({ onOpen, onOpenContact, isUploadLoading }: BarProps): JSX.Element => (
+export const LeftBar = ({ onOpen, isUploadLoading, setSelectedTab, selectedTab }: BarProps): JSX.Element => (
 	<Sidebar
 		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-		contactButton={<ContactButton text="Contacts" onClick={() => onOpenContact()} isLoading={isUploadLoading} />}
+		contactTab="Contacts"
+		myFilesTab="My files"
+		sharedFilesTab="Shared with me"
+		setSelectedTab={setSelectedTab}
+		currentTabIndex={selectedTab}
 	/>
 );
 
-export const BarWithDrawer = ({ onOpen, onOpenContact, isUploadLoading }: BarProps): JSX.Element => {
+export const BarWithDrawer = ({ onOpen, setSelectedTab, isUploadLoading, selectedTab }: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
 	const placement: SlideDirection = 'left';
 
@@ -41,7 +47,12 @@ export const BarWithDrawer = ({ onOpen, onOpenContact, isUploadLoading }: BarPro
 			<Drawer isOpen={isOpenDrawer} placement={placement} onClose={onCloseDrawer}>
 				<DrawerOverlay />
 				<DrawerContent w="75%">
-					<LeftBar onOpen={onOpen} onOpenContact={onOpenContact} isUploadLoading={isUploadLoading} />
+					<LeftBar
+						onOpen={onOpen}
+						setSelectedTab={setSelectedTab}
+						isUploadLoading={isUploadLoading}
+						selectedTab={selectedTab}
+					/>
 				</DrawerContent>
 			</Drawer>
 			<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
@@ -68,10 +79,24 @@ export const BarWithDrawer = ({ onOpen, onOpenContact, isUploadLoading }: BarPro
 	);
 };
 
-export const ResponsiveBar = ({ onOpen, onOpenContact, isUploadLoading }: BarProps): JSX.Element => {
+export const ResponsiveBar = ({ onOpen, setSelectedTab, isUploadLoading, selectedTab }: BarProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
 
 	if (!isDrawerNeeded)
-		return <LeftBar onOpen={onOpen} onOpenContact={onOpenContact} isUploadLoading={isUploadLoading} />;
-	return <BarWithDrawer onOpen={onOpen} onOpenContact={onOpenContact} isUploadLoading={isUploadLoading} />;
+		return (
+			<LeftBar
+				onOpen={onOpen}
+				setSelectedTab={setSelectedTab}
+				isUploadLoading={isUploadLoading}
+				selectedTab={selectedTab}
+			/>
+		);
+	return (
+		<BarWithDrawer
+			onOpen={onOpen}
+			setSelectedTab={setSelectedTab}
+			isUploadLoading={isUploadLoading}
+			selectedTab={selectedTab}
+		/>
+	);
 };

@@ -1,19 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import {
-	Box,
-	VStack,
-	Button,
-	HStack,
-	useDisclosure,
-	useToast,
-	Input,
-	Text,
-	Flex,
-	Spacer,
-	Icon,
-} from '@chakra-ui/react';
-import { CheckIcon, DeleteIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
+import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Text, Flex, Spacer } from '@chakra-ui/react';
+import { CheckIcon } from '@chakra-ui/icons';
 
 import EthCrypto from 'eth-crypto';
 
@@ -22,24 +10,23 @@ import { useUserContext } from 'contexts/user';
 import { IPCFile, IPCContact } from 'types/types';
 
 import Modal from 'components/Modal';
-import FileCard from 'components/FileCard';
 
-import { MdPeopleAlt } from 'react-icons/md';
 import { generateFileKey } from 'utils/generateFileKey';
 
 import { getFileContent, extractFilename } from '../utils/fileManipulation';
 
 import { ResponsiveBar } from '../components/ResponsiveBar';
+import { DisplayFileCards } from '../components/DisplayFileCards';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { isOpen: isOpenContact, onOpen: onOpenContact, onClose: onCloseContact } = useDisclosure();
 	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
 	const [contactInfos, setContactInfo] = useState<IPCContact>({
 		name: '',
@@ -47,6 +34,7 @@ const Dashboard = (): JSX.Element => {
 		publicKey: '',
 		files: [],
 	});
+	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -69,10 +57,6 @@ const Dashboard = (): JSX.Element => {
 			console.log('iuj', user.drive.files);
 		})();
 	}, []);
-
-	useEffect(() => {
-		console.log('fghf5645454545ghfghf', files);
-	}, [files]);
 
 	const loadDrive = async () => {
 		try {
@@ -105,7 +89,7 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 			console.log('fchgvjb', user.drive.files);
-			setFiles(user.drive.files);
+			setSharedFiles(user.drive.sharedFiles);
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -327,7 +311,6 @@ const Dashboard = (): JSX.Element => {
 					isClosable: true,
 				});
 			}
-			onCloseContact();
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -341,36 +324,28 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
-			<ResponsiveBar onOpen={onOpen} onOpenContact={onOpenContact} isUploadLoading={isUploadLoading} />
+			<ResponsiveBar
+				onOpen={onOpen}
+				setSelectedTab={setSelectedTab}
+				isUploadLoading={isUploadLoading}
+				selectedTab={selectedTab}
+			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-					{files.map((file) => (
-						<FileCard key={file.created_at} file={file}>
-							<>
-								<Button
-									variant="inline"
-									size="sm"
-									onClick={async () => downloadFile(file)}
-									isLoading={isDownloadLoading}
-									id="ipc-dashboardView-download-button"
-								>
-									<DownloadIcon />
-								</Button>
-								<Button
-									variant="inline"
-									size="sm"
-									onClick={() => {
-										setSelectedFile(file);
-										onOpenShare();
-									}}
-									isLoading={isDownloadLoading}
-									id="ipc-dashboardView-share-button"
-								>
-									<Icon as={MdPeopleAlt} />
-								</Button>
-							</>
-						</FileCard>
-					))}
+					<DisplayFileCards
+						myFiles={files}
+						sharedFiles={sharedFiles}
+						contacts={contacts}
+						index={selectedTab}
+						downloadFile={downloadFile}
+						isDownloadLoading={isDownloadLoading}
+						setSelectedFile={setSelectedFile}
+						onOpenShare={onOpenShare}
+						setContactInfo={setContactInfo}
+						onOpenContactUpdate={onOpenContactUpdate}
+						onOpenContactAdd={onOpenContactAdd}
+						deleteContact={deleteContact}
+					/>
 				</VStack>
 			</Box>
 			<Modal
@@ -398,47 +373,6 @@ const Dashboard = (): JSX.Element => {
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
 					id="ipc-dashboardView-upload-file"
 				/>
-			</Modal>
-			<Modal
-				isOpen={isOpenContact}
-				onClose={onCloseContact}
-				title="Contacts"
-				CTA={
-					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
-						onClick={onOpenContactAdd}
-						id="ipc-dashboardView-contact-modal-button"
-					>
-						Add Contact
-					</Button>
-				}
-			>
-				<VStack spacing="16px" overflowY="auto">
-					{contacts.map((contact) => (
-						<Flex key={contact.address} w="100%">
-							<VStack key={contact.address}>
-								<Text fontWeight="600">{contact.name}</Text>
-								<Text fontSize="12px">{contact.publicKey}</Text>
-							</VStack>
-							<Spacer />
-							<Button
-								p="0px"
-								mx="4px"
-								onClick={() => {
-									setContactInfo(contact);
-									onOpenContactUpdate();
-								}}
-							>
-								<EditIcon />
-							</Button>
-							<Button mx="4px" p="0px" onClick={async () => deleteContact(contact)}>
-								<DeleteIcon />
-							</Button>
-						</Flex>
-					))}
-				</VStack>
 			</Modal>
 			<Modal
 				isOpen={isOpenContactAdd}
@@ -512,23 +446,7 @@ const Dashboard = (): JSX.Element => {
 					<Text as="i">* Fill, to update the info</Text>
 				</>
 			</Modal>
-			<Modal
-				isOpen={isOpenShare}
-				onClose={onCloseShare}
-				title="Select your contact"
-				CTA={
-					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
-						onClick={addContact}
-						isLoading={isUploadLoading}
-						id="ipc-dashboardView-share-modal-add-contact-button"
-					>
-						Add a contact
-					</Button>
-				}
-			>
+			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">
 					{contacts.map((contact) => (
 						<Flex key={contact.address} w="100%">
@@ -540,8 +458,8 @@ const Dashboard = (): JSX.Element => {
 							<Button
 								p="0px"
 								mx="4px"
-								onClick={() => {
-									shareFile(contact);
+								onClick={async () => {
+									await shareFile(contact);
 								}}
 							>
 								<CheckIcon />
