@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 
-import { IPCFile } from 'lib/drive';
+import { IPCFile } from 'types/types';
 
 type FileCardProps = {
 	file: IPCFile;

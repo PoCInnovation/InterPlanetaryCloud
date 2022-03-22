@@ -30,3 +30,5 @@ cypress/screenshots
 cypress/videos
 
 .metamask
+
+/.vscode
