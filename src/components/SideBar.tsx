@@ -7,6 +7,7 @@ type SideBarPropsType = {
 	contactTab: string;
 	myFilesTab: string;
 	sharedFilesTab: string;
+	profileTab: string;
 	uploadButton: JSX.Element;
 	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
 	currentTabIndex: number;
@@ -16,6 +17,7 @@ const SideBar = ({
 	contactTab,
 	myFilesTab,
 	sharedFilesTab,
+	profileTab,
 	uploadButton,
 	setSelectedTab,
 	currentTabIndex,
@@ -65,6 +67,14 @@ const SideBar = ({
 						}}
 					>
 						{contactTab}
+					</Tab>
+					<Tab
+						borderLeft={`5px solid ${colors.blue[700]}`}
+						_selected={{
+							borderLeft: `5px solid ${colors.red[700]}`,
+						}}
+					>
+						{profileTab}
 					</Tab>
 				</TabList>
 			</Tabs>

@@ -1,6 +1,18 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Text, Flex, Spacer } from '@chakra-ui/react';
+import {
+	Box,
+	VStack,
+	Button,
+	HStack,
+	useDisclosure,
+	useToast,
+	Input,
+	Text,
+	Flex,
+	Spacer,
+	Divider,
+} from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
 import EthCrypto from 'eth-crypto';
@@ -331,7 +343,7 @@ const Dashboard = (): JSX.Element => {
 				selectedTab={selectedTab}
 			/>
 			<Box w="100%" m="32px !important">
-				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayFileCards
 						myFiles={files}
 						sharedFiles={sharedFiles}
@@ -394,7 +406,6 @@ const Dashboard = (): JSX.Element => {
 				<>
 					<Input
 						type="text"
-						h="200%"
 						w="100%"
 						p="10px"
 						my="4px"
@@ -404,7 +415,6 @@ const Dashboard = (): JSX.Element => {
 					/>
 					<Input
 						type="text"
-						h="200%"
 						w="100%"
 						p="10px"
 						my="4px"
@@ -435,7 +445,6 @@ const Dashboard = (): JSX.Element => {
 					<Text>New name *</Text>
 					<Input
 						type="text"
-						h="200%"
 						w="100%"
 						p="10px"
 						my="4px"
@@ -448,24 +457,28 @@ const Dashboard = (): JSX.Element => {
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">
-					{contacts.map((contact) => (
-						<Flex key={contact.address} w="100%">
-							<VStack key={contact.address}>
-								<Text fontWeight="600">{contact.name}</Text>
-								<Text fontSize="12px">{contact.address}</Text>
-							</VStack>
-							<Spacer />
-							<Button
-								p="0px"
-								mx="4px"
-								onClick={async () => {
-									await shareFile(contact);
-								}}
-							>
-								<CheckIcon />
-							</Button>
-						</Flex>
-					))}
+					{contacts.map((contact) => {
+						if (user.account && contact.address !== user.account.address)
+							return (
+								<Flex key={contact.address} w="100%">
+									<VStack key={contact.address}>
+										<Text fontWeight="600">{contact.name}</Text>
+										<Text fontSize="12px">{contact.address}</Text>
+									</VStack>
+									<Spacer />
+									<Button
+										p="0px"
+										mx="4px"
+										onClick={async () => {
+											await shareFile(contact);
+										}}
+									>
+										<CheckIcon />
+									</Button>
+								</Flex>
+							);
+						return <Divider key={contact.address} />;
+					})}
 				</VStack>
 			</Modal>
 		</HStack>

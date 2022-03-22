@@ -32,6 +32,7 @@ export const LeftBar = ({ onOpen, isUploadLoading, setSelectedTab, selectedTab }
 		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
 		contactTab="Contacts"
 		myFilesTab="My files"
+		profileTab="My profile"
 		sharedFilesTab="Shared with me"
 		setSelectedTab={setSelectedTab}
 		currentTabIndex={selectedTab}

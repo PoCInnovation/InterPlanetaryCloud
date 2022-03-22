@@ -27,6 +27,9 @@ export const FileCards = ({
 					<Button
 						variant="inline"
 						size="sm"
+						w="100%"
+						p="0px"
+						mx="4px"
 						onClick={async () => downloadFile(file)}
 						isLoading={isDownloadLoading}
 						id="ipc-dashboardView-download-button"
@@ -34,8 +37,11 @@ export const FileCards = ({
 						<DownloadIcon />
 					</Button>
 					<Button
-						variant="inline"
+						variant="reverseInline"
 						size="sm"
+						w="100%"
+						p="0px"
+						mx="4px"
 						onClick={() => {
 							setSelectedFile(file);
 							onOpenShare();
