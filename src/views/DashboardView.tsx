@@ -469,6 +469,7 @@ const Dashboard = (): JSX.Element => {
 									<Button
 										p="0px"
 										mx="4px"
+										variant="inline"
 										onClick={async () => {
 											await shareFile(contact);
 										}}
