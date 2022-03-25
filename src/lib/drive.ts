@@ -16,6 +16,8 @@ import EthCrypto from 'eth-crypto';
 class Drive {
 	public files: IPCFile[];
 
+	public sharedFiles: IPCFile[];
+
 	public filesPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
@@ -24,6 +26,7 @@ class Drive {
 
 	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
+		this.sharedFiles = [];
 		this.account = importedAccount;
 		this.filesPostHash = '';
 		this.private_key = private_key;
@@ -32,7 +35,6 @@ class Drive {
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				console.log(contacts);
 				await Promise.all(
 					contacts.map(async (contact) => {
 						const userData = await post.Get({
@@ -55,7 +57,9 @@ class Drive {
 									await Promise.all(
 										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
 											if (contactToFind.address === this.account!.address) {
-												this.files = this.files.concat(contactToFind.files);
+												if (contact.address === this.account?.address)
+													this.files = this.files.concat(contactToFind.files);
+												else this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
 												return true;
 											}
 											return false;
