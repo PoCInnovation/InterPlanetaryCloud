@@ -35,7 +35,6 @@ class Drive {
 				console.log(contacts);
 				await Promise.all(
 					contacts.map(async (contact) => {
-						console.log('Address contact: ', contact.address);
 						const userData = await post.Get({
 							APIServer: DEFAULT_API_V2,
 							types: '',
@@ -47,7 +46,6 @@ class Drive {
 							hashes: [],
 						});
 
-						console.log(userData.posts);
 						await Promise.all(
 							userData.posts.map(async (postContent) => {
 								const itemContent = JSON.parse(postContent.item_content);
@@ -57,7 +55,6 @@ class Drive {
 									await Promise.all(
 										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
 											if (contactToFind.address === this.account!.address) {
-												console.log(contactToFind.files);
 												this.files = this.files.concat(contactToFind.files);
 												return true;
 											}
