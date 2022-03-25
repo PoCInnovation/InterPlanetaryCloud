@@ -56,40 +56,17 @@ const Dashboard = (): JSX.Element => {
 	);
 	const [selectedFile, setSelectedFile] = useState<IPCFile>({
 		name: '',
-		content: '',
+		hash: '',
 		created_at: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 	});
 
 	useEffect(() => {
 		(async () => {
-			await loadDrive();
 			await loadContact();
 			await loadSharedDrive();
-			console.log('iuj', user.drive.files);
 		})();
 	}, []);
-
-	const loadDrive = async () => {
-		try {
-			const load = await user.drive.load();
-			toast({
-				title: load.message,
-				status: load.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-			setFiles(user.drive.files);
-		} catch (error) {
-			console.error(error);
-			toast({
-				title: 'Unable to load drive',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-		}
-	};
 
 	const loadSharedDrive = async () => {
 		try {
@@ -100,7 +77,6 @@ const Dashboard = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
-			console.log('fchgvjb', user.drive.files);
 			setFiles(user.drive.files);
 		} catch (error) {
 			console.error(error);

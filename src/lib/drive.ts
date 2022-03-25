@@ -29,97 +29,46 @@ class Drive {
 		this.private_key = private_key;
 	}
 
-	// TODO load without any IPCFile
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				console.log(contacts);
 				await Promise.all(
 					contacts.map(async (contact) => {
-						console.log('!!');
-						if (this.account!.address !== contact.address) {
-							console.log('Address contact: ', contact.address);
-							const files: IPCFile[] = [];
-							const userData = await post.Get({
-								APIServer: DEFAULT_API_V2,
-								types: '',
-								pagination: 200,
-								page: 1,
-								refs: [],
-								addresses: [contact.address],
-								tags: [],
-								hashes: [],
-							});
+						console.log('Address contact: ', contact.address);
+						const userData = await post.Get({
+							APIServer: DEFAULT_API_V2,
+							types: '',
+							pagination: 200,
+							page: 1,
+							refs: [],
+							addresses: [contact.address],
+							tags: [],
+							hashes: [],
+						});
 
-							console.log(userData.posts);
-							await Promise.all(
-								userData.posts.map(async (postContent) => {
-									const itemContent = JSON.parse(postContent.item_content);
+						console.log(userData.posts);
+						await Promise.all(
+							userData.posts.map(async (postContent) => {
+								const itemContent = JSON.parse(postContent.item_content);
 
-									console.log('h', itemContent.content.header);
-									const temp = async () => {
-										if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Files') {
-											console.log('Post files founded');
-											itemContent.content.files.map((file: IPCFile) => {
-												files.push(file);
-												console.log('Files: ', files);
+								if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
+									console.log('Post contacts founded');
+									await Promise.all(
+										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
+											if (contactToFind.address === this.account!.address) {
+												console.log(contactToFind.files);
+												this.files = this.files.concat(contactToFind.files);
 												return true;
-											});
-											return true;
-										}
-										return true;
-									};
-
-									await temp();
-									if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
-										console.log('Post contacts founded');
-										await Promise.all(
-											itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
-												if (contactToFind.address === this.account!.address) {
-													console.log(contactToFind.files);
-													await Promise.all(
-														contactToFind.files.map(async (fileShared: IPCFile) => {
-															console.log('!!2');
-															console.log(fileShared.key);
-															console.log(
-																await EthCrypto.decryptWithPrivateKey(this.private_key.slice(2), fileShared.key),
-															);
-															await Promise.all(
-																files.map(async (contactFile: IPCFile) => {
-																	console.log('!!3');
-																	if (contactFile.content === fileShared.hash) {
-																		console.log('!!3');
-																		this.files.push({
-																			name: contactFile.name,
-																			content: contactFile.content,
-																			created_at: contactFile.created_at,
-																			key: CryptoJS.AES.encrypt(
-																				await EthCrypto.decryptWithPrivateKey(
-																					this.private_key.slice(2),
-																					fileShared.key,
-																				),
-																				this.private_key,
-																			).toString(), // TODO improve because it's ugly
-																		});
-																		return true;
-																	}
-																	return false;
-																}),
-															);
-															return true;
-														}),
-													);
-													return true;
-												}
-												return false;
-											}),
-										);
-										return true;
-									}
-									return false;
-								}),
-							);
-						}
+											}
+											return false;
+										}),
+									);
+									return true;
+								}
+								return false;
+							}),
+						);
 					}),
 				);
 				return { success: true, message: 'Shared drive loaded' };
@@ -131,7 +80,6 @@ class Drive {
 		}
 	}
 
-	// TODO upload without any IPCFile
 	public async upload(file: IPCFile, key: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
@@ -153,7 +101,7 @@ class Drive {
 					name: file.name,
 					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
-					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey, key),
+					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
 				this.files.push(newFile);
@@ -167,7 +115,6 @@ class Drive {
 		}
 	}
 
-	// TODO download without any IPCFile
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
