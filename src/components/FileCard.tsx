@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 
 import { IPCFile } from 'types/types';
 
@@ -19,10 +19,14 @@ const FileCard = ({ file, children }: FileCardProps): JSX.Element => (
 		display="flex"
 		justifyContent="space-between"
 	>
-		<Flex w="100%" justify="space-between" align="center">
-			<Text fontWeight="500">{file.name}</Text>
-			{children}
-		</Flex>
+		<VStack w="100%" justify="space-between" align="center">
+			<Text fontWeight="500" isTruncated maxW="100%">
+				{file.name}
+			</Text>
+			<Flex w="100%" justify="space-between" align="center">
+				{children}
+			</Flex>
+		</VStack>
 	</Box>
 );
 

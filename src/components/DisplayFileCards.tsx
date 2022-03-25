@@ -2,6 +2,7 @@ import React from 'react';
 import { IPCContact, IPCFile } from '../types/types';
 import { FileCards } from './FileCards';
 import { ContactCards } from './ContactCards';
+import { ProfileCard } from './ProfileCard';
 
 type FileCardsProps = {
 	myFiles: IPCFile[];
@@ -52,13 +53,17 @@ export const DisplayFileCards = ({
 				onOpenShare={onOpenShare}
 			/>
 		);
+	if (index === 2)
+		return (
+			<ContactCards
+				contacts={contacts}
+				setContactInfo={setContactInfo}
+				onOpenContactUpdate={onOpenContactUpdate}
+				onOpenContactAdd={onOpenContactAdd}
+				deleteContact={deleteContact}
+			/>
+		);
 	return (
-		<ContactCards
-			contacts={contacts}
-			setContactInfo={setContactInfo}
-			onOpenContactUpdate={onOpenContactUpdate}
-			onOpenContactAdd={onOpenContactAdd}
-			deleteContact={deleteContact}
-		/>
+		<ProfileCard profile={contacts[0]} setContactInfo={setContactInfo} onOpenContactUpdate={onOpenContactUpdate} />
 	);
 };
