@@ -6,7 +6,6 @@ import { ALEPH_CHANNEL } from 'config/constants';
 
 import { IPCContact, IPCFile, ResponseType } from 'types/types';
 import EthCrypto from 'eth-crypto';
-import CryptoJS from 'crypto-js';
 
 class Contact {
 	public contacts: IPCContact[];
