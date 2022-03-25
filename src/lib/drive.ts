@@ -57,7 +57,7 @@ class Drive {
 									await Promise.all(
 										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
 											if (contactToFind.address === this.account!.address) {
-												if (contact.address === this.account?.address)
+												if (contact.address === this.account!.address)
 													this.files = this.files.concat(contactToFind.files);
 												else this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
 												return true;
