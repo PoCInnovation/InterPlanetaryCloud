@@ -116,28 +116,31 @@ class Contact {
 	public async remove(contactAddress: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				this.contacts.map((contact, index) => {
-					if (contact.address === contactAddress) {
-						this.contacts.splice(index, 1);
-						return true;
-					}
-					return false;
-				});
+				if (contactAddress !== this.account.address) {
+					this.contacts.map((contact, index) => {
+						if (contact.address === contactAddress) {
+							this.contacts.splice(index, 1);
+							return true;
+						}
+						return false;
+					});
 
-				await post.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					postType: 'amend',
-					content: {
-						header: 'InterPlanetaryCloud2.0 - Contacts',
-						contacts: this.contacts,
-					},
-					ref: this.contactsPostHash,
-				});
-				return { success: true, message: 'Contact deleted' };
+					await post.Publish({
+						APIServer: DEFAULT_API_V2,
+						channel: ALEPH_CHANNEL,
+						inlineRequested: true,
+						storageEngine: ItemType.ipfs,
+						account: this.account,
+						postType: 'amend',
+						content: {
+							header: 'InterPlanetaryCloud2.0 - Contacts',
+							contacts: this.contacts,
+						},
+						ref: this.contactsPostHash,
+					});
+					return { success: true, message: 'Contact deleted' };
+				}
+				return { success: false, message: "You can't delete your account" };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {

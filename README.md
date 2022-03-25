@@ -63,15 +63,57 @@ You are now ready to access to your decentralized cloud :boom: !
 <details>
   <summary>Dashboard</summary>
   
- ![Dashboard](.github/assets/dashboard.png)
+ ![Dashboard](.github/assets/ipc-dashboard.png)
  
 </details>
 
 <details>
-  <summary>Dashboard - Upload document</summary>
+  <summary>Dashboard - Upload a file</summary>
   
- ![Dashboard Upload](.github/assets/dashboardUpload.png)
+ ![Dashboard Upload](.github/assets/ipc-dashboard-upload-a-file.png)
  
+</details>
+
+<details>
+  <summary>Dashboard - Share a file</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-share-a-file.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Files shared</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-files-shared.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Contacts</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-contacts.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Add a contact</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-add-a-contact.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Update a contact</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-update-a-contact.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - User's profile</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-my-profile.png)
+
 </details>
 
 ## How ? :thinking:
@@ -88,6 +130,14 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
 
 **How it works?**
+
+<details>
+    <summary>Full overview</summary>
+
+<img src=".github/assets/ipc-graph.png" width="85%" />
+</details>
+
+---
 
 - For each file, a random key is generated and the content of the file is encrypted with this key.
 - The content is pushed into a store message via the aleph network.
@@ -146,7 +196,7 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
     <summary>Post messages</summary>
 
 <div>
-<img src=".github/assets/ipc-post-message-contacts.png" width="50%" />
+<img src=".github/assets/ipc-post-message.png" width="50%" />
 </div>
 
 </details>
