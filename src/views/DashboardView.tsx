@@ -56,40 +56,17 @@ const Dashboard = (): JSX.Element => {
 	);
 	const [selectedFile, setSelectedFile] = useState<IPCFile>({
 		name: '',
-		content: '',
+		hash: '',
 		created_at: 0,
-		key: '',
+		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 	});
 
 	useEffect(() => {
 		(async () => {
-			await loadDrive();
 			await loadContact();
 			await loadSharedDrive();
-			console.log('iuj', user.drive.files);
 		})();
 	}, []);
-
-	const loadDrive = async () => {
-		try {
-			const load = await user.drive.load();
-			toast({
-				title: load.message,
-				status: load.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-			setFiles(user.drive.files);
-		} catch (error) {
-			console.error(error);
-			toast({
-				title: 'Unable to load drive',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-		}
-	};
 
 	const loadSharedDrive = async () => {
 		try {
@@ -100,8 +77,7 @@ const Dashboard = (): JSX.Element => {
 				duration: 2000,
 				isClosable: true,
 			});
-			console.log('fchgvjb', user.drive.files);
-			setSharedFiles(user.drive.sharedFiles);
+			setFiles(user.drive.files);
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -113,6 +89,7 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
+	// Todo imrpove the toast handling
 	const uploadFile = async () => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
@@ -123,31 +100,44 @@ const Dashboard = (): JSX.Element => {
 
 		setIsUploadLoading(true);
 		try {
-			const upload = await user.drive.upload({
-				name: filename,
-				content: fileContent,
-				created_at: Date.now(),
+			const upload = await user.drive.upload(
+				{
+					name: filename,
+					hash: fileContent,
+					created_at: Date.now(),
+					key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+				},
 				key,
-			});
-			toast({
-				title: upload.message,
-				status: upload.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			);
+
 			if (user.account) {
-				/* const share = */ await user.contact.addFileToContact(
+				const shared = await user.contact.addFileToContact(
 					user.account.address,
-					user.drive.files[user.drive.files.length - 1].content,
-					user.drive.files[user.drive.files.length - 1].key,
+					user.drive.files[user.drive.files.length - 1],
 				);
-				// TODO not usefully => print the message "File shared with the contact" except that the file is not shared with someone (just the owner but not need to display this info)
-				// toast({
-				//	title: share.message,
-				//	status: share.success ? 'success' : 'error',
-				//	duration: 2000,
-				//	isClosable: true,
-				// });
+
+				if (upload.success && shared.success)
+					toast({
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				else {
+					toast({
+						title: 'Fail to upload the file',
+						status: 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				}
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
 			}
 			onClose();
 		} catch (error) {
@@ -188,7 +178,7 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(true);
 		try {
 			console.log(selectedFile.key);
-			const share = await user.contact.addFileToContact(contact.address, selectedFile.content, selectedFile.key);
+			const share = await user.contact.addFileToContact(contact.address, selectedFile);
 			onCloseShare();
 			toast({
 				title: share.message,
