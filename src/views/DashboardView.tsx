@@ -78,6 +78,7 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 			setFiles(user.drive.files);
+			setSharedFiles(user.drive.sharedFiles);
 		} catch (error) {
 			console.error(error);
 			toast({
