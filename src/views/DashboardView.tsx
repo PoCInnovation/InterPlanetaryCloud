@@ -101,33 +101,31 @@ const Dashboard = (): JSX.Element => {
 
 		setIsUploadLoading(true);
 		try {
-			const upload = await user.drive.upload(
-				{
-					name: filename,
-					hash: fileContent,
-					created_at: Date.now(),
-					key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-				},
-				key,
-			);
-
 			if (user.account) {
-				const shared = await user.contact.addFileToContact(
-					user.account.address,
-					user.drive.files[user.drive.files.length - 1],
+				const upload = await user.drive.upload(
+					{
+						name: filename,
+						hash: fileContent,
+						created_at: Date.now(),
+						key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+					},
+					key,
 				);
-
-				if (upload.success && shared.success)
+				if (!upload.success) {
 					toast({
 						title: upload.message,
 						status: upload.success ? 'success' : 'error',
 						duration: 2000,
 						isClosable: true,
 					});
-				else {
+				} else {
+					const shared = await user.contact.addFileToContact(
+						user.account.address,
+						user.drive.files[user.drive.files.length - 1],
+					);
 					toast({
-						title: 'Fail to upload the file',
-						status: 'error',
+						title: shared.success ? upload.message : 'Failed to upload the file',
+						status: shared.success ? 'success' : 'error',
 						duration: 2000,
 						isClosable: true,
 					});
