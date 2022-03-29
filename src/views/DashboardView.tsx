@@ -90,7 +90,6 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
-	// Todo imrpove the toast handling
 	const uploadFile = async () => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
