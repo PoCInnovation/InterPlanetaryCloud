@@ -8,74 +8,81 @@ import {
 	useDisclosure,
 	useToast,
 	Input,
-	useBreakpointValue,
-	Drawer,
-	DrawerOverlay,
-	DrawerContent,
-	SlideDirection,
-	Icon,
 	Text,
+	Flex,
+	Spacer,
 	Divider,
 } from '@chakra-ui/react';
-import { DownloadIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { CheckIcon } from '@chakra-ui/icons';
+
+import EthCrypto from 'eth-crypto';
 
 import { useUserContext } from 'contexts/user';
 
-import { IPCFile } from 'lib/drive';
+import { IPCFile, IPCContact } from 'types/types';
 
 import Modal from 'components/Modal';
-import Sidebar from 'components/SideBar';
-import FileCard from 'components/FileCard';
-import UploadButton from 'components/UploadButton';
-import colors from 'theme/foundations/colors';
 
-const extractFilename = (filepath: string) => {
-	const result = /[^\\]*$/.exec(filepath);
-	return result && result.length ? result[0] : '';
-};
+import { generateFileKey } from 'utils/generateFileKey';
 
-const getFileContent = (file: unknown): Promise<string> =>
-	new Promise((resolve, reject) => {
-		const reader = new window.FileReader();
-		reader.onload = (event: unknown) => {
-			// eslint-disable-next-line
-			resolve((event as any).target.result);
-		};
-		reader.onerror = (event) => {
-			reject(event);
-		};
-		reader.readAsText(file as Blob);
-	});
+import { getFileContent, extractFilename } from '../utils/fileManipulation';
+
+import { ResponsiveBar } from '../components/ResponsiveBar';
+import { DisplayFileCards } from '../components/DisplayFileCards';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
+	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
+	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
+	const [contacts, setContacts] = useState<IPCContact[]>([]);
+	const [contactInfos, setContactInfo] = useState<IPCContact>({
+		name: '',
+		address: '',
+		publicKey: '',
+		files: [],
+	});
+	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
+		undefined,
+	);
+	const [selectedFile, setSelectedFile] = useState<IPCFile>({
+		name: '',
+		hash: '',
+		created_at: 0,
+		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+	});
 
 	useEffect(() => {
 		(async () => {
-			await loadDrive();
+			await loadContact();
+			await loadSharedDrive();
 		})();
 	}, []);
 
-	const loadDrive = async () => {
+	const loadSharedDrive = async () => {
 		try {
-			const load = await user.drive.load();
+			const loadShared = await user.drive.loadShared(user.contact.contacts);
 			toast({
-				title: load.message,
-				status: load.success ? 'success' : 'error',
+				title: loadShared.message,
+				status: loadShared.success ? 'success' : 'error',
 				duration: 2000,
 				isClosable: true,
 			});
 			setFiles(user.drive.files);
+			setSharedFiles(user.drive.sharedFiles);
 		} catch (error) {
 			console.error(error);
 			toast({
-				title: 'Unable to load drive',
+				title: 'Unable to load shared drive',
 				status: 'error',
 				duration: 2000,
 				isClosable: true,
@@ -87,21 +94,49 @@ const Dashboard = (): JSX.Element => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
+		const key = generateFileKey();
+
 		if (!filename || !fileContent) return;
 
 		setIsUploadLoading(true);
 		try {
-			const upload = await user.drive.upload({
-				name: filename,
-				content: fileContent,
-				created_at: Date.now(),
-			});
-			toast({
-				title: upload.message,
-				status: upload.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			if (user.account) {
+				const upload = await user.drive.upload(
+					{
+						name: filename,
+						hash: fileContent,
+						created_at: Date.now(),
+						key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+					},
+					key,
+				);
+				if (!upload.success) {
+					toast({
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				} else {
+					const shared = await user.contact.addFileToContact(
+						user.account.address,
+						user.drive.files[user.drive.files.length - 1],
+					);
+					toast({
+						title: shared.success ? upload.message : 'Failed to upload the file',
+						status: shared.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				}
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
 			onClose();
 		} catch (error) {
 			console.error(error);
@@ -137,74 +172,180 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(false);
 	};
 
-	const LeftBar = (): JSX.Element => (
-		<Sidebar
-			uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-		/>
-	);
-
-	const BarWithDrawer = () => {
-		// eslint-disable-next-line @typescript-eslint/no-shadow
-		const { isOpen, onOpen, onClose } = useDisclosure();
-		const placement: SlideDirection = 'left';
-
-		return (
-			<Box zIndex={100} position="relative" height="80px">
-				<Drawer isOpen={isOpen} placement={placement} onClose={onClose}>
-					<DrawerOverlay />
-					<DrawerContent w="75%">
-						<LeftBar />
-					</DrawerContent>
-				</Drawer>
-				<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
-					<HStack w="100%" h="100%" px="24px" py="32px">
-						<Button onClick={onOpen} _focus={{}} p="16px" id="ipc-dashboardView-drawer-button" bg="transparent">
-							<Icon fontSize="24px" as={HamburgerIcon} />
-						</Button>
-
-						<VStack textAlign="center" w="100%">
-							<Text
-								fontSize={{ base: '16px', sm: '24px' }}
-								fontWeight="bold"
-								bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
-								bgClip="text"
-								id="ipc-sideBar-title"
-							>
-								Inter Planetary Cloud
-							</Text>
-						</VStack>
-					</HStack>
-					<Divider />
-				</Box>
-			</Box>
-		);
+	const shareFile = async (contact: IPCContact) => {
+		setIsDownloadLoading(true);
+		try {
+			console.log(selectedFile.key);
+			const share = await user.contact.addFileToContact(contact.address, selectedFile);
+			onCloseShare();
+			toast({
+				title: share.message,
+				status: share.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to share the file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsDownloadLoading(false);
 	};
 
-	const ResponsiveBar = () => {
-		const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
+	const loadContact = async () => {
+		try {
+			const load = await user.contact.load();
+			toast({
+				title: load.message,
+				status: load.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
 
-		if (!isDrawerNeeded) return <LeftBar />;
-		return <BarWithDrawer />;
+			setContacts(user.contact.contacts);
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to load contacts',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const addContact = async () => {
+		try {
+			if (contactsNameEvent && contactsPublicKeyEvent) {
+				const add = await user.contact.add({
+					name: contactsNameEvent.target.value,
+					address: EthCrypto.publicKey.toAddress(contactsPublicKeyEvent.target.value.slice(2)),
+					publicKey: contactsPublicKeyEvent.target.value,
+					files: [],
+				});
+
+				toast({
+					title: add.message,
+					status: add.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setContacts(user.contact.contacts);
+			} else {
+				toast({
+					title: 'Bad contact infos',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseContactAdd();
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to add this contact',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const updateContact = async () => {
+		try {
+			if (contactsPublicKeyEvent) {
+				const update = await user.contact.update(
+					contactInfos.address,
+					contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
+				);
+				toast({
+					title: update.message,
+					status: update.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setContacts(user.contact.contacts);
+			} else {
+				toast({
+					title: 'Invalid address',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseContactUpdate();
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to update this contact',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const deleteContact = async (contactToDelete: IPCContact) => {
+		try {
+			const deletedContact = contacts.find((contact) => contact === contactToDelete);
+
+			if (deletedContact) {
+				const deleteResponse = await user.contact.remove(contactToDelete.address);
+
+				toast({
+					title: deleteResponse.message,
+					status: deleteResponse.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setContacts(user.contact.contacts);
+			} else {
+				toast({
+					title: 'Unable to find this contact',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Unable to delete this contact',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
 	};
 
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
-			<ResponsiveBar />
+			<ResponsiveBar
+				onOpen={onOpen}
+				setSelectedTab={setSelectedTab}
+				isUploadLoading={isUploadLoading}
+				selectedTab={selectedTab}
+			/>
 			<Box w="100%" m="32px !important">
-				<VStack w="100%" maxW="400px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-					{files.map((file) => (
-						<FileCard key={file.created_at} file={file}>
-							<Button
-								variant="inline"
-								size="sm"
-								onClick={async () => downloadFile(file)}
-								isLoading={isDownloadLoading}
-								id="ipc-dashboardView-download-button"
-							>
-								<DownloadIcon />
-							</Button>
-						</FileCard>
-					))}
+				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+					<DisplayFileCards
+						myFiles={files}
+						sharedFiles={sharedFiles}
+						contacts={contacts}
+						index={selectedTab}
+						downloadFile={downloadFile}
+						isDownloadLoading={isDownloadLoading}
+						setSelectedFile={setSelectedFile}
+						onOpenShare={onOpenShare}
+						setContactInfo={setContactInfo}
+						onOpenContactUpdate={onOpenContactUpdate}
+						onOpenContactAdd={onOpenContactAdd}
+						deleteContact={deleteContact}
+					/>
 				</VStack>
 			</Box>
 			<Modal
@@ -232,6 +373,102 @@ const Dashboard = (): JSX.Element => {
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
 					id="ipc-dashboardView-upload-file"
 				/>
+			</Modal>
+			<Modal
+				isOpen={isOpenContactAdd}
+				onClose={onCloseContactAdd}
+				title="Add the contact"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={addContact}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-add-contact-button"
+					>
+						Add the contact
+					</Button>
+				}
+			>
+				<>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder="Name"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
+						id="ipc-dashboardView-input-contact-name"
+					/>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder="Public Key"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactPublicKeyEvent(e)}
+						id="ipc-dashboardView-input-contact-public-key"
+					/>
+				</>
+			</Modal>
+			<Modal
+				isOpen={isOpenContactUpdate}
+				onClose={onCloseContactUpdate}
+				title="Update the contact"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={updateContact}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-update-contact-button"
+					>
+						Update the contact
+					</Button>
+				}
+			>
+				<>
+					<Text>New name *</Text>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder={contactInfos.name}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
+						id="ipc-dashboardView-input-contact-name"
+					/>
+					<Text as="i">* Fill, to update the info</Text>
+				</>
+			</Modal>
+			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
+				<VStack spacing="16px" overflowY="auto">
+					{contacts.map((contact) => {
+						if (user.account && contact.address !== user.account.address)
+							return (
+								<Flex key={contact.address} w="100%">
+									<VStack key={contact.address}>
+										<Text fontWeight="600">{contact.name}</Text>
+										<Text fontSize="12px">{contact.address}</Text>
+									</VStack>
+									<Spacer />
+									<Button
+										p="0px"
+										mx="4px"
+										variant="inline"
+										onClick={async () => {
+											await shareFile(contact);
+										}}
+									>
+										<CheckIcon />
+									</Button>
+								</Flex>
+							);
+						return <Divider key={contact.address} />;
+					})}
+				</VStack>
 			</Modal>
 		</HStack>
 	);

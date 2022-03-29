@@ -63,15 +63,57 @@ You are now ready to access to your decentralized cloud :boom: !
 <details>
   <summary>Dashboard</summary>
   
- ![Dashboard](.github/assets/dashboard.png)
+ ![Dashboard](.github/assets/ipc-dashboard.png)
  
 </details>
 
 <details>
-  <summary>Dashboard - Upload document</summary>
+  <summary>Dashboard - Upload a file</summary>
   
- ![Dashboard Upload](.github/assets/dashboardUpload.png)
+ ![Dashboard Upload](.github/assets/ipc-dashboard-upload-a-file.png)
  
+</details>
+
+<details>
+  <summary>Dashboard - Share a file</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-share-a-file.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Files shared</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-files-shared.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Contacts</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-contacts.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Add a contact</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-add-a-contact.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - Update a contact</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-update-a-contact.png)
+
+</details>
+
+<details>
+  <summary>Dashboard - User's profile</summary>
+
+![Dashboard Upload](.github/assets/ipc-dashboard-my-profile.png)
+
 </details>
 
 ## How ? :thinking:
@@ -86,6 +128,78 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 **Security 🛡️**  
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js).
+
+**How it works?**
+
+<details>
+    <summary>Full overview</summary>
+
+<img src=".github/assets/ipc-graph.png" width="85%" />
+</details>
+
+---
+
+- For each file, a random key is generated and the content of the file is encrypted with this key.
+- The content is pushed into a store message via the aleph network.
+- The hash of the store message and the key are added to the 'Contacts' post message.
+
+<details>
+    <summary>Upload a file</summary>
+
+<img src=".github/assets/ipc-upload-a-file.png" width="50%" />
+
+</details>
+
+---
+
+- For each contacts into the 'Post Message - Contacts', the files and contacts are get.
+- An occurrence between the address of the user and the contacts is searched.
+- For each file found, metadata about the files are retrieved.
+
+<details>
+    <summary>Load a file</summary>
+
+<img src=".github/assets/ipc-file-loading.png" width="50%" />
+
+</details>
+
+---
+
+- The content is retrieved from the aleph network from his hash.
+- The content is decrypt with the key, itself decrypt with the private key of the user.
+
+<details>
+    <summary>Download a file</summary>
+
+<img src=".github/assets/ipc-download-a-file.png" width="50%" />
+
+</details>
+
+---
+
+- The hash and the key are encrypted with the public key of the contact.
+- These infos are added to the list of shared files of the contact.
+
+<details>
+    <summary>Share a file</summary>
+
+<img src=".github/assets/ipc-share-a-file.png" width="50%" />
+
+</details>
+
+---
+
+- One post message, with the list of contacts and the list of shared files for each contacts
+- The post message contains the info about the contact, his name, address, public key and a list of shared files
+
+<details>
+    <summary>Post messages</summary>
+
+<div>
+<img src=".github/assets/ipc-post-message.png" width="50%" />
+</div>
+
+</details>
 
 ## Our PoC team :ok_hand:
 

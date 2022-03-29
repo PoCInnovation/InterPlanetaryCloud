@@ -10,21 +10,15 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-type IPCFile = {
-	name: string;
-	content: string;
-	created_at: number;
-};
-
-type ResponseType = {
-	success: boolean;
-	message: string;
-};
+import { IPCContact, IPCFile, ResponseType } from 'types/types';
+import EthCrypto from 'eth-crypto';
 
 class Drive {
 	public files: IPCFile[];
 
-	public postsHash: string;
+	public sharedFiles: IPCFile[];
+
+	public filesPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
 
@@ -32,71 +26,65 @@ class Drive {
 
 	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
+		this.sharedFiles = [];
 		this.account = importedAccount;
-		this.postsHash = '';
+		this.filesPostHash = '';
 		this.private_key = private_key;
 	}
 
-	public async load(): Promise<ResponseType> {
+	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const userData = await post.Get({
-					APIServer: DEFAULT_API_V2,
-					types: '',
-					pagination: 200,
-					page: 1,
-					refs: [],
-					addresses: [this.account.address],
-					tags: [],
-					hashes: [],
-				});
+				await Promise.all(
+					contacts.map(async (contact) => {
+						const userData = await post.Get({
+							APIServer: DEFAULT_API_V2,
+							types: '',
+							pagination: 200,
+							page: 1,
+							refs: [],
+							addresses: [contact.address],
+							tags: [],
+							hashes: [],
+						});
 
-				const postMessage = userData.posts.map((postContent) => {
-					const itemContent = JSON.parse(postContent.item_content);
-					if (itemContent.content.header === 'InterPlanetaryCloud2.0 Header') {
-						this.postsHash = postContent.hash;
-						if (itemContent.content.files.length > 0) {
-							itemContent.content.files[0].map((file: IPCFile) => {
-								this.files.push(file);
-								return true;
-							});
-						}
-						return true;
-					}
-					return false;
-				});
-				if (postMessage.length !== 1) {
-					if (postMessage.length > 1) {
-						return { success: false, message: 'Too many post messages' };
-					}
-					console.log('Create Post Message');
-					const newPostPublishResponse = await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: '',
-						content: {
-							header: 'InterPlanetaryCloud2.0 Header',
-							files: this.files,
-						},
-					});
-					this.postsHash = newPostPublishResponse.item_hash;
-				}
-				return { success: true, message: 'Drive loaded' };
+						await Promise.all(
+							userData.posts.map(async (postContent) => {
+								const itemContent = JSON.parse(postContent.item_content);
+
+								if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
+									console.log('Post contacts founded');
+									await Promise.all(
+										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
+											if (contactToFind.address === this.account!.address) {
+												if (contact.address === this.account!.address)
+													this.files = this.files.concat(contactToFind.files);
+												else this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
+												return true;
+											}
+											return false;
+										}),
+									);
+									return true;
+								}
+								return false;
+							}),
+						);
+					}),
+				);
+				return { success: true, message: 'Shared drive loaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
-			return { success: false, message: 'Failed to load drive' };
+			console.error(err);
+			return { success: false, message: 'Failed to load shared drive' };
 		}
 	}
 
-	public async upload(file: IPCFile): Promise<ResponseType> {
+	public async upload(file: IPCFile, key: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.content, this.private_key).toString();
+				const encryptedContentFile = CryptoJS.AES.encrypt(file.hash, key).toString();
 
 				const newStoreFile = new File([encryptedContentFile], file.name, {
 					type: 'text/plain',
@@ -112,24 +100,12 @@ class Drive {
 
 				const newFile: IPCFile = {
 					name: file.name,
-					content: fileHashPublishStore.content.item_hash,
+					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
+					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
 				this.files.push(newFile);
-				await post.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					postType: 'amend',
-					content: {
-						header: 'InterPlanetaryCloud2.0 Header',
-						files: [this.files],
-					},
-					ref: this.postsHash,
-				});
 
 				return { success: true, message: 'File uploaded' };
 			}
@@ -145,15 +121,18 @@ class Drive {
 			if (this.account) {
 				const storeFile = await store.Get({
 					APIServer: DEFAULT_API_V2,
-					fileHash: file.content,
+					fileHash: file.hash,
 				});
 
-				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), this.private_key).toString(
+				const keyFile = await EthCrypto.decryptWithPrivateKey(this.private_key.slice(2), file.key);
+				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
 					CryptoJS.enc.Utf8,
 				);
 
-				const blob = new Blob([decryptedContentFile]);
-				fileDownload(blob, file.name);
+				const newFile = new File([decryptedContentFile], file.name, {
+					type: 'plain/text',
+				});
+				fileDownload(newFile, file.name);
 				return { success: true, message: 'File downloaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -163,7 +142,5 @@ class Drive {
 		}
 	}
 }
-
-export type { IPCFile };
 
 export default Drive;

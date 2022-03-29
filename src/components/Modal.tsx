@@ -9,7 +9,7 @@ type PopupProps = {
 	onClose: () => void;
 	title: string;
 	children: JSX.Element;
-	CTA: JSX.Element;
+	CTA?: JSX.Element;
 };
 
 const Popup = ({ isOpen, onClose, title, children, CTA }: PopupProps): JSX.Element => (
