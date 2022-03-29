@@ -1,4 +1,4 @@
-# InterPlanetaryCloud
+# InterPlanetaryCloud TEST
 A personal file storage and management system built on top of [IPFS](https://ipfs.io/), protecting your data.  
 
 <div align="center">
