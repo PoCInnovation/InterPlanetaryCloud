@@ -14,7 +14,9 @@ categories:
       - 'bug'
   - title: '🧰 Maintenance'
     collapse-after: 5
-    label: 'chore'
+    labels:
+      - 'chore'
+      - 'dependencies'
   - title: '📄 Documentation'
     collapse-after: 5
     label: 'documentation'
