@@ -6,15 +6,15 @@ IPC offers two services :
 
 ***Cloud Storage***
 
-A personal file storage and management system plateform, protecting your data.
+A distributed personal file storage and management system plateform, protecting your data.
 
-<div align="center" style="margin-bottom: 24px">
+<div align="center">
   <img src=".github/assets/ipc.gif" width="80%" />
  </div>
 
 ***Cloud Computing***
 
-A personal cloud computing plateform for HTTP servers.
+A distributed personal cloud computing plateform for HTTP servers.
 
 ## Getting started :wrench:
 
