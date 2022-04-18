@@ -189,6 +189,12 @@ We strongly advice you to have a discord channel on wich you will receive GitHub
 
 Follow this [tutorial](https://gist.github.com/SGTGunner/50d6a3cc0d489cf779f77695ba3e22ea).
 
+### Security dependabot
+
+We strongly advice you to have a security dependabot to fix vulnerable dependencies.
+
+Follow this [tutorial](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates#managing-dependabot-security-updates-for-your-repositories).
+
 ### Help
 
 If you have any questions, please contact [Adrien Fort](https://github.com/adrienfort).
