@@ -42,10 +42,10 @@ docker build . -t ipc:latest
 
 ```
 # Run IPC docker image
-docker run -p 3000:3000 ipc:latest
+docker run -p 8080:80 ipc:latest
 ```
 
-You are now ready to access to your decentralized cloud :boom: !
+You are now ready to access to your decentralized cloud at [`http://localhost:8080`](http://localhost:8080) :boom: !
 
 ## Get involved
 

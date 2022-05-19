@@ -5,9 +5,9 @@
 LICENSE
 README.md
 
-# JS
-.eslintrc.js
-.prettierc.js
+# Linter
+.prettierc
+.eslintrc.yaml
 
 # Node
 node_modules/

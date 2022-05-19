@@ -11,10 +11,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: npm install
+        run: yarn
 
       - name: Run eslint
-        run: npm run lint > eslint-results
+        run: yarn lint > eslint-results
 
       - name: Get eslint results
         uses: actions/upload-artifact@v1

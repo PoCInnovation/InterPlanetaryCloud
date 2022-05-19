@@ -1,6 +1,6 @@
 describe('Good front for HomeView', () => {
 	it('Go to home view', () => {
-		cy.visit('http://localhost:3000');
+		cy.visit('');
 		cy.wait(1000);
 	});
 
@@ -27,22 +27,22 @@ describe('Good front for HomeView', () => {
 
 describe('Create Account Button for HomeView', () => {
 	it('Go to home view', () => {
-		cy.visit('http://localhost:3000');
+		cy.visit('');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for create account button', () => {
-		cy.get('#ipc-homeView-create-account-button').click().url().should('eq', 'http://localhost:3000/signup');
+		cy.get('#ipc-homeView-create-account-button').click().url().should('eq', 'http://localhost:8080/signup');
 	});
 });
 
 describe('Login Button form HomeView', () => {
 	it('Go to home view', () => {
-		cy.visit('http://localhost:3000');
+		cy.visit('');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-homeView-login-button').click().url().should('eq', 'http://localhost:3000/login');
+		cy.get('#ipc-homeView-login-button').click().url().should('eq', 'http://localhost:8080/login');
 	});
 });
