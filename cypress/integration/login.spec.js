@@ -2,7 +2,7 @@ const mnemonic = 'repair nest celery light distance coil giant pyramid poet suit
 
 describe('Good front for LoginView', () => {
 	it('Go to login view', () => {
-		cy.visit('http://localhost:3000/login');
+		cy.visit('/login');
 		cy.wait(1000);
 	});
 
@@ -33,7 +33,7 @@ describe('Good front for LoginView', () => {
 
 describe('Login with credentials Button for LoginView', () => {
 	it('Go to login view', () => {
-		cy.visit('http://localhost:3000/login');
+		cy.visit('/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(mnemonic);
 	});
@@ -43,17 +43,17 @@ describe('Login with credentials Button for LoginView', () => {
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-loginView-credentials-button').click().url().should('eq', 'http://localhost:3000/dashboard');
+		cy.get('#ipc-loginView-credentials-button').click().url().should('eq', 'http://localhost:8080/dashboard');
 	});
 });
 
 describe('Signup Button for LoginView', () => {
 	it('Go to login view', () => {
-		cy.visit('http://localhost:3000/login');
+		cy.visit('/login');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for signup button', () => {
-		cy.get('#ipc-loginView-signup-button').click().url().should('eq', 'http://localhost:3000/signup');
+		cy.get('#ipc-loginView-signup-button').click().url().should('eq', 'http://localhost:8080/signup');
 	});
 });

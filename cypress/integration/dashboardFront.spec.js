@@ -2,7 +2,7 @@ let dashboardSpecMnemonic = '';
 
 describe('Create account for DashboardView tests', () => {
 	it('Connect', () => {
-		cy.visit('http://localhost:3000/signup');
+		cy.visit('/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
 		cy.get('#ipc-signupView-text-area')
@@ -16,7 +16,7 @@ describe('Create account for DashboardView tests', () => {
 
 describe('Good front for DashboardView', () => {
 	it('Go to dashboard view', () => {
-		cy.visit('http://localhost:3000/login');
+		cy.visit('/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-loginView-credentials-button').click();
@@ -34,7 +34,7 @@ describe('Good front for DashboardView', () => {
 
 describe('Good Modal Front for DashboardView', () => {
 	it('Go to upload modal into dashboard view', () => {
-		cy.visit('http://localhost:3000/login');
+		cy.visit('/login');
 		cy.wait(1000);
 		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-loginView-credentials-button').click().wait(3000);

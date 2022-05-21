@@ -1,6 +1,6 @@
 describe('Good front for SignupView', () => {
 	it('Go to signup view', () => {
-		cy.visit('http://localhost:3000/signup');
+		cy.visit('/signup');
 		cy.wait(1000);
 	});
 
@@ -27,7 +27,7 @@ describe('Good front for SignupView', () => {
 
 describe('Good Modal front for SignupView', () => {
 	it('Go to signup view', () => {
-		cy.visit('http://localhost:3000/signup');
+		cy.visit('/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
 	});
@@ -55,7 +55,7 @@ describe('Good Modal front for SignupView', () => {
 
 describe('Signup with credentials Button for SignupView', () => {
 	it('Go to signup view', () => {
-		cy.visit('http://localhost:3000/signup');
+		cy.visit('/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
 		cy.get(1000);
@@ -73,17 +73,17 @@ describe('Signup with credentials Button for SignupView', () => {
 
 	it('Good URL redirect for close button', () => {
 		cy.wait(1000);
-		cy.get('#ipc-modal-close-button').click().url().should('eq', 'http://localhost:3000/dashboard');
+		cy.get('#ipc-modal-close-button').click().url().should('eq', 'http://localhost:8080/dashboard');
 	});
 });
 
 describe('Login Button for SignupView', () => {
 	it('Go to signup view', () => {
-		cy.visit('http://localhost:3000/signup');
+		cy.visit('/signup');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-signupView-login-button').click().url().should('eq', 'http://localhost:3000/login');
+		cy.get('#ipc-signupView-login-button').click().url().should('eq', 'http://localhost:8080/login');
 	});
 });

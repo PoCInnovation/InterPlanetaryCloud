@@ -42,10 +42,10 @@ docker build . -t ipc:latest
 
 ```
 # Run IPC docker image
-docker run -p 3000:3000 ipc:latest
+docker run -p 8080:80 ipc:latest
 ```
 
-You are now ready to access to your decentralized cloud :boom: !
+You are now ready to access to your decentralized cloud at [`http://localhost:8080`](http://localhost:8080) :boom: !
 
 ## Get involved
 
@@ -226,6 +226,25 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 </details>
 
 ## Our PoC team :ok_hand:
+
+### April 2022 - September 2022
+Developpers - Team Storage:
+
+| [<img src="https://github.com/RezaRahemtola.png?size=85" width=85><br><sub>Reza Rahemtola</sub>](https://github.com/RezaRahemtola) | [<img src="https://github.com/TristanMasselot.png?size=85" width=85><br><sub>Tristan Masselot</sub>](https://github.com/TristanMasselot) | [<img src="https://github.com/Samoten777.png?size=85" width=85><br><sub>Samoten 777</sub>](https://github.com/Samoten777)
+|:---:|:---:|:---:|
+
+Developpers - Team Computing:
+
+| [<img src="https://github.com/AmozPay.png?size=85" width=85><br><sub>Amoz Pay</sub>](https://github.com/AmozPay)| [<img src="https://github.com/ZerLock.png?size=85" width=85><br><sub>Léo Dubosclard</sub>](https://github.com/ZerLock) | [<img src="https://github.com/Alex-Prevot.png?size=85" width=85><br><sub>Alex Prevot</sub>](https://github.com/Alex-Prevot)
+|:---:|:---:|:---:|
+
+Project Manager:
+| [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort)
+| :---: |
+
+Reviewers :
+| [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis)
+| :---: |
 
 ### September 2021 - April 2022
 Developers:

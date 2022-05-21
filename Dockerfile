@@ -1,19 +1,41 @@
-# Set the base image
-FROM node:16.5-alpine
+###
+# Builder image
+###
+FROM node:16.5-alpine AS builder
 
-# Retrieve sources
 WORKDIR /app
-COPY . /app
 
 # Install dependencies
-RUN npm install
+COPY package.json .
+COPY yarn.lock .
+
+# Install dependencies
+RUN yarn install
+
+# Copy source (see .dockerignore)
+COPY . .
 
 # Add env variable
 ENV REACT_APP_ALEPH_CHANNEL=TEST
 
-# Expose PORT
-EXPOSE 3000
+# Build source
+RUN yarn run build
 
-# Declare entrypoint
-ENTRYPOINT ["npm"]
-CMD ["start"]
+###
+# Production image
+###
+FROM nginx:1.21.6-alpine as app
+
+WORKDIR /app
+
+# Copy code
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose PORT
+EXPOSE 80
+
+# Prefix commands and start production
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

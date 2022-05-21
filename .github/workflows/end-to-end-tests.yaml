@@ -16,8 +16,8 @@ jobs:
       - name: Run cypress
         uses: cypress-io/github-action@v2
         with:
-          start: docker run -p 3000:3000 ipc:latest
-          wait-on: "http://localhost:3000"
+          start: docker run -p 8080:80 ipc:latest
+          wait-on: "http://localhost:8080"
 
       - name: Get screenshots
         uses: actions/upload-artifact@v1
