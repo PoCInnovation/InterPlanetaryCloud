@@ -5,7 +5,7 @@ FROM node:16.5-alpine AS builder
 
 WORKDIR /app
 
-# Install dependecies
+# Install dependencies
 COPY package.json .
 COPY yarn.lock .
 
