@@ -185,6 +185,48 @@ class Contact {
 		}
 	}
 
+	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const owner = this.account.address;
+				if (
+					this.contacts.find((contact, contactIndex) => {
+						if (owner === contact.address) {
+							return this.contacts[contactIndex].files.find((file, fileIndex) => {
+								if (file.hash === concernedFile.hash) {
+									this.contacts[contactIndex].files[fileIndex].name = newName;
+									return true;
+								}
+								return false;
+							});
+						}
+						return false;
+					})
+				) {
+					await post.Publish({
+						APIServer: DEFAULT_API_V2,
+						channel: ALEPH_CHANNEL,
+						inlineRequested: true,
+						storageEngine: ItemType.ipfs,
+						account: this.account,
+						postType: 'amend',
+						content: {
+							header: 'InterPlanetaryCloud2.0 - Contacts',
+							contacts: this.contacts,
+						},
+						ref: this.contactsPostHash,
+					});
+					return { success: true, message: 'Filename updated' };
+				}
+				return { success: false, message: 'File does not exist' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update this filename' };
+		}
+	}
+
 	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {

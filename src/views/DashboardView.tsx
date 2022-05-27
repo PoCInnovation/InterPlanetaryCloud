@@ -35,6 +35,7 @@ const Dashboard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
+	const { isOpen: isOpenUpdateFileName, onOpen: onOpenUpdateFileName, onClose: onCloseUpdateFileName } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
@@ -51,6 +52,7 @@ const Dashboard = (): JSX.Element => {
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -164,6 +166,32 @@ const Dashboard = (): JSX.Element => {
 			console.error(error);
 			toast({
 				title: 'Unable to download file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsDownloadLoading(false);
+	};
+
+	const updateFileName = async () => {
+		setIsDownloadLoading(true);
+		try {
+			if (fileNameEvent) {
+				const filename = fileNameEvent.target.value;
+				const update = await user.contact.updateFileName(selectedFile, filename);
+				toast({
+					title: update.message,
+					status: update.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				onCloseUpdateFileName();
+			}
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to change name',
 				status: 'error',
 				duration: 2000,
 				isClosable: true,
@@ -344,6 +372,7 @@ const Dashboard = (): JSX.Element => {
 						setContactInfo={setContactInfo}
 						onOpenContactUpdate={onOpenContactUpdate}
 						onOpenContactAdd={onOpenContactAdd}
+						onOpenUpdateFileName={onOpenUpdateFileName}
 						deleteContact={deleteContact}
 					/>
 				</VStack>
@@ -439,6 +468,37 @@ const Dashboard = (): JSX.Element => {
 						placeholder={contactInfos.name}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
 						id="ipc-dashboardView-input-contact-name"
+					/>
+					<Text as="i">* Fill, to update the info</Text>
+				</>
+			</Modal>
+			<Modal
+				isOpen={isOpenUpdateFileName}
+				onClose={onCloseUpdateFileName}
+				title="Update filename"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={updateFileName}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-update-filename-button"
+					>
+						Update the filename
+					</Button>
+				}
+			>
+				<>
+					<Text>New name *</Text>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder={selectedFile.name}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
+						id="ipc-dashboardView-input-update-filename"
 					/>
 					<Text as="i">* Fill, to update the info</Text>
 				</>

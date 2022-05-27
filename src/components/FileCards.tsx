@@ -1,5 +1,5 @@
 import { Button, Icon } from '@chakra-ui/react';
-import { DownloadIcon } from '@chakra-ui/icons';
+import { DownloadIcon, EditIcon } from '@chakra-ui/icons';
 import { MdPeopleAlt } from 'react-icons/md';
 import React from 'react';
 import FileCard from './FileCard';
@@ -11,6 +11,7 @@ type FileCardsProps = {
 	isDownloadLoading: boolean;
 	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
 	onOpenShare: () => void;
+	onOpenUpdateFileName: () => void;
 };
 
 export const FileCards = ({
@@ -19,6 +20,7 @@ export const FileCards = ({
 	isDownloadLoading,
 	setSelectedFile,
 	onOpenShare,
+	onOpenUpdateFileName,
 }: FileCardsProps): JSX.Element => (
 	<>
 		{files.map((file) => (
@@ -50,6 +52,21 @@ export const FileCards = ({
 						id="ipc-dashboardView-share-button"
 					>
 						<Icon as={MdPeopleAlt} />
+					</Button>
+					<Button
+						variant="inline"
+						size="sm"
+						w="100%"
+						p="0px"
+						mx="4px"
+						onClick={async () => {
+							setSelectedFile(file);
+							onOpenUpdateFileName();
+						}}
+						isLoading={isDownloadLoading}
+						id="ipc-dashboardView-update-filename-button"
+					>
+						<EditIcon />
 					</Button>
 				</>
 			</FileCard>

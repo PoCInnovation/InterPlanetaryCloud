@@ -16,6 +16,7 @@ type FileCardsProps = {
 	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
+	onOpenUpdateFileName: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
@@ -31,6 +32,7 @@ export const DisplayFileCards = ({
 	setContactInfo,
 	onOpenContactUpdate,
 	onOpenContactAdd,
+	onOpenUpdateFileName,
 	deleteContact,
 }: FileCardsProps): JSX.Element => {
 	if (index === 0)
@@ -41,6 +43,7 @@ export const DisplayFileCards = ({
 				isDownloadLoading={isDownloadLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenUpdateFileName={onOpenUpdateFileName}
 			/>
 		);
 	if (index === 1)
@@ -51,6 +54,7 @@ export const DisplayFileCards = ({
 				isDownloadLoading={isDownloadLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenUpdateFileName={onOpenUpdateFileName}
 			/>
 		);
 	if (index === 2)
