@@ -2,7 +2,7 @@ import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 import React from 'react';
-import ButtonIpComputing from './ButtonIpComputing';
+import ButtonIpCloud from './ButtonIpCloud';
 
 type SideBarPropsType = {
 	contactTab: string;
@@ -14,7 +14,7 @@ type SideBarPropsType = {
 	currentTabIndex: number;
 };
 
-const SideBar = ({
+const SideBarComputing = ({
 	contactTab,
 	myFilesTab,
 	sharedFilesTab,
@@ -41,7 +41,7 @@ const SideBar = ({
 				id="ipc-sideBar-title"
 				pb="64px"
 			>
-				Inter Planetary Cloud
+				Inter Planetary Computing
 			</Text>
 			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
 				<TabList>
@@ -59,30 +59,14 @@ const SideBar = ({
 							borderLeft: `5px solid ${colors.red[700]}`,
 						}}
 					>
-						{sharedFilesTab}
-					</Tab>
-					<Tab
-						borderLeft={`5px solid ${colors.blue[700]}`}
-						_selected={{
-							borderLeft: `5px solid ${colors.red[700]}`,
-						}}
-					>
-						{contactTab}
-					</Tab>
-					<Tab
-						borderLeft={`5px solid ${colors.blue[700]}`}
-						_selected={{
-							borderLeft: `5px solid ${colors.red[700]}`,
-						}}
-					>
 						{profileTab}
 					</Tab>
 				</TabList>
 			</Tabs>
 			{uploadButton}
-			<ButtonIpComputing/>
+			<ButtonIpCloud/>
 		</VStack>
 	</VStack>
 );
 
-export default SideBar;
+export default SideBarComputing;

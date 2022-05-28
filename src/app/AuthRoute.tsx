@@ -29,7 +29,7 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 						id="ipc-title"
 						textAlign="center"
 					>
-						Inter Planetary Cloud
+						Inter Planetary Cloud / Computing
 					</Text>
 					<Text
 						fontSize={{ base: '6px', '3xs': '10px', '2xs': '12px', xs: '14px', '2sm': '16px' }}
