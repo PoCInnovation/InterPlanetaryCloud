@@ -4,10 +4,10 @@ import HomeView from 'views/HomeView';
 import LoginView from 'views/LoginView';
 import SignupView from 'views/SignupView';
 import DashboardView from 'views/DashboardView';
+import ComputingView from 'views/ComputingView';
 
 import AuthRoute from './AuthRoute';
 import PrivateRoute from './PrivateRoute';
-import ComputingView from 'views/ComputingView';
 
 const Routes = (): JSX.Element => (
 	<BrowserRouter>
