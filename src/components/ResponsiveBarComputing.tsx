@@ -80,7 +80,12 @@ export const BarWithDrawer = ({ onOpen, setSelectedTab, isUploadLoading, selecte
 	);
 };
 
-export const ResponsiveBarComputing = ({ onOpen, setSelectedTab, isUploadLoading, selectedTab }: BarProps): JSX.Element => {
+export const ResponsiveBarComputing = ({
+	onOpen,
+	setSelectedTab,
+	isUploadLoading,
+	selectedTab,
+}: BarProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
 
 	if (!isDrawerNeeded)

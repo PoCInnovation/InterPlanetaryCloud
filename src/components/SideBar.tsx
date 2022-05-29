@@ -80,7 +80,7 @@ const SideBar = ({
 				</TabList>
 			</Tabs>
 			{uploadButton}
-			<ButtonIpComputing/>
+			<ButtonIpComputing />
 		</VStack>
 	</VStack>
 );

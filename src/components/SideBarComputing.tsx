@@ -64,7 +64,7 @@ const SideBarComputing = ({
 				</TabList>
 			</Tabs>
 			{uploadButton}
-			<ButtonIpCloud/>
+			<ButtonIpCloud />
 		</VStack>
 	</VStack>
 );
