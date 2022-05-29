@@ -152,7 +152,6 @@ const ComputingView = (): JSX.Element => {
 		}
 	};
 
-
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBarComputing
