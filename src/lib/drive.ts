@@ -1,4 +1,4 @@
-import { accounts, post, store } from 'aleph-sdk-ts';
+import { accounts, forget, post, store } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
@@ -113,6 +113,30 @@ class Drive {
 		} catch (err) {
 			console.log(err);
 			return { success: false, message: 'Failed to upload the file' };
+		}
+	}
+
+	public async delete(fileHash: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+
+				const res = await forget.publish({
+					APIServer: DEFAULT_API_V2,
+					channel: ALEPH_CHANNEL,
+					hashes: [fileHash],
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+					account: this.account,
+				});
+
+				this.files.filter((file) => file.hash !== fileHash);
+
+				return { success: true, message: 'File deleted' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to delete the file' };
 		}
 	}
 
