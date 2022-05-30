@@ -12,6 +12,8 @@ import {
 	Flex,
 	Spacer,
 	Divider,
+	FormControl,
+	FormLabel,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -458,8 +460,8 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<>
-					<Text>New name *</Text>
+				<FormControl>
+					<FormLabel>New name</FormLabel>
 					<Input
 						type="text"
 						w="100%"
@@ -469,13 +471,12 @@ const Dashboard = (): JSX.Element => {
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
 						id="ipc-dashboardView-input-contact-name"
 					/>
-					<Text as="i">* Fill, to update the info</Text>
-				</>
+				</FormControl>
 			</Modal>
 			<Modal
 				isOpen={isOpenUpdateFileName}
 				onClose={onCloseUpdateFileName}
-				title="Update filename"
+				title="Update filename or file content"
 				CTA={
 					<Button
 						variant="inline"
@@ -490,17 +491,30 @@ const Dashboard = (): JSX.Element => {
 				}
 			>
 				<>
-					<Text>New name *</Text>
-					<Input
-						type="text"
-						w="100%"
-						p="10px"
-						my="4px"
-						placeholder={selectedFile.name}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
-						id="ipc-dashboardView-input-update-filename"
-					/>
-					<Text as="i">* Fill, to update the info</Text>
+					<FormControl>
+						<FormLabel>New file name</FormLabel>
+						<Input
+							type="text"
+							w="100%"
+							p="10px"
+							my="4px"
+							placeholder={selectedFile.name}
+							onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
+							id="ipc-dashboardView-input-update-filename"
+						/>
+					</FormControl>
+
+					<FormControl>
+						<FormLabel>Upload new content</FormLabel>
+						<Input
+							type="file"
+							h="100%"
+							w="100%"
+							p="10px"
+							onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+							id="ipc-dashboardView-upload-new-file-content"
+						/>
+					</FormControl>
 				</>
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
