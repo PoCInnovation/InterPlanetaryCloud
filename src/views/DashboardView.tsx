@@ -14,6 +14,7 @@ import {
 	Divider,
 	FormControl,
 	FormLabel,
+	FormHelperText,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -40,6 +41,7 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenUpdateFileName, onOpen: onOpenUpdateFileName, onClose: onCloseUpdateFileName } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
+	const { isOpen: isOpenUpdateFileContent, onOpen: onOpenUpdateFileContent, onClose: onCloseUpdateFileContent } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
@@ -55,6 +57,7 @@ const Dashboard = (): JSX.Element => {
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [oldFileName, setOldFileName] = useState('');
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -96,9 +99,11 @@ const Dashboard = (): JSX.Element => {
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
-		const filename = extractFilename(fileEvent.target.value);
+		let filename = extractFilename(fileEvent.target.value);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		const key = generateFileKey();
+
+		if (oldFileName) filename = oldFileName;
 
 		if (!filename || !fileContent) return;
 
@@ -369,12 +374,14 @@ const Dashboard = (): JSX.Element => {
 						index={selectedTab}
 						downloadFile={downloadFile}
 						isDownloadLoading={isDownloadLoading}
+						isUpdateLoading={isUploadLoading}
 						setSelectedFile={setSelectedFile}
 						onOpenShare={onOpenShare}
 						setContactInfo={setContactInfo}
 						onOpenContactUpdate={onOpenContactUpdate}
 						onOpenContactAdd={onOpenContactAdd}
 						onOpenUpdateFileName={onOpenUpdateFileName}
+						onOpenUpdateFileContent={onOpenUpdateFileContent}
 						deleteContact={deleteContact}
 					/>
 				</VStack>
@@ -476,7 +483,7 @@ const Dashboard = (): JSX.Element => {
 			<Modal
 				isOpen={isOpenUpdateFileName}
 				onClose={onCloseUpdateFileName}
-				title="Update filename or file content"
+				title="Rename the file"
 				CTA={
 					<Button
 						variant="inline"
@@ -486,36 +493,55 @@ const Dashboard = (): JSX.Element => {
 						isLoading={isUploadLoading}
 						id="ipc-dashboardView-update-filename-button"
 					>
-						Update the filename
+						OK
 					</Button>
 				}
 			>
-				<>
-					<FormControl>
-						<FormLabel>New file name</FormLabel>
-						<Input
-							type="text"
-							w="100%"
-							p="10px"
-							my="4px"
-							placeholder={selectedFile.name}
-							onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
-							id="ipc-dashboardView-input-update-filename"
-						/>
-					</FormControl>
-
-					<FormControl>
-						<FormLabel>Upload new content</FormLabel>
-						<Input
-							type="file"
-							h="100%"
-							w="100%"
-							p="10px"
-							onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-							id="ipc-dashboardView-upload-new-file-content"
-						/>
-					</FormControl>
-				</>
+				<FormControl>
+					<FormLabel>New file name</FormLabel>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder={selectedFile.name}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
+						id="ipc-dashboardView-input-update-filename"
+					/>
+				</FormControl>
+			</Modal>
+			<Modal
+				isOpen={isOpenUpdateFileContent}
+				onClose={onCloseUpdateFileContent}
+				title="Update file content from a file"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={uploadFile}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-update-file-content-button"
+					>
+						Upload new version
+					</Button>
+				}
+			>
+				<FormControl>
+					<Input
+						type="file"
+						h="100%"
+						w="100%"
+						p="10px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
+							setOldFileName(selectedFile.name);
+							// TODO: delete file from the server and user drive
+							setFileEvent(e);
+						}}
+						id="ipc-dashboardView-upload-new-file-content"
+					/>
+					<FormHelperText as="i">Accepted file format : text</FormHelperText>
+				</FormControl>
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">
