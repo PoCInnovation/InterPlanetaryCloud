@@ -185,6 +185,23 @@ class Contact {
 		}
 	}
 
+	public async updateFileHash(oldHash: string, newHash: string): Promise<ResponseType> {
+		try {
+			this.contacts = this.contacts.map((contact, i) => {
+				contact.files.map((file, j) => {
+					if (file.hash === oldHash) this.contacts[i].files[j].hash = newHash;
+					return file;
+				});
+				return contact;
+			});
+
+			return { success: true, message: 'File hashes updated' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update the file hashes' };
+		}
+	}
+
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {

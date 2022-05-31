@@ -10,7 +10,7 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import { IPCContact, IPCFile, ResponseType } from 'types/types';
+import { IPCContact, IPCFile, ResponseType, UploadResponse } from 'types/types';
 import EthCrypto from 'eth-crypto';
 
 class Drive {
@@ -81,7 +81,7 @@ class Drive {
 		}
 	}
 
-	public async upload(file: IPCFile, key: string): Promise<ResponseType> {
+	public async upload(file: IPCFile, key: string): Promise<UploadResponse> {
 		try {
 			if (this.account) {
 				const encryptedContentFile = CryptoJS.AES.encrypt(file.hash, key).toString();
@@ -105,22 +105,23 @@ class Drive {
 					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
-				this.files.push(newFile);
-
-				return { success: true, message: 'File uploaded' };
+				return { success: true, message: 'File uploaded', file: newFile };
 			}
-			return { success: false, message: 'Failed to load account' };
+			return { success: false, message: 'Failed to load account', file: undefined };
 		} catch (err) {
 			console.log(err);
-			return { success: false, message: 'Failed to upload the file' };
+			return { success: false, message: 'Failed to upload the file', file: undefined };
 		}
+	}
+
+	public addIPCFile(file: IPCFile): void {
+		this.files.push(file);
 	}
 
 	public async delete(fileHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-
-				const res = await forget.publish({
+				await forget.publish({
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
 					hashes: [fileHash],
@@ -128,8 +129,6 @@ class Drive {
 					storageEngine: ItemType.ipfs,
 					account: this.account,
 				});
-
-				this.files.filter((file) => file.hash !== fileHash);
 
 				return { success: true, message: 'File deleted' };
 			}
