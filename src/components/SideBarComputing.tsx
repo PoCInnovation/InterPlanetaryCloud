@@ -2,24 +2,19 @@ import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 import React from 'react';
-import ButtonIpCloud from './ButtonIpCloud';
 
 type SideBarPropsType = {
-	contactTab: string;
-	myFilesTab: string;
-	sharedFilesTab: string;
+	myProgramsTab: string;
 	profileTab: string;
-	uploadButton: JSX.Element;
+	deployButton: JSX.Element;
 	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
 	currentTabIndex: number;
 };
 
 const SideBarComputing = ({
-	contactTab,
-	myFilesTab,
-	sharedFilesTab,
+	myProgramsTab,
 	profileTab,
-	uploadButton,
+	deployButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -51,20 +46,20 @@ const SideBarComputing = ({
 							borderLeft: `5px solid ${colors.red[700]}`,
 						}}
 					>
-						{myFilesTab}
+						{myProgramsTab}
 					</Tab>
 					<Tab
 						borderLeft={`5px solid ${colors.blue[700]}`}
 						_selected={{
 							borderLeft: `5px solid ${colors.red[700]}`,
 						}}
+						onClick={() => setSelectedTab(3)}
 					>
 						{profileTab}
 					</Tab>
 				</TabList>
 			</Tabs>
-			{uploadButton}
-			<ButtonIpCloud />
+			{deployButton}
 		</VStack>
 	</VStack>
 );

@@ -2,7 +2,6 @@ import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 import React from 'react';
-import ButtonIpComputing from './ButtonIpComputing';
 
 type SideBarPropsType = {
 	contactTab: string;
@@ -80,7 +79,6 @@ const SideBar = ({
 				</TabList>
 			</Tabs>
 			{uploadButton}
-			<ButtonIpComputing />
 		</VStack>
 	</VStack>
 );

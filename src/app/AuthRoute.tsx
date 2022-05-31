@@ -14,7 +14,7 @@ const AuthRoute = ({ children, ...rest }: AuthRouteProps): JSX.Element => {
 	const history = useHistory();
 
 	useEffect(() => {
-		if (user) history.push('/dashboard');
+		if (user) history.push('/redirection');
 	}, [user]);
 
 	return (

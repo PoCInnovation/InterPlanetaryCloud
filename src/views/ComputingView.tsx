@@ -1,64 +1,69 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import {
-	Box,
-	VStack,
-	Button,
-	HStack,
-	useDisclosure,
-	useToast,
-	Input,
-	Text,
-	Flex,
-	Spacer,
-	Divider,
-} from '@chakra-ui/react';
-import { CheckIcon } from '@chakra-ui/icons';
-
-import EthCrypto from 'eth-crypto';
+import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Text } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import { IPCFile, IPCContact } from 'types/types';
+import { IPCContact, IPCProgram } from 'types/types';
 
 import Modal from 'components/Modal';
 
-import { generateFileKey } from 'utils/generateFileKey';
-
-import { getFileContent, extractFilename } from '../utils/fileManipulation';
-
+import { DisplayProgramCards } from 'components/DisplayProgramCards';
+import { extractFilename, getFileContent } from 'utils/fileManipulation';
 import { ResponsiveBarComputing } from '../components/ResponsiveBarComputing';
-import { DisplayFileCards } from '../components/DisplayFileCards';
 
 const ComputingView = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [files, setFiles] = useState<IPCFile[]>([]);
-	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
+	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
+	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
+	const [contactInfos, setContactInfo] = useState<IPCContact>({
+		name: '',
+		address: '',
+		publicKey: '',
+		files: [],
+	});
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
+		undefined,
+	);
+	const [selectedFile, setSelectedFile] = useState<IPCProgram>({
+		name: '',
+		hash: '',
+		created_at: 0,
+	});
 
 	useEffect(() => {
 		(async () => {
 			await loadContact();
-			await loadSharedDrive();
+			await loadPrograms();
 		})();
 	}, []);
 
-	const loadSharedDrive = async () => {
+	const loadPrograms = async () => {
 		try {
-			const loadShared = await user.drive.loadShared(user.contact.contacts);
-			toast({
-				title: loadShared.message,
-				status: loadShared.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-			setFiles(user.drive.files);
-			setSharedFiles(user.drive.sharedFiles);
+			if (user.account) {
+				const loadedPrograms = await user.computing.loadPrograms();
+				toast({
+					title: loadedPrograms.message,
+					status: loadedPrograms.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				setPrograms(user.computing.programs);
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -70,67 +75,7 @@ const ComputingView = (): JSX.Element => {
 		}
 	};
 
-	const uploadFile = async () => {
-		if (!fileEvent) return;
-		const filename = extractFilename(fileEvent.target.value);
-		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
-		const key = generateFileKey();
-
-		if (!filename || !fileContent) return;
-
-		setIsUploadLoading(true);
-		try {
-			if (user.account) {
-				const upload = await user.drive.upload(
-					{
-						name: filename,
-						hash: fileContent,
-						created_at: Date.now(),
-						key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-					},
-					key,
-				);
-				if (!upload.success) {
-					toast({
-						title: upload.message,
-						status: upload.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-				} else {
-					const shared = await user.contact.addFileToContact(
-						user.account.address,
-						user.drive.files[user.drive.files.length - 1],
-					);
-					toast({
-						title: shared.success ? upload.message : 'Failed to upload the file',
-						status: shared.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-				}
-			} else {
-				toast({
-					title: 'Failed to load account',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
-			}
-			onClose();
-		} catch (error) {
-			console.error(error);
-			toast({
-				title: 'Unable to upload the file',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-		}
-		setIsUploadLoading(false);
-	};
-
-	const loadContact = async () => {
+	const loadContact = async (): Promise<void> => {
 		try {
 			const load = await user.contact.load();
 			toast({
@@ -152,6 +97,53 @@ const ComputingView = (): JSX.Element => {
 		}
 	};
 
+	const uploadFile = async () => {
+		if (!fileEvent || !fileEvent.target.files) return;
+		const filename = extractFilename(fileEvent.target.value);
+
+		if (!filename) return;
+
+		setIsUploadLoading(true);
+		try {
+			if (user.account) {
+				const upload = await user.computing.uploadProgram(
+					{
+						name: filename,
+						hash: '',
+						created_at: Date.now(),
+					},
+					fileEvent.target.files[0],
+				);
+				toast({
+					title: upload.message,
+					status: upload.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				if (upload.success) {
+					setPrograms(user.computing.programs);
+				}
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onClose();
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to upload file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsUploadLoading(false);
+	};
+
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBarComputing
@@ -160,10 +152,21 @@ const ComputingView = (): JSX.Element => {
 				isUploadLoading={isUploadLoading}
 				selectedTab={selectedTab}
 			/>
+			<Box w="100%" m="32px !important">
+				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+					<DisplayProgramCards
+						myPrograms={programs}
+						contacts={contacts}
+						index={selectedTab}
+						setContactInfo={setContactInfo}
+						onOpenContactUpdate={onOpenContactUpdate}
+					/>
+				</VStack>
+			</Box>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Upload a file"
+				title="Deploy a program"
 				CTA={
 					<Button
 						variant="inline"
@@ -173,7 +176,7 @@ const ComputingView = (): JSX.Element => {
 						isLoading={isUploadLoading}
 						id="ipc-dashboardView-upload-file-modal-button"
 					>
-						Upload file
+						Deploy a program
 					</Button>
 				}
 			>

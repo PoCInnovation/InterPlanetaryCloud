@@ -17,3 +17,9 @@ export const ContactButton = ({ text, onClick, isLoading }: UploadButtonProps): 
 		{text}
 	</Button>
 );
+
+export const DeployButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
+	<Button variant="inline" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-deploy-button">
+		{text}
+	</Button>
+);

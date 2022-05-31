@@ -18,7 +18,7 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import React from 'react';
 import colors from '../theme/foundations/colors';
 import SideBarComputing from './SideBarComputing';
-import { UploadButton } from './CustomButtons';
+import { DeployButton } from './CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;
@@ -29,11 +29,9 @@ type BarProps = {
 
 export const LeftBar = ({ onOpen, isUploadLoading, setSelectedTab, selectedTab }: BarProps): JSX.Element => (
 	<SideBarComputing
-		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-		contactTab="Contacts"
-		myFilesTab="My files"
+		deployButton={<DeployButton text="Deploy a program" onClick={() => onOpen()} isLoading={isUploadLoading} />}
+		myProgramsTab="My programs"
 		profileTab="My profile"
-		sharedFilesTab="Shared with me"
 		setSelectedTab={setSelectedTab}
 		currentTabIndex={selectedTab}
 	/>
@@ -70,7 +68,7 @@ export const BarWithDrawer = ({ onOpen, setSelectedTab, isUploadLoading, selecte
 							bgClip="text"
 							id="ipc-sideBar-title"
 						>
-							Inter Planetary Cloud
+							Inter Planetary Computing
 						</Text>
 					</VStack>
 				</HStack>
