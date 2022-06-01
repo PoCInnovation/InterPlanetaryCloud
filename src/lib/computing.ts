@@ -1,4 +1,4 @@
-import { accounts, program, post } from 'aleph-sdk-ts';
+import { accounts, program } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';

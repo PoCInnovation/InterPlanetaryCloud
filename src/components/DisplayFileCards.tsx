@@ -1,11 +1,13 @@
 import React from 'react';
-import { IPCContact, IPCFile } from '../types/types';
+import { IPCContact, IPCFile, IPCProgram } from '../types/types';
 import { FileCards } from './FileCards';
+import { ProgramCards } from './ProgramCards';
 import { ContactCards } from './ContactCards';
 import { ProfileCard } from './ProfileCard';
 
 type FileCardsProps = {
 	myFiles: IPCFile[];
+	myPrograms: IPCProgram[];
 	sharedFiles: IPCFile[];
 	contacts: IPCContact[];
 	index: number;
@@ -21,6 +23,7 @@ type FileCardsProps = {
 
 export const DisplayFileCards = ({
 	myFiles,
+	myPrograms,
 	sharedFiles,
 	contacts,
 	index,
@@ -63,6 +66,7 @@ export const DisplayFileCards = ({
 				deleteContact={deleteContact}
 			/>
 		);
+	if (index === 3) return <ProgramCards programs={myPrograms} />;
 	return (
 		<ProfileCard profile={contacts[0]} setContactInfo={setContactInfo} onOpenContactUpdate={onOpenContactUpdate} />
 	);
