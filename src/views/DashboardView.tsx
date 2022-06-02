@@ -37,10 +37,18 @@ const Dashboard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
-	const { isOpen: isOpenUpdateFileName, onOpen: onOpenUpdateFileName, onClose: onCloseUpdateFileName } = useDisclosure();
+	const {
+		isOpen: isOpenUpdateFileName,
+		onOpen: onOpenUpdateFileName,
+		onClose: onCloseUpdateFileName,
+	} = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
-	const { isOpen: isOpenUpdateFileContent, onOpen: onOpenUpdateFileContent, onClose: onCloseUpdateFileContent } = useDisclosure();
+	const {
+		isOpen: isOpenUpdateFileContent,
+		onOpen: onOpenUpdateFileContent,
+		onClose: onCloseUpdateFileContent,
+	} = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
