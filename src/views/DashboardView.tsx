@@ -14,7 +14,6 @@ import {
 	Divider,
 	FormControl,
 	FormLabel,
-	FormHelperText,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -57,7 +56,6 @@ const Dashboard = (): JSX.Element => {
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [oldFileName, setOldFileName] = useState('');
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -99,11 +97,9 @@ const Dashboard = (): JSX.Element => {
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
-		let filename = extractFilename(fileEvent.target.value);
+		const filename = extractFilename(fileEvent.target.value);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		const key = generateFileKey();
-
-		if (oldFileName) filename = oldFileName;
 
 		if (!filename || !fileContent) return;
 
@@ -126,7 +122,8 @@ const Dashboard = (): JSX.Element => {
 						duration: 2000,
 						isClosable: true,
 					});
-				} else {
+				} else if (upload.file) {
+					user.drive.addIPCFile(upload.file);
 					const shared = await user.contact.addFileToContact(
 						user.account.address,
 						user.drive.files[user.drive.files.length - 1],
@@ -527,21 +524,14 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<FormControl>
-					<Input
-						type="file"
-						h="100%"
-						w="100%"
-						p="10px"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => {
-							setOldFileName(selectedFile.name);
-							// TODO: delete file from the server and user drive
-							setFileEvent(e);
-						}}
-						id="ipc-dashboardView-upload-new-file-content"
-					/>
-					<FormHelperText as="i">Accepted file format : text</FormHelperText>
-				</FormControl>
+				<Input
+					type="file"
+					h="100%"
+					w="100%"
+					p="10px"
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+					id="ipc-dashboardView-upload-new-file-content"
+				/>
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">
