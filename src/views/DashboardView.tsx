@@ -204,6 +204,64 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(false);
 	};
 
+	const updateFileContent = async () => {
+		if (!fileEvent) return;
+		const filename = extractFilename(fileEvent.target.value);
+		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
+		const key = generateFileKey();
+		const oldHash = selectedFile.hash;
+
+		if (!filename || !fileContent) return;
+
+		setIsUploadLoading(true);
+		try {
+			if (user.account) {
+				const upload = await user.drive.upload(
+					{
+						name: filename,
+						hash: fileContent,
+						created_at: Date.now(),
+						key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+					},
+					key,
+				);
+				if (!upload.success) {
+					toast({
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				} else if (upload.file) {
+					const update = await user.contact.updateFileContent(upload.file, oldHash);
+					toast({
+						title: update.success ? update.message : 'Failed to update the content',
+						status: update.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				}
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseUpdateFileContent();
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to update the content',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsUploadLoading(false);
+	};
+
 	const shareFile = async (contact: IPCContact) => {
 		setIsDownloadLoading(true);
 		try {
@@ -516,7 +574,7 @@ const Dashboard = (): JSX.Element => {
 						variant="inline"
 						w="100%"
 						mb="16px"
-						onClick={uploadFile}
+						onClick={updateFileContent}
 						isLoading={isUploadLoading}
 						id="ipc-dashboardView-update-file-content-button"
 					>

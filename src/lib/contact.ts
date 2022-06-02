@@ -185,20 +185,49 @@ class Contact {
 		}
 	}
 
-	public async updateFileHash(oldHash: string, newHash: string): Promise<ResponseType> {
+	public async updateFileContent(newFile: IPCFile, oldHash: string): Promise<ResponseType> {
 		try {
-			this.contacts = this.contacts.map((contact, i) => {
-				contact.files.map((file, j) => {
-					if (file.hash === oldHash) this.contacts[i].files[j].hash = newHash;
-					return file;
-				});
-				return contact;
-			});
+			if (this.account) {
+				const owner = this.account.address;
+				if (
+					await Promise.all(
+						this.contacts.map(async (contact, i) => {
+							if (contact.address === owner) {
+								this.contacts[i].files.map((file, j) => {
+									if (file.hash === oldHash) {
+										this.contacts[i].files[j].hash = newFile.hash;
+										this.contacts[i].files[j].key = newFile.key;
+										return true;
+									}
+									return false;
+								});
 
-			return { success: true, message: 'File hashes updated' };
+								await post.Publish({
+									APIServer: DEFAULT_API_V2,
+									channel: ALEPH_CHANNEL,
+									inlineRequested: true,
+									storageEngine: ItemType.ipfs,
+									account: this.account!,
+									postType: 'amend',
+									content: {
+										header: 'InterPlanetaryCloud2.0 - Contacts',
+										contacts: this.contacts,
+									},
+									ref: this.contactsPostHash,
+								});
+								return true;
+							}
+							return false;
+						}),
+					)
+				)
+					return { success: true, message: 'File content updated' };
+				return { success: false, message: 'Contact does not exist' };
+			}
+			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
 			console.log(err);
-			return { success: false, message: 'Failed to update the file hashes' };
+			return { success: false, message: 'Failed to update the file content' };
 		}
 	}
 
