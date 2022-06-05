@@ -1,4 +1,4 @@
-import { accounts, program } from 'aleph-sdk-ts';
+import { accounts, program, post } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
@@ -19,7 +19,36 @@ class Computing {
 	public async loadPrograms(): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				console.log('Programs loaded');
+				const userData = await post.Get({
+					APIServer: DEFAULT_API_V2,
+					types: '',
+					pagination: 200,
+					page: 1,
+					refs: [],
+					addresses: [this.account.address],
+					tags: [],
+					hashes: [],
+				});
+
+				userData.posts.map(async (postContent) => {
+					const itemContent = JSON.parse(postContent.item_content);
+
+					if (itemContent.content.headers === 'InterPlanetaryCloud2.0 - Programs') {
+						console.log('Post program founded');
+
+						const foundedProgram: IPCProgram = {
+							hash: itemContent.content.program.hash,
+							name: itemContent.content.program.name,
+							created_at: itemContent.content.program.created_at,
+						};
+
+						this.programs.push(foundedProgram);
+
+						return true;
+					}
+					return false;
+				});
+
 				return { success: true, message: 'Programs loaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -56,6 +85,30 @@ class Computing {
 		} catch (err) {
 			console.log(err);
 			return { success: false, message: 'Failed to upload program' };
+		}
+	}
+
+	public async addToUser(): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				await post.Publish({
+					APIServer: DEFAULT_API_V2,
+					channel: ALEPH_CHANNEL,
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+					account: this.account!,
+					postType: '',
+					content: {
+						headers: 'InterPlanetaryCloud2.0 - Programs',
+						program: this.programs[this.programs.length - 1],
+					},
+				});
+				return { success: true, message: 'File added to the user' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (error) {
+			console.error(error);
+			return { success: false, message: 'Failed to add program to user' };
 		}
 	}
 }

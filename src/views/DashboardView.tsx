@@ -67,11 +67,11 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		(async () => {
 			await loadContact();
-			await loadSharedDrive();
+			await loadUserContents();
 		})();
 	}, []);
 
-	const loadSharedDrive = async () => {
+	const loadUserContents = async () => {
 		try {
 			const loadShared = await user.drive.loadShared(user.contact.contacts);
 			toast({
@@ -82,6 +82,15 @@ const Dashboard = (): JSX.Element => {
 			});
 			setFiles(user.drive.files);
 			setSharedFiles(user.drive.sharedFiles);
+
+			const loadedPrograms = await user.computing.loadPrograms();
+			toast({
+				title: loadedPrograms.message,
+				status: loadedPrograms.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+			setPrograms(user.computing.programs);
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -110,14 +119,21 @@ const Dashboard = (): JSX.Element => {
 					},
 					fileEvent.target.files[0],
 				);
-				toast({
-					title: upload.message,
-					status: upload.success ? 'success' : 'error',
-					duration: 2000,
-					isClosable: true,
-				});
-				if (upload.success) {
-					setPrograms(user.computing.programs);
+				if (!upload.success) {
+					toast({
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				} else {
+					const addToUser = await user.computing.addToUser();
+					toast({
+						title: addToUser.success ? upload.message : 'Failed to upload the file',
+						status: addToUser.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
 				}
 			} else {
 				toast({
