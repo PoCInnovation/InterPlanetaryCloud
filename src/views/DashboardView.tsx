@@ -218,8 +218,7 @@ const Dashboard = (): JSX.Element => {
 	const updateFileContent = async () => {
 		if (!fileEvent || !selectedFile) return;
 
-		const oldFileName = selectedFile.name;
-		const oldFileHash = selectedFile.hash;
+		const oldFile = selectedFile;
 
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		const key = generateFileKey();
@@ -227,7 +226,7 @@ const Dashboard = (): JSX.Element => {
 		if (!fileContent) return;
 
 		const newFile : IPCFile = {
-			name: oldFileName,
+			name: oldFile.name,
 			hash: fileContent,
 			created_at: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
@@ -236,35 +235,24 @@ const Dashboard = (): JSX.Element => {
 		setIsUpdateLoading(true);
 		try {
 			if (user.account) {
-				const deleted = await user.drive.delete(oldFileHash);
-				if (!deleted.success) {
-					toast({
-						title: deleted.message,
-						status: deleted.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-					return;
-				}
 
-				const upload = await user.drive.upload(newFile,	key);
-				if (!upload.success || !upload.file) {
+				const updateContent = await user.drive.updateFileContent(oldFile, newFile, key);
+
+				if (!updateContent.success || !updateContent.file) {
 					toast({
-						title: upload.message,
-						status: upload.success ? 'success' : 'error',
+						title: updateContent.message,
+						status: updateContent.success ? 'success' : 'error',
 						duration: 2000,
 						isClosable: true,
 					});
 				} else {
-					const updated = await user.contact.updateFileContent(upload.file, oldFileHash);
+					const updated = await user.contact.updateFileContent(updateContent.file, oldFile.hash);
 					toast({
-						title: updated.success ? upload.message : 'Failed to update the file',
+						title: updated.success ? updated.message : 'Failed to update the file',
 						status: updated.success ? 'success' : 'error',
 						duration: 2000,
 						isClosable: true,
 					});
-
-					if (updated.success) setSelectedFile(newFile);
 				}
 			} else {
 				toast({

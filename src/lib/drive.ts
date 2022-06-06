@@ -164,6 +164,26 @@ class Drive {
 			return { success: false, message: 'Failed to download the file' };
 		}
 	}
+
+	public async updateFileContent(oldFile : IPCFile, newFile : IPCFile, key : string) : Promise<UploadResponse> {
+		try {
+			if (this.account) {
+				const deleted = await this.delete(oldFile.hash);
+
+				if (!deleted.success) return { success: false, message: 'Failed to delete the file' };
+
+				const uploaded = await this.upload(newFile, key);
+
+				if (!uploaded.success || !uploaded.file) return { success: false, message: 'Failed to upload the file' };
+
+				return { success: true, message: 'Successfully updated the file', file: uploaded.file};
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update the file' };
+		}
+	}
 }
 
 export default Drive;
