@@ -1,9 +1,9 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 
-import { IPCFile } from 'types/types';
+import { IPCFile, IPCProgram } from 'types/types';
 
 type FileCardProps = {
-	file: IPCFile;
+	file: IPCFile | IPCProgram;
 	children: JSX.Element;
 };
 

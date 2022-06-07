@@ -143,7 +143,7 @@ const Dashboard = (): JSX.Element => {
 					isClosable: true,
 				});
 			}
-			onClose();
+			onCloseProgram();
 		} catch (error) {
 			console.error(error);
 			toast({

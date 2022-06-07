@@ -1,7 +1,6 @@
 import React from 'react';
 import { IPCContact, IPCFile, IPCProgram } from '../types/types';
 import { FileCards } from './FileCards';
-import { ProgramCards } from './ProgramCards';
 import { ContactCards } from './ContactCards';
 import { ProfileCard } from './ProfileCard';
 
@@ -40,6 +39,7 @@ export const DisplayFileCards = ({
 		return (
 			<FileCards
 				files={myFiles}
+				programs={[]}
 				downloadFile={downloadFile}
 				isDownloadLoading={isDownloadLoading}
 				setSelectedFile={setSelectedFile}
@@ -50,6 +50,7 @@ export const DisplayFileCards = ({
 		return (
 			<FileCards
 				files={sharedFiles}
+				programs={[]}
 				downloadFile={downloadFile}
 				isDownloadLoading={isDownloadLoading}
 				setSelectedFile={setSelectedFile}
@@ -66,7 +67,17 @@ export const DisplayFileCards = ({
 				deleteContact={deleteContact}
 			/>
 		);
-	if (index === 3) return <ProgramCards programs={myPrograms} />;
+	if (index === 3)
+		return (
+			<FileCards
+				files={[]}
+				programs={myPrograms}
+				downloadFile={downloadFile}
+				isDownloadLoading={isDownloadLoading}
+				setSelectedFile={setSelectedFile}
+				onOpenShare={onOpenShare}
+			/>
+		);
 	return (
 		<ProfileCard profile={contacts[0]} setContactInfo={setContactInfo} onOpenContactUpdate={onOpenContactUpdate} />
 	);
