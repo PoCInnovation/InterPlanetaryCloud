@@ -225,7 +225,7 @@ const Dashboard = (): JSX.Element => {
 
 		if (!fileContent) return;
 
-		const newFile : IPCFile = {
+		const newFile: IPCFile = {
 			name: oldFile.name,
 			hash: fileContent,
 			created_at: Date.now(),
@@ -235,7 +235,6 @@ const Dashboard = (): JSX.Element => {
 		setIsUpdateLoading(true);
 		try {
 			if (user.account) {
-
 				const updateContent = await user.drive.updateFileContent(oldFile, newFile, key);
 
 				if (!updateContent.success || !updateContent.file) {

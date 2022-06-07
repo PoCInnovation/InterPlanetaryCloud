@@ -165,7 +165,7 @@ class Drive {
 		}
 	}
 
-	public async updateFileContent(oldFile : IPCFile, newFile : IPCFile, key : string) : Promise<UploadResponse> {
+	public async updateFileContent(oldFile: IPCFile, newFile: IPCFile, key: string): Promise<UploadResponse> {
 		try {
 			if (this.account) {
 				const deleted = await this.delete(oldFile.hash);
@@ -176,7 +176,7 @@ class Drive {
 
 				if (!uploaded.success || !uploaded.file) return { success: false, message: 'Failed to upload the file' };
 
-				return { success: true, message: 'Successfully updated the file', file: uploaded.file};
+				return { success: true, message: 'Successfully updated the file', file: uploaded.file };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
