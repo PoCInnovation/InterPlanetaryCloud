@@ -201,6 +201,12 @@ const Dashboard = (): JSX.Element => {
 					duration: 2000,
 					isClosable: true,
 				});
+				if (update.success) {
+					const index = files.indexOf(selectedFile);
+
+					if (index !== -1) files[index].name = filename;
+					setFiles(files);
+				}
 				onCloseUpdateFileName();
 			}
 		} catch (error) {
@@ -252,6 +258,12 @@ const Dashboard = (): JSX.Element => {
 						duration: 2000,
 						isClosable: true,
 					});
+					if (updated.success && updateContent.file) {
+						const index = files.indexOf(oldFile);
+
+						if (index !== -1) files[index] = updateContent.file;
+						setFiles(files);
+					}
 				}
 			} else {
 				toast({
