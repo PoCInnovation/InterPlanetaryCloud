@@ -10,7 +10,7 @@ In this part, you will configure your project.
 
 ### Branches
 
-Branch protection is really important. It helps you to have controle on your code.
+Branch protection is really important. It helps you to have control on your code.
 
 For each of the following branches, add the required protections.
 
@@ -153,11 +153,11 @@ There are three parts :
 - Final Report
   > **:warning: It's checklist must be completed before starting a new sprint :warning:**
 
-Additional informations are written in the milestones's checklists. Read them carefully !
+Additional information is written in the milestones's checklists. Read them carefully !
 
 ### Issues
 
-Create all the required issues of a sprint before starting it. Once the sprint started, no issue linked to it should be create.
+Create all the required issues of a sprint before starting it. Once the sprint started, no issue linked to it should be created.
 
 **Each issue must be linked to a milestone and a GitHub project, have the right labels and be assigned to someone.**
 
@@ -185,13 +185,13 @@ Tag pull requests with the `patch`, `minor` or `major` labels.
 
 ### Discord Webhook
 
-We strongly advice you to have a discord channel on wich you will receive GitHub updates on your project.
+We strongly advise you to have a discord channel on which you will receive GitHub updates on your project.
 
 Follow this [tutorial](https://gist.github.com/SGTGunner/50d6a3cc0d489cf779f77695ba3e22ea).
 
 ### Security dependabot
 
-We strongly advice you to have a security dependabot to fix vulnerable dependencies.
+We strongly advise you to have a security dependabot to fix vulnerable dependencies.
 
 Follow this [tutorial](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates#managing-dependabot-security-updates-for-your-repositories).
 
