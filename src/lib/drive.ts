@@ -53,7 +53,6 @@ class Drive {
 								const itemContent = JSON.parse(postContent.item_content);
 
 								if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
-									console.log('Post contacts founded');
 									await Promise.all(
 										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
 											if (contactToFind.address === this.account!.address) {

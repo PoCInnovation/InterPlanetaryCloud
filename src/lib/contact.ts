@@ -53,7 +53,6 @@ class Contact {
 				});
 
 				if (this.contactsPostHash === '') {
-					console.log('Create Post Message for Contacts');
 					this.contacts.push({
 						name: 'Owner (Me)',
 						address: this.account.address,

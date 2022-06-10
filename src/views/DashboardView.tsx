@@ -289,7 +289,6 @@ const Dashboard = (): JSX.Element => {
 	const shareFile = async (contact: IPCContact) => {
 		setIsDownloadLoading(true);
 		try {
-			console.log(selectedFile.key);
 			const share = await user.contact.addFileToContact(contact.address, selectedFile);
 			onCloseShare();
 			toast({
