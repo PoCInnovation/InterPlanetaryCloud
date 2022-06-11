@@ -113,18 +113,16 @@ const Dashboard = (): JSX.Element => {
 
 		if (!filename || !fileContent) return;
 
+		const file: IPCFile = {
+			name: filename,
+			hash: fileContent,
+			created_at: Date.now(),
+			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+		};
 		setIsUploadLoading(true);
 		try {
 			if (user.account) {
-				const upload = await user.drive.upload(
-					{
-						name: filename,
-						hash: fileContent,
-						created_at: Date.now(),
-						key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-					},
-					key,
-				);
+				const upload = await user.drive.upload(file, key);
 				if (!upload.success || !upload.file) {
 					toast({
 						title: upload.message,
@@ -225,7 +223,6 @@ const Dashboard = (): JSX.Element => {
 		if (!fileEvent || !selectedFile) return;
 
 		const oldFile = selectedFile;
-
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		const key = generateFileKey();
 
@@ -234,7 +231,7 @@ const Dashboard = (): JSX.Element => {
 		const newFile: IPCFile = {
 			name: oldFile.name,
 			hash: fileContent,
-			created_at: Date.now(),
+			created_at: oldFile.created_at,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		};
 		setIsUpdateLoading(true);
@@ -259,7 +256,6 @@ const Dashboard = (): JSX.Element => {
 					});
 					if (updated.success && upload.file) {
 						const index = files.indexOf(oldFile);
-
 						if (index !== -1) files[index] = upload.file;
 						setFiles(files);
 

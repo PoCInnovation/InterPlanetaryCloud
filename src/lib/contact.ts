@@ -23,6 +23,22 @@ class Contact {
 		this.private_key = private_key;
 	}
 
+	private publishPost() {
+		return post.Publish({
+			APIServer: DEFAULT_API_V2,
+			channel: ALEPH_CHANNEL,
+			inlineRequested: true,
+			storageEngine: ItemType.ipfs,
+			account: this.account!,
+			postType: 'amend',
+			content: {
+				header: 'InterPlanetaryCloud2.0 - Contacts',
+				contacts: this.contacts,
+			},
+			ref: this.contactsPostHash,
+		});
+	}
+
 	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
@@ -90,19 +106,7 @@ class Contact {
 				}
 				this.contacts.push(contactToAdd);
 
-				await post.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					postType: 'amend',
-					content: {
-						header: 'InterPlanetaryCloud2.0 - Contacts',
-						contacts: this.contacts,
-					},
-					ref: this.contactsPostHash,
-				});
+				await this.publishPost();
 				return { success: true, message: 'Contact added' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -124,19 +128,7 @@ class Contact {
 						return false;
 					});
 
-					await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: 'amend',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-						ref: this.contactsPostHash,
-					});
+					await this.publishPost();
 					return { success: true, message: 'Contact deleted' };
 				}
 				return { success: false, message: "You can't delete your account" };
@@ -160,19 +152,7 @@ class Contact {
 						return false;
 					})
 				) {
-					await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: 'amend',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-						ref: this.contactsPostHash,
-					});
+					await this.publishPost();
 					return { success: true, message: 'Contact updated' };
 				}
 				return { success: false, message: 'Contact does not exist' };
@@ -196,19 +176,7 @@ class Contact {
 									contact.publicKey.slice(2),
 									await EthCrypto.decryptWithPrivateKey(this.private_key, newFile.key),
 								);
-								await post.Publish({
-									APIServer: DEFAULT_API_V2,
-									channel: ALEPH_CHANNEL,
-									inlineRequested: true,
-									storageEngine: ItemType.ipfs,
-									account: this.account!,
-									postType: 'amend',
-									content: {
-										header: 'InterPlanetaryCloud2.0 - Contacts',
-										contacts: this.contacts,
-									},
-									ref: this.contactsPostHash,
-								});
+								await this.publishPost();
 							}
 						});
 					}),
@@ -227,9 +195,9 @@ class Contact {
 			if (this.account) {
 				const owner = this.account.address;
 				if (
-					this.contacts.find((contact, contactIndex) => {
+					this.contacts.find((contact, index) => {
 						if (owner === contact.address) {
-							return this.contacts[contactIndex].files.find((file) => {
+							return this.contacts[index].files.find((file) => {
 								if (file.hash === hash) return true;
 								return false;
 							});
@@ -251,7 +219,7 @@ class Contact {
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
 			for (let i = 0; this.contacts[i] != null; i += 1) {
-				this.updateOneFileName(concernedFile, newName, i, this.contacts[i]);
+				this.updateOneFileName(concernedFile.hash, newName, i);
 			}
 			return { success: true, message: 'Filename updated' };
 		} catch (err) {
@@ -260,36 +228,19 @@ class Contact {
 		}
 	}
 
-	public async updateOneFileName(
-		concernedFile: IPCFile,
-		newName: string,
-		contactIndex: number,
-		contact: IPCContact,
-	): Promise<ResponseType> {
+	public async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				if (
-					contact.files.find((file, fileIndex) => {
-						if (file.hash === concernedFile.hash) {
+					this.contacts[contactIndex].files.find((file, fileIndex) => {
+						if (file.hash === fileHash) {
 							this.contacts[contactIndex].files[fileIndex].name = newName;
 							return true;
 						}
 						return false;
 					})
 				) {
-					await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: 'amend',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-						ref: this.contactsPostHash,
-					});
+					await this.publishPost();
 					return { success: true, message: 'Filename updated' };
 				}
 				return { success: false, message: 'File does not exist' };
@@ -320,19 +271,7 @@ class Contact {
 									created_at: mainFile.created_at,
 									name: mainFile.name,
 								});
-								await post.Publish({
-									APIServer: DEFAULT_API_V2,
-									channel: ALEPH_CHANNEL,
-									inlineRequested: true,
-									storageEngine: ItemType.ipfs,
-									account: this.account!,
-									postType: 'amend',
-									content: {
-										header: 'InterPlanetaryCloud2.0 - Contacts',
-										contacts: this.contacts,
-									},
-									ref: this.contactsPostHash,
-								});
+								await this.publishPost();
 								return true;
 							}
 							return false;
