@@ -258,18 +258,29 @@ class Contact {
 
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
+			for (let i = 0; this.contacts[i] != null; i += 1) {
+				this.updateOneFileName(concernedFile, newName, i, this.contacts[i]);
+			}
+			return { success: true, message: 'Filename updated' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update this filename' };
+		}
+	}
+
+	public async updateOneFileName(
+		concernedFile: IPCFile,
+		newName: string,
+		contactIndex: number,
+		contact: IPCContact,
+	): Promise<ResponseType> {
+		try {
 			if (this.account) {
-				const owner = this.account.address;
 				if (
-					this.contacts.find((contact, contactIndex) => {
-						if (owner === contact.address) {
-							return this.contacts[contactIndex].files.find((file, fileIndex) => {
-								if (file.hash === concernedFile.hash) {
-									this.contacts[contactIndex].files[fileIndex].name = newName;
-									return true;
-								}
-								return false;
-							});
+					contact.files.find((file, fileIndex) => {
+						if (file.hash === concernedFile.hash) {
+							this.contacts[contactIndex].files[fileIndex].name = newName;
+							return true;
 						}
 						return false;
 					})
