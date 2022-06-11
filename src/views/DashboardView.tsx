@@ -237,32 +237,39 @@ const Dashboard = (): JSX.Element => {
 			created_at: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		};
-
 		setIsUpdateLoading(true);
 		try {
 			if (user.account) {
-				const updateContent = await user.drive.updateFileContent(oldFile, newFile, key);
+				const upload = await user.drive.upload(newFile, key);
 
-				if (!updateContent.success || !updateContent.file) {
+				if (!upload.success || !upload.file) {
 					toast({
-						title: updateContent.message,
-						status: updateContent.success ? 'success' : 'error',
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
 						duration: 2000,
 						isClosable: true,
 					});
 				} else {
-					const updated = await user.contact.updateFileContent(updateContent.file, oldFile.hash);
+					const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
 					toast({
 						title: updated.success ? updated.message : 'Failed to update the file',
 						status: updated.success ? 'success' : 'error',
 						duration: 2000,
 						isClosable: true,
 					});
-					if (updated.success && updateContent.file) {
+					if (updated.success && upload.file) {
 						const index = files.indexOf(oldFile);
 
-						if (index !== -1) files[index] = updateContent.file;
+						if (index !== -1) files[index] = upload.file;
 						setFiles(files);
+
+						const deleted = await user.drive.delete(oldFile.hash);
+						toast({
+							title: deleted.success ? deleted.message : 'Failed to update the file',
+							status: deleted.success ? 'success' : 'error',
+							duration: 2000,
+							isClosable: true,
+						});
 					}
 				}
 			} else {

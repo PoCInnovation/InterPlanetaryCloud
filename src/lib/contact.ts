@@ -187,20 +187,15 @@ class Contact {
 	public async updateFileContent(newFile: IPCFile, oldHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const owner = this.account.address;
-				if (
-					await Promise.all(
-						this.contacts.map(async (contact, i) => {
-							if (contact.address === owner) {
-								this.contacts[i].files.map((file, j) => {
-									if (file.hash === oldHash) {
-										this.contacts[i].files[j].hash = newFile.hash;
-										this.contacts[i].files[j].key = newFile.key;
-										return true;
-									}
-									return false;
-								});
-
+				await Promise.all(
+					this.contacts.map(async (contact, i) => {
+						this.contacts[i].files.map(async (file, j) => {
+							if (file.hash === oldHash) {
+								this.contacts[i].files[j].hash = newFile.hash;
+								this.contacts[i].files[j].key = await EthCrypto.encryptWithPublicKey(
+									contact.publicKey.slice(2),
+									await EthCrypto.decryptWithPrivateKey(this.private_key, newFile.key),
+								);
 								await post.Publish({
 									APIServer: DEFAULT_API_V2,
 									channel: ALEPH_CHANNEL,
@@ -214,14 +209,11 @@ class Contact {
 									},
 									ref: this.contactsPostHash,
 								});
-								return true;
 							}
-							return false;
-						}),
-					)
-				)
-					return { success: true, message: 'File content updated' };
-				return { success: false, message: 'Contact does not exist' };
+						});
+					}),
+				);
+				return { success: true, message: 'File content updated' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
