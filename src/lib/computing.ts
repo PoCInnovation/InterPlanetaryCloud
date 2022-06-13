@@ -9,10 +9,13 @@ import { IPCProgram, ResponseType } from 'types/types';
 class Computing {
 	public programs: IPCProgram[];
 
+	public programsPostHash: string;
+
 	private readonly account: accounts.base.Account | undefined;
 
 	constructor(importedAccount: accounts.base.Account) {
 		this.programs = [];
+		this.programsPostHash = '';
 		this.account = importedAccount;
 	}
 
@@ -30,25 +33,36 @@ class Computing {
 					hashes: [],
 				});
 
-				userData.posts.map(async (postContent) => {
+				userData.posts.map((postContent) => {
 					const itemContent = JSON.parse(postContent.item_content);
-
 					if (itemContent.content.headers === 'InterPlanetaryCloud2.0 - Programs') {
-						console.log('Post program founded');
-
-						const foundedProgram: IPCProgram = {
-							hash: itemContent.content.program.hash,
-							name: itemContent.content.program.name,
-							created_at: itemContent.content.program.created_at,
-						};
-
-						this.programs.push(foundedProgram);
-
+						this.programsPostHash = postContent.hash;
+						if (itemContent.content.programs.length > 0) {
+							itemContent.content.programs.map((importedProgram: IPCProgram) => {
+								this.programs.push(importedProgram);
+								return true;
+							});
+						}
 						return true;
 					}
 					return false;
 				});
 
+				if (this.programsPostHash === '') {
+					const newPostPublishResponse = await post.Publish({
+						APIServer: DEFAULT_API_V2,
+						channel: ALEPH_CHANNEL,
+						inlineRequested: true,
+						storageEngine: ItemType.ipfs,
+						account: this.account,
+						postType: '',
+						content: {
+							headers: 'InterPlanetaryCloud2.0 - Programs',
+							programs: [],
+						},
+					});
+					this.programsPostHash = newPostPublishResponse.item_hash;
+				}
 				return { success: true, message: 'Programs loaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -97,12 +111,14 @@ class Computing {
 					inlineRequested: true,
 					storageEngine: ItemType.ipfs,
 					account: this.account!,
-					postType: '',
+					postType: 'amend',
 					content: {
 						headers: 'InterPlanetaryCloud2.0 - Programs',
-						program: this.programs[this.programs.length - 1],
+						programs: this.programs,
 					},
+					ref: this.programsPostHash,
 				});
+
 				return { success: true, message: 'File added to the user' };
 			}
 			return { success: false, message: 'Failed to load account' };
