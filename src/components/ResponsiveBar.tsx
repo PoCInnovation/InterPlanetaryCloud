@@ -90,7 +90,7 @@ export const BarWithDrawer = ({
 							bgClip="text"
 							id="ipc-sideBar-title"
 						>
-							Inter Planetary Cloud / Computing
+							Inter Planetary Cloud
 						</Text>
 					</VStack>
 				</HStack>

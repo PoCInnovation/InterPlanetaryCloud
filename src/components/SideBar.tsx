@@ -44,7 +44,7 @@ const SideBar = ({
 				id="ipc-sideBar-title"
 				pb="64px"
 			>
-				Inter Planetary Cloud / Computing
+				Inter Planetary Cloud
 			</Text>
 			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
 				<TabList>
