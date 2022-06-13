@@ -3,11 +3,10 @@ import { DownloadIcon } from '@chakra-ui/icons';
 import { MdPeopleAlt } from 'react-icons/md';
 import React from 'react';
 import FileCard from './FileCard';
-import { IPCFile, IPCProgram } from '../types/types';
+import { IPCFile } from '../types/types';
 
 type FileCardsProps = {
 	files: IPCFile[];
-	programs: IPCProgram[];
 	downloadFile: (file: IPCFile) => Promise<void>;
 	isDownloadLoading: boolean;
 	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
@@ -16,7 +15,6 @@ type FileCardsProps = {
 
 export const FileCards = ({
 	files,
-	programs,
 	downloadFile,
 	isDownloadLoading,
 	setSelectedFile,
@@ -52,24 +50,6 @@ export const FileCards = ({
 						id="ipc-dashboardView-share-button"
 					>
 						<Icon as={MdPeopleAlt} />
-					</Button>
-				</>
-			</FileCard>
-		))}
-		{programs.map((program: IPCProgram) => (
-			<FileCard key={program.created_at} file={program}>
-				<>
-					<Button
-						as="a"
-						href={`https://aleph.sh/vm/${program.hash}`}
-						target="_blank"
-						variant="inline"
-						size="sm"
-						w="100%"
-						p="0px"
-						id="ipc-computingView-forwardUrl-button"
-					>
-						Go to site
 					</Button>
 				</>
 			</FileCard>

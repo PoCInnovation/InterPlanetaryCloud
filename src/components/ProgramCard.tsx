@@ -1,13 +1,13 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 
-import { IPCFile } from 'types/types';
+import { IPCProgram } from 'types/types';
 
-type FileCardProps = {
-	file: IPCFile;
+type ProgramCardProps = {
+	program: IPCProgram;
 	children: JSX.Element;
 };
 
-const FileCard = ({ file, children }: FileCardProps): JSX.Element => (
+const ProgramCard = ({ program, children }: ProgramCardProps): JSX.Element => (
 	<Box
 		p="16px"
 		bg="white"
@@ -21,7 +21,7 @@ const FileCard = ({ file, children }: FileCardProps): JSX.Element => (
 	>
 		<VStack w="100%" justify="space-between" align="center">
 			<Text fontWeight="500" isTruncated maxW="100%">
-				{file.name}
+				{program.name}
 			</Text>
 			<Flex w="100%" justify="space-between" align="center">
 				{children}
@@ -30,4 +30,4 @@ const FileCard = ({ file, children }: FileCardProps): JSX.Element => (
 	</Box>
 );
 
-export default FileCard;
+export default ProgramCard;
