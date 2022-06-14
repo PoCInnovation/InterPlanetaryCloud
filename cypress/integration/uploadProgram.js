@@ -30,11 +30,11 @@ describe('Upload a program modal for DashboardView', () => {
 		cy.get('#ipc-dashboardView-upload-program').attachFile(fixtureFile);
 		cy.get('#ipc-dashboardView-upload-program-modal-button').click();
 		cy.wait(2000);
-		cy.get('button').should('have.length', 8);
+		cy.get('button').should('have.length', 10);
 	});
 
 	it('Good number of buttons after closing modal', () => {
 		cy.get('#ipc-modal-close-button').click();
-		cy.get('button').should('have.length', 8);
+		cy.get('button').should('have.length', 10);
 	});
 });
