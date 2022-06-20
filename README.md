@@ -190,7 +190,7 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 ---
 
 - The content is retrieved from the aleph network from his hash.
-- The content is decrypt with the key, itself decrypt with the private key of the user.
+- The content is decrypted with the key, itself decrypted with the private key of the user.
 
 <details>
     <summary>Download a file</summary>

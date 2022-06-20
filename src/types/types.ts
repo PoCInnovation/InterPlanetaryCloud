@@ -18,3 +18,7 @@ export type ResponseType = {
 	success: boolean;
 	message: string;
 };
+
+export type UploadResponse = ResponseType & {
+	file?: IPCFile;
+};

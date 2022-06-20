@@ -1,4 +1,4 @@
-import { accounts, post, store } from 'aleph-sdk-ts';
+import { accounts, forget, post, store } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
@@ -10,7 +10,7 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import { IPCContact, IPCFile, ResponseType } from 'types/types';
+import { IPCContact, IPCFile, ResponseType, UploadResponse } from 'types/types';
 import EthCrypto from 'eth-crypto';
 
 class Drive {
@@ -53,7 +53,6 @@ class Drive {
 								const itemContent = JSON.parse(postContent.item_content);
 
 								if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
-									console.log('Post contacts founded');
 									await Promise.all(
 										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
 											if (contactToFind.address === this.account!.address) {
@@ -81,7 +80,7 @@ class Drive {
 		}
 	}
 
-	public async upload(file: IPCFile, key: string): Promise<ResponseType> {
+	public async upload(file: IPCFile, key: string): Promise<UploadResponse> {
 		try {
 			if (this.account) {
 				const encryptedContentFile = CryptoJS.AES.encrypt(file.hash, key).toString();
@@ -105,14 +104,37 @@ class Drive {
 					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
-				this.files.push(newFile);
+				return { success: true, message: 'File uploaded', file: newFile };
+			}
+			return { success: false, message: 'Failed to load account', file: undefined };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to upload the file', file: undefined };
+		}
+	}
 
-				return { success: true, message: 'File uploaded' };
+	public addIPCFile(file: IPCFile): void {
+		this.files.push(file);
+	}
+
+	public async delete(fileHash: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				await forget.publish({
+					APIServer: DEFAULT_API_V2,
+					channel: ALEPH_CHANNEL,
+					hashes: [fileHash],
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+					account: this.account,
+				});
+
+				return { success: true, message: 'File deleted' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
 			console.log(err);
-			return { success: false, message: 'Failed to upload the file' };
+			return { success: false, message: 'Failed to delete the file' };
 		}
 	}
 
