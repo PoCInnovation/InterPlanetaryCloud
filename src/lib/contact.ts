@@ -23,6 +23,22 @@ class Contact {
 		this.private_key = private_key;
 	}
 
+	private publishPost() {
+		return post.Publish({
+			APIServer: DEFAULT_API_V2,
+			channel: ALEPH_CHANNEL,
+			inlineRequested: true,
+			storageEngine: ItemType.ipfs,
+			account: this.account!,
+			postType: 'amend',
+			content: {
+				header: 'InterPlanetaryCloud2.0 - Contacts',
+				contacts: this.contacts,
+			},
+			ref: this.contactsPostHash,
+		});
+	}
+
 	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
@@ -53,7 +69,6 @@ class Contact {
 				});
 
 				if (this.contactsPostHash === '') {
-					console.log('Create Post Message for Contacts');
 					this.contacts.push({
 						name: 'Owner (Me)',
 						address: this.account.address,
@@ -91,19 +106,7 @@ class Contact {
 				}
 				this.contacts.push(contactToAdd);
 
-				await post.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					postType: 'amend',
-					content: {
-						header: 'InterPlanetaryCloud2.0 - Contacts',
-						contacts: this.contacts,
-					},
-					ref: this.contactsPostHash,
-				});
+				await this.publishPost();
 				return { success: true, message: 'Contact added' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -125,19 +128,7 @@ class Contact {
 						return false;
 					});
 
-					await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: 'amend',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-						ref: this.contactsPostHash,
-					});
+					await this.publishPost();
 					return { success: true, message: 'Contact deleted' };
 				}
 				return { success: false, message: "You can't delete your account" };
@@ -161,19 +152,7 @@ class Contact {
 						return false;
 					})
 				) {
-					await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: 'amend',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-						ref: this.contactsPostHash,
-					});
+					await this.publishPost();
 					return { success: true, message: 'Contact updated' };
 				}
 				return { success: false, message: 'Contact does not exist' };
@@ -182,6 +161,94 @@ class Contact {
 		} catch (err) {
 			console.log(err);
 			return { success: false, message: 'Failed to update this contact' };
+		}
+	}
+
+	public async updateFileContent(newFile: IPCFile, oldHash: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				await Promise.all(
+					this.contacts.map(async (contact, i) => {
+						this.contacts[i].files.map(async (file, j) => {
+							if (file.hash === oldHash) {
+								this.contacts[i].files[j].hash = newFile.hash;
+								this.contacts[i].files[j].key = await EthCrypto.encryptWithPublicKey(
+									contact.publicKey.slice(2),
+									await EthCrypto.decryptWithPrivateKey(this.private_key, newFile.key),
+								);
+								await this.publishPost();
+							}
+						});
+					}),
+				);
+				return { success: true, message: 'File content updated' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update the file content' };
+		}
+	}
+
+	public async hasEditPermission(hash: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const owner = this.account.address;
+				if (
+					this.contacts.find((contact, index) => {
+						if (owner === contact.address) {
+							return this.contacts[index].files.find((file) => {
+								if (file.hash === hash) return true;
+								return false;
+							});
+						}
+						return false;
+					})
+				) {
+					return { success: true, message: 'You have edit permission' };
+				}
+				return { success: false, message: 'Failed to load account' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update this filename' };
+		}
+	}
+
+	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
+		try {
+			for (let i = 0; this.contacts[i] != null; i += 1) {
+				this.updateOneFileName(concernedFile.hash, newName, i);
+			}
+			return { success: true, message: 'Filename updated' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update this filename' };
+		}
+	}
+
+	public async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				if (
+					this.contacts[contactIndex].files.find((file, fileIndex) => {
+						if (file.hash === fileHash) {
+							this.contacts[contactIndex].files[fileIndex].name = newName;
+							return true;
+						}
+						return false;
+					})
+				) {
+					await this.publishPost();
+					return { success: true, message: 'Filename updated' };
+				}
+				return { success: false, message: 'File does not exist' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.log(err);
+			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
 
@@ -204,19 +271,7 @@ class Contact {
 									created_at: mainFile.created_at,
 									name: mainFile.name,
 								});
-								await post.Publish({
-									APIServer: DEFAULT_API_V2,
-									channel: ALEPH_CHANNEL,
-									inlineRequested: true,
-									storageEngine: ItemType.ipfs,
-									account: this.account!,
-									postType: 'amend',
-									content: {
-										header: 'InterPlanetaryCloud2.0 - Contacts',
-										contacts: this.contacts,
-									},
-									ref: this.contactsPostHash,
-								});
+								await this.publishPost();
 								return true;
 							}
 							return false;

@@ -13,11 +13,14 @@ type FileCardsProps = {
 	index: number;
 	downloadFile: (file: IPCFile) => Promise<void>;
 	isDownloadLoading: boolean;
+	isUpdateLoading: boolean;
 	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
 	onOpenShare: () => void;
 	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
+	onOpenUpdateFileName: () => void;
+	onOpenUpdateFileContent: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
@@ -29,11 +32,14 @@ export const DisplayFileCards = ({
 	index,
 	downloadFile,
 	isDownloadLoading,
+	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
 	setContactInfo,
 	onOpenContactUpdate,
 	onOpenContactAdd,
+	onOpenUpdateFileName,
+	onOpenUpdateFileContent,
 	deleteContact,
 }: FileCardsProps): JSX.Element => {
 	if (index === 0)
@@ -42,8 +48,11 @@ export const DisplayFileCards = ({
 				files={myFiles}
 				downloadFile={downloadFile}
 				isDownloadLoading={isDownloadLoading}
+				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenUpdateFileName={onOpenUpdateFileName}
+				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>
 		);
 	if (index === 1)
@@ -52,8 +61,11 @@ export const DisplayFileCards = ({
 				files={sharedFiles}
 				downloadFile={downloadFile}
 				isDownloadLoading={isDownloadLoading}
+				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenUpdateFileName={onOpenUpdateFileName}
+				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>
 		);
 	if (index === 2)
