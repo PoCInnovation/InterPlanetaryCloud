@@ -12,6 +12,9 @@ import {
 	Flex,
 	Spacer,
 	Divider,
+	FormControl,
+	FormLabel,
+	FormHelperText,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -25,20 +28,30 @@ import Modal from 'components/Modal';
 
 import { generateFileKey } from 'utils/generateFileKey';
 
-import { getFileContent, extractFilename } from '../utils/fileManipulation';
+import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
-import { ResponsiveBar } from '../components/ResponsiveBar';
-import { DisplayFileCards } from '../components/DisplayFileCards';
+import { ResponsiveBar } from 'components/ResponsiveBar';
+import { DisplayFileCards } from 'components/DisplayFileCards';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { isOpen: isOpenContactAdd, onOpen: onOpenContactAdd, onClose: onCloseContactAdd } = useDisclosure();
+	const {
+		isOpen: isOpenUpdateFileName,
+		onOpen: onOpenUpdateFileName,
+		onClose: onCloseUpdateFileName,
+	} = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
 	const [programs, setPrograms] = useState<IPCProgram[]>([]);
+	const {
+		isOpen: isOpenUpdateFileContent,
+		onOpen: onOpenUpdateFileContent,
+		onClose: onCloseUpdateFileContent,
+	} = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
@@ -52,8 +65,10 @@ const Dashboard = (): JSX.Element => {
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
+	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -165,19 +180,17 @@ const Dashboard = (): JSX.Element => {
 
 		if (!filename || !fileContent) return;
 
+		const file: IPCFile = {
+			name: filename,
+			hash: fileContent,
+			created_at: Date.now(),
+			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+		};
 		setIsUploadLoading(true);
 		try {
 			if (user.account) {
-				const upload = await user.drive.upload(
-					{
-						name: filename,
-						hash: fileContent,
-						created_at: Date.now(),
-						key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-					},
-					key,
-				);
-				if (!upload.success) {
+				const upload = await user.drive.upload(file, key);
+				if (!upload.success || !upload.file) {
 					toast({
 						title: upload.message,
 						status: upload.success ? 'success' : 'error',
@@ -185,6 +198,8 @@ const Dashboard = (): JSX.Element => {
 						isClosable: true,
 					});
 				} else {
+					user.drive.addIPCFile(upload.file);
+
 					const shared = await user.contact.addFileToContact(
 						user.account.address,
 						user.drive.files[user.drive.files.length - 1],
@@ -240,10 +255,111 @@ const Dashboard = (): JSX.Element => {
 		setIsDownloadLoading(false);
 	};
 
+	const updateFileName = async () => {
+		setIsDownloadLoading(true);
+		try {
+			if (fileNameEvent) {
+				const filename = fileNameEvent.target.value;
+				const update = await user.contact.updateFileName(selectedFile, filename);
+				toast({
+					title: update.message,
+					status: update.success ? 'success' : 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+				if (update.success) {
+					const index = files.indexOf(selectedFile);
+
+					if (index !== -1) files[index].name = filename;
+					setFiles(files);
+				}
+				onCloseUpdateFileName();
+			}
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to change name',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsDownloadLoading(false);
+	};
+
+	const updateFileContent = async () => {
+		if (!fileEvent || !selectedFile) return;
+
+		const oldFile = selectedFile;
+		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
+		const key = generateFileKey();
+
+		if (!fileContent) return;
+
+		const newFile: IPCFile = {
+			name: oldFile.name,
+			hash: fileContent,
+			created_at: oldFile.created_at,
+			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+		};
+		setIsUpdateLoading(true);
+		try {
+			if (user.account) {
+				const upload = await user.drive.upload(newFile, key);
+
+				if (!upload.success || !upload.file) {
+					toast({
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				} else {
+					const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
+					toast({
+						title: updated.success ? updated.message : 'Failed to update the file',
+						status: updated.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+					if (updated.success && upload.file) {
+						const index = files.indexOf(oldFile);
+						if (index !== -1) files[index] = upload.file;
+						setFiles(files);
+
+						const deleted = await user.drive.delete(oldFile.hash);
+						toast({
+							title: deleted.success ? deleted.message : 'Failed to update the file',
+							status: deleted.success ? 'success' : 'error',
+							duration: 2000,
+							isClosable: true,
+						});
+					}
+				}
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseUpdateFileContent();
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to update the file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setIsUpdateLoading(false);
+	};
+
 	const shareFile = async (contact: IPCContact) => {
 		setIsDownloadLoading(true);
 		try {
-			console.log(selectedFile.key);
 			const share = await user.contact.addFileToContact(contact.address, selectedFile);
 			onCloseShare();
 			toast({
@@ -410,11 +526,14 @@ const Dashboard = (): JSX.Element => {
 						index={selectedTab}
 						downloadFile={downloadFile}
 						isDownloadLoading={isDownloadLoading}
+						isUpdateLoading={isUpdateLoading}
 						setSelectedFile={setSelectedFile}
 						onOpenShare={onOpenShare}
 						setContactInfo={setContactInfo}
 						onOpenContactUpdate={onOpenContactUpdate}
 						onOpenContactAdd={onOpenContactAdd}
+						onOpenUpdateFileName={onOpenUpdateFileName}
+						onOpenUpdateFileContent={onOpenUpdateFileContent}
 						deleteContact={deleteContact}
 					/>
 				</VStack>
@@ -526,8 +645,8 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<>
-					<Text>New name *</Text>
+				<FormControl>
+					<FormLabel>New name</FormLabel>
 					<Input
 						type="text"
 						w="100%"
@@ -537,8 +656,66 @@ const Dashboard = (): JSX.Element => {
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
 						id="ipc-dashboardView-input-contact-name"
 					/>
-					<Text as="i">* Fill, to update the info</Text>
-				</>
+				</FormControl>
+			</Modal>
+			<Modal
+				isOpen={isOpenUpdateFileName}
+				onClose={onCloseUpdateFileName}
+				title="Rename the file"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={updateFileName}
+						isLoading={isUploadLoading}
+						id="ipc-dashboardView-update-filename-button"
+					>
+						OK
+					</Button>
+				}
+			>
+				<FormControl>
+					<FormLabel>New file name</FormLabel>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder={selectedFile.name}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
+						id="ipc-dashboardView-input-update-filename"
+					/>
+				</FormControl>
+			</Modal>
+			<Modal
+				isOpen={isOpenUpdateFileContent}
+				onClose={onCloseUpdateFileContent}
+				title="Update file content from a file"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={updateFileContent}
+						isLoading={isUpdateLoading}
+						id="ipc-dashboardView-update-file-content-button"
+					>
+						Upload new version
+					</Button>
+				}
+			>
+				<FormControl>
+					<Input
+						type="file"
+						h="100%"
+						w="100%"
+						p="10px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+						id="ipc-dashboardView-input-new-file-content"
+					/>
+					<FormHelperText as="i">Accepted file format : text</FormHelperText>
+				</FormControl>
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">
