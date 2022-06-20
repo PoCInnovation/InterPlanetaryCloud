@@ -30,7 +30,7 @@ export const FileCards = ({
 						w="100%"
 						p="0px"
 						mx="4px"
-						onClick={async () => downloadFile(file as IPCFile)}
+						onClick={async () => downloadFile(file)}
 						isLoading={isDownloadLoading}
 						id="ipc-dashboardView-download-button"
 					>
@@ -43,7 +43,7 @@ export const FileCards = ({
 						p="0px"
 						mx="4px"
 						onClick={() => {
-							setSelectedFile(file as IPCFile);
+							setSelectedFile(file);
 							onOpenShare();
 						}}
 						isLoading={isDownloadLoading}
