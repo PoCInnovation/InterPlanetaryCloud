@@ -7,6 +7,12 @@ export type IPCFile = {
 	created_at: number;
 };
 
+export type IPCProgram = {
+	hash: string;
+	name: string;
+	created_at: number;
+};
+
 export type IPCContact = {
 	name: string;
 	address: string;

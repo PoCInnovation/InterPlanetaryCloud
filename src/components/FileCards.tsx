@@ -28,7 +28,7 @@ export const FileCards = ({
 	onOpenUpdateFileContent,
 }: FileCardsProps): JSX.Element => (
 	<>
-		{files.map((file) => (
+		{files.map((file: IPCFile) => (
 			<FileCard key={file.created_at} file={file}>
 				<>
 					<Button

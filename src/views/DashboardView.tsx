@@ -22,7 +22,7 @@ import EthCrypto from 'eth-crypto';
 
 import { useUserContext } from 'contexts/user';
 
-import { IPCFile, IPCContact } from 'types/types';
+import { IPCFile, IPCContact, IPCProgram } from 'types/types';
 
 import Modal from 'components/Modal';
 
@@ -45,6 +45,8 @@ const Dashboard = (): JSX.Element => {
 	} = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
+	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
+	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const {
 		isOpen: isOpenUpdateFileContent,
 		onOpen: onOpenUpdateFileContent,
@@ -62,6 +64,7 @@ const Dashboard = (): JSX.Element => {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
+	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -79,11 +82,11 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		(async () => {
 			await loadContact();
-			await loadSharedDrive();
+			await loadUserContents();
 		})();
 	}, []);
 
-	const loadSharedDrive = async () => {
+	const loadUserContents = async () => {
 		try {
 			const loadShared = await user.drive.loadShared(user.contact.contacts);
 			toast({
@@ -94,6 +97,15 @@ const Dashboard = (): JSX.Element => {
 			});
 			setFiles(user.drive.files);
 			setSharedFiles(user.drive.sharedFiles);
+
+			const loadedPrograms = await user.computing.loadPrograms();
+			toast({
+				title: loadedPrograms.message,
+				status: loadedPrograms.success ? 'success' : 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+			setPrograms(user.computing.programs);
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -103,6 +115,61 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 		}
+	};
+
+	const uploadProgram = async () => {
+		if (!fileEvent || !fileEvent.target.files) return;
+		const filename = extractFilename(fileEvent.target.value);
+
+		if (!filename) return;
+
+		setIsDeployLoading(true);
+		try {
+			if (user.account) {
+				const upload = await user.computing.uploadProgram(
+					{
+						name: filename,
+						hash: '',
+						created_at: Date.now(),
+					},
+					fileEvent.target.files[0],
+				);
+				if (!upload.success) {
+					toast({
+						title: upload.message,
+						status: upload.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				} else {
+					const addToUser = await user.computing.addToUser();
+					toast({
+						title: addToUser.success ? upload.message : 'Failed to upload the file',
+						status: addToUser.success ? 'success' : 'error',
+						duration: 2000,
+						isClosable: true,
+					});
+				}
+			} else {
+				toast({
+					title: 'Failed to load account',
+					status: 'error',
+					duration: 2000,
+					isClosable: true,
+				});
+			}
+			onCloseProgram();
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Unable to upload file',
+				status: 'error',
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+		setFileEvent(undefined);
+		setIsDeployLoading(false);
 	};
 
 	const uploadFile = async () => {
@@ -162,6 +229,7 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 		}
+		setFileEvent(undefined);
 		setIsUploadLoading(false);
 	};
 
@@ -442,14 +510,17 @@ const Dashboard = (): JSX.Element => {
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBar
 				onOpen={onOpen}
+				onOpenProgram={onOpenProgram}
 				setSelectedTab={setSelectedTab}
 				isUploadLoading={isUploadLoading}
+				isDeployLoading={isDeployLoading}
 				selectedTab={selectedTab}
 			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayFileCards
 						myFiles={files}
+						myPrograms={programs}
 						sharedFiles={sharedFiles}
 						contacts={contacts}
 						index={selectedTab}
@@ -467,6 +538,32 @@ const Dashboard = (): JSX.Element => {
 					/>
 				</VStack>
 			</Box>
+			<Modal
+				isOpen={isOpenProgram}
+				onClose={onCloseProgram}
+				title="Deploy a program"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={uploadProgram}
+						isLoading={isDeployLoading}
+						id="ipc-dashboardView-upload-program-modal-button"
+					>
+						Deploy program
+					</Button>
+				}
+			>
+				<Input
+					type="file"
+					h="100%"
+					w="100%"
+					p="10px"
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+					id="ipc-dashboardView-upload-program"
+				/>
+			</Modal>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

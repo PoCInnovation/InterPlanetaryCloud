@@ -47,7 +47,7 @@ describe('Good Modal Front for DashboardView', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 8);
+		cy.get('button').should('have.length', 10);
 	});
 
 	it('Good number of input', () => {

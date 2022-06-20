@@ -6,16 +6,21 @@ import Drive from './drive';
 
 import Contact from './contact';
 
+import Computing from './computing';
+
 class User {
 	public account: accounts.base.Account | undefined;
 
 	public drive: Drive;
+
+	public computing: Computing;
 
 	public contact: Contact;
 
 	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
 		this.account = importedAccount;
 		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));
+		this.computing = new Computing(this.account);
 		this.contact = new Contact(this.account, mnemonicToPrivateKey(mnemonic));
 	}
 }
