@@ -18,20 +18,31 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import React from 'react';
 import colors from '../theme/foundations/colors';
 import Sidebar from './SideBar';
-import { UploadButton } from './CustomButtons';
+import { UploadButton, DeployButton } from './CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;
+	onOpenProgram: () => void;
 	isUploadLoading: boolean;
+	isDeployLoading: boolean;
 	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
 	selectedTab: number;
 };
 
-export const LeftBar = ({ onOpen, isUploadLoading, setSelectedTab, selectedTab }: BarProps): JSX.Element => (
+export const LeftBar = ({
+	onOpen,
+	onOpenProgram,
+	isUploadLoading,
+	isDeployLoading,
+	setSelectedTab,
+	selectedTab,
+}: BarProps): JSX.Element => (
 	<Sidebar
 		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
+		deployButton={<DeployButton text="Deploy a program" onClick={onOpenProgram} isLoading={isDeployLoading} />}
 		contactTab="Contacts"
 		myFilesTab="My files"
+		myProgramsTab="My programs"
 		profileTab="My profile"
 		sharedFilesTab="Shared with me"
 		setSelectedTab={setSelectedTab}
@@ -39,7 +50,14 @@ export const LeftBar = ({ onOpen, isUploadLoading, setSelectedTab, selectedTab }
 	/>
 );
 
-export const BarWithDrawer = ({ onOpen, setSelectedTab, isUploadLoading, selectedTab }: BarProps): JSX.Element => {
+export const BarWithDrawer = ({
+	onOpen,
+	onOpenProgram,
+	setSelectedTab,
+	isDeployLoading,
+	isUploadLoading,
+	selectedTab,
+}: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
 	const placement: SlideDirection = 'left';
 
@@ -50,8 +68,10 @@ export const BarWithDrawer = ({ onOpen, setSelectedTab, isUploadLoading, selecte
 				<DrawerContent w="75%">
 					<LeftBar
 						onOpen={onOpen}
+						onOpenProgram={onOpenProgram}
 						setSelectedTab={setSelectedTab}
 						isUploadLoading={isUploadLoading}
+						isDeployLoading={isDeployLoading}
 						selectedTab={selectedTab}
 					/>
 				</DrawerContent>
@@ -80,23 +100,34 @@ export const BarWithDrawer = ({ onOpen, setSelectedTab, isUploadLoading, selecte
 	);
 };
 
-export const ResponsiveBar = ({ onOpen, setSelectedTab, isUploadLoading, selectedTab }: BarProps): JSX.Element => {
+export const ResponsiveBar = ({
+	onOpen,
+	onOpenProgram,
+	setSelectedTab,
+	isUploadLoading,
+	isDeployLoading,
+	selectedTab,
+}: BarProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
 
 	if (!isDrawerNeeded)
 		return (
 			<LeftBar
 				onOpen={onOpen}
+				onOpenProgram={onOpenProgram}
 				setSelectedTab={setSelectedTab}
 				isUploadLoading={isUploadLoading}
+				isDeployLoading={isDeployLoading}
 				selectedTab={selectedTab}
 			/>
 		);
 	return (
 		<BarWithDrawer
 			onOpen={onOpen}
+			onOpenProgram={onOpenProgram}
 			setSelectedTab={setSelectedTab}
 			isUploadLoading={isUploadLoading}
+			isDeployLoading={isDeployLoading}
 			selectedTab={selectedTab}
 		/>
 	);

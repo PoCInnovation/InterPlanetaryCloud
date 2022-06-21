@@ -7,6 +7,12 @@ export type IPCFile = {
 	created_at: number;
 };
 
+export type IPCProgram = {
+	hash: string;
+	name: string;
+	created_at: number;
+};
+
 export type IPCContact = {
 	name: string;
 	address: string;
@@ -17,4 +23,8 @@ export type IPCContact = {
 export type ResponseType = {
 	success: boolean;
 	message: string;
+};
+
+export type UploadResponse = ResponseType & {
+	file?: IPCFile;
 };
