@@ -23,6 +23,6 @@
   },
   "include": [
     "src",
-    "cypress",
+    "cypress", "pages/index.tsx",
   ]
 }

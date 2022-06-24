@@ -1,3 +1,4 @@
 import * as env from 'env-var';
 
-export const ALEPH_CHANNEL = env.get('REACT_APP_ALEPH_CHANNEL').required().asString();
+console.log(process.env.NEXT_PUBLIC_ALEPH_CHANNEL);
+export const ALEPH_CHANNEL = env.get('NEXT_PUBLIC_ALEPH_CHANNEL').asString();

@@ -8,8 +8,6 @@ import Auth from 'lib/auth';
 import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
 
-import Routes from './Routes';
-
 const App = (): JSX.Element => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
@@ -46,11 +44,6 @@ const App = (): JSX.Element => {
 
 	return (
 		<>
-			<AuthContext.Provider value={auth}>
-				<UserContext.Provider value={{ user: user as User, setUser }}>
-					<Routes />
-				</UserContext.Provider>
-			</AuthContext.Provider>
 		</>
 	);
 };
