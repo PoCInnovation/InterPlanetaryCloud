@@ -25,7 +25,7 @@ type BarProps = {
 	onOpenProgram: () => void;
 	isUploadLoading: boolean;
 	isDeployLoading: boolean;
-	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	setSelectedTab: (tab: number) => void;
 	selectedTab: number;
 };
 

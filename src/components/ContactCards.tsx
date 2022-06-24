@@ -6,7 +6,7 @@ import { ContactCard } from './ContactCard';
 
 type ContactCardsProps = {
 	contacts: IPCContact[];
-	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
+	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;

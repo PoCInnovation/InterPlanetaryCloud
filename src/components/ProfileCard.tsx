@@ -5,7 +5,7 @@ import { IPCContact } from '../types/types';
 
 type ProfileCardProps = {
 	profile: IPCContact;
-	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
+	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 };
 

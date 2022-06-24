@@ -11,7 +11,7 @@ type FileCardsProps = {
 	downloadFile: (file: IPCFile) => Promise<void>;
 	isDownloadLoading: boolean;
 	isUpdateLoading: boolean;
-	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
+	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;

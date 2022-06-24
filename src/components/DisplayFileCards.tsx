@@ -14,9 +14,9 @@ type FileCardsProps = {
 	downloadFile: (file: IPCFile) => Promise<void>;
 	isDownloadLoading: boolean;
 	isUpdateLoading: boolean;
-	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
+	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
-	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
+	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
 	onOpenUpdateFileName: () => void;

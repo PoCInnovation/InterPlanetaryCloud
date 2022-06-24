@@ -8,7 +8,7 @@ import { IPCFile } from '../types/types';
 type FileEditButtonsProps = {
 	file: IPCFile;
 	isUpdateLoading: boolean;
-	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
+	setSelectedFile: (file: IPCFile) => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 };

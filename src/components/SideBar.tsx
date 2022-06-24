@@ -11,7 +11,7 @@ type SideBarPropsType = {
 	profileTab: string;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
-	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	setSelectedTab: (tab: number) => void;
 	currentTabIndex: number;
 };
 
