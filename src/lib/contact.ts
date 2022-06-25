@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import { IPCContact, IPCFile, ResponseType } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType } from 'types/types';
 import EthCrypto from 'eth-crypto';
 
 class Contact {

@@ -23,7 +23,7 @@ import EthCrypto from 'eth-crypto';
 
 import { useUserContext } from '../src/contexts/user';
 
-import { IPCFile, IPCContact, IPCProgram } from '../src/types/types';
+import type { IPCFile, IPCContact, IPCProgram } from '../src/types/types';
 
 import Modal from '../src/components/Modal';
 

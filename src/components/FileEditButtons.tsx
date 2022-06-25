@@ -3,7 +3,7 @@ import { EditIcon } from '@chakra-ui/icons';
 import { MdUpdate } from 'react-icons/md';
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from 'contexts/user';
-import { IPCFile } from '../types/types';
+import type { IPCFile } from '../types/types';
 
 type FileEditButtonsProps = {
 	file: IPCFile;

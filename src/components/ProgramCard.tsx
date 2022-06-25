@@ -1,6 +1,6 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 
-import { IPCProgram } from 'types/types';
+import type { IPCProgram } from 'types/types';
 
 type ProgramCardProps = {
 	program: IPCProgram;

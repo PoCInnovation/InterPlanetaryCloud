@@ -10,7 +10,7 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import { IPCContact, IPCFile, ResponseType, UploadResponse } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType, UploadResponse } from 'types/types';
 import EthCrypto from 'eth-crypto';
 
 class Drive {

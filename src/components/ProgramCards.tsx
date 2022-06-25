@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import ProgramCard from './ProgramCard';
-import { IPCProgram } from '../types/types';
+import type { IPCProgram } from '../types/types';
 
 type ProgramCardsProps = {
 	programs: IPCProgram[];

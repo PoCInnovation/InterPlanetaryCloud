@@ -1,7 +1,7 @@
 import { Box, VStack, Text, Flex, Tooltip, Button } from '@chakra-ui/react';
 import { CopyIcon, EditIcon } from '@chakra-ui/icons';
 import React from 'react';
-import { IPCContact } from '../types/types';
+import type { IPCContact } from '../types/types';
 
 type ProfileCardProps = {
 	profile: IPCContact;

@@ -4,7 +4,7 @@ import { MdPeopleAlt } from 'react-icons/md';
 import React from 'react';
 import FileCard from './FileCard';
 import { FileEditButtons } from './FileEditButtons';
-import { IPCFile } from '../types/types';
+import type { IPCFile } from '../types/types';
 
 type FileCardsProps = {
 	files: IPCFile[];

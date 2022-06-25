@@ -1,5 +1,5 @@
 import React from 'react';
-import { IPCContact, IPCFile, IPCProgram } from '../types/types';
+import type { IPCContact, IPCFile, IPCProgram } from '../types/types';
 import { FileCards } from './FileCards';
 import { ProgramCards } from './ProgramCards';
 import { ContactCards } from './ContactCards';
