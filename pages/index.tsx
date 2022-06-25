@@ -1,13 +1,12 @@
-import Head from 'next/head';
 import Link from 'next/link';
-import { Button, Text, VStack  } from '@chakra-ui/react';
+import { Button, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 import OutlineButton from 'components/OutlineButton';
 
 export default function Home() {
-  return (
-      <VStack spacing="56px" mt={{ base: '96px', md: '132px' }}>
+	return (
+		<VStack spacing="56px" mt={{ base: '96px', md: '132px' }}>
 			<VStack spacing="16px">
 				<Text
 					fontSize={{ base: '32px', md: '56px', lg: '64px' }}
@@ -38,5 +37,5 @@ export default function Home() {
 				</Link>
 			</VStack>
 		</VStack>
-  )
+	);
 }

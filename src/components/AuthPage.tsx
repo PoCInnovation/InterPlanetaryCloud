@@ -3,11 +3,11 @@ import { Text, VStack } from '@chakra-ui/react';
 import colors from '../theme/foundations/colors';
 
 type AuthPageProps = {
-    children: JSX.Element;
-}
+	children: JSX.Element;
+};
 
 const AuthPage = ({ children }: AuthPageProps): JSX.Element => (
-    <VStack spacing="56px" mt={{ base: '96px', md: '132px' }}>
+	<VStack spacing="56px" mt={{ base: '96px', md: '132px' }}>
 		<VStack spacing="16px">
 			<Text
 				fontSize={{ base: '32px', md: '56px', lg: '64px' }}
@@ -27,10 +27,8 @@ const AuthPage = ({ children }: AuthPageProps): JSX.Element => (
 				The first cloud unsealing your data
 			</Text>
 		</VStack>
-		<VStack w={{ base: '90%', md: '496px' }}>
-            {children}
-        </VStack>
-    </VStack>
-)
+		<VStack w={{ base: '90%', md: '496px' }}>{children}</VStack>
+	</VStack>
+);
 
 export default AuthPage;

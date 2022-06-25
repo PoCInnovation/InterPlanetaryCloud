@@ -12,8 +12,8 @@ extends:
   - airbnb-typescript
   - airbnb/hooks
   - plugin:@typescript-eslint/recommended
+  - plugin:@next/next/recommended
   - prettier
-  - react-app
 
 plugins:
   - prettier

@@ -16,7 +16,7 @@ RUN yarn install
 COPY . .
 
 # Add env variable
-ENV REACT_APP_ALEPH_CHANNEL=TEST
+ENV NEXT_PUBLIC_ALEPH_CHANNEL=TEST
 
 # Build source
 RUN yarn run build
