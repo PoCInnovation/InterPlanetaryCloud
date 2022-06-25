@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { Button, FormControl, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
@@ -14,6 +15,7 @@ import colors from '../src/theme/foundations/colors';
 const Login = (): JSX.Element => {
     const auth = useAuthContext();
 	const { setUser } = useUserContext();
+	const router = useRouter();
 
 	const [mnemonics, setMnemonics] = useState('');
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -33,6 +35,7 @@ const Login = (): JSX.Element => {
 				isClosable: true,
 			});
 			setUser(login.user);
+			router.push('/dashboard');
 		} else {
 			toast({
 				title: login.message,

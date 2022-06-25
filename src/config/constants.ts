@@ -1,1 +1,1 @@
-export const ALEPH_CHANNEL = process.env.ALEPH_CHANNEL;
+export const ALEPH_CHANNEL = process.env.ALEPH_CHANNEL!;

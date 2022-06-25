@@ -32,8 +32,10 @@ export default function Home() {
 						Create an account
 					</Button>
 				</Link>
-				<Link href="/login" id="ipc-homeView-login-button">
-					<OutlineButton w="100%" text="Login" />
+				<Link href="/login" >
+					<div style={{ width: '100%' }}>
+						<OutlineButton w="100%" id="ipc-homeView-login-button" text="Login" />
+					</div>
 				</Link>
 			</VStack>
 		</VStack>

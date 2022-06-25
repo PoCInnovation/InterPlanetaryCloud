@@ -32,11 +32,6 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
-  "eslintConfig": {
-    "extends": [
-      "next"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

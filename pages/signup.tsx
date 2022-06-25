@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
@@ -17,6 +18,7 @@ import colors from '../src/theme/foundations/colors';
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
+	const router = useRouter();
 
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
 	const [signupResult, setSignupResult] = useState<AuthReturnType | undefined>(undefined);
@@ -58,6 +60,7 @@ const Signup = (): JSX.Element => {
 			isClosable: true,
 		});
 		setUser(signupResult.user);
+		router.push('/dashboard');
 	};
 
 	const onClick = () => {

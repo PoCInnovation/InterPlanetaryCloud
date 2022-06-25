@@ -16,7 +16,7 @@ RUN yarn install
 COPY . .
 
 # Add env variable
-ENV NEXT_PUBLIC_ALEPH_CHANNEL=TEST
+ENV ALEPH_CHANNEL=TEST
 
 # Build source
 RUN yarn run build
@@ -29,7 +29,7 @@ FROM nginx:1.21.6-alpine as app
 WORKDIR /app
 
 # Copy code
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /app/.next /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
