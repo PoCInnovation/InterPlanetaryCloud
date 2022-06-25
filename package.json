@@ -25,9 +25,9 @@
     "web3": "^1.5.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint src",
