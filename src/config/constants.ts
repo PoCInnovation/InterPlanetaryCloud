@@ -1,3 +1,1 @@
-import env from 'env-var';
-
-export const ALEPH_CHANNEL = env.get('NEXT_PUBLIC_ALEPH_CHANNEL').required().asString();
+export const ALEPH_CHANNEL = process.env.ALEPH_CHANNEL;
