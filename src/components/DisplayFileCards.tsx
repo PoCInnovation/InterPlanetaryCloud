@@ -1,9 +1,8 @@
-import React from 'react';
-import type { IPCContact, IPCFile, IPCProgram } from '../types/types';
-import { FileCards } from './FileCards';
-import { ProgramCards } from './ProgramCards';
-import { ContactCards } from './ContactCards';
-import { ProfileCard } from './ProfileCard';
+import type { IPCContact, IPCFile, IPCProgram } from 'types/types';
+import { FileCards } from 'components/FileCards';
+import { ProgramCards } from 'components/ProgramCards';
+import { ContactCards } from 'components/ContactCards';
+import { ProfileCard } from 'components/ProfileCard';
 
 type FileCardsProps = {
 	myFiles: IPCFile[];

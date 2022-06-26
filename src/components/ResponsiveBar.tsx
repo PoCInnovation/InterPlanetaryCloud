@@ -15,10 +15,9 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-import React from 'react';
-import colors from '../theme/foundations/colors';
-import Sidebar from './SideBar';
-import { UploadButton, DeployButton } from './CustomButtons';
+import colors from 'theme/foundations/colors';
+import Sidebar from 'components/SideBar';
+import { UploadButton, DeployButton } from 'components/CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;

@@ -1,10 +1,9 @@
 import { Button, Icon } from '@chakra-ui/react';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { MdPeopleAlt } from 'react-icons/md';
-import React from 'react';
-import FileCard from './FileCard';
-import { FileEditButtons } from './FileEditButtons';
-import type { IPCFile } from '../types/types';
+import FileCard from 'components/FileCard';
+import { FileEditButtons } from 'components/FileEditButtons';
+import type { IPCFile } from 'types/types';
 
 type FileCardsProps = {
 	files: IPCFile[];

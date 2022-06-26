@@ -1,6 +1,6 @@
 import { Text, VStack } from '@chakra-ui/react';
 
-import colors from '../theme/foundations/colors';
+import colors from 'theme/foundations/colors';
 
 type AuthPageProps = {
 	children: JSX.Element;

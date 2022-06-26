@@ -1,7 +1,6 @@
 import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
-import React from 'react';
 
 type SideBarPropsType = {
 	contactTab: string;

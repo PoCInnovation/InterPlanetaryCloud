@@ -1,5 +1,5 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
-import type { IPCContact } from '../types/types';
+import type { IPCContact } from 'types/types';
 
 type FileCardProps = {
 	contact: IPCContact;

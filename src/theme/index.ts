@@ -2,14 +2,14 @@ import { extendTheme } from '@chakra-ui/react';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
 // Foundation overrides
-import fonts from './foundations/fonts';
-import colors from './foundations/colors';
-import radius from './foundations/borderRadius';
-import shadows from './foundations/shadows';
+import fonts from 'theme/foundations/fonts';
+import colors from 'theme/foundations/colors';
+import radius from 'theme/foundations/borderRadius';
+import shadows from 'theme/foundations/shadows';
 
-import Button from './components/button';
-import Link from './components/link';
-import Text from './components/text';
+import Button from 'theme/components/button';
+import Link from 'theme/components/link';
+import Text from 'theme/components/text';
 
 const breakpoints = createBreakpoints({
 	xs: '320px',

@@ -4,13 +4,13 @@ import Link from 'next/link';
 
 import { Button, FormControl, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 
-import { useAuthContext } from '../src/contexts/auth';
-import { useUserContext } from '../src/contexts/user';
+import { useAuthContext } from 'contexts/auth';
+import { useUserContext } from 'contexts/user';
 
-import OutlineButton from '../src/components/OutlineButton';
-import AuthPage from '../src/components/AuthPage';
+import OutlineButton from 'components/OutlineButton';
+import AuthPage from 'components/AuthPage';
 
-import colors from '../src/theme/foundations/colors';
+import colors from 'theme/foundations/colors';
 
 const Login = (): JSX.Element => {
 	const auth = useAuthContext();

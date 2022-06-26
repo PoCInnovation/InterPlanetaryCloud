@@ -5,13 +5,13 @@ import { AppProps } from 'next/app';
 import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
 
 import theme from 'theme';
-import '../src/theme/index.css';
+import 'theme/index.css';
 
-import User from '../src/lib/user';
-import Auth from '../src/lib/auth';
+import User from 'lib/user';
+import Auth from 'lib/auth';
 
-import UserContext from '../src/contexts/user';
-import AuthContext from '../src/contexts/auth';
+import UserContext from 'contexts/user';
+import AuthContext from 'contexts/auth';
 
 const App = ({ Component, pageProps }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);

@@ -21,18 +21,18 @@ import { CheckIcon } from '@chakra-ui/icons';
 
 import EthCrypto from 'eth-crypto';
 
-import { useUserContext } from '../src/contexts/user';
+import { useUserContext } from 'contexts/user';
 
-import type { IPCFile, IPCContact, IPCProgram } from '../src/types/types';
+import type { IPCFile, IPCContact, IPCProgram } from 'types/types';
 
-import Modal from '../src/components/Modal';
+import Modal from 'components/Modal';
 
-import { generateFileKey } from '../src/utils/generateFileKey';
+import { generateFileKey } from 'utils/generateFileKey';
 
-import { getFileContent, extractFilename } from '../src/utils/fileManipulation';
+import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
-import { ResponsiveBar } from '../src/components/ResponsiveBar';
-import { DisplayFileCards } from '../src/components/DisplayFileCards';
+import { ResponsiveBar } from 'components/ResponsiveBar';
+import { DisplayFileCards } from 'components/DisplayFileCards';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast();

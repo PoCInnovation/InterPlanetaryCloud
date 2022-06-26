@@ -4,16 +4,16 @@ import Link from 'next/link';
 
 import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
-import { useAuthContext } from '../src/contexts/auth';
-import { useUserContext } from '../src/contexts/user';
+import { useAuthContext } from 'contexts/auth';
+import { useUserContext } from 'contexts/user';
 
-import { AuthReturnType } from '../src/lib/auth';
+import { AuthReturnType } from 'lib/auth';
 
-import Modal from '../src/components/Modal';
-import OutlineButton from '../src/components/OutlineButton';
-import AuthPage from '../src/components/AuthPage';
+import Modal from 'components/Modal';
+import OutlineButton from 'components/OutlineButton';
+import AuthPage from 'components/AuthPage';
 
-import colors from '../src/theme/foundations/colors';
+import colors from 'theme/foundations/colors';
 
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();
