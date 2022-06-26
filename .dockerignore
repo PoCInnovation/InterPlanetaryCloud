@@ -6,8 +6,7 @@ LICENSE
 README.md
 
 # Linter
-.prettierc
-.eslintrc.yaml
+.prettierrc
 
 # Node
 node_modules/
