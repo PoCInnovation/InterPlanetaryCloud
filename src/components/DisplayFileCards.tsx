@@ -10,8 +10,6 @@ type FileCardsProps = {
 	sharedFiles: IPCFile[];
 	contacts: IPCContact[];
 	index: number;
-	downloadFile: (file: IPCFile) => Promise<void>;
-	isDownloadLoading: boolean;
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
@@ -29,8 +27,6 @@ export const DisplayFileCards = ({
 	sharedFiles,
 	contacts,
 	index,
-	downloadFile,
-	isDownloadLoading,
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
@@ -45,8 +41,6 @@ export const DisplayFileCards = ({
 		return (
 			<FileCards
 				files={myFiles}
-				downloadFile={downloadFile}
-				isDownloadLoading={isDownloadLoading}
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
@@ -58,8 +52,6 @@ export const DisplayFileCards = ({
 		return (
 			<FileCards
 				files={sharedFiles}
-				downloadFile={downloadFile}
-				isDownloadLoading={isDownloadLoading}
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}

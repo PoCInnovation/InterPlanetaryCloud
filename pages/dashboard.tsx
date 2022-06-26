@@ -15,7 +15,6 @@ import {
 	Divider,
 	FormControl,
 	FormLabel,
-	FormHelperText,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -65,7 +64,6 @@ const Dashboard = (): JSX.Element => {
 	});
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
-	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -237,30 +235,7 @@ const Dashboard = (): JSX.Element => {
 		setIsUploadLoading(false);
 	};
 
-	const downloadFile = async (file: IPCFile) => {
-		setIsDownloadLoading(true);
-		try {
-			const download = await user.drive.download(file);
-			toast({
-				title: download.message,
-				status: download.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-		} catch (error) {
-			console.error(error);
-			toast({
-				title: 'Unable to download file',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
-		}
-		setIsDownloadLoading(false);
-	};
-
 	const updateFileName = async () => {
-		setIsDownloadLoading(true);
 		try {
 			if (fileNameEvent) {
 				const filename = fileNameEvent.target.value;
@@ -288,7 +263,6 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 		}
-		setIsDownloadLoading(false);
 	};
 
 	const updateFileContent = async () => {
@@ -362,7 +336,6 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const shareFile = async (contact: IPCContact) => {
-		setIsDownloadLoading(true);
 		try {
 			const share = await user.contact.addFileToContact(contact.address, selectedFile);
 			onCloseShare();
@@ -381,7 +354,6 @@ const Dashboard = (): JSX.Element => {
 				isClosable: true,
 			});
 		}
-		setIsDownloadLoading(false);
 	};
 
 	const loadContact = async () => {
@@ -528,8 +500,6 @@ const Dashboard = (): JSX.Element => {
 						sharedFiles={sharedFiles}
 						contacts={contacts}
 						index={selectedTab}
-						downloadFile={downloadFile}
-						isDownloadLoading={isDownloadLoading}
 						isUpdateLoading={isUpdateLoading}
 						setSelectedFile={setSelectedFile}
 						onOpenShare={onOpenShare}
@@ -709,17 +679,14 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<FormControl>
-					<Input
-						type="file"
-						h="100%"
-						w="100%"
-						p="10px"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-						id="ipc-dashboardView-input-new-file-content"
-					/>
-					<FormHelperText as="i">Accepted file format : text</FormHelperText>
-				</FormControl>
+				<Input
+					type="file"
+					h="100%"
+					w="100%"
+					p="10px"
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+					id="ipc-dashboardView-input-new-file-content"
+				/>
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">
 				<VStack spacing="16px" overflowY="auto">

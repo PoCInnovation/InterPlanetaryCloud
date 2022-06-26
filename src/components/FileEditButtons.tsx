@@ -13,7 +13,7 @@ type FileEditButtonsProps = {
 	onOpenUpdateFileContent: () => void;
 };
 
-export const FileEditButtons = ({
+const FileEditButtons = ({
 	file,
 	isUpdateLoading,
 	setSelectedFile,
@@ -68,3 +68,5 @@ export const FileEditButtons = ({
 		</>
 	);
 };
+
+export default FileEditButtons;
