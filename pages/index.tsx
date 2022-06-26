@@ -32,7 +32,7 @@ export default function Home() {
 						Create an account
 					</Button>
 				</Link>
-				<Link href="/login" >
+				<Link href="/login">
 					<div style={{ width: '100%' }}>
 						<OutlineButton w="100%" id="ipc-homeView-login-button" text="Login" />
 					</div>

@@ -81,7 +81,7 @@ const Dashboard = (): JSX.Element => {
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 	});
 
-	if (!user) router.push("/");
+	if (!user) router.push('/');
 
 	useEffect(() => {
 		(async () => {

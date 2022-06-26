@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
+import { AppProps } from 'next/app';
+
 import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
+
+import theme from 'theme';
+import '../src/theme/index.css';
 
 import User from '../src/lib/user';
 import Auth from '../src/lib/auth';
 
-import theme from 'theme';
-import Head from 'next/head';
-
-import '../src/theme/index.css';
-
 import UserContext from '../src/contexts/user';
 import AuthContext from '../src/contexts/auth';
 
-
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
@@ -50,8 +50,11 @@ const App = ({ Component, pageProps }) => {
 		<>
 			<Head>
 				<title>InterPlanerataryCloud</title>
-    	    	<meta name="description" content="A distributed cloud built on top of Aleph, the next generation network of distributed big data applications." />
-    	    	<link rel="icon" href="/ipc-logo.svg" />
+				<meta
+					name="description"
+					content="A distributed cloud built on top of Aleph, the next generation network of distributed big data applications."
+				/>
+				<link rel="icon" href="/ipc-logo.svg" />
 			</Head>
 			<ChakraProvider theme={theme} resetCSS>
 				<AuthContext.Provider value={auth}>
@@ -62,6 +65,6 @@ const App = ({ Component, pageProps }) => {
 			</ChakraProvider>
 		</>
 	);
-}
+};
 
 export default App;

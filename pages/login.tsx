@@ -13,7 +13,7 @@ import AuthPage from '../src/components/AuthPage';
 import colors from '../src/theme/foundations/colors';
 
 const Login = (): JSX.Element => {
-    const auth = useAuthContext();
+	const auth = useAuthContext();
 	const { setUser } = useUserContext();
 	const router = useRouter();
 
@@ -46,39 +46,41 @@ const Login = (): JSX.Element => {
 		}
 	};
 
-    return (
-        <AuthPage children={
-            <VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
-			    <FormControl>
-			    	<Textarea
-			    		_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
-			    		cursor="text"
-			    		onChange={(e) => setMnemonics(e.target.value)}
-			    		id="ipc-loginView-text-area"
-			    	/>
-			    	<Button
-			    		variant="inline"
-			    		mt="16px"
-			    		w="100%"
-			    		type="submit"
-			    		onClick={() => loginWithCredentials()}
-			    		isLoading={isLoadingCredentials}
-			    		id="ipc-loginView-credentials-button"
-			    	>
-			    		Login with credentials
-			    	</Button>
-			    </FormControl>
-			    <VStack w="100%">
-			    	<Text fontSize="14px">Already an account ?</Text>
-			    	<Link href="/signup">
-                        <div style={{ width: "100%" }}>
-			    		    <OutlineButton w="100%" text="Signup" id="ipc-loginView-signup-button" />
-                        </div>
-			    	</Link>
-			    </VStack>
-		    </VStack>
-        } />
-    );
-}
+	return (
+		<AuthPage
+			children={
+				<VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
+					<FormControl>
+						<Textarea
+							_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
+							cursor="text"
+							onChange={(e) => setMnemonics(e.target.value)}
+							id="ipc-loginView-text-area"
+						/>
+						<Button
+							variant="inline"
+							mt="16px"
+							w="100%"
+							type="submit"
+							onClick={() => loginWithCredentials()}
+							isLoading={isLoadingCredentials}
+							id="ipc-loginView-credentials-button"
+						>
+							Login with credentials
+						</Button>
+					</FormControl>
+					<VStack w="100%">
+						<Text fontSize="14px">Already an account ?</Text>
+						<Link href="/signup">
+							<div style={{ width: '100%' }}>
+								<OutlineButton w="100%" text="Signup" id="ipc-loginView-signup-button" />
+							</div>
+						</Link>
+					</VStack>
+				</VStack>
+			}
+		/>
+	);
+};
 
 export default Login;
