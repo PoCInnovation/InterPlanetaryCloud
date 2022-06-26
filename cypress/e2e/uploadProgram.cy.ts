@@ -25,8 +25,8 @@ describe('Upload a program modal for Dashboard', () => {
 	});
 
 	it('Good number of buttons after upload', () => {
-		cy.get('#ipc-dashboard-upload-program').attachFile(fixtureFile);
-		cy.get('#ipc-dashboard-upload-program-modal-button').click();
+		cy.get('#ipc-dashboard-deploy-program').attachFile(fixtureFile);
+		cy.get('#ipc-dashboard-deploy-program-modal-button').click();
 		cy.wait(2000);
 		cy.get('button').should('have.length', 10);
 	});

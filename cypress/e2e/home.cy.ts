@@ -25,7 +25,7 @@ describe('Good front for Home', () => {
 	});
 });
 
-describe('Create Account Button for Home', () => {
+describe('Signup Button in Home', () => {
 	it('Go to home', () => {
 		cy.visit('');
 		cy.wait(1000);
@@ -36,7 +36,7 @@ describe('Create Account Button for Home', () => {
 	});
 });
 
-describe('Login Button form Home', () => {
+describe('Login Button in Home', () => {
 	it('Go to home', () => {
 		cy.visit('');
 		cy.wait(1000);

@@ -141,7 +141,13 @@ const Dashboard = (): JSX.Element => {
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		const key = generateFileKey();
 
-		if (!filename || !fileContent) return;
+		if (!filename || !fileContent) {
+			toast({ title: 'Invalid file', status: 'error' });
+			setFileEvent(undefined);
+			setIsUploadLoading(false);
+			onClose();
+			return;
+		}
 
 		const file: IPCFile = {
 			name: filename,
@@ -360,7 +366,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={uploadProgram}
 						isLoading={isDeployLoading}
-						id="ipc-dashboard-upload-program-modal-button"
+						id="ipc-dashboard-deploy-program-modal-button"
 					>
 						Deploy program
 					</Button>
@@ -372,7 +378,7 @@ const Dashboard = (): JSX.Element => {
 					w="100%"
 					p="10px"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboard-upload-program"
+					id="ipc-dashboard-deploy-program"
 				/>
 			</Modal>
 			<Modal
