@@ -1,4 +1,5 @@
 import { Button, ButtonProps, Flex, Text } from '@chakra-ui/react';
+
 import colors from 'theme/foundations/colors';
 
 type OutlineButtonProps = { text: string } & ButtonProps;

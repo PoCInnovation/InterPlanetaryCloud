@@ -1,5 +1,6 @@
 import { Box, VStack, Text, Flex, Tooltip, Button } from '@chakra-ui/react';
 import { CopyIcon, EditIcon } from '@chakra-ui/icons';
+
 import type { IPCContact } from 'types/types';
 
 type ProfileCardProps = {
@@ -8,7 +9,7 @@ type ProfileCardProps = {
 	onOpenContactUpdate: () => void;
 };
 
-export const ProfileCard = ({ profile, setContactInfo, onOpenContactUpdate }: ProfileCardProps): JSX.Element => (
+const ProfileCard = ({ profile, setContactInfo, onOpenContactUpdate }: ProfileCardProps): JSX.Element => (
 	<Box
 		p="16px"
 		bg="white"
@@ -57,3 +58,5 @@ export const ProfileCard = ({ profile, setContactInfo, onOpenContactUpdate }: Pr
 		</VStack>
 	</Box>
 );
+
+export default ProfileCard;

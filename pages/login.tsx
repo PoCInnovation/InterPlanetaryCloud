@@ -55,7 +55,7 @@ const Login = (): JSX.Element => {
 							_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 							cursor="text"
 							onChange={(e) => setMnemonics(e.target.value)}
-							id="ipc-loginView-text-area"
+							id="ipc-login-text-area"
 						/>
 						<Button
 							variant="inline"
@@ -64,7 +64,7 @@ const Login = (): JSX.Element => {
 							type="submit"
 							onClick={() => loginWithCredentials()}
 							isLoading={isLoadingCredentials}
-							id="ipc-loginView-credentials-button"
+							id="ipc-login-credentials-button"
 						>
 							Login with credentials
 						</Button>
@@ -73,7 +73,7 @@ const Login = (): JSX.Element => {
 						<Text fontSize="14px">Already an account ?</Text>
 						<Link href="/signup">
 							<div style={{ width: '100%' }}>
-								<OutlineButton w="100%" text="Signup" id="ipc-loginView-signup-button" />
+								<OutlineButton w="100%" text="Signup" id="ipc-login-signup-button" />
 							</div>
 						</Link>
 					</VStack>

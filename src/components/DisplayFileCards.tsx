@@ -1,8 +1,9 @@
+import FileCards from 'components/FileCards';
+import ProgramCards from 'components/ProgramCards';
+import ContactCards from 'components/ContactCards';
+import ProfileCard from 'components/ProfileCard';
+
 import type { IPCContact, IPCFile, IPCProgram } from 'types/types';
-import { FileCards } from 'components/FileCards';
-import { ProgramCards } from 'components/ProgramCards';
-import { ContactCards } from 'components/ContactCards';
-import { ProfileCard } from 'components/ProfileCard';
 
 type FileCardsProps = {
 	myFiles: IPCFile[];

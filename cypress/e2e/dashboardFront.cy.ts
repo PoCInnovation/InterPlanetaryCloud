@@ -1,9 +1,9 @@
-describe('Create account for DashboardView tests', () => {
+describe('Create account for Dashboard tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
-		cy.get('#ipc-signupView-credentials-signup-button').click();
-		cy.get('#ipc-signupView-text-area')
+		cy.get('#ipc-signup-credentials-signup-button').click();
+		cy.get('#ipc-signup-text-area')
 			.invoke('val')
 			.then((input) => {
 				dashboardSpecMnemonic = input as string;
@@ -12,12 +12,12 @@ describe('Create account for DashboardView tests', () => {
 	});
 });
 
-describe('Good front for DashboardView', () => {
-	it('Go to dashboard view', () => {
+describe('Good front for Dashboard', () => {
+	it('Go to dashboard', () => {
 		cy.visit('/login');
 		cy.wait(1000);
-		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-loginView-credentials-button').click();
+		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
+		cy.get('#ipc-login-credentials-button').click();
 	});
 
 	it('Good title', () => {
@@ -25,18 +25,18 @@ describe('Good front for DashboardView', () => {
 	});
 
 	it('Good name for upload button', () => {
-		cy.get('#ipc-dashboardView-drawer-button').click({ force: true });
+		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('#ipc-upload-button').should('contain', 'Upload a file');
 	});
 });
 
-describe('Good Modal Front for DashboardView', () => {
-	it('Go to upload modal into dashboard view', () => {
+describe('Good Modal Front for Dashboard', () => {
+	it('Go to upload modal into dashboard', () => {
 		cy.visit('/login');
 		cy.wait(1000);
-		cy.get('#ipc-loginView-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-loginView-credentials-button').click().wait(3000);
-		cy.get('#ipc-dashboardView-drawer-button').click({ force: true });
+		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
+		cy.get('#ipc-login-credentials-button').click().wait(3000);
+		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('#ipc-upload-button').click();
 	});
 
@@ -53,7 +53,7 @@ describe('Good Modal Front for DashboardView', () => {
 	});
 
 	it('Good name for upload a file button', () => {
-		cy.get('#ipc-dashboardView-upload-file-modal-button').should('contain', 'Upload file');
+		cy.get('#ipc-dashboard-upload-file-modal-button').should('contain', 'Upload file');
 	});
 
 	it('Good name for close button', () => {

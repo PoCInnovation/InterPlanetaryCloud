@@ -360,7 +360,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={uploadProgram}
 						isLoading={isDeployLoading}
-						id="ipc-dashboardView-upload-program-modal-button"
+						id="ipc-dashboard-upload-program-modal-button"
 					>
 						Deploy program
 					</Button>
@@ -372,7 +372,7 @@ const Dashboard = (): JSX.Element => {
 					w="100%"
 					p="10px"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboardView-upload-program"
+					id="ipc-dashboard-upload-program"
 				/>
 			</Modal>
 			<Modal
@@ -386,7 +386,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={uploadFile}
 						isLoading={isUploadLoading}
-						id="ipc-dashboardView-upload-file-modal-button"
+						id="ipc-dashboard-upload-file-modal-button"
 					>
 						Upload file
 					</Button>
@@ -398,7 +398,7 @@ const Dashboard = (): JSX.Element => {
 					w="100%"
 					p="10px"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboardView-upload-file"
+					id="ipc-dashboard-upload-file"
 				/>
 			</Modal>
 			<Modal
@@ -412,7 +412,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={addContact}
 						isLoading={isUploadLoading}
-						id="ipc-dashboardView-add-contact-button"
+						id="ipc-dashboard-add-contact-button"
 					>
 						Add the contact
 					</Button>
@@ -426,7 +426,7 @@ const Dashboard = (): JSX.Element => {
 						my="4px"
 						placeholder="Name"
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
-						id="ipc-dashboardView-input-contact-name"
+						id="ipc-dashboard-input-contact-name"
 					/>
 					<Input
 						type="text"
@@ -435,7 +435,7 @@ const Dashboard = (): JSX.Element => {
 						my="4px"
 						placeholder="Public Key"
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactPublicKeyEvent(e)}
-						id="ipc-dashboardView-input-contact-public-key"
+						id="ipc-dashboard-input-contact-public-key"
 					/>
 				</>
 			</Modal>
@@ -450,7 +450,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={updateContact}
 						isLoading={isUploadLoading}
-						id="ipc-dashboardView-update-contact-button"
+						id="ipc-dashboard-update-contact-button"
 					>
 						Update the contact
 					</Button>
@@ -465,7 +465,7 @@ const Dashboard = (): JSX.Element => {
 						my="4px"
 						placeholder={contactInfos.name}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
-						id="ipc-dashboardView-input-contact-name"
+						id="ipc-dashboard-input-contact-name"
 					/>
 				</FormControl>
 			</Modal>
@@ -480,7 +480,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={updateFileName}
 						isLoading={isUploadLoading}
-						id="ipc-dashboardView-update-filename-button"
+						id="ipc-dashboard-update-filename-button"
 					>
 						OK
 					</Button>
@@ -495,7 +495,7 @@ const Dashboard = (): JSX.Element => {
 						my="4px"
 						placeholder={selectedFile.name}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
-						id="ipc-dashboardView-input-update-filename"
+						id="ipc-dashboard-input-update-filename"
 					/>
 				</FormControl>
 			</Modal>
@@ -510,7 +510,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={updateFileContent}
 						isLoading={isUpdateLoading}
-						id="ipc-dashboardView-update-file-content-button"
+						id="ipc-dashboard-update-file-content-button"
 					>
 						Upload new version
 					</Button>
@@ -522,7 +522,7 @@ const Dashboard = (): JSX.Element => {
 					w="100%"
 					p="10px"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboardView-input-new-file-content"
+					id="ipc-dashboard-input-new-file-content"
 				/>
 			</Modal>
 			<Modal isOpen={isOpenShare} onClose={onCloseShare} title="Select your contact">

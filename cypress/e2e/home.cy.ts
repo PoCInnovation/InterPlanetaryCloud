@@ -1,5 +1,5 @@
-describe('Good front for HomeView', () => {
-	it('Go to home view', () => {
+describe('Good front for Home', () => {
+	it('Go to home', () => {
 		cy.visit('');
 		cy.wait(1000);
 	});
@@ -17,32 +17,32 @@ describe('Good front for HomeView', () => {
 	});
 
 	it('Good name for create account button', () => {
-		cy.get('#ipc-homeView-create-account-button').should('contain', 'Create an account');
+		cy.get('#ipc-home-create-account-button').should('contain', 'Create an account');
 	});
 
 	it('Good name for login button', () => {
-		cy.get('#ipc-homeView-login-button').should('contain', 'Login');
+		cy.get('#ipc-home-login-button').should('contain', 'Login');
 	});
 });
 
-describe('Create Account Button for HomeView', () => {
-	it('Go to home view', () => {
+describe('Create Account Button for Home', () => {
+	it('Go to home', () => {
 		cy.visit('');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for create account button', () => {
-		cy.get('#ipc-homeView-create-account-button').click().url().should('eq', 'http://localhost:8080/signup');
+		cy.get('#ipc-home-create-account-button').click().url().should('eq', 'http://localhost:8080/signup');
 	});
 });
 
-describe('Login Button form HomeView', () => {
-	it('Go to home view', () => {
+describe('Login Button form Home', () => {
+	it('Go to home', () => {
 		cy.visit('');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-homeView-login-button').click().url().should('eq', 'http://localhost:8080/login');
+		cy.get('#ipc-home-login-button').click().url().should('eq', 'http://localhost:8080/login');
 	});
 });

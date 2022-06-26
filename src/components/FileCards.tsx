@@ -19,7 +19,7 @@ type FileCardsProps = {
 	onOpenUpdateFileContent: () => void;
 };
 
-export const FileCards = ({
+const FileCards = ({
 	files,
 	isUpdateLoading,
 	setSelectedFile,
@@ -62,7 +62,7 @@ export const FileCards = ({
 							mx="4px"
 							onClick={async () => downloadFile(file)}
 							isLoading={isDownloadLoading}
-							id="ipc-dashboardView-download-button"
+							id="ipc-dashboard-download-button"
 						>
 							<DownloadIcon />
 						</Button>
@@ -77,7 +77,7 @@ export const FileCards = ({
 								onOpenShare();
 							}}
 							isLoading={isDownloadLoading}
-							id="ipc-dashboardView-share-button"
+							id="ipc-dashboard-share-button"
 						>
 							<Icon as={MdPeopleAlt} />
 						</Button>
@@ -94,3 +94,5 @@ export const FileCards = ({
 		</>
 	);
 };
+
+export default FileCards;

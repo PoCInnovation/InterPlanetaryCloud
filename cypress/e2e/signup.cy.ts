@@ -1,5 +1,5 @@
-describe('Good front for SignupView', () => {
-	it('Go to signup view', () => {
+describe('Good front for Signup', () => {
+	it('Go to signup', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
 	});
@@ -17,19 +17,19 @@ describe('Good front for SignupView', () => {
 	});
 
 	it('Good name for signup credentials button', () => {
-		cy.get('#ipc-signupView-credentials-signup-button').should('contain', 'Signup');
+		cy.get('#ipc-signup-credentials-signup-button').should('contain', 'Signup');
 	});
 
 	it('Good name for login button', () => {
-		cy.get('#ipc-signupView-login-button').should('contain', 'Login');
+		cy.get('#ipc-signup-login-button').should('contain', 'Login');
 	});
 });
 
-describe('Good Modal front for SignupView', () => {
-	it('Go to signup view', () => {
+describe('Good Modal front for Signup', () => {
+	it('Go to signup', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
-		cy.get('#ipc-signupView-credentials-signup-button').click();
+		cy.get('#ipc-signup-credentials-signup-button').click();
 	});
 
 	it('Good header', () => {
@@ -45,7 +45,7 @@ describe('Good Modal front for SignupView', () => {
 	});
 
 	it('Good name for copy mnemonics button', () => {
-		cy.get('#ipc-signupView-copy-mnemonics-button').should('contain', 'Copy my mnemonics');
+		cy.get('#ipc-signup-copy-mnemonics-button').should('contain', 'Copy my mnemonics');
 	});
 
 	it('Good name for close button', () => {
@@ -53,13 +53,13 @@ describe('Good Modal front for SignupView', () => {
 	});
 });
 
-describe('Signup with credentials Button for SignupView', () => {
-	it('Go to signup view', () => {
+describe('Signup with credentials Button for Signup', () => {
+	it('Go to signup', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
-		cy.get('#ipc-signupView-credentials-signup-button').click();
+		cy.get('#ipc-signup-credentials-signup-button').click();
 		cy.wait(1000);
-		cy.get('#ipc-signupView-copy-mnemonics-button').click();
+		cy.get('#ipc-signup-copy-mnemonics-button').click();
 	});
 
 	it('Good copied clipboard', () => {
@@ -67,7 +67,7 @@ describe('Signup with credentials Button for SignupView', () => {
 			.its('navigator.clipboard')
 			.invoke('readText')
 			.then((clipboard) => {
-				cy.get('#ipc-signupView-text-area').invoke('val').should('eq', clipboard);
+				cy.get('#ipc-signup-text-area').invoke('val').should('eq', clipboard);
 			});
 	});
 
@@ -77,13 +77,13 @@ describe('Signup with credentials Button for SignupView', () => {
 	});
 });
 
-describe('Login Button for SignupView', () => {
-	it('Go to signup view', () => {
+describe('Login Button for Signup', () => {
+	it('Go to signup', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-signupView-login-button').click().url().should('eq', 'http://localhost:8080/login');
+		cy.get('#ipc-signup-login-button').click().url().should('eq', 'http://localhost:8080/login');
 	});
 });

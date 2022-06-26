@@ -9,13 +9,13 @@ const Home = (): JSX.Element => (
 		children={
 			<>
 				<Link href="/signup">
-					<Button variant="inline" w="100%" id="ipc-homeView-create-account-button">
+					<Button variant="inline" w="100%" id="ipc-home-create-account-button">
 						Create an account
 					</Button>
 				</Link>
 				<Link href="/login">
 					<div style={{ width: '100%' }}>
-						<OutlineButton w="100%" id="ipc-homeView-login-button" text="Login" />
+						<OutlineButton w="100%" id="ipc-home-login-button" text="Login" />
 					</div>
 				</Link>
 			</>

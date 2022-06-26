@@ -84,7 +84,7 @@ const Signup = (): JSX.Element => {
 						type="submit"
 						onClick={() => signupWithCredentials()}
 						isLoading={isLoadingCredentials}
-						id="ipc-signupView-credentials-signup-button"
+						id="ipc-signup-credentials-signup-button"
 					>
 						Signup
 					</Button>
@@ -92,7 +92,7 @@ const Signup = (): JSX.Element => {
 						<Text fontSize="14px">Already an account ?</Text>
 						<Link href="/login">
 							<div style={{ width: '100%' }}>
-								<OutlineButton w="100%" text="Login" id="ipc-signupView-login-button" />
+								<OutlineButton w="100%" text="Login" id="ipc-signup-login-button" />
 							</div>
 						</Link>
 					</VStack>
@@ -101,7 +101,7 @@ const Signup = (): JSX.Element => {
 						onClose={closeModal}
 						title="Your Mnemonics"
 						CTA={
-							<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signupView-copy-mnemonics-button">
+							<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signup-copy-mnemonics-button">
 								Copy my mnemonics
 							</Button>
 						}
@@ -111,7 +111,7 @@ const Signup = (): JSX.Element => {
 							_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 							cursor="text"
 							readOnly
-							id="ipc-signupView-text-area"
+							id="ipc-signup-text-area"
 						/>
 					</Modal>
 				</VStack>

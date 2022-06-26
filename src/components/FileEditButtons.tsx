@@ -1,7 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Button, Icon } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { MdUpdate } from 'react-icons/md';
-import { useState, useEffect } from 'react';
 import { useUserContext } from 'contexts/user';
 import type { IPCFile } from 'types/types';
 
@@ -46,7 +46,7 @@ const FileEditButtons = ({
 					onOpenUpdateFileName();
 				}}
 				isLoading={isUpdateLoading}
-				id="ipc-dashboardView-update-filename-button"
+				id="ipc-dashboard-update-filename-button"
 			>
 				<EditIcon />
 			</Button>
@@ -61,7 +61,7 @@ const FileEditButtons = ({
 					onOpenUpdateFileContent();
 				}}
 				isLoading={isUpdateLoading}
-				id="ipc-dashboardView-update-content-button"
+				id="ipc-dashboard-update-content-button"
 			>
 				<Icon as={MdUpdate} />
 			</Button>
