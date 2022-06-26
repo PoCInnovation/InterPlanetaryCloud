@@ -49,11 +49,13 @@ const App = ({ Component, pageProps }: AppProps) => {
 	return (
 		<>
 			<Head>
-				<title>InterPlanerataryCloud</title>
+				<title>InterPlanetaryCloud</title>
 				<meta
 					name="description"
 					content="A distributed cloud built on top of Aleph, the next generation network of distributed big data applications."
 				/>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<meta charSet="UTF-8" />
 				<link rel="icon" href="/ipc-logo.svg" />
 			</Head>
 			<ChakraProvider theme={theme} resetCSS>
