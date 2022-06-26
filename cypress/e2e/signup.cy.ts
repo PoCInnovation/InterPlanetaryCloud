@@ -58,7 +58,7 @@ describe('Signup with credentials Button for SignupView', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
 		cy.get('#ipc-signupView-credentials-signup-button').click();
-		cy.get(1000);
+		cy.wait(1000);
 		cy.get('#ipc-signupView-copy-mnemonics-button').click();
 	});
 

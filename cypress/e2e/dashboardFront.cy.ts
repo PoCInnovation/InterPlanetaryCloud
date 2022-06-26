@@ -1,5 +1,3 @@
-let dashboardSpecMnemonic = '';
-
 describe('Create account for DashboardView tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');
@@ -8,7 +6,7 @@ describe('Create account for DashboardView tests', () => {
 		cy.get('#ipc-signupView-text-area')
 			.invoke('val')
 			.then((input) => {
-				dashboardSpecMnemonic = input;
+				dashboardSpecMnemonic = input as string;
 			});
 		cy.get('#ipc-modal-close-button').click();
 	});
