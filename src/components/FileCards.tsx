@@ -28,7 +28,7 @@ export const FileCards = ({
 	onOpenUpdateFileContent,
 }: FileCardsProps): JSX.Element => {
 	const { user } = useUserContext();
-	const toast = useToast();
+	const toast = useToast({ duration: 2000, isClosable: true });
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
 
 	const downloadFile = async (file: IPCFile) => {
@@ -38,16 +38,12 @@ export const FileCards = ({
 			toast({
 				title: download.message,
 				status: download.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
 			});
 		} catch (error) {
 			console.error(error);
 			toast({
 				title: 'Unable to download file',
 				status: 'error',
-				duration: 2000,
-				isClosable: true,
 			});
 		}
 		setIsDownloadLoading(false);

@@ -34,7 +34,7 @@ import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayFileCards } from 'components/DisplayFileCards';
 
 const Dashboard = (): JSX.Element => {
-	const toast = useToast();
+	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
 	const { user } = useUserContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -91,31 +91,16 @@ const Dashboard = (): JSX.Element => {
 	const loadUserContents = async () => {
 		try {
 			const loadShared = await user.drive.loadShared(user.contact.contacts);
-			toast({
-				title: loadShared.message,
-				status: loadShared.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: loadShared.message, status: loadShared.success ? 'success' : 'error' });
 			setFiles(user.drive.files);
 			setSharedFiles(user.drive.sharedFiles);
 
 			const loadedPrograms = await user.computing.loadPrograms();
-			toast({
-				title: loadedPrograms.message,
-				status: loadedPrograms.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
 			setPrograms(user.computing.programs);
 		} catch (error) {
 			console.error(error);
-			toast({
-				title: 'Unable to load shared drive',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to load shared drive', status: 'error' });
 		}
 	};
 
@@ -127,48 +112,24 @@ const Dashboard = (): JSX.Element => {
 
 		setIsDeployLoading(true);
 		try {
-			if (user.account) {
-				const upload = await user.computing.uploadProgram(
-					{
-						name: filename,
-						hash: '',
-						created_at: Date.now(),
-					},
-					fileEvent.target.files[0],
-				);
-				if (!upload.success) {
-					toast({
-						title: upload.message,
-						status: upload.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-				} else {
-					const addToUser = await user.computing.addToUser();
-					toast({
-						title: addToUser.success ? upload.message : 'Failed to upload the file',
-						status: addToUser.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-				}
+			const upload = await user.computing.uploadProgram(
+				{
+					name: filename,
+					hash: '',
+					created_at: Date.now(),
+				},
+				fileEvent.target.files[0],
+			);
+			if (!upload.success) {
+				toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 			} else {
-				toast({
-					title: 'Failed to load account',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				const addToUser = await user.computing.addToUser();
+				toast({ title: upload.message, status: addToUser.success ? 'success' : 'error' });
 			}
 			onCloseProgram();
 		} catch (error) {
 			console.error(error);
-			toast({
-				title: 'Unable to upload file',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to upload file', status: 'error' });
 		}
 		setFileEvent(undefined);
 		setIsDeployLoading(false);
@@ -193,12 +154,7 @@ const Dashboard = (): JSX.Element => {
 			if (user.account) {
 				const upload = await user.drive.upload(file, key);
 				if (!upload.success || !upload.file) {
-					toast({
-						title: upload.message,
-						status: upload.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
+					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 				} else {
 					user.drive.addIPCFile(upload.file);
 
@@ -206,30 +162,15 @@ const Dashboard = (): JSX.Element => {
 						user.account.address,
 						user.drive.files[user.drive.files.length - 1],
 					);
-					toast({
-						title: shared.success ? upload.message : 'Failed to upload the file',
-						status: shared.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
+					toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
 				}
 			} else {
-				toast({
-					title: 'Failed to load account',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: 'Failed to load account', status: 'error' });
 			}
 			onClose();
 		} catch (error) {
 			console.error(error);
-			toast({
-				title: 'Unable to upload the file',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to upload the file', status: 'error' });
 		}
 		setFileEvent(undefined);
 		setIsUploadLoading(false);
@@ -240,12 +181,7 @@ const Dashboard = (): JSX.Element => {
 			if (fileNameEvent) {
 				const filename = fileNameEvent.target.value;
 				const update = await user.contact.updateFileName(selectedFile, filename);
-				toast({
-					title: update.message,
-					status: update.success ? 'success' : 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: update.message, status: update.success ? 'success' : 'error' });
 				if (update.success) {
 					const index = files.indexOf(selectedFile);
 
@@ -256,12 +192,7 @@ const Dashboard = (): JSX.Element => {
 			}
 		} catch (error) {
 			console.error(error);
-			toast({
-				title: 'Unable to change name',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to change name', status: 'error' });
 		}
 	};
 
@@ -282,55 +213,26 @@ const Dashboard = (): JSX.Element => {
 		};
 		setIsUpdateLoading(true);
 		try {
-			if (user.account) {
-				const upload = await user.drive.upload(newFile, key);
+			const upload = await user.drive.upload(newFile, key);
 
-				if (!upload.success || !upload.file) {
-					toast({
-						title: upload.message,
-						status: upload.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-				} else {
-					const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
-					toast({
-						title: updated.success ? updated.message : 'Failed to update the file',
-						status: updated.success ? 'success' : 'error',
-						duration: 2000,
-						isClosable: true,
-					});
-					if (updated.success && upload.file) {
-						const index = files.indexOf(oldFile);
-						if (index !== -1) files[index] = upload.file;
-						setFiles(files);
-
-						const deleted = await user.drive.delete(oldFile.hash);
-						toast({
-							title: deleted.success ? deleted.message : 'Failed to update the file',
-							status: deleted.success ? 'success' : 'error',
-							duration: 2000,
-							isClosable: true,
-						});
-					}
-				}
+			if (!upload.success || !upload.file) {
+				toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 			} else {
-				toast({
-					title: 'Failed to load account',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
+				toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
+				if (updated.success && upload.file) {
+					const index = files.indexOf(oldFile);
+					if (index !== -1) files[index] = upload.file;
+					setFiles(files);
+
+					const deleted = await user.drive.delete(oldFile.hash);
+					toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
+				}
 			}
 			onCloseUpdateFileContent();
 		} catch (error) {
 			console.error(error);
-			toast({
-				title: 'Unable to update the file',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to update the file', status: 'error' });
 		}
 		setIsUpdateLoading(false);
 	};
@@ -339,42 +241,22 @@ const Dashboard = (): JSX.Element => {
 		try {
 			const share = await user.contact.addFileToContact(contact.address, selectedFile);
 			onCloseShare();
-			toast({
-				title: share.message,
-				status: share.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: share.message, status: share.success ? 'success' : 'error' });
 		} catch (error) {
 			console.log(error);
-			toast({
-				title: 'Unable to share the file',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to share the file', status: 'error' });
 		}
 	};
 
 	const loadContact = async () => {
 		try {
 			const load = await user.contact.load();
-			toast({
-				title: load.message,
-				status: load.success ? 'success' : 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: load.message, status: load.success ? 'success' : 'error' });
 
 			setContacts(user.contact.contacts);
 		} catch (error) {
 			console.log(error);
-			toast({
-				title: 'Unable to load contacts',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to load contacts', status: 'error' });
 		}
 	};
 
@@ -388,30 +270,15 @@ const Dashboard = (): JSX.Element => {
 					files: [],
 				});
 
-				toast({
-					title: add.message,
-					status: add.success ? 'success' : 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: add.message, status: add.success ? 'success' : 'error' });
 				setContacts(user.contact.contacts);
 			} else {
-				toast({
-					title: 'Bad contact infos',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: 'Bad contact infos', status: 'error' });
 			}
 			onCloseContactAdd();
 		} catch (error) {
 			console.log(error);
-			toast({
-				title: 'Unable to add this contact',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to add this contact', status: 'error' });
 		}
 	};
 
@@ -422,30 +289,15 @@ const Dashboard = (): JSX.Element => {
 					contactInfos.address,
 					contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
 				);
-				toast({
-					title: update.message,
-					status: update.success ? 'success' : 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: update.message, status: update.success ? 'success' : 'error' });
 				setContacts(user.contact.contacts);
 			} else {
-				toast({
-					title: 'Invalid address',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: 'Invalid address', status: 'error' });
 			}
 			onCloseContactUpdate();
 		} catch (error) {
 			console.log(error);
-			toast({
-				title: 'Unable to update this contact',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to update this contact', status: 'error' });
 		}
 	};
 
@@ -456,29 +308,14 @@ const Dashboard = (): JSX.Element => {
 			if (deletedContact) {
 				const deleteResponse = await user.contact.remove(contactToDelete.address);
 
-				toast({
-					title: deleteResponse.message,
-					status: deleteResponse.success ? 'success' : 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: deleteResponse.message, status: deleteResponse.success ? 'success' : 'error' });
 				setContacts(user.contact.contacts);
 			} else {
-				toast({
-					title: 'Unable to find this contact',
-					status: 'error',
-					duration: 2000,
-					isClosable: true,
-				});
+				toast({ title: 'Unable to find this contact', status: 'error' });
 			}
 		} catch (error) {
 			console.log(error);
-			toast({
-				title: 'Unable to delete this contact',
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: 'Unable to delete this contact', status: 'error' });
 		}
 	};
 
