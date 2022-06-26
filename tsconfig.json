@@ -24,8 +24,7 @@
   },
   "include": [
     "src",
-    "cypress",
-    "pages/*.tsx",
+    "pages",
   ],
   "exclude": [
     "node_modules"

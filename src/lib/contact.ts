@@ -5,7 +5,7 @@ import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
 import type { IPCContact, IPCFile, ResponseType } from 'types/types';
-import EthCrypto from 'eth-crypto';
+import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Contact {
 	public contacts: IPCContact[];
@@ -172,9 +172,9 @@ class Contact {
 						this.contacts[i].files.map(async (file, j) => {
 							if (file.hash === oldHash) {
 								this.contacts[i].files[j].hash = newFile.hash;
-								this.contacts[i].files[j].key = await EthCrypto.encryptWithPublicKey(
+								this.contacts[i].files[j].key = await encryptWithPublicKey(
 									contact.publicKey.slice(2),
-									await EthCrypto.decryptWithPrivateKey(this.private_key, newFile.key),
+									await decryptWithPrivateKey(this.private_key, newFile.key),
 								);
 								await this.publishPost();
 							}
@@ -264,9 +264,9 @@ class Contact {
 								}
 								this.contacts[contactIndex].files.push({
 									hash: mainFile.hash,
-									key: await EthCrypto.encryptWithPublicKey(
+									key: await encryptWithPublicKey(
 										contact.publicKey.slice(2),
-										await EthCrypto.decryptWithPrivateKey(this.private_key, mainFile.key),
+										await decryptWithPrivateKey(this.private_key, mainFile.key),
 									),
 									created_at: mainFile.created_at,
 									name: mainFile.name,

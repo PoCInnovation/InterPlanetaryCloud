@@ -11,7 +11,7 @@ import CryptoJS from 'crypto-js';
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
 import type { IPCContact, IPCFile, ResponseType, UploadResponse } from 'types/types';
-import EthCrypto from 'eth-crypto';
+import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Drive {
 	public files: IPCFile[];
@@ -101,7 +101,7 @@ class Drive {
 					name: file.name,
 					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
-					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey.slice(2), key),
+					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
 				return { success: true, message: 'File uploaded', file: newFile };
@@ -146,7 +146,7 @@ class Drive {
 					fileHash: file.hash,
 				});
 
-				const keyFile = await EthCrypto.decryptWithPrivateKey(this.private_key.slice(2), file.key);
+				const keyFile = await decryptWithPrivateKey(this.private_key.slice(2), file.key);
 				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
 					CryptoJS.enc.Utf8,
 				);
