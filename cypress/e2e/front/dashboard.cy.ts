@@ -28,9 +28,14 @@ describe('Good front for Dashboard', () => {
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('#ipc-upload-button').should('contain', 'Upload a file');
 	});
+
+	it('Good name for deploy button', () => {
+		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
+		cy.get('#ipc-deploy-button').should('contain', 'Deploy a program');
+	});
 });
 
-describe('Good Upload file modal front for Dashboard', () => {
+describe('Good Upload file modal front in Dashboard', () => {
 	it('Go to upload modal into dashboard', () => {
 		cy.visit('/login');
 		cy.wait(1000);
@@ -61,7 +66,7 @@ describe('Good Upload file modal front for Dashboard', () => {
 	});
 });
 
-describe('Good Deploy program modal front for Dashboard', () => {
+describe('Good Deploy program modal front in Dashboard', () => {
 	it('Go to upload modal into dashboard', () => {
 		cy.visit('/login');
 		cy.wait(1000);

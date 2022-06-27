@@ -1,6 +1,6 @@
 let dashboardSpecMnemonic = '';
 
-describe('Create account for Dashboard tests', () => {
+describe('Create account for File tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');
 		cy.wait(1000);
@@ -14,7 +14,7 @@ describe('Create account for Dashboard tests', () => {
 	});
 });
 
-describe('Upload a file modal for Dashboard', () => {
+describe('Upload a file modal in Dashboard', () => {
 	const fixtureFile = 'upload_test_file.txt';
 
 	beforeEach(() => {
@@ -39,22 +39,6 @@ describe('Upload a file modal for Dashboard', () => {
 	});
 });
 
-describe('Download a file in Dashboard', () => {
-	beforeEach(() => {
-		cy.visit('/login');
-		cy.wait(1000);
-		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-login-credentials-button').click();
-		cy.wait(2500);
-		cy.get('#ipc-dashboard-download-button').click();
-		cy.wait(3000);
-	});
-
-	it('Good content for downloaded file', () => {
-		cy.readFile('./cypress/downloads/upload_test_file.txt').should('eq', 'This is an upload test file');
-	});
-});
-
 describe('Upload an empty file in Dashboard', () => {
 	const fixtureFile = 'upload_empty_file.txt';
 
@@ -72,5 +56,21 @@ describe('Upload an empty file in Dashboard', () => {
 		cy.get('#ipc-dashboard-upload-file-modal-button').click();
 		cy.wait(2000);
 		cy.get('button').should('have.length', 12);
+	});
+});
+
+describe('Download a file in Dashboard', () => {
+	beforeEach(() => {
+		cy.visit('/login');
+		cy.wait(1000);
+		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
+		cy.get('#ipc-login-credentials-button').click();
+		cy.wait(2500);
+		cy.get('#ipc-dashboard-download-button').click();
+		cy.wait(3000);
+	});
+
+	it('Good content for downloaded file', () => {
+		cy.readFile('./cypress/downloads/upload_test_file.txt').should('eq', 'This is an upload test file');
 	});
 });
