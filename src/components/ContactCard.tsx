@@ -1,12 +1,13 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
-import { IPCContact } from '../types/types';
+
+import type { IPCContact } from 'types/types';
 
 type FileCardProps = {
 	contact: IPCContact;
 	children: JSX.Element;
 };
 
-export const ContactCard = ({ contact, children }: FileCardProps): JSX.Element => (
+const ContactCard = ({ contact, children }: FileCardProps): JSX.Element => (
 	<Box
 		p="16px"
 		bg="white"
@@ -26,3 +27,5 @@ export const ContactCard = ({ contact, children }: FileCardProps): JSX.Element =
 		</VStack>
 	</Box>
 );
+
+export default ContactCard;

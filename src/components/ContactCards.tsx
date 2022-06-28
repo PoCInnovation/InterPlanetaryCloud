@@ -1,18 +1,19 @@
-import React from 'react';
 import { Box, Button, Divider, Tooltip, VStack } from '@chakra-ui/react';
 import { CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { IPCContact } from '../types/types';
-import { ContactCard } from './ContactCard';
+
+import ContactCard from 'components/ContactCard';
+
+import type { IPCContact } from 'types/types';
 
 type ContactCardsProps = {
 	contacts: IPCContact[];
-	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
+	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
-export const ContactCards = ({
+const ContactCards = ({
 	contacts,
 	setContactInfo,
 	onOpenContactUpdate,
@@ -81,3 +82,5 @@ export const ContactCards = ({
 		})}
 	</>
 );
+
+export default ContactCards;

@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import { Link as RouteLink } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-import { Button, Link, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
-
-import { AuthReturnType } from 'lib/auth';
+import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
 
+import { AuthReturnType } from 'lib/auth';
+
 import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
+import AuthPage from 'components/AuthPage';
 
 import colors from 'theme/foundations/colors';
 
-const SignupView = (): JSX.Element => {
+const Signup = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
+	const router = useRouter();
 
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
 	const [signupResult, setSignupResult] = useState<AuthReturnType | undefined>(undefined);
@@ -57,6 +60,7 @@ const SignupView = (): JSX.Element => {
 			isClosable: true,
 		});
 		setUser(signupResult.user);
+		router.push('/dashboard');
 	};
 
 	const onClick = () => {
@@ -70,44 +74,50 @@ const SignupView = (): JSX.Element => {
 	};
 
 	return (
-		<VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
-			<Button
-				variant="inline"
-				mt="16px"
-				w="100%"
-				type="submit"
-				onClick={() => signupWithCredentials()}
-				isLoading={isLoadingCredentials}
-				id="ipc-signupView-credentials-signup-button"
-			>
-				Signup
-			</Button>
-			<VStack w="100%">
-				<Text fontSize="14px">Already an account ?</Text>
-				<Link as={RouteLink} to="/login" w="100%">
-					<OutlineButton w="100%" text="Login" id="ipc-signupView-login-button" />
-				</Link>
-			</VStack>
-			<Modal
-				isOpen={isOpen}
-				onClose={closeModal}
-				title="Your Mnemonics"
-				CTA={
-					<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signupView-copy-mnemonics-button">
-						Copy my mnemonics
+		<AuthPage
+			children={
+				<VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
+					<Button
+						variant="inline"
+						mt="16px"
+						w="100%"
+						type="submit"
+						onClick={() => signupWithCredentials()}
+						isLoading={isLoadingCredentials}
+						id="ipc-signup-credentials-signup-button"
+					>
+						Signup
 					</Button>
-				}
-			>
-				<Textarea
-					value={mnemonics}
-					_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
-					cursor="text"
-					readOnly
-					id="ipc-signupView-text-area"
-				/>
-			</Modal>
-		</VStack>
+					<VStack w="100%">
+						<Text fontSize="14px">Already an account ?</Text>
+						<Link href="/login">
+							<div style={{ width: '100%' }}>
+								<OutlineButton w="100%" text="Login" id="ipc-signup-login-button" />
+							</div>
+						</Link>
+					</VStack>
+					<Modal
+						isOpen={isOpen}
+						onClose={closeModal}
+						title="Your Mnemonics"
+						CTA={
+							<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signup-copy-mnemonics-button">
+								Copy my mnemonics
+							</Button>
+						}
+					>
+						<Textarea
+							value={mnemonics}
+							_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
+							cursor="text"
+							readOnly
+							id="ipc-signup-text-area"
+						/>
+					</Modal>
+				</VStack>
+			}
+		/>
 	);
 };
 
-export default SignupView;
+export default Signup;

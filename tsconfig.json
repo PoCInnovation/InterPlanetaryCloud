@@ -19,10 +19,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
     "src",
-    "cypress",
+    "pages",
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

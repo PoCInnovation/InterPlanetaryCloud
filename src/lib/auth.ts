@@ -1,6 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
 
-import User from './user';
+import User from 'lib/user';
 
 type AuthReturnType = {
 	user: User | undefined;

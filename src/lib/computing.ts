@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import { IPCProgram, ResponseType } from 'types/types';
+import type { IPCProgram, ResponseType } from 'types/types';
 
 class Computing {
 	public programs: IPCProgram[];

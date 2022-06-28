@@ -15,17 +15,16 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-import React from 'react';
-import colors from '../theme/foundations/colors';
-import Sidebar from './SideBar';
-import { UploadButton, DeployButton } from './CustomButtons';
+import colors from 'theme/foundations/colors';
+import Sidebar from 'components/SideBar';
+import { UploadButton, DeployButton } from 'components/CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;
 	onOpenProgram: () => void;
 	isUploadLoading: boolean;
 	isDeployLoading: boolean;
-	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	setSelectedTab: (tab: number) => void;
 	selectedTab: number;
 };
 
@@ -78,7 +77,7 @@ export const BarWithDrawer = ({
 			</Drawer>
 			<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
 				<HStack w="100%" h="100%" px="24px" py="32px">
-					<Button onClick={onOpenDrawer} _focus={{}} p="16px" id="ipc-dashboardView-drawer-button" bg="transparent">
+					<Button onClick={onOpenDrawer} _focus={{}} p="16px" id="ipc-dashboard-drawer-button" bg="transparent">
 						<Icon fontSize="24px" as={HamburgerIcon} />
 					</Button>
 

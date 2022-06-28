@@ -1,19 +1,19 @@
+import { useState, useEffect } from 'react';
 import { Button, Icon } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { MdUpdate } from 'react-icons/md';
-import React, { useState, useEffect } from 'react';
 import { useUserContext } from 'contexts/user';
-import { IPCFile } from '../types/types';
+import type { IPCFile } from 'types/types';
 
 type FileEditButtonsProps = {
 	file: IPCFile;
 	isUpdateLoading: boolean;
-	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
+	setSelectedFile: (file: IPCFile) => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 };
 
-export const FileEditButtons = ({
+const FileEditButtons = ({
 	file,
 	isUpdateLoading,
 	setSelectedFile,
@@ -46,7 +46,7 @@ export const FileEditButtons = ({
 					onOpenUpdateFileName();
 				}}
 				isLoading={isUpdateLoading}
-				id="ipc-dashboardView-update-filename-button"
+				id="ipc-dashboard-update-filename-button"
 			>
 				<EditIcon />
 			</Button>
@@ -61,10 +61,12 @@ export const FileEditButtons = ({
 					onOpenUpdateFileContent();
 				}}
 				isLoading={isUpdateLoading}
-				id="ipc-dashboardView-update-content-button"
+				id="ipc-dashboard-update-content-button"
 			>
 				<Icon as={MdUpdate} />
 			</Button>
 		</>
 	);
 };
+
+export default FileEditButtons;
