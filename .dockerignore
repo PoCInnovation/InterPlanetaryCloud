@@ -5,9 +5,6 @@
 LICENSE
 README.md
 
-# Linter
-.prettierrc
-
 # Node
 node_modules/
 tests/
