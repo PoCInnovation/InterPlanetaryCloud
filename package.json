@@ -25,7 +25,7 @@
   },
   "scripts": {
     "dev": "next dev -p 8080",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start -p 8080",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
