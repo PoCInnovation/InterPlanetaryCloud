@@ -120,12 +120,7 @@ const Dashboard = (): JSX.Element => {
 				},
 				fileEvent.target.files[0],
 			);
-			if (!upload.success) {
-				toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-			} else {
-				const addToUser = await user.computing.addToUser();
-				toast({ title: upload.message, status: addToUser.success ? 'success' : 'error' });
-			}
+			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 			onCloseProgram();
 		} catch (error) {
 			console.error(error);

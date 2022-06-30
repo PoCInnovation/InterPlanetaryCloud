@@ -1,46 +1,52 @@
-import { accounts, program, post, aggregate } from 'aleph-sdk-ts';
+import { accounts, program, aggregate } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { IPCProgram, ResponseType } from 'types/types';
+import type { IPCProgram, ResponseType, AggregateType } from 'types/types';
 
 class Computing {
 	public programs: IPCProgram[];
-
-	public programsPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
 
 	constructor(importedAccount: accounts.base.Account) {
 		this.programs = [];
-		this.programsPostHash = '';
 		this.account = importedAccount;
+	}
+
+	private async publishAggregate() {
+		const aggr = await aggregate.Get<AggregateType>({
+			APIServer: DEFAULT_API_V2,
+			address: this.account!.address,
+			keys: ['InterPlanetaryCloud'],
+		});
+
+		const content = aggr.InterPlanetaryCloud;
+		content.programs = this.programs;
+
+		return aggregate.Publish({
+			APIServer: DEFAULT_API_V2,
+			channel: ALEPH_CHANNEL,
+			inlineRequested: true,
+			storageEngine: ItemType.ipfs,
+			account: this.account!,
+			key: 'InterPlanetaryCloud',
+			content,
+		});
 	}
 
 	public async loadPrograms(): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				try {
-					const programs = await aggregate.Get<any>({ // TDO: replace with proper type once IPCProgram
-						APIServer: DEFAULT_API_V2,
-						address: this.account.address,
-						keys: ['Programs'],
-					});
-					this.programs = programs;
-					console.dir(programs);
-				} catch (error) {
-					await aggregate.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						key: 'Programs',
-						content: [],
-					});
-				}
+				const aggr = await aggregate.Get<AggregateType>({
+					APIServer: DEFAULT_API_V2,
+					address: this.account.address,
+					keys: ['InterPlanetaryCloud'],
+				});
+
+				this.programs = aggr.InterPlanetaryCloud.programs;
 
 				return { success: true, message: 'Programs loaded' };
 			}
@@ -72,34 +78,14 @@ class Computing {
 
 				this.programs.push(newProgram);
 
+				await this.publishAggregate();
+
 				return { success: true, message: 'Program uploaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to upload program' };
-		}
-	}
-
-	public async addToUser(): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				await aggregate.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-					key: 'Programs',
-					content: this.programs,
-				});
-
-				return { success: true, message: 'File added to the user' };
-			}
-			return { success: false, message: 'Failed to load account' };
-		} catch (error) {
-			console.error(error);
-			return { success: false, message: 'Failed to add program to user' };
 		}
 	}
 }

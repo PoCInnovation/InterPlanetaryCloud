@@ -1,4 +1,8 @@
-import { accounts } from 'aleph-sdk-ts';
+import { accounts, aggregate } from 'aleph-sdk-ts';
+
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
+import { ItemType } from 'aleph-sdk-ts/messages/message';
+import { ALEPH_CHANNEL } from 'config/constants';
 
 import User from 'lib/user';
 
@@ -18,6 +22,26 @@ class Auth {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
 			const user = new User(account, mnemonic);
+
+			await aggregate.Publish({
+				APIServer: DEFAULT_API_V2,
+				channel: ALEPH_CHANNEL,
+				inlineRequested: true,
+				storageEngine: ItemType.ipfs,
+				account,
+				key: 'InterPlanetaryCloud',
+				content: {
+					contacts: [
+						{
+							name: 'Owner (Me)',
+							address: account.address,
+							publicKey: account.publicKey,
+							files: [],
+						},
+					],
+					programs: [],
+				},
+			});
 
 			return { user, mnemonic, message: 'Successful signup' };
 		} catch (err) {
