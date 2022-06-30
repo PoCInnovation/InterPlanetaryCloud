@@ -1,4 +1,4 @@
-import { accounts, program, post } from 'aleph-sdk-ts';
+import { accounts, program, post, aggregate } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
@@ -22,47 +22,26 @@ class Computing {
 	public async loadPrograms(): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const userData = await post.Get({
-					APIServer: DEFAULT_API_V2,
-					types: '',
-					pagination: 200,
-					page: 1,
-					refs: [],
-					addresses: [this.account.address],
-					tags: [],
-					hashes: [],
-				});
-
-				userData.posts.map((postContent) => {
-					const itemContent = JSON.parse(postContent.item_content);
-					if (itemContent.content.headers === 'InterPlanetaryCloud2.0 - Programs') {
-						this.programsPostHash = postContent.hash;
-						if (itemContent.content.programs.length > 0) {
-							itemContent.content.programs.map((importedProgram: IPCProgram) => {
-								this.programs.push(importedProgram);
-								return true;
-							});
-						}
-						return true;
-					}
-					return false;
-				});
-
-				if (this.programsPostHash === '') {
-					const newPostPublishResponse = await post.Publish({
+				try {
+					const programs = await aggregate.Get<any>({ // TDO: replace with proper type once IPCProgram
+						APIServer: DEFAULT_API_V2,
+						address: this.account.address,
+						keys: ['Programs'],
+					});
+					this.programs = programs;
+					console.dir(programs);
+				} catch (error) {
+					await aggregate.Publish({
 						APIServer: DEFAULT_API_V2,
 						channel: ALEPH_CHANNEL,
 						inlineRequested: true,
 						storageEngine: ItemType.ipfs,
 						account: this.account,
-						postType: '',
-						content: {
-							headers: 'InterPlanetaryCloud2.0 - Programs',
-							programs: [],
-						},
+						key: 'Programs',
+						content: [],
 					});
-					this.programsPostHash = newPostPublishResponse.item_hash;
 				}
+
 				return { success: true, message: 'Programs loaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -105,18 +84,14 @@ class Computing {
 	public async addToUser(): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await post.Publish({
+				await aggregate.Publish({
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
 					inlineRequested: true,
 					storageEngine: ItemType.ipfs,
-					account: this.account!,
-					postType: 'amend',
-					content: {
-						headers: 'InterPlanetaryCloud2.0 - Programs',
-						programs: this.programs,
-					},
-					ref: this.programsPostHash,
+					account: this.account,
+					key: 'Programs',
+					content: this.programs,
 				});
 
 				return { success: true, message: 'File added to the user' };
