@@ -157,7 +157,7 @@ const Dashboard = (): JSX.Element => {
 				if (!upload.success || !upload.file) {
 					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 				} else {
-					user.drive.addIPCFile(upload.file);
+					user.drive.files.push(upload.file);
 
 					const shared = await user.contact.addFileToContact(
 						user.account.address,
@@ -244,7 +244,7 @@ const Dashboard = (): JSX.Element => {
 			onCloseShare();
 			toast({ title: share.message, status: share.success ? 'success' : 'error' });
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			toast({ title: 'Unable to share the file', status: 'error' });
 		}
 	};
@@ -256,7 +256,7 @@ const Dashboard = (): JSX.Element => {
 
 			setContacts(user.contact.contacts);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			toast({ title: 'Unable to load contacts', status: 'error' });
 		}
 	};
@@ -278,7 +278,7 @@ const Dashboard = (): JSX.Element => {
 			}
 			onCloseContactAdd();
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			toast({ title: 'Unable to add this contact', status: 'error' });
 		}
 	};
@@ -297,7 +297,7 @@ const Dashboard = (): JSX.Element => {
 			}
 			onCloseContactUpdate();
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			toast({ title: 'Unable to update this contact', status: 'error' });
 		}
 	};
@@ -315,7 +315,7 @@ const Dashboard = (): JSX.Element => {
 				toast({ title: 'Unable to find this contact', status: 'error' });
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			toast({ title: 'Unable to delete this contact', status: 'error' });
 		}
 	};

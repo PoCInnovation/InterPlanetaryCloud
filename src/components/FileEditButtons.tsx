@@ -24,10 +24,10 @@ const FileEditButtons = ({
 	const [hasPermission, setHasPermission] = useState(false);
 
 	useEffect(() => {
-		async function getToken() {
-			const permission = await user.contact.hasEditPermission(file.hash);
+		const getToken = () => {
+			const permission = user.contact.hasEditPermission(file.hash);
 			setHasPermission(permission.success);
-		}
+		};
 		getToken();
 	}, []);
 

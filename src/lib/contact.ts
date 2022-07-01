@@ -1,10 +1,10 @@
 import { accounts, aggregate } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
+import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { IPCContact, IPCFile, ResponseType, AggregateType } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Contact {
@@ -20,7 +20,7 @@ class Contact {
 		this.private_key = private_key;
 	}
 
-	private async publishAggregate() {
+	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
 			APIServer: DEFAULT_API_V2,
 			address: this.account!.address,
@@ -56,7 +56,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to load contacts' };
 		}
 	}
@@ -74,7 +74,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to add this contact' };
 		}
 	}
@@ -98,7 +98,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to delete this contact' };
 		}
 	}
@@ -122,7 +122,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this contact' };
 		}
 	}
@@ -148,22 +148,19 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update the file content' };
 		}
 	}
 
-	public async hasEditPermission(hash: string): Promise<ResponseType> {
+	public hasEditPermission(hash: string): ResponseType {
 		try {
 			if (this.account) {
 				const owner = this.account.address;
 				if (
 					this.contacts.find((contact, index) => {
 						if (owner === contact.address) {
-							return this.contacts[index].files.find((file) => {
-								if (file.hash === hash) return true;
-								return false;
-							});
+							return this.contacts[index].files.find((file) => file.hash === hash);
 						}
 						return false;
 					})
@@ -174,7 +171,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
@@ -186,7 +183,7 @@ class Contact {
 			}
 			return { success: true, message: 'Filename updated' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
@@ -210,7 +207,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
@@ -246,7 +243,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to share the file with the contact' };
 		}
 	}

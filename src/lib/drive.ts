@@ -90,13 +90,9 @@ class Drive {
 			}
 			return { success: false, message: 'Failed to load account', file: undefined };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to upload the file', file: undefined };
 		}
-	}
-
-	public addIPCFile(file: IPCFile): void {
-		this.files.push(file);
 	}
 
 	public async delete(fileHash: string): Promise<ResponseType> {
@@ -115,7 +111,7 @@ class Drive {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to delete the file' };
 		}
 	}
@@ -141,7 +137,7 @@ class Drive {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to download the file' };
 		}
 	}

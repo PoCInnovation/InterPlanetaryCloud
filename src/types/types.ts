@@ -29,9 +29,11 @@ export type UploadResponse = ResponseType & {
 	file?: IPCFile;
 };
 
+export type AggregateContentType = {
+	programs: IPCProgram[];
+	contacts: IPCContact[];
+};
+
 export type AggregateType = {
-	InterPlanetaryCloud: {
-		programs: IPCProgram[];
-		contacts: IPCContact[];
-	};
+	InterPlanetaryCloud: AggregateContentType;
 };

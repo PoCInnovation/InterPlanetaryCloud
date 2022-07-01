@@ -26,7 +26,7 @@ const Signup = (): JSX.Element => {
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const toast = useToast();
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const signupWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
@@ -41,36 +41,21 @@ const Signup = (): JSX.Element => {
 			setSignupResult(signup);
 			onOpen();
 		} else {
-			toast({
-				title: signup.message,
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: signup.message, status: 'error' });
 		}
 	};
 
 	const closeModal = () => {
 		onClose();
 		if (!signupResult) return;
-		toast({
-			title: signupResult.message,
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		});
+		toast({ title: signupResult.message, status: 'success' });
 		setUser(signupResult.user);
 		router.push('/dashboard');
 	};
 
 	const onClick = () => {
 		navigator.clipboard.writeText(mnemonics);
-		toast({
-			title: 'Copy to clipboard !',
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		});
+		toast({ title: 'Copy to clipboard !', status: 'success' });
 	};
 
 	return (
