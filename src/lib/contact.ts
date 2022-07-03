@@ -217,12 +217,12 @@ class Contact {
 			if (this.account) {
 				if (
 					await Promise.all(
-						this.contacts.map(async (contact, contactIndex) => {
+						this.contacts.map(async (contact, index) => {
 							if (contact.address === contactAddress) {
-								if (this.contacts[contactIndex].files.find((file) => file.hash === mainFile.hash)) {
+								if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
 									return { success: false, message: 'The file is already shared' };
 								}
-								this.contacts[contactIndex].files.push({
+								this.contacts[index].files.push({
 									hash: mainFile.hash,
 									key: await encryptWithPublicKey(
 										contact.publicKey.slice(2),
