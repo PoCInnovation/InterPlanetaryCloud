@@ -2,8 +2,9 @@ let dashboardSpecMnemonic = '';
 
 describe('Create account for File tests', () => {
 	it('Connect', () => {
+		cy.intercept('/signup').as('getSignup');
 		cy.visit('/signup');
-		cy.wait(1000);
+		cy.wait('@getSignup');
 		cy.get('#ipc-signup-credentials-signup-button').click();
 		cy.get('#ipc-signup-text-area')
 			.invoke('val')
@@ -18,8 +19,9 @@ describe('Upload a file modal in Dashboard', () => {
 	const fixtureFile = 'upload_test_file.txt';
 
 	beforeEach(() => {
+		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait(1000);
+		cy.wait('@getLogin');
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click().wait(3000);
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
@@ -43,8 +45,9 @@ describe('Upload an empty file in Dashboard', () => {
 	const fixtureFile = 'upload_empty_file.txt';
 
 	beforeEach(() => {
+		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait(1000);
+		cy.wait('@getLogin');
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click().wait(3000);
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
@@ -61,8 +64,9 @@ describe('Upload an empty file in Dashboard', () => {
 
 describe('Download a file in Dashboard', () => {
 	beforeEach(() => {
+		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait(1000);
+		cy.wait('@getLogin');
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click();
 		cy.wait(2500);
