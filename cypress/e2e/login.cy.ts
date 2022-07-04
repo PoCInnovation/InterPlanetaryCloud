@@ -2,8 +2,9 @@ const mnemonic = 'repair nest celery light distance coil giant pyramid poet suit
 
 describe('Good front for Login', () => {
 	it('Go to login', () => {
+		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait(1000);
+		cy.wait('@getLogin');
 	});
 
 	it('Good title', () => {
@@ -33,8 +34,9 @@ describe('Good front for Login', () => {
 
 describe('Login with credentials Button for Login', () => {
 	it('Go to login', () => {
+		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait(1000);
+		cy.wait('@getLogin');
 		cy.get('#ipc-login-text-area').click().type(mnemonic);
 	});
 
@@ -49,8 +51,9 @@ describe('Login with credentials Button for Login', () => {
 
 describe('Signup Button for Login', () => {
 	it('Go to login', () => {
+		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait(1000);
+		cy.wait('@getLogin');
 	});
 
 	it('Good URL redirect for signup button', () => {
