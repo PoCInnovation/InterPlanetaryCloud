@@ -1,8 +1,6 @@
 describe('Good front for Home', () => {
 	it('Go to home', () => {
-		cy.intercept('').as('getHome');
 		cy.visit('');
-		cy.wait('@getHome');
 	});
 
 	it('Good title', () => {
@@ -28,9 +26,7 @@ describe('Good front for Home', () => {
 
 describe('Signup Button front in Home', () => {
 	it('Go to home', () => {
-		cy.intercept('').as('getHome');
 		cy.visit('');
-		cy.wait('@getHome');
 	});
 
 	it('Good URL redirect for create account button', () => {
@@ -40,9 +36,7 @@ describe('Signup Button front in Home', () => {
 
 describe('Login Button front in Home', () => {
 	it('Go to home', () => {
-		cy.intercept('').as('getHome');
 		cy.visit('');
-		cy.wait('@getHome');
 	});
 
 	it('Good URL redirect for login button', () => {

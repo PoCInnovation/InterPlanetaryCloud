@@ -64,9 +64,7 @@ describe('Upload an empty file in Dashboard', () => {
 
 describe('Download a file in Dashboard', () => {
 	beforeEach(() => {
-		cy.intercept('/login').as('getLogin');
 		cy.visit('/login');
-		cy.wait('@getLogin');
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click();
 		cy.wait(2500);

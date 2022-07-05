@@ -1,8 +1,6 @@
 describe('Good front for Signup', () => {
 	it('Go to signup', () => {
-		cy.intercept('/signup').as('getSignup');
 		cy.visit('/signup');
-		cy.wait('@getSignup');
 	});
 
 	it('Good title', () => {
@@ -28,9 +26,7 @@ describe('Good front for Signup', () => {
 
 describe('Good Modal front for Signup', () => {
 	it('Go to signup', () => {
-		cy.intercept('/signup').as('getSignup');
 		cy.visit('/signup');
-		cy.wait('@getSignup');
 		cy.get('#ipc-signup-credentials-signup-button').click();
 	});
 
@@ -57,9 +53,7 @@ describe('Good Modal front for Signup', () => {
 
 describe('Signup with credentials Button for Signup', () => {
 	it('Go to signup', () => {
-		cy.intercept('/signup').as('getSignup');
 		cy.visit('/signup');
-		cy.wait('@getSignup');
 		cy.get('#ipc-signup-credentials-signup-button').click();
 		cy.wait(1000);
 		cy.get('#ipc-signup-copy-mnemonics-button').click();
@@ -82,9 +76,7 @@ describe('Signup with credentials Button for Signup', () => {
 
 describe('Login Button for Signup', () => {
 	it('Go to signup', () => {
-		cy.intercept('/signup').as('getSignup');
 		cy.visit('/signup');
-		cy.wait('@getSignup');
 	});
 
 	it('Good URL redirect for login button', () => {
