@@ -1,7 +1,6 @@
 describe('Good front for Signup', () => {
 	it('Go to signup', () => {
 		cy.visit('/signup');
-		cy.wait(1000);
 	});
 
 	it('Good title', () => {
@@ -28,7 +27,6 @@ describe('Good front for Signup', () => {
 describe('Good Modal front for Signup', () => {
 	it('Go to signup', () => {
 		cy.visit('/signup');
-		cy.wait(1000);
 		cy.get('#ipc-signup-credentials-signup-button').click();
 	});
 
@@ -56,9 +54,7 @@ describe('Good Modal front for Signup', () => {
 describe('Signup with credentials Button for Signup', () => {
 	it('Go to signup', () => {
 		cy.visit('/signup');
-		cy.wait(1000);
 		cy.get('#ipc-signup-credentials-signup-button').click();
-		cy.wait(1000);
 		cy.get('#ipc-signup-copy-mnemonics-button').click();
 	});
 
@@ -72,7 +68,6 @@ describe('Signup with credentials Button for Signup', () => {
 	});
 
 	it('Good URL redirect for close button', () => {
-		cy.wait(1000);
 		cy.get('#ipc-modal-close-button').click().url().should('eq', 'http://localhost:8080/dashboard');
 	});
 });
@@ -80,7 +75,6 @@ describe('Signup with credentials Button for Signup', () => {
 describe('Login Button for Signup', () => {
 	it('Go to signup', () => {
 		cy.visit('/signup');
-		cy.wait(1000);
 	});
 
 	it('Good URL redirect for login button', () => {

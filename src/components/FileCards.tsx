@@ -35,16 +35,10 @@ const FileCards = ({
 		setIsDownloadLoading(true);
 		try {
 			const download = await user.drive.download(file);
-			toast({
-				title: download.message,
-				status: download.success ? 'success' : 'error',
-			});
+			toast({ title: download.message, status: download.success ? 'success' : 'error' });
 		} catch (error) {
 			console.error(error);
-			toast({
-				title: 'Unable to download file',
-				status: 'error',
-			});
+			toast({ title: 'Unable to download file', status: 'error' });
 		}
 		setIsDownloadLoading(false);
 	};

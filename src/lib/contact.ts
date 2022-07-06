@@ -1,16 +1,14 @@
-import { accounts, post } from 'aleph-sdk-ts';
+import { accounts, aggregate } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
+import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { IPCContact, IPCFile, ResponseType } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Contact {
 	public contacts: IPCContact[];
-
-	public contactsPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
 
@@ -18,82 +16,47 @@ class Contact {
 
 	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.contacts = [];
-		this.contactsPostHash = '';
 		this.account = importedAccount;
 		this.private_key = private_key;
 	}
 
-	private publishPost() {
-		return post.Publish({
+	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
+		const aggr = await aggregate.Get<AggregateType>({
+			APIServer: DEFAULT_API_V2,
+			address: this.account!.address,
+			keys: ['InterPlanetaryCloud'],
+		});
+
+		const content = aggr.InterPlanetaryCloud;
+		content.contacts = this.contacts;
+
+		return aggregate.Publish({
 			APIServer: DEFAULT_API_V2,
 			channel: ALEPH_CHANNEL,
 			inlineRequested: true,
 			storageEngine: ItemType.ipfs,
 			account: this.account!,
-			postType: 'amend',
-			content: {
-				header: 'InterPlanetaryCloud2.0 - Contacts',
-				contacts: this.contacts,
-			},
-			ref: this.contactsPostHash,
+			key: 'InterPlanetaryCloud',
+			content,
 		});
 	}
 
 	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const userData = await post.Get({
+				const aggr = await aggregate.Get<AggregateType>({
 					APIServer: DEFAULT_API_V2,
-					types: '',
-					pagination: 200,
-					page: 1,
-					refs: [],
-					addresses: [this.account.address],
-					tags: [],
-					hashes: [],
+					address: this.account!.address,
+					keys: ['InterPlanetaryCloud'],
 				});
 
-				userData.posts.map((postContent) => {
-					const itemContent = JSON.parse(postContent.item_content);
-					if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
-						this.contactsPostHash = postContent.hash;
-						if (itemContent.content.contacts.length > 0) {
-							itemContent.content.contacts.map((contact: IPCContact) => {
-								this.contacts.push(contact);
-								return true;
-							});
-						}
-						return true;
-					}
-					return false;
-				});
+				this.contacts = aggr.InterPlanetaryCloud.contacts;
 
-				if (this.contactsPostHash === '') {
-					this.contacts.push({
-						name: 'Owner (Me)',
-						address: this.account.address,
-						publicKey: this.account.publicKey,
-						files: [],
-					});
-					const newPostPublishResponse = await post.Publish({
-						APIServer: DEFAULT_API_V2,
-						channel: ALEPH_CHANNEL,
-						inlineRequested: true,
-						storageEngine: ItemType.ipfs,
-						account: this.account,
-						postType: '',
-						content: {
-							header: 'InterPlanetaryCloud2.0 - Contacts',
-							contacts: this.contacts,
-						},
-					});
-					this.contactsPostHash = newPostPublishResponse.item_hash;
-				}
 				return { success: true, message: 'Contacts loaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to load contacts' };
 		}
 	}
@@ -106,12 +69,12 @@ class Contact {
 				}
 				this.contacts.push(contactToAdd);
 
-				await this.publishPost();
+				await this.publishAggregate();
 				return { success: true, message: 'Contact added' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to add this contact' };
 		}
 	}
@@ -128,14 +91,14 @@ class Contact {
 						return false;
 					});
 
-					await this.publishPost();
+					await this.publishAggregate();
 					return { success: true, message: 'Contact deleted' };
 				}
 				return { success: false, message: "You can't delete your account" };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to delete this contact' };
 		}
 	}
@@ -152,14 +115,14 @@ class Contact {
 						return false;
 					})
 				) {
-					await this.publishPost();
+					await this.publishAggregate();
 					return { success: true, message: 'Contact updated' };
 				}
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this contact' };
 		}
 	}
@@ -176,7 +139,7 @@ class Contact {
 									contact.publicKey.slice(2),
 									await decryptWithPrivateKey(this.private_key, newFile.key),
 								);
-								await this.publishPost();
+								await this.publishAggregate();
 							}
 						});
 					}),
@@ -185,22 +148,19 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update the file content' };
 		}
 	}
 
-	public async hasEditPermission(hash: string): Promise<ResponseType> {
+	public hasEditPermission(hash: string): ResponseType {
 		try {
 			if (this.account) {
 				const owner = this.account.address;
 				if (
 					this.contacts.find((contact, index) => {
 						if (owner === contact.address) {
-							return this.contacts[index].files.find((file) => {
-								if (file.hash === hash) return true;
-								return false;
-							});
+							return this.contacts[index].files.find((file) => file.hash === hash);
 						}
 						return false;
 					})
@@ -211,7 +171,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
@@ -223,7 +183,7 @@ class Contact {
 			}
 			return { success: true, message: 'Filename updated' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
@@ -240,14 +200,14 @@ class Contact {
 						return false;
 					})
 				) {
-					await this.publishPost();
+					await this.publishAggregate();
 					return { success: true, message: 'Filename updated' };
 				}
 				return { success: false, message: 'File does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
 		}
 	}
@@ -257,12 +217,12 @@ class Contact {
 			if (this.account) {
 				if (
 					await Promise.all(
-						this.contacts.map(async (contact, contactIndex) => {
+						this.contacts.map(async (contact, index) => {
 							if (contact.address === contactAddress) {
-								if (this.contacts[contactIndex].files.find((file) => file.hash === mainFile.hash)) {
+								if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
 									return { success: false, message: 'The file is already shared' };
 								}
-								this.contacts[contactIndex].files.push({
+								this.contacts[index].files.push({
 									hash: mainFile.hash,
 									key: await encryptWithPublicKey(
 										contact.publicKey.slice(2),
@@ -271,7 +231,7 @@ class Contact {
 									created_at: mainFile.created_at,
 									name: mainFile.name,
 								});
-								await this.publishPost();
+								await this.publishAggregate();
 								return true;
 							}
 							return false;
@@ -283,7 +243,7 @@ class Contact {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to share the file with the contact' };
 		}
 	}

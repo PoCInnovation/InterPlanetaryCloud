@@ -20,7 +20,7 @@ const Login = (): JSX.Element => {
 	const [mnemonics, setMnemonics] = useState('');
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
 
-	const toast = useToast();
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const loginWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
@@ -28,21 +28,11 @@ const Login = (): JSX.Element => {
 		setIsLoadingCredentials(false);
 
 		if (login.user) {
-			toast({
-				title: login.message,
-				status: 'success',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: login.message, status: 'success' });
 			setUser(login.user);
 			router.push('/dashboard');
 		} else {
-			toast({
-				title: login.message,
-				status: 'error',
-				duration: 2000,
-				isClosable: true,
-			});
+			toast({ title: login.message, status: 'error' });
 		}
 	};
 

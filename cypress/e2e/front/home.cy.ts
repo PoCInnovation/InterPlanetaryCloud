@@ -1,7 +1,6 @@
 describe('Good front for Home', () => {
 	it('Go to home', () => {
 		cy.visit('');
-		cy.wait(1000);
 	});
 
 	it('Good title', () => {
@@ -28,7 +27,6 @@ describe('Good front for Home', () => {
 describe('Signup Button front in Home', () => {
 	it('Go to home', () => {
 		cy.visit('');
-		cy.wait(1000);
 	});
 
 	it('Good URL redirect for create account button', () => {
@@ -39,7 +37,6 @@ describe('Signup Button front in Home', () => {
 describe('Login Button front in Home', () => {
 	it('Go to home', () => {
 		cy.visit('');
-		cy.wait(1000);
 	});
 
 	it('Good URL redirect for login button', () => {

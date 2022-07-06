@@ -1,7 +1,6 @@
 describe('Create account for Dashboard tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');
-		cy.wait(1000);
 		cy.get('#ipc-signup-credentials-signup-button').click();
 		cy.get('#ipc-signup-text-area')
 			.invoke('val')
@@ -17,9 +16,8 @@ describe('Upload a program modal for Dashboard', () => {
 
 	beforeEach(() => {
 		cy.visit('/login');
-		cy.wait(1000);
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-login-credentials-button').click().wait(3000);
+		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('#ipc-deploy-button').click().wait(2500);
 	});
