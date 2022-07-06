@@ -42,7 +42,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 	if (!auth) {
 		return (
 			<Center mt="160px">
-				<Spinner w="160px" />
+				<Spinner w="64px" h="64px" />
 			</Center>
 		);
 	}
