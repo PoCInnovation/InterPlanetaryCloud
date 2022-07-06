@@ -9,11 +9,12 @@ env:
   browser: true
 
 extends:
+  - airbnb-base
   - airbnb-typescript
   - airbnb/hooks
   - plugin:@typescript-eslint/recommended
+  - plugin:@next/next/recommended
   - prettier
-  - react-app
 
 plugins:
   - prettier
@@ -25,6 +26,7 @@ rules:
   prettier/prettier: warn
 
   react/react-in-jsx-scope: 0
+  react/jsx-filename-extension: 0
   react/no-unescaped-entities: 0
   react/jsx-props-no-spreading: 0
   react/require-default-props: 0

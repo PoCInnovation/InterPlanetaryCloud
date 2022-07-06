@@ -1,5 +1,5 @@
-import colors from '../foundations/colors';
-import radius from '../foundations/borderRadius';
+import colors from 'theme/foundations/colors';
+import radius from 'theme/foundations/borderRadius';
 
 const Button = {
 	baseStyle: {

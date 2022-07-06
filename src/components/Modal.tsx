@@ -2,7 +2,7 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay 
 
 import colors from 'theme/foundations/colors';
 
-import OutlineButton from './OutlineButton';
+import OutlineButton from 'components/OutlineButton';
 
 type PopupProps = {
 	isOpen: boolean;

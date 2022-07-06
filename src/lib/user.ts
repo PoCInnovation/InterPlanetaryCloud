@@ -2,11 +2,9 @@ import { accounts } from 'aleph-sdk-ts';
 
 import { mnemonicToPrivateKey } from 'utils/mnemonicToPrivateKey';
 
-import Drive from './drive';
-
-import Contact from './contact';
-
-import Computing from './computing';
+import Drive from 'lib/drive';
+import Contact from 'lib/contact';
+import Computing from 'lib/computing';
 
 class User {
 	public account: accounts.base.Account | undefined;

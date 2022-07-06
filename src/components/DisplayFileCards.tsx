@@ -1,9 +1,9 @@
-import React from 'react';
-import { IPCContact, IPCFile, IPCProgram } from '../types/types';
-import { FileCards } from './FileCards';
-import { ProgramCards } from './ProgramCards';
-import { ContactCards } from './ContactCards';
-import { ProfileCard } from './ProfileCard';
+import FileCards from 'components/FileCards';
+import ProgramCards from 'components/ProgramCards';
+import ContactCards from 'components/ContactCards';
+import ProfileCard from 'components/ProfileCard';
+
+import type { IPCContact, IPCFile, IPCProgram } from 'types/types';
 
 type FileCardsProps = {
 	myFiles: IPCFile[];
@@ -11,12 +11,10 @@ type FileCardsProps = {
 	sharedFiles: IPCFile[];
 	contacts: IPCContact[];
 	index: number;
-	downloadFile: (file: IPCFile) => Promise<void>;
-	isDownloadLoading: boolean;
 	isUpdateLoading: boolean;
-	setSelectedFile: React.Dispatch<React.SetStateAction<IPCFile>>;
+	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
-	setContactInfo: React.Dispatch<React.SetStateAction<IPCContact>>;
+	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
 	onOpenUpdateFileName: () => void;
@@ -30,8 +28,6 @@ export const DisplayFileCards = ({
 	sharedFiles,
 	contacts,
 	index,
-	downloadFile,
-	isDownloadLoading,
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
@@ -46,8 +42,6 @@ export const DisplayFileCards = ({
 		return (
 			<FileCards
 				files={myFiles}
-				downloadFile={downloadFile}
-				isDownloadLoading={isDownloadLoading}
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
@@ -59,8 +53,6 @@ export const DisplayFileCards = ({
 		return (
 			<FileCards
 				files={sharedFiles}
-				downloadFile={downloadFile}
-				isDownloadLoading={isDownloadLoading}
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}

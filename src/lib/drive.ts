@@ -1,4 +1,4 @@
-import { accounts, forget, post, store } from 'aleph-sdk-ts';
+import { accounts, forget, aggregate, store } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
@@ -10,15 +10,13 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import { IPCContact, IPCFile, ResponseType, UploadResponse } from 'types/types';
-import EthCrypto from 'eth-crypto';
+import type { IPCContact, IPCFile, ResponseType, UploadResponse, AggregateType } from 'types/types';
+import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Drive {
 	public files: IPCFile[];
 
 	public sharedFiles: IPCFile[];
-
-	public filesPostHash: string;
 
 	private readonly account: accounts.base.Account | undefined;
 
@@ -28,7 +26,6 @@ class Drive {
 		this.files = [];
 		this.sharedFiles = [];
 		this.account = importedAccount;
-		this.filesPostHash = '';
 		this.private_key = private_key;
 	}
 
@@ -37,38 +34,23 @@ class Drive {
 			if (this.account) {
 				await Promise.all(
 					contacts.map(async (contact) => {
-						const userData = await post.Get({
+						const aggr = await aggregate.Get<AggregateType>({
 							APIServer: DEFAULT_API_V2,
-							types: '',
-							pagination: 200,
-							page: 1,
-							refs: [],
-							addresses: [contact.address],
-							tags: [],
-							hashes: [],
+							address: contact.address,
+							keys: ['InterPlanetaryCloud'],
 						});
 
-						await Promise.all(
-							userData.posts.map(async (postContent) => {
-								const itemContent = JSON.parse(postContent.item_content);
-
-								if (itemContent.content.header === 'InterPlanetaryCloud2.0 - Contacts') {
-									await Promise.all(
-										itemContent.content.contacts.map(async (contactToFind: IPCContact) => {
-											if (contactToFind.address === this.account!.address) {
-												if (contact.address === this.account!.address)
-													this.files = this.files.concat(contactToFind.files);
-												else this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
-												return true;
-											}
-											return false;
-										}),
-									);
-									return true;
+						aggr.InterPlanetaryCloud.contacts.map((contactToFind: IPCContact) => {
+							if (contactToFind.address === this.account!.address) {
+								if (contact.address === this.account!.address) {
+									this.files = this.files.concat(contactToFind.files);
+								} else {
+									this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
 								}
-								return false;
-							}),
-						);
+								return true;
+							}
+							return false;
+						});
 					}),
 				);
 				return { success: true, message: 'Shared drive loaded' };
@@ -101,20 +83,16 @@ class Drive {
 					name: file.name,
 					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
-					key: await EthCrypto.encryptWithPublicKey(this.account.publicKey.slice(2), key),
+					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
 				return { success: true, message: 'File uploaded', file: newFile };
 			}
 			return { success: false, message: 'Failed to load account', file: undefined };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to upload the file', file: undefined };
 		}
-	}
-
-	public addIPCFile(file: IPCFile): void {
-		this.files.push(file);
 	}
 
 	public async delete(fileHash: string): Promise<ResponseType> {
@@ -133,7 +111,7 @@ class Drive {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to delete the file' };
 		}
 	}
@@ -146,7 +124,7 @@ class Drive {
 					fileHash: file.hash,
 				});
 
-				const keyFile = await EthCrypto.decryptWithPrivateKey(this.private_key.slice(2), file.key);
+				const keyFile = await decryptWithPrivateKey(this.private_key.slice(2), file.key);
 				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
 					CryptoJS.enc.Utf8,
 				);
@@ -159,7 +137,7 @@ class Drive {
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			return { success: false, message: 'Failed to download the file' };
 		}
 	}

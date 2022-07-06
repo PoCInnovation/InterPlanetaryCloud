@@ -1,7 +1,6 @@
 import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
-import React from 'react';
 
 type SideBarPropsType = {
 	contactTab: string;
@@ -11,7 +10,7 @@ type SideBarPropsType = {
 	profileTab: string;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
-	setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+	setSelectedTab: (tab: number) => void;
 	currentTabIndex: number;
 };
 
