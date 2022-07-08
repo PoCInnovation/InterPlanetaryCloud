@@ -79,12 +79,14 @@ const Dashboard = (): JSX.Element => {
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 	});
 
-	if (!user) router.push('/');
-
 	useEffect(() => {
 		(async () => {
-			await loadContact();
-			await loadUserContents();
+			if (!user) {
+				router.push('/');
+			} else {
+				await loadContact();
+				await loadUserContents();
+			}
 		})();
 	}, []);
 
