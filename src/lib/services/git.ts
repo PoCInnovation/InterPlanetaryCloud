@@ -2,12 +2,10 @@ import node_path from 'path';
 import _clone from 'git-clone';
 import { GITCLONE_DIR } from 'config/constants';
 import { createDir, fileExists, rmdir } from 'utils/fsPromise';
-import { boolean } from 'joi';
-import { useNumberInput } from '@chakra-ui/react';
 
 function getRepoName(repoUrl: string): string {
-	const pathArray = repoUrl.replace('.git', '').split('/');
-	return pathArray[pathArray.length - 1];
+	const path = repoUrl.replace('.git', '');
+	return node_path.basename(path);
 }
 
 function getRepoUsername(repoUrl: string): string {
@@ -22,7 +20,7 @@ function getRepoUsername(repoUrl: string): string {
 function getPath(repoUrl: string): string {
 	const username = getRepoUsername(repoUrl);
 	const repoName = getRepoName(repoUrl);
-	return `${GITCLONE_DIR}/${username}@${repoName}`;
+	return node_path.join(GITCLONE_DIR, `${username}@${repoName}`);
 }
 
 function cleanup(path: string): Promise<void> {
