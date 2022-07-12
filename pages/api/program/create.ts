@@ -3,6 +3,7 @@ import { createRouter } from 'next-connect';
 import Joi from 'joi';
 import validate from 'lib/middlewares/validation';
 import { clone, cleanup } from 'lib/services/git';
+import { compress } from 'lib/services/deploy';
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
@@ -13,8 +14,9 @@ const postSchema = Joi.object({
 
 router.post(validate({ body: postSchema }), async (req, res) => {
 	const { repository } = req.body;
-	clone(repository).then((path: string) => {
-		// TODO: launch deploy and then cleanup
+	clone(repository).then(async (path: string) => {
+		await compress(path);
+		// deploy
 		// cleanup(path);
 	});
 	return res.status(200).end(`Deploying repository ${repository}`);
