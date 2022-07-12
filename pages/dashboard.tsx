@@ -77,6 +77,7 @@ const Dashboard = (): JSX.Element => {
 		hash: '',
 		created_at: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+		path: '/',
 	});
 
 	useEffect(() => {
@@ -151,6 +152,7 @@ const Dashboard = (): JSX.Element => {
 			hash: fileContent,
 			created_at: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+			path: '/',
 		};
 		setIsUploadLoading(true);
 		try {
@@ -213,6 +215,7 @@ const Dashboard = (): JSX.Element => {
 			hash: fileContent,
 			created_at: oldFile.created_at,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+			path: '/',
 		};
 		setIsUpdateLoading(true);
 		try {

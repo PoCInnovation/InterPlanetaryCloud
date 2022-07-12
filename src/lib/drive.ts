@@ -84,6 +84,7 @@ class Drive {
 					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
+					path: file.path,
 				};
 
 				return { success: true, message: 'File uploaded', file: newFile };

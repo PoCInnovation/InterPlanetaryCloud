@@ -230,6 +230,7 @@ class Contact {
 									),
 									created_at: mainFile.created_at,
 									name: mainFile.name,
+									path: mainFile.path,
 								});
 								await this.publishAggregate();
 								return true;
