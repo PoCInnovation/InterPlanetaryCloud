@@ -13,6 +13,7 @@ import { useUserContext } from 'contexts/user';
 type FileCardsProps = {
 	files: IPCFile[];
 	isUpdateLoading: boolean;
+	path: string;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
 	onOpenUpdateFileName: () => void;
@@ -22,6 +23,7 @@ type FileCardsProps = {
 const FileCards = ({
 	files,
 	isUpdateLoading,
+	path,
 	setSelectedFile,
 	onOpenShare,
 	onOpenUpdateFileName,
@@ -42,10 +44,11 @@ const FileCards = ({
 		}
 		setIsDownloadLoading(false);
 	};
+	const currentFiles = files.filter((file) => file.path === path);
 
 	return (
 		<>
-			{files.map((file: IPCFile) => (
+			{currentFiles.map((file: IPCFile) => (
 				<FileCard key={file.created_at} file={file}>
 					<>
 						<Button

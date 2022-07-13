@@ -11,6 +11,7 @@ type FileCardsProps = {
 	sharedFiles: IPCFile[];
 	contacts: IPCContact[];
 	index: number;
+	path: string;
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
@@ -28,6 +29,7 @@ export const DisplayFileCards = ({
 	sharedFiles,
 	contacts,
 	index,
+	path,
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
@@ -43,6 +45,7 @@ export const DisplayFileCards = ({
 			<FileCards
 				files={myFiles}
 				isUpdateLoading={isUpdateLoading}
+				path={path}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
 				onOpenUpdateFileName={onOpenUpdateFileName}
@@ -54,6 +57,7 @@ export const DisplayFileCards = ({
 			<FileCards
 				files={sharedFiles}
 				isUpdateLoading={isUpdateLoading}
+				path={path}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
 				onOpenUpdateFileName={onOpenUpdateFileName}

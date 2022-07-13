@@ -63,6 +63,7 @@ const Dashboard = (): JSX.Element => {
 		files: [],
 	});
 	const [selectedTab, setSelectedTab] = useState(0);
+	const [path, setPath] = useState('');
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
@@ -77,7 +78,8 @@ const Dashboard = (): JSX.Element => {
 		hash: '',
 		created_at: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-		path: '/',
+		isFile: true,
+		path: '',
 	});
 
 	useEffect(() => {
@@ -152,52 +154,43 @@ const Dashboard = (): JSX.Element => {
 			hash: fileContent,
 			created_at: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			path: '/',
+			isFile: true,
+			path: '',
 		};
 		setIsUploadLoading(true);
-		try {
-			if (user.account) {
-				const upload = await user.drive.upload(file, key);
-				if (!upload.success || !upload.file) {
-					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-				} else {
-					user.drive.files.push(upload.file);
-
-					const shared = await user.contact.addFileToContact(
-						user.account.address,
-						user.drive.files[user.drive.files.length - 1],
-					);
-					toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
-				}
+		if (user.account) {
+			const upload = await user.drive.upload(file, key);
+			if (!upload.success || !upload.file) {
+				toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 			} else {
-				toast({ title: 'Failed to load account', status: 'error' });
+				user.drive.files.push(upload.file);
+
+				const shared = await user.contact.addFileToContact(
+					user.account.address,
+					user.drive.files[user.drive.files.length - 1],
+				);
+				toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
 			}
-			onClose();
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to upload the file', status: 'error' });
+		} else {
+			toast({ title: 'Failed to load account', status: 'error' });
 		}
+		onClose();
 		setFileEvent(undefined);
 		setIsUploadLoading(false);
 	};
 
 	const updateFileName = async () => {
-		try {
-			if (fileNameEvent) {
-				const filename = fileNameEvent.target.value;
-				const update = await user.contact.updateFileName(selectedFile, filename);
-				toast({ title: update.message, status: update.success ? 'success' : 'error' });
-				if (update.success) {
-					const index = files.indexOf(selectedFile);
+		if (fileNameEvent) {
+			const filename = fileNameEvent.target.value;
+			const update = await user.contact.updateFileName(selectedFile, filename);
+			toast({ title: update.message, status: update.success ? 'success' : 'error' });
+			if (update.success) {
+				const index = files.indexOf(selectedFile);
 
-					if (index !== -1) files[index].name = filename;
-					setFiles(files);
-				}
-				onCloseUpdateFileName();
+				if (index !== -1) files[index].name = filename;
+				setFiles(files);
 			}
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to change name', status: 'error' });
+			onCloseUpdateFileName();
 		}
 	};
 
@@ -215,31 +208,26 @@ const Dashboard = (): JSX.Element => {
 			hash: fileContent,
 			created_at: oldFile.created_at,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			path: '/',
+			isFile: true,
+			path: '',
 		};
 		setIsUpdateLoading(true);
-		try {
-			const upload = await user.drive.upload(newFile, key);
+		const upload = await user.drive.upload(newFile, key);
+		if (!upload.success || !upload.file) {
+			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
+		} else {
+			const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
+			toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
+			if (updated.success && upload.file) {
+				const index = files.indexOf(oldFile);
+				if (index !== -1) files[index] = upload.file;
+				setFiles(files);
 
-			if (!upload.success || !upload.file) {
-				toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-			} else {
-				const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
-				toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
-				if (updated.success && upload.file) {
-					const index = files.indexOf(oldFile);
-					if (index !== -1) files[index] = upload.file;
-					setFiles(files);
-
-					const deleted = await user.drive.delete(oldFile.hash);
-					toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
-				}
+				const deleted = await user.drive.delete(oldFile.hash);
+				toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			}
-			onCloseUpdateFileContent();
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to update the file', status: 'error' });
 		}
+		onCloseUpdateFileContent();
 		setIsUpdateLoading(false);
 	};
 
@@ -337,12 +325,14 @@ const Dashboard = (): JSX.Element => {
 			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+					<p>Path: "{path}"</p>
 					<DisplayFileCards
 						myFiles={files}
 						myPrograms={programs}
 						sharedFiles={sharedFiles}
 						contacts={contacts}
 						index={selectedTab}
+						path={path}
 						isUpdateLoading={isUpdateLoading}
 						setSelectedFile={setSelectedFile}
 						onOpenShare={onOpenShare}

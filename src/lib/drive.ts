@@ -40,7 +40,7 @@ class Drive {
 							keys: ['InterPlanetaryCloud'],
 						});
 
-						aggr.InterPlanetaryCloud.contacts.map((contactToFind: IPCContact) => {
+						aggr.InterPlanetaryCloud.contacts.forEach((contactToFind: IPCContact) => {
 							if (contactToFind.address === this.account!.address) {
 								if (contact.address === this.account!.address) {
 									this.files = this.files.concat(contactToFind.files);
@@ -84,6 +84,7 @@ class Drive {
 					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
+					isFile: true,
 					path: file.path,
 				};
 

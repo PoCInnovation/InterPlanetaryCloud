@@ -5,6 +5,7 @@ export type IPCFile = {
 	key: Encrypted;
 	name: string;
 	created_at: number;
+	isFile: boolean;
 	path: string;
 };
 

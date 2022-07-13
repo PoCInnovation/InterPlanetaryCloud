@@ -46,7 +46,7 @@ class Contact {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
 					APIServer: DEFAULT_API_V2,
-					address: this.account!.address,
+					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});
 
@@ -83,7 +83,7 @@ class Contact {
 		try {
 			if (this.account) {
 				if (contactAddress !== this.account.address) {
-					this.contacts.map((contact, index) => {
+					this.contacts.forEach((contact, index) => {
 						if (contact.address === contactAddress) {
 							this.contacts.splice(index, 1);
 							return true;
@@ -132,7 +132,7 @@ class Contact {
 			if (this.account) {
 				await Promise.all(
 					this.contacts.map(async (contact, i) => {
-						this.contacts[i].files.map(async (file, j) => {
+						this.contacts[i].files.forEach(async (file, j) => {
 							if (file.hash === oldHash) {
 								this.contacts[i].files[j].hash = newFile.hash;
 								this.contacts[i].files[j].key = await encryptWithPublicKey(
@@ -230,6 +230,7 @@ class Contact {
 									),
 									created_at: mainFile.created_at,
 									name: mainFile.name,
+									isFile: true,
 									path: mainFile.path,
 								});
 								await this.publishAggregate();
