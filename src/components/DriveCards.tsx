@@ -6,6 +6,7 @@ import { MdPeopleAlt } from 'react-icons/md';
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
 import FileEditButtons from 'components/FileEditButtons';
+import MoveFileButton from 'components/MoveFileButton';
 
 import type { IPCFile } from 'types/types';
 
@@ -18,6 +19,7 @@ type DriveCardsProps = {
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
+	onOpenMoveFile: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 };
@@ -57,6 +59,7 @@ const DriveCards = ({
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
+	onOpenMoveFile,
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
 }: DriveCardsProps): JSX.Element => {
@@ -80,6 +83,7 @@ const DriveCards = ({
 		<>
 			<PathCard path={path} setPath={setPath} />
 			{files.map((file: IPCFile) => {
+				console.log(file.path);
 				if (file.isFile) {
 					return (
 						<FileCard key={file.created_at} file={file}>
@@ -111,6 +115,12 @@ const DriveCards = ({
 								>
 									<Icon as={MdPeopleAlt} />
 								</Button>
+								<MoveFileButton
+									file={file}
+									isUpdateLoading={isUpdateLoading}
+									setSelectedFile={setSelectedFile}
+									onOpenMoveFile={onOpenMoveFile}
+								/>
 								<FileEditButtons
 									file={file}
 									isUpdateLoading={isUpdateLoading}

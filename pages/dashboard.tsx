@@ -44,6 +44,7 @@ const Dashboard = (): JSX.Element => {
 		onOpen: onOpenUpdateFileName,
 		onClose: onCloseUpdateFileName,
 	} = useDisclosure();
+	const { isOpen: isOpenMoveFile, onOpen: onOpenMoveFile, onClose: onCloseMoveFile } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
@@ -73,6 +74,7 @@ const Dashboard = (): JSX.Element => {
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [folderNameEvent, setFolderNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [newPath, setNewPath] = useState('');
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -183,6 +185,14 @@ const Dashboard = (): JSX.Element => {
 			}
 			onCloseUpdateFileName();
 		}
+	};
+
+	const moveFile = async () => {
+		const index = files.indexOf(selectedFile);
+
+		if (index !== -1) files[index].path = newPath;
+		setFiles(files);
+		onCloseMoveFile();
 	};
 
 	const updateFileContent = async () => {
@@ -328,6 +338,7 @@ const Dashboard = (): JSX.Element => {
 						path={path}
 						setPath={setPath}
 						isUpdateLoading={isUpdateLoading}
+						onOpenMoveFile={onOpenMoveFile}
 						setSelectedFile={setSelectedFile}
 						onOpenShare={onOpenShare}
 						setContactInfo={setContactInfo}
@@ -515,6 +526,36 @@ const Dashboard = (): JSX.Element => {
 						placeholder={selectedFile.name}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
 						id="ipc-dashboard-input-update-filename"
+					/>
+				</FormControl>
+			</Modal>
+			<Modal
+				isOpen={isOpenMoveFile}
+				onClose={onCloseMoveFile}
+				title="Move file"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={moveFile}
+						isLoading={isUploadLoading}
+						id="ipc-dashboard-update-filename-button"
+					>
+						OK
+					</Button>
+				}
+			>
+				<FormControl>
+					<FormLabel>Move File</FormLabel>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						placeholder={`Current: '${selectedFile.path}'`}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setNewPath(e.target.value)}
+						id="ipc-dashboard-input-move-file"
 					/>
 				</FormControl>
 			</Modal>

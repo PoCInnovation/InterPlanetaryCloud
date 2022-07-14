@@ -19,6 +19,7 @@ type CardsProps = {
 	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
+	onOpenMoveFile: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
@@ -35,6 +36,7 @@ export const DisplayCards = ({
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
+	onOpenMoveFile,
 	setContactInfo,
 	onOpenContactUpdate,
 	onOpenContactAdd,
@@ -51,6 +53,7 @@ export const DisplayCards = ({
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenMoveFile={onOpenMoveFile}
 				onOpenUpdateFileName={onOpenUpdateFileName}
 				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>
@@ -64,6 +67,7 @@ export const DisplayCards = ({
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenMoveFile={onOpenMoveFile}
 				onOpenUpdateFileName={onOpenUpdateFileName}
 				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>
