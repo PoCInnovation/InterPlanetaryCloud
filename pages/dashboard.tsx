@@ -31,7 +31,7 @@ import { generateFileKey } from 'utils/generateFileKey';
 import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
 import { ResponsiveBar } from 'components/ResponsiveBar';
-import { DisplayFileCards } from 'components/DisplayFileCards';
+import { DisplayCards } from 'components/DisplayCards';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -320,7 +320,7 @@ const Dashboard = (): JSX.Element => {
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<p>Path: "{path}"</p>
-					<DisplayFileCards
+					<DisplayCards
 						myFiles={files}
 						myPrograms={programs}
 						sharedFiles={sharedFiles}

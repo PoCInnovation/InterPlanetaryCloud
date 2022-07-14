@@ -1,11 +1,11 @@
-import FileCards from 'components/FileCards';
+import DriveCards from 'components/DriveCards';
 import ProgramCards from 'components/ProgramCards';
 import ContactCards from 'components/ContactCards';
 import ProfileCard from 'components/ProfileCard';
 
 import type { IPCContact, IPCFile, IPCProgram } from 'types/types';
 
-type FileCardsProps = {
+type CardsProps = {
 	myFiles: IPCFile[];
 	myPrograms: IPCProgram[];
 	sharedFiles: IPCFile[];
@@ -23,7 +23,7 @@ type FileCardsProps = {
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
-export const DisplayFileCards = ({
+export const DisplayCards = ({
 	myFiles,
 	myPrograms,
 	sharedFiles,
@@ -39,13 +39,12 @@ export const DisplayFileCards = ({
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
 	deleteContact,
-}: FileCardsProps): JSX.Element => {
+}: CardsProps): JSX.Element => {
 	if (index === 0)
 		return (
-			<FileCards
+			<DriveCards
 				files={myFiles.filter((file) => file.path === path)}
 				isUpdateLoading={isUpdateLoading}
-				path={path}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
 				onOpenUpdateFileName={onOpenUpdateFileName}
@@ -54,10 +53,9 @@ export const DisplayFileCards = ({
 		);
 	if (index === 1)
 		return (
-			<FileCards
+			<DriveCards
 				files={sharedFiles}
 				isUpdateLoading={isUpdateLoading}
-				path={path}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
 				onOpenUpdateFileName={onOpenUpdateFileName}
