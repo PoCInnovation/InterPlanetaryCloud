@@ -149,7 +149,7 @@ const Dashboard = (): JSX.Element => {
 			created_at: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			isFile: true,
-			path: '',
+			path,
 		};
 		setIsUploadLoading(true);
 		if (user.account) {
@@ -200,7 +200,7 @@ const Dashboard = (): JSX.Element => {
 			created_at: oldFile.created_at,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			isFile: true,
-			path: '',
+			path: oldFile.path,
 		};
 		setIsUpdateLoading(true);
 		const upload = await user.drive.upload(newFile, key);
@@ -288,7 +288,7 @@ const Dashboard = (): JSX.Element => {
 			const folder = {
 				name,
 				isFile: false,
-				path: '',
+				path,
 				hash: '',
 				key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 				created_at: Date.now(),
@@ -327,6 +327,7 @@ const Dashboard = (): JSX.Element => {
 						contacts={contacts}
 						index={selectedTab}
 						path={path}
+						setPath={setPath}
 						isUpdateLoading={isUpdateLoading}
 						setSelectedFile={setSelectedFile}
 						onOpenShare={onOpenShare}

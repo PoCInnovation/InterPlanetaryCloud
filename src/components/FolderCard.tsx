@@ -3,9 +3,11 @@ import { MouseEvent, useState } from 'react';
 
 type FolderCardProps = {
 	name: string;
+	path: string;
+	setPath: (path: string) => void;
 };
 
-const FolderCard = ({ name }: FolderCardProps): JSX.Element => {
+const FolderCard = ({ name, path, setPath }: FolderCardProps): JSX.Element => {
 	const [open, setOpen] = useState(false);
 
 	const handleClick = (e: MouseEvent): void => {
@@ -25,6 +27,7 @@ const FolderCard = ({ name }: FolderCardProps): JSX.Element => {
 			mb="8px"
 			display="flex"
 			justifyContent="space-between"
+			onClick={() => setPath(`${path}/${name}`.replace(/^\//, ''))}
 			onContextMenu={(e) => handleClick(e)}
 		>
 			<VStack w="100%" justify="space-between" align="center">

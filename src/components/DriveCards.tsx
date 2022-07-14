@@ -13,6 +13,8 @@ import { useUserContext } from 'contexts/user';
 
 type DriveCardsProps = {
 	files: IPCFile[];
+	path: string;
+	setPath: (path: string) => void;
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
@@ -22,6 +24,8 @@ type DriveCardsProps = {
 
 const DriveCards = ({
 	files,
+	path,
+	setPath,
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
@@ -89,7 +93,7 @@ const DriveCards = ({
 						</FileCard>
 					);
 				}
-				return <FolderCard key={file.created_at} name={file.name} />;
+				return <FolderCard key={file.created_at} name={file.name} path={path} setPath={setPath} />;
 			})}
 		</>
 	);
