@@ -103,6 +103,7 @@ const Dashboard = (): JSX.Element => {
 		const loadShared = await user.drive.loadShared(user.contact.contacts);
 		toast({ title: loadShared.message, status: loadShared.success ? 'success' : 'error' });
 		setFiles(user.drive.files);
+		setFolders(user.drive.folders);
 		setSharedFiles(user.drive.sharedFiles);
 
 		const loadedPrograms = await user.computing.loadPrograms();
@@ -187,11 +188,16 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
-	const moveFile = () => {
-		const index = files.indexOf(selectedFile);
+	const moveFile = async () => {
+		const moved = await user.contact.moveFile(selectedFile, newPath);
 
-		if (index !== -1) files[index].path = newPath;
-		setFiles(files);
+		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
+
+		const index = files.indexOf(selectedFile);
+		if (index !== -1) {
+			files[index].path = newPath;
+			setFiles(files);
+		}
 		onCloseMoveFile();
 	};
 

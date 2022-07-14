@@ -86,9 +86,7 @@ class Contact {
 					this.contacts.forEach((contact, index) => {
 						if (contact.address === contactAddress) {
 							this.contacts.splice(index, 1);
-							return true;
 						}
-						return false;
 					});
 
 					await this.publishAggregate();
@@ -106,15 +104,13 @@ class Contact {
 	public async update(contactAddress: string, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				this.contacts.forEach(async (contact, index) => {
-					if (contact.address === contactAddress) {
-						this.contacts[index].name = newName;
+				const contact = this.contacts.find((c) => c.address === contactAddress);
 
-						await this.publishAggregate();
-						return { success: true, message: 'Contact updated' };
-					}
-					return false;
-				});
+				if (contact) {
+					contact.name = newName;
+					await this.publishAggregate();
+					return { success: true, message: 'Contact updated' };
+				}
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -153,10 +149,9 @@ class Contact {
 	public hasEditPermission(hash: string): ResponseType {
 		try {
 			if (this.account) {
-				const owner = this.account.address;
 				if (
 					this.contacts.find((contact, index) => {
-						if (owner === contact.address) {
+						if (this.account?.address === contact.address) {
 							return this.contacts[index].files.find((file) => file.hash === hash);
 						}
 						return false;
@@ -188,15 +183,9 @@ class Contact {
 	private async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					this.contacts[contactIndex].files.find((file, fileIndex) => {
-						if (file.hash === fileHash) {
-							this.contacts[contactIndex].files[fileIndex].name = newName;
-							return true;
-						}
-						return false;
-					})
-				) {
+				const file = this.contacts[contactIndex].files.find((f) => f.hash === fileHash);
+				if (file) {
+					file.name = newName;
 					await this.publishAggregate();
 					return { success: true, message: 'Filename updated' };
 				}
@@ -262,6 +251,29 @@ class Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
+
+	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					const currentFile = contact.files.find((f) => f.hash === file.hash);
+					if (currentFile) {
+						currentFile.path = newPath;
+						await this.publishAggregate();
+						return { success: true, message: 'File moved' };
+					}
+					return { success: false, message: 'File does not exist' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to move the file' };
 		}
 	}
 }

@@ -10,11 +10,13 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import type { IPCContact, IPCFile, ResponseType, UploadResponse, AggregateType } from 'types/types';
+import type { IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse, AggregateType } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Drive {
 	public files: IPCFile[];
+
+	public folders: IPCFolder[];
 
 	public sharedFiles: IPCFile[];
 
@@ -24,6 +26,7 @@ class Drive {
 
 	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
+		this.folders = [];
 		this.sharedFiles = [];
 		this.account = importedAccount;
 		this.private_key = private_key;
@@ -43,13 +46,12 @@ class Drive {
 						aggr.InterPlanetaryCloud.contacts.forEach((contactToFind: IPCContact) => {
 							if (contactToFind.address === this.account!.address) {
 								if (contact.address === this.account!.address) {
-									this.files = this.files.concat(contactToFind.files);
+									this.files = contactToFind.files;
+									this.folders = contactToFind.folders;
 								} else {
 									this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
 								}
-								return true;
 							}
-							return false;
 						});
 					}),
 				);
