@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Icon, useToast, HStack, Text, Flex } from '@chakra-ui/react';
+import { Button, Icon, useToast, HStack, Text } from '@chakra-ui/react';
 import { DownloadIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import { MdPeopleAlt } from 'react-icons/md';
 
@@ -8,12 +8,13 @@ import FolderCard from 'components/FolderCard';
 import FileEditButtons from 'components/FileEditButtons';
 import MoveFileButton from 'components/MoveFileButton';
 
-import type { IPCFile } from 'types/types';
+import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 
 type DriveCardsProps = {
 	files: IPCFile[];
+	folders: IPCFolder[];
 	path: string;
 	setPath: (path: string) => void;
 	isUpdateLoading: boolean;
@@ -54,6 +55,7 @@ const PathCard = ({ path, setPath }: PathCardProps): JSX.Element => {
 
 const DriveCards = ({
 	files,
+	folders,
 	path,
 	setPath,
 	isUpdateLoading,
@@ -82,58 +84,55 @@ const DriveCards = ({
 	return (
 		<>
 			<PathCard path={path} setPath={setPath} />
-			{files.map((file: IPCFile) => {
-				console.log(file.path);
-				if (file.isFile) {
-					return (
-						<FileCard key={file.created_at} file={file}>
-							<>
-								<Button
-									variant="inline"
-									size="sm"
-									w="100%"
-									p="0px"
-									mx="4px"
-									onClick={async () => downloadFile(file)}
-									isLoading={isDownloadLoading}
-									id="ipc-dashboard-download-button"
-								>
-									<DownloadIcon />
-								</Button>
-								<Button
-									variant="reverseInline"
-									size="sm"
-									w="100%"
-									p="0px"
-									mx="4px"
-									onClick={() => {
-										setSelectedFile(file);
-										onOpenShare();
-									}}
-									isLoading={isDownloadLoading}
-									id="ipc-dashboard-share-button"
-								>
-									<Icon as={MdPeopleAlt} />
-								</Button>
-								<MoveFileButton
-									file={file}
-									isUpdateLoading={isUpdateLoading}
-									setSelectedFile={setSelectedFile}
-									onOpenMoveFile={onOpenMoveFile}
-								/>
-								<FileEditButtons
-									file={file}
-									isUpdateLoading={isUpdateLoading}
-									setSelectedFile={setSelectedFile}
-									onOpenUpdateFileName={onOpenUpdateFileName}
-									onOpenUpdateFileContent={onOpenUpdateFileContent}
-								/>
-							</>
-						</FileCard>
-					);
-				}
-				return <FolderCard key={file.created_at} name={file.name} path={path} setPath={setPath} />;
-			})}
+			{folders.map((folder) => (
+				<FolderCard key={folder.created_at} name={folder.name} path={path} setPath={setPath} />
+			))}
+			{files.map((file) => (
+				<FileCard key={file.created_at} file={file}>
+					<>
+						<Button
+							variant="inline"
+							size="sm"
+							w="100%"
+							p="0px"
+							mx="4px"
+							onClick={async () => downloadFile(file)}
+							isLoading={isDownloadLoading}
+							id="ipc-dashboard-download-button"
+						>
+							<DownloadIcon />
+						</Button>
+						<Button
+							variant="reverseInline"
+							size="sm"
+							w="100%"
+							p="0px"
+							mx="4px"
+							onClick={() => {
+								setSelectedFile(file);
+								onOpenShare();
+							}}
+							isLoading={isDownloadLoading}
+							id="ipc-dashboard-share-button"
+						>
+							<Icon as={MdPeopleAlt} />
+						</Button>
+						<MoveFileButton
+							file={file}
+							isUpdateLoading={isUpdateLoading}
+							setSelectedFile={setSelectedFile}
+							onOpenMoveFile={onOpenMoveFile}
+						/>
+						<FileEditButtons
+							file={file}
+							isUpdateLoading={isUpdateLoading}
+							setSelectedFile={setSelectedFile}
+							onOpenUpdateFileName={onOpenUpdateFileName}
+							onOpenUpdateFileContent={onOpenUpdateFileContent}
+						/>
+					</>
+				</FileCard>
+			))}
 		</>
 	);
 };

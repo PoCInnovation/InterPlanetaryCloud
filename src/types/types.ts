@@ -5,7 +5,12 @@ export type IPCFile = {
 	key: Encrypted;
 	name: string;
 	created_at: number;
-	isFile: boolean;
+	path: string;
+};
+
+export type IPCFolder = {
+	name: string;
+	created_at: number;
 	path: string;
 };
 
@@ -20,6 +25,7 @@ export type IPCContact = {
 	address: string;
 	publicKey: string;
 	files: IPCFile[];
+	folders: IPCFolder[];
 };
 
 export type ResponseType = {

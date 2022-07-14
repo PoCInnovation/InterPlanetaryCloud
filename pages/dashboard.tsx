@@ -22,7 +22,7 @@ import EthCrypto from 'eth-crypto';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile, IPCContact, IPCProgram } from 'types/types';
+import type { IPCFile, IPCFolder, IPCContact, IPCProgram } from 'types/types';
 
 import Modal from 'components/Modal';
 
@@ -55,6 +55,7 @@ const Dashboard = (): JSX.Element => {
 	} = useDisclosure();
 	const { isOpen: isOpenCreateFolder, onOpen: onOpenCreateFolder, onClose: onCloseCreateFolder } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [folders, setFolders] = useState<IPCFolder[]>([]);
 	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
@@ -63,6 +64,7 @@ const Dashboard = (): JSX.Element => {
 		address: '',
 		publicKey: '',
 		files: [],
+		folders: [],
 	});
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [path, setPath] = useState('/');
@@ -83,7 +85,6 @@ const Dashboard = (): JSX.Element => {
 		hash: '',
 		created_at: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-		isFile: true,
 		path: '/',
 	});
 
@@ -150,7 +151,6 @@ const Dashboard = (): JSX.Element => {
 			hash: fileContent,
 			created_at: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			isFile: true,
 			path,
 		};
 		setIsUploadLoading(true);
@@ -209,7 +209,6 @@ const Dashboard = (): JSX.Element => {
 			hash: fileContent,
 			created_at: oldFile.created_at,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			isFile: true,
 			path: oldFile.path,
 		};
 		setIsUpdateLoading(true);
@@ -253,6 +252,7 @@ const Dashboard = (): JSX.Element => {
 				address: EthCrypto.publicKey.toAddress(contactsPublicKeyEvent.target.value.slice(2)),
 				publicKey: contactsPublicKeyEvent.target.value,
 				files: [],
+				folders: [],
 			});
 
 			toast({ title: add.message, status: add.success ? 'success' : 'error' });
@@ -295,20 +295,16 @@ const Dashboard = (): JSX.Element => {
 		if (folderNameEvent) {
 			const name = folderNameEvent.target.value;
 
-			const folder = {
+			const folder: IPCFolder = {
 				name,
-				isFile: false,
 				path,
-				hash: '',
-				key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 				created_at: Date.now(),
 			};
 
 			const created = await user.contact.createFolder(folder);
 			toast({ title: created.message, status: created.success ? 'success' : 'error' });
 			if (created.success) {
-				files.push(folder);
-				setFiles(files);
+				setFolders([...folders, folder]);
 			}
 			onCloseCreateFolder();
 		}
@@ -331,6 +327,7 @@ const Dashboard = (): JSX.Element => {
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayCards
 						myFiles={files}
+						myFolders={folders}
 						myPrograms={programs}
 						sharedFiles={sharedFiles}
 						contacts={contacts}

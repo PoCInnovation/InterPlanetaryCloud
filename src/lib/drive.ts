@@ -10,7 +10,7 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import type { IPCContact, IPCFile, ResponseType, UploadResponse, AggregateType } from 'types/types';
+import type { IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse, AggregateType } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Drive {
@@ -84,7 +84,6 @@ class Drive {
 					hash: fileHashPublishStore.content.item_hash,
 					created_at: file.created_at,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
-					isFile: true,
 					path: file.path,
 				};
 

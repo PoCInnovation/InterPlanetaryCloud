@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType, IPCFolder } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Contact {
@@ -230,7 +230,6 @@ class Contact {
 									),
 									created_at: mainFile.created_at,
 									name: mainFile.name,
-									isFile: true,
 									path: mainFile.path,
 								});
 								await this.publishAggregate();
@@ -250,16 +249,17 @@ class Contact {
 		}
 	}
 
-	public async createFolder(folder: IPCFile): Promise<ResponseType> {
+	public async createFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const contact = this.contacts.find((c) => c.address === this.account?.address);
-				if (contact) {
-					contact.files.push(folder);
-					await this.publishAggregate();
-
-					return { success: true, message: 'Folder created' };
-				}
+				this.contacts = this.contacts.map((contact) => {
+					if (contact.address === this.account?.address) {
+						contact.folders.push(folder);
+					}
+					return contact;
+				});
+				await this.publishAggregate();
+				return { success: true, message: 'Folder created' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {

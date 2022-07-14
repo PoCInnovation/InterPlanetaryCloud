@@ -3,10 +3,11 @@ import ProgramCards from 'components/ProgramCards';
 import ContactCards from 'components/ContactCards';
 import ProfileCard from 'components/ProfileCard';
 
-import type { IPCContact, IPCFile, IPCProgram } from 'types/types';
+import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
 type CardsProps = {
 	myFiles: IPCFile[];
+	myFolders: IPCFolder[];
 	myPrograms: IPCProgram[];
 	sharedFiles: IPCFile[];
 	contacts: IPCContact[];
@@ -27,6 +28,7 @@ type CardsProps = {
 
 export const DisplayCards = ({
 	myFiles,
+	myFolders,
 	myPrograms,
 	sharedFiles,
 	contacts,
@@ -47,7 +49,8 @@ export const DisplayCards = ({
 	if (index === 0)
 		return (
 			<DriveCards
-				files={myFiles.filter((file) => file.path === path)}
+				files={myFiles.filter((elem) => elem.path === path)}
+				folders={myFolders.filter((elem) => elem.path === path)}
 				path={path}
 				setPath={setPath}
 				isUpdateLoading={isUpdateLoading}
@@ -62,6 +65,7 @@ export const DisplayCards = ({
 		return (
 			<DriveCards
 				files={sharedFiles}
+				folders={[]}
 				path={path}
 				setPath={setPath}
 				isUpdateLoading={isUpdateLoading}
