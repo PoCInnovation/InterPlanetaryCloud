@@ -43,7 +43,7 @@ export const DisplayFileCards = ({
 	if (index === 0)
 		return (
 			<FileCards
-				files={myFiles}
+				files={myFiles.filter((file) => file.path === path)}
 				isUpdateLoading={isUpdateLoading}
 				path={path}
 				setSelectedFile={setSelectedFile}

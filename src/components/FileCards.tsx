@@ -44,11 +44,10 @@ const FileCards = ({
 		}
 		setIsDownloadLoading(false);
 	};
-	const currentFiles = files.filter((file) => file.path === path);
 
 	return (
 		<>
-			{currentFiles.forEach((file: IPCFile) => (
+			{files.map((file: IPCFile) => (
 				<FileCard key={file.created_at} file={file}>
 					<>
 						<Button

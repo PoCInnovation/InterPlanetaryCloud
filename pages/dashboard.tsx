@@ -47,13 +47,14 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
-	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const {
 		isOpen: isOpenUpdateFileContent,
 		onOpen: onOpenUpdateFileContent,
 		onClose: onCloseUpdateFileContent,
 	} = useDisclosure();
+	const { isOpen: isOpenCreateFolder, onOpen: onOpenCreateFolder, onClose: onCloseCreateFolder } = useDisclosure();
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
 	const [contactInfos, setContactInfo] = useState<IPCContact>({
@@ -67,9 +68,11 @@ const Dashboard = (): JSX.Element => {
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+	const [isCreateFolderLoading, setIsCreateFolderLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+	const [folderNameEvent, setFolderNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -156,10 +159,7 @@ const Dashboard = (): JSX.Element => {
 			} else {
 				user.drive.files.push(upload.file);
 
-				const shared = await user.contact.addFileToContact(
-					user.account.address,
-					user.drive.files[user.drive.files.length - 1],
-				);
+				const shared = await user.contact.addFileToContact(user.account.address, upload.file);
 				toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
 			}
 		} else {
@@ -280,14 +280,41 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
+	const createFolder = async () => {
+		setIsCreateFolderLoading(true);
+		if (folderNameEvent) {
+			const name = folderNameEvent.target.value;
+
+			const folder = {
+				name,
+				isFile: false,
+				path: '',
+				hash: '',
+				key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+				created_at: Date.now(),
+			};
+
+			const created = await user.contact.createFolder(folder);
+			toast({ title: created.message, status: created.success ? 'success' : 'error' });
+			if (created.success) {
+				files.push(folder);
+				setFiles(files);
+			}
+			onCloseCreateFolder();
+		}
+		setIsCreateFolderLoading(false);
+	};
+
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBar
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
+				onOpenCreateFolder={onOpenCreateFolder}
 				setSelectedTab={setSelectedTab}
 				isUploadLoading={isUploadLoading}
 				isDeployLoading={isDeployLoading}
+				isCreateFolderLoading={isCreateFolderLoading}
 				selectedTab={selectedTab}
 			/>
 			<Box w="100%" m="32px !important">
@@ -363,6 +390,35 @@ const Dashboard = (): JSX.Element => {
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
 					id="ipc-dashboard-upload-file"
 				/>
+			</Modal>
+			<Modal
+				isOpen={isOpenCreateFolder}
+				onClose={onCloseCreateFolder}
+				title="Create a folder"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={createFolder}
+						isLoading={isCreateFolderLoading}
+						id="ipc-dashboard-create-folder-modal-button"
+					>
+						Create Folder
+					</Button>
+				}
+			>
+				<FormControl>
+					<FormLabel>Name</FormLabel>
+					<Input
+						type="text"
+						w="100%"
+						p="10px"
+						my="4px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFolderNameEvent(e)}
+						id="ipc-dashboard-input-folder-name"
+					/>
+				</FormControl>
 			</Modal>
 			<Modal
 				isOpen={isOpenContactAdd}

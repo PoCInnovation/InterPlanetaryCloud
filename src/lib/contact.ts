@@ -249,6 +249,24 @@ class Contact {
 			return { success: false, message: 'Failed to share the file with the contact' };
 		}
 	}
+
+	public async createFolder(folder: IPCFile): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				if (contact) {
+					contact.files.push(folder);
+					await this.publishAggregate();
+
+					return { success: true, message: 'Folder created' };
+				}
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
 }
 
 export default Contact;

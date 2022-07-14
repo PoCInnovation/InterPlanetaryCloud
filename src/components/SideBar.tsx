@@ -10,6 +10,7 @@ type SideBarPropsType = {
 	profileTab: string;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
+	createFolderButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
 	currentTabIndex: number;
 };
@@ -22,6 +23,7 @@ const SideBar = ({
 	profileTab,
 	uploadButton,
 	deployButton,
+	createFolderButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -91,6 +93,7 @@ const SideBar = ({
 			</Tabs>
 			{uploadButton}
 			{deployButton}
+			{createFolderButton}
 		</VStack>
 	</VStack>
 );
