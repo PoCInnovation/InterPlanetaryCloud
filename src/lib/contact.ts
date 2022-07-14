@@ -106,18 +106,15 @@ class Contact {
 	public async update(contactAddress: string, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					this.contacts.find((contact, index) => {
-						if (contact.address === contactAddress) {
-							this.contacts[index].name = newName;
-							return true;
-						}
-						return false;
-					})
-				) {
-					await this.publishAggregate();
-					return { success: true, message: 'Contact updated' };
-				}
+				this.contacts.forEach(async (contact, index) => {
+					if (contact.address === contactAddress) {
+						this.contacts[index].name = newName;
+
+						await this.publishAggregate();
+						return { success: true, message: 'Contact updated' };
+					}
+					return false;
+				});
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -132,16 +129,16 @@ class Contact {
 			if (this.account) {
 				await Promise.all(
 					this.contacts.map(async (contact, i) => {
-						this.contacts[i].files.forEach(async (file, j) => {
-							if (file.hash === oldHash) {
-								this.contacts[i].files[j].hash = newFile.hash;
-								this.contacts[i].files[j].key = await encryptWithPublicKey(
-									contact.publicKey.slice(2),
-									await decryptWithPrivateKey(this.private_key, newFile.key),
-								);
-								await this.publishAggregate();
-							}
-						});
+						const file = this.contacts[i].files.find((f) => f.hash === oldHash);
+
+						if (file) {
+							file.hash = newFile.hash;
+							file.key = await encryptWithPublicKey(
+								contact.publicKey.slice(2),
+								await decryptWithPrivateKey(this.private_key, newFile.key),
+							);
+							await this.publishAggregate();
+						}
 					}),
 				);
 				return { success: true, message: 'File content updated' };
@@ -252,14 +249,14 @@ class Contact {
 	public async createFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				this.contacts = this.contacts.map((contact) => {
-					if (contact.address === this.account?.address) {
-						contact.folders.push(folder);
-					}
-					return contact;
-				});
-				await this.publishAggregate();
-				return { success: true, message: 'Folder created' };
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					contact.folders.push(folder);
+					await this.publishAggregate();
+					return { success: true, message: 'Folder created' };
+				}
+				return { success: false, message: 'Failed to load contact' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {

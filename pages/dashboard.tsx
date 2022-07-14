@@ -187,7 +187,7 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
-	const moveFile = async () => {
+	const moveFile = () => {
 		const index = files.indexOf(selectedFile);
 
 		if (index !== -1) files[index].path = newPath;
@@ -537,7 +537,7 @@ const Dashboard = (): JSX.Element => {
 						mb="16px"
 						onClick={moveFile}
 						isLoading={isUploadLoading}
-						id="ipc-dashboard-update-filename-button"
+						id="ipc-dashboard-move-file-button"
 					>
 						OK
 					</Button>
