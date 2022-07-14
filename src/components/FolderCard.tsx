@@ -27,7 +27,7 @@ const FolderCard = ({ name, path, setPath }: FolderCardProps): JSX.Element => {
 			mb="8px"
 			display="flex"
 			justifyContent="space-between"
-			onClick={() => setPath(`${path}/${name}`.replace(/^\//, ''))}
+			onClick={() => setPath(`${path}${name}/`)}
 			onContextMenu={(e) => handleClick(e)}
 		>
 			<VStack w="100%" justify="space-between" align="center">

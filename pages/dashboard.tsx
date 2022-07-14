@@ -64,7 +64,7 @@ const Dashboard = (): JSX.Element => {
 		files: [],
 	});
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [path, setPath] = useState('');
+	const [path, setPath] = useState('/');
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
@@ -82,7 +82,7 @@ const Dashboard = (): JSX.Element => {
 		created_at: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		isFile: true,
-		path: '',
+		path: '/',
 	});
 
 	useEffect(() => {
@@ -319,7 +319,6 @@ const Dashboard = (): JSX.Element => {
 			/>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-					<p>Path: "{path}"</p>
 					<DisplayCards
 						myFiles={files}
 						myPrograms={programs}

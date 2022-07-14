@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, Icon, useToast } from '@chakra-ui/react';
-import { DownloadIcon } from '@chakra-ui/icons';
+import { Button, Icon, useToast, HStack, Text, Flex } from '@chakra-ui/react';
+import { DownloadIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import { MdPeopleAlt } from 'react-icons/md';
 
 import FileCard from 'components/FileCard';
@@ -20,6 +20,34 @@ type DriveCardsProps = {
 	onOpenShare: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
+};
+
+type PathCardProps = {
+	path: string;
+	setPath: (path: string) => void;
+};
+
+const PathCard = ({ path, setPath }: PathCardProps): JSX.Element => {
+	if (path === '/') return <></>;
+
+	return (
+		<HStack w="100%" align="center">
+			<Button
+				variant="inline"
+				size="sm"
+				w="25%"
+				p="0px"
+				mx="4px"
+				onClick={() => setPath(path.replace(/([^/]+)\/$/, ''))}
+				id="ipc-dashboard-back-path-button"
+			>
+				<ArrowBackIcon />
+			</Button>
+			<Text fontWeight="500" isTruncated>
+				{path}
+			</Text>
+		</HStack>
+	);
 };
 
 const DriveCards = ({
@@ -50,6 +78,7 @@ const DriveCards = ({
 
 	return (
 		<>
+			<PathCard path={path} setPath={setPath} />
 			{files.map((file: IPCFile) => {
 				if (file.isFile) {
 					return (
