@@ -10,7 +10,7 @@ type ProgramCardsProps = {
 
 const ProgramCards = ({ programs }: ProgramCardsProps): JSX.Element => (
 	<>
-		{programs.map((program: IPCProgram) => (
+		{programs.forEach((program: IPCProgram) => (
 			<ProgramCard key={program.created_at} program={program}>
 				<Button
 					as="a"

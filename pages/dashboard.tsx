@@ -94,19 +94,14 @@ const Dashboard = (): JSX.Element => {
 	}, []);
 
 	const loadUserContents = async () => {
-		try {
-			const loadShared = await user.drive.loadShared(user.contact.contacts);
-			toast({ title: loadShared.message, status: loadShared.success ? 'success' : 'error' });
-			setFiles(user.drive.files);
-			setSharedFiles(user.drive.sharedFiles);
+		const loadShared = await user.drive.loadShared(user.contact.contacts);
+		toast({ title: loadShared.message, status: loadShared.success ? 'success' : 'error' });
+		setFiles(user.drive.files);
+		setSharedFiles(user.drive.sharedFiles);
 
-			const loadedPrograms = await user.computing.loadPrograms();
-			toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
-			setPrograms(user.computing.programs);
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to load shared drive', status: 'error' });
-		}
+		const loadedPrograms = await user.computing.loadPrograms();
+		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
+		setPrograms(user.computing.programs);
 	};
 
 	const uploadProgram = async () => {
@@ -116,21 +111,17 @@ const Dashboard = (): JSX.Element => {
 		if (!filename) return;
 
 		setIsDeployLoading(true);
-		try {
-			const upload = await user.computing.uploadProgram(
-				{
-					name: filename,
-					hash: '',
-					created_at: Date.now(),
-				},
-				fileEvent.target.files[0],
-			);
-			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-			onCloseProgram();
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to upload file', status: 'error' });
-		}
+
+		const upload = await user.computing.uploadProgram(
+			{
+				name: filename,
+				hash: '',
+				created_at: Date.now(),
+			},
+			fileEvent.target.files[0],
+		);
+		toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
+		onCloseProgram();
 		setFileEvent(undefined);
 		setIsDeployLoading(false);
 	};
@@ -232,84 +223,60 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const shareFile = async (contact: IPCContact) => {
-		try {
-			const share = await user.contact.addFileToContact(contact.address, selectedFile);
-			onCloseShare();
-			toast({ title: share.message, status: share.success ? 'success' : 'error' });
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to share the file', status: 'error' });
-		}
+		const share = await user.contact.addFileToContact(contact.address, selectedFile);
+
+		onCloseShare();
+		toast({ title: share.message, status: share.success ? 'success' : 'error' });
 	};
 
 	const loadContact = async () => {
-		try {
-			const load = await user.contact.load();
-			toast({ title: load.message, status: load.success ? 'success' : 'error' });
+		const load = await user.contact.load();
 
-			setContacts(user.contact.contacts);
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to load contacts', status: 'error' });
-		}
+		toast({ title: load.message, status: load.success ? 'success' : 'error' });
+		setContacts(user.contact.contacts);
 	};
 
 	const addContact = async () => {
-		try {
-			if (contactsNameEvent && contactsPublicKeyEvent) {
-				const add = await user.contact.add({
-					name: contactsNameEvent.target.value,
-					address: EthCrypto.publicKey.toAddress(contactsPublicKeyEvent.target.value.slice(2)),
-					publicKey: contactsPublicKeyEvent.target.value,
-					files: [],
-				});
+		if (contactsNameEvent && contactsPublicKeyEvent) {
+			const add = await user.contact.add({
+				name: contactsNameEvent.target.value,
+				address: EthCrypto.publicKey.toAddress(contactsPublicKeyEvent.target.value.slice(2)),
+				publicKey: contactsPublicKeyEvent.target.value,
+				files: [],
+			});
 
-				toast({ title: add.message, status: add.success ? 'success' : 'error' });
-				setContacts(user.contact.contacts);
-			} else {
-				toast({ title: 'Bad contact infos', status: 'error' });
-			}
-			onCloseContactAdd();
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to add this contact', status: 'error' });
+			toast({ title: add.message, status: add.success ? 'success' : 'error' });
+			setContacts(user.contact.contacts);
+		} else {
+			toast({ title: 'Bad contact infos', status: 'error' });
 		}
+		onCloseContactAdd();
 	};
 
 	const updateContact = async () => {
-		try {
-			if (contactsPublicKeyEvent) {
-				const update = await user.contact.update(
-					contactInfos.address,
-					contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
-				);
-				toast({ title: update.message, status: update.success ? 'success' : 'error' });
-				setContacts(user.contact.contacts);
-			} else {
-				toast({ title: 'Invalid address', status: 'error' });
-			}
-			onCloseContactUpdate();
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to update this contact', status: 'error' });
+		if (contactsPublicKeyEvent) {
+			const update = await user.contact.update(
+				contactInfos.address,
+				contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
+			);
+			toast({ title: update.message, status: update.success ? 'success' : 'error' });
+			setContacts(user.contact.contacts);
+		} else {
+			toast({ title: 'Invalid address', status: 'error' });
 		}
+		onCloseContactUpdate();
 	};
 
 	const deleteContact = async (contactToDelete: IPCContact) => {
-		try {
-			const deletedContact = contacts.find((contact) => contact === contactToDelete);
+		const deletedContact = contacts.find((contact) => contact === contactToDelete);
 
-			if (deletedContact) {
-				const deleteResponse = await user.contact.remove(contactToDelete.address);
+		if (deletedContact) {
+			const deleteResponse = await user.contact.remove(contactToDelete.address);
 
-				toast({ title: deleteResponse.message, status: deleteResponse.success ? 'success' : 'error' });
-				setContacts(user.contact.contacts);
-			} else {
-				toast({ title: 'Unable to find this contact', status: 'error' });
-			}
-		} catch (error) {
-			console.error(error);
-			toast({ title: 'Unable to delete this contact', status: 'error' });
+			toast({ title: deleteResponse.message, status: deleteResponse.success ? 'success' : 'error' });
+			setContacts(user.contact.contacts);
+		} else {
+			toast({ title: 'Unable to find this contact', status: 'error' });
 		}
 	};
 

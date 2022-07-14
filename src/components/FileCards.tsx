@@ -48,7 +48,7 @@ const FileCards = ({
 
 	return (
 		<>
-			{currentFiles.map((file: IPCFile) => (
+			{currentFiles.forEach((file: IPCFile) => (
 				<FileCard key={file.created_at} file={file}>
 					<>
 						<Button

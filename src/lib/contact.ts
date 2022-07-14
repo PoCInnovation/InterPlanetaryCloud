@@ -188,7 +188,7 @@ class Contact {
 		}
 	}
 
-	public async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
+	private async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				if (

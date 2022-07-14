@@ -38,7 +38,7 @@ const ContactCards = ({
 				</Button>
 			</VStack>
 		</Box>
-		{contacts.map((contact, index) => {
+		{contacts.forEach((contact, index) => {
 			if (index !== 0)
 				return (
 					<ContactCard key={contact.publicKey} contact={contact}>
