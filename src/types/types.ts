@@ -4,20 +4,20 @@ export type IPCFile = {
 	hash: string;
 	key: Encrypted;
 	name: string;
-	created_at: number;
+	createdAt: number;
 	path: string;
 };
 
 export type IPCFolder = {
 	name: string;
-	created_at: number;
+	createdAt: number;
 	path: string;
 };
 
 export type IPCProgram = {
 	hash: string;
 	name: string;
-	created_at: number;
+	createdAt: number;
 };
 
 export type IPCContact = {

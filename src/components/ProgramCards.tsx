@@ -11,7 +11,7 @@ type ProgramCardsProps = {
 const ProgramCards = ({ programs }: ProgramCardsProps): JSX.Element => (
 	<>
 		{programs.map((program: IPCProgram) => (
-			<ProgramCard key={program.created_at} program={program}>
+			<ProgramCard key={program.createdAt} program={program}>
 				<Button
 					as="a"
 					href={`https://aleph.sh/vm/${program.hash}`}

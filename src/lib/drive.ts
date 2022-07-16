@@ -84,7 +84,7 @@ class Drive {
 				const newFile: IPCFile = {
 					name: file.name,
 					hash: fileHashPublishStore.content.item_hash,
-					created_at: file.created_at,
+					createdAt: file.createdAt,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
 					path: file.path,
 				};

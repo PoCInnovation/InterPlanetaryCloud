@@ -83,7 +83,7 @@ const Dashboard = (): JSX.Element => {
 	const [selectedFile, setSelectedFile] = useState<IPCFile>({
 		name: '',
 		hash: '',
-		created_at: 0,
+		createdAt: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		path: '/',
 	});
@@ -106,7 +106,7 @@ const Dashboard = (): JSX.Element => {
 		setFolders(user.drive.folders);
 		setSharedFiles(user.drive.sharedFiles);
 
-		const loadedPrograms = await user.computing.loadPrograms();
+		const loadedPrograms = await user.computing.load();
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
 		setPrograms(user.computing.programs);
 	};
@@ -119,11 +119,11 @@ const Dashboard = (): JSX.Element => {
 
 		setIsDeployLoading(true);
 
-		const upload = await user.computing.uploadProgram(
+		const upload = await user.computing.upload(
 			{
 				name: filename,
 				hash: '',
-				created_at: Date.now(),
+				createdAt: Date.now(),
 			},
 			fileEvent.target.files[0],
 		);
@@ -150,7 +150,7 @@ const Dashboard = (): JSX.Element => {
 		const file: IPCFile = {
 			name: filename,
 			hash: fileContent,
-			created_at: Date.now(),
+			createdAt: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path,
 		};
@@ -213,7 +213,7 @@ const Dashboard = (): JSX.Element => {
 		const newFile: IPCFile = {
 			name: oldFile.name,
 			hash: fileContent,
-			created_at: oldFile.created_at,
+			createdAt: oldFile.createdAt,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path: oldFile.path,
 		};
@@ -304,7 +304,7 @@ const Dashboard = (): JSX.Element => {
 			const folder: IPCFolder = {
 				name,
 				path,
-				created_at: Date.now(),
+				createdAt: Date.now(),
 			};
 
 			const created = await user.contact.createFolder(folder);

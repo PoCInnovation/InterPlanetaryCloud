@@ -85,10 +85,10 @@ const DriveCards = ({
 		<>
 			<PathCard path={path} setPath={setPath} />
 			{folders.map((folder) => (
-				<FolderCard key={folder.created_at} name={folder.name} path={path} setPath={setPath} />
+				<FolderCard key={folder.createdAt} name={folder.name} path={path} setPath={setPath} />
 			))}
 			{files.map((file) => (
-				<FileCard key={file.created_at} file={file}>
+				<FileCard key={file.createdAt} file={file}>
 					<>
 						<Button
 							variant="inline"

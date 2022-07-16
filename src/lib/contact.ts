@@ -214,7 +214,7 @@ class Contact {
 										contact.publicKey.slice(2),
 										await decryptWithPrivateKey(this.private_key, mainFile.key),
 									),
-									created_at: mainFile.created_at,
+									createdAt: mainFile.createdAt,
 									name: mainFile.name,
 									path: mainFile.path,
 								});
