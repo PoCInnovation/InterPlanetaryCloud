@@ -1,4 +1,17 @@
-import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
+import {
+	Tab, TabList, Tabs, Text, VStack,
+	Popover,
+	PopoverTrigger,
+	Portal,
+	PopoverContent,
+	Button,
+	PopoverHeader,
+	PopoverFooter,
+	PopoverBody,
+	HStack
+} from '@chakra-ui/react';
+
+import { FcFile, FcFolder, FcRules } from "react-icons/fc";
 
 import colors from 'theme/foundations/colors';
 
@@ -8,6 +21,7 @@ type SideBarPropsType = {
 	sharedFilesTab: string;
 	myProgramsTab: string;
 	profileTab: string;
+	newElemButton: JSX.Element;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
@@ -20,6 +34,7 @@ const SideBar = ({
 	sharedFilesTab,
 	myProgramsTab,
 	profileTab,
+	newElemButton,
 	uploadButton,
 	deployButton,
 	setSelectedTab,
@@ -41,10 +56,36 @@ const SideBar = ({
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"
 				id="ipc-sideBar-title"
-				pb="64px"
 			>
 				Inter Planetary Cloud
 			</Text>
+			<Popover placement='right' closeOnBlur={false}>
+				<PopoverTrigger>
+					<Button variant="inline" w="80%" borderRadius="lg" id="ipc-deploy-button">New Elem</Button>
+				</PopoverTrigger>
+				<Portal>
+					<PopoverContent w="300px">
+						<PopoverHeader>
+							<HStack>
+								<FcFolder display="flex" size="40" ></FcFolder>
+								<Button w="100%" backgroundColor={'white'} justifyContent="flex-start" >Folder</Button>
+							</HStack>
+						</PopoverHeader>
+						<PopoverBody>
+							<HStack>
+								<FcFile display="flex" size="40"></FcFile>
+								{uploadButton}
+							</HStack>
+						</PopoverBody>
+						<PopoverFooter>
+							<HStack>
+								<FcRules display="flex" size="40" ></FcRules>
+								{deployButton}
+							</HStack>
+						</PopoverFooter>
+					</PopoverContent>
+				</Portal>
+			</Popover>
 			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
 				<TabList>
 					<Tab
@@ -89,8 +130,6 @@ const SideBar = ({
 					</Tab>
 				</TabList>
 			</Tabs>
-			{uploadButton}
-			{deployButton}
 		</VStack>
 	</VStack>
 );

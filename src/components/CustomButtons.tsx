@@ -7,7 +7,7 @@ type UploadButtonProps = {
 };
 
 export const UploadButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
-	<Button variant="inline" w="80%" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-upload-button">
+	<Button w="100%" backgroundColor={'white'} justifyContent="flex-start" onClick={onClick} isLoading={isLoading} id="ipc-upload-button">
 		{text}
 	</Button>
 );
@@ -19,6 +19,12 @@ export const ContactButton = ({ text, onClick, isLoading }: UploadButtonProps): 
 );
 
 export const DeployButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
+	<Button w="100%" backgroundColor={'white'} justifyContent="flex-start" onClick={onClick} isLoading={isLoading} id="ipc-upload-button">
+		{text}
+	</Button>
+);
+
+export const NewElemButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
 	<Button variant="inline" w="80%" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-deploy-button">
 		{text}
 	</Button>

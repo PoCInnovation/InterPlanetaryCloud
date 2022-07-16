@@ -15,6 +15,15 @@ import {
 	Divider,
 	FormControl,
 	FormLabel,
+	Popover,
+	PopoverTrigger,
+	Portal,
+	PopoverContent,
+	PopoverArrow,
+	PopoverHeader,
+	PopoverCloseButton,
+	PopoverBody,
+	PopoverFooter,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -32,6 +41,7 @@ import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
 import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayFileCards } from 'components/DisplayFileCards';
+import { NewElemButton } from 'components/CustomButtons';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -47,6 +57,7 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
+	const { isOpen: isOpenElem, onOpen: onOpenElem, onClose: onCloseElem } = useDisclosure();
 	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const {
 		isOpen: isOpenUpdateFileContent,
@@ -323,6 +334,7 @@ const Dashboard = (): JSX.Element => {
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBar
+				onOpenElem={onOpenElem}
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
 				setSelectedTab={setSelectedTab}

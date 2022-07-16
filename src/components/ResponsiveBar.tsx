@@ -17,9 +17,10 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
 import Sidebar from 'components/SideBar';
-import { UploadButton, DeployButton } from 'components/CustomButtons';
+import { UploadButton, DeployButton, NewElemButton } from 'components/CustomButtons';
 
 type BarProps = {
+	onOpenElem: () => void;
 	onOpen: () => void;
 	onOpenProgram: () => void;
 	isUploadLoading: boolean;
@@ -29,6 +30,7 @@ type BarProps = {
 };
 
 export const LeftBar = ({
+	onOpenElem,
 	onOpen,
 	onOpenProgram,
 	isUploadLoading,
@@ -37,6 +39,7 @@ export const LeftBar = ({
 	selectedTab,
 }: BarProps): JSX.Element => (
 	<Sidebar
+		newElemButton={<NewElemButton text="New Elem" onClick={onOpenElem} isLoading={isDeployLoading} />}
 		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
 		deployButton={<DeployButton text="Deploy a program" onClick={onOpenProgram} isLoading={isDeployLoading} />}
 		contactTab="Contacts"
@@ -50,6 +53,7 @@ export const LeftBar = ({
 );
 
 export const BarWithDrawer = ({
+	onOpenElem,
 	onOpen,
 	onOpenProgram,
 	setSelectedTab,
@@ -66,6 +70,7 @@ export const BarWithDrawer = ({
 				<DrawerOverlay />
 				<DrawerContent w="75%">
 					<LeftBar
+						onOpenElem={onOpenElem}
 						onOpen={onOpen}
 						onOpenProgram={onOpenProgram}
 						setSelectedTab={setSelectedTab}
@@ -100,6 +105,7 @@ export const BarWithDrawer = ({
 };
 
 export const ResponsiveBar = ({
+	onOpenElem,
 	onOpen,
 	onOpenProgram,
 	setSelectedTab,
@@ -112,6 +118,7 @@ export const ResponsiveBar = ({
 	if (!isDrawerNeeded)
 		return (
 			<LeftBar
+				onOpenElem={onOpenElem}
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
 				setSelectedTab={setSelectedTab}
@@ -122,6 +129,7 @@ export const ResponsiveBar = ({
 		);
 	return (
 		<BarWithDrawer
+			onOpenElem={onOpenElem}
 			onOpen={onOpen}
 			onOpenProgram={onOpenProgram}
 			setSelectedTab={setSelectedTab}
