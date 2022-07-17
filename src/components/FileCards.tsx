@@ -1,5 +1,16 @@
 import { useState } from 'react';
-import { Button, Icon, useToast } from '@chakra-ui/react';
+import {
+	Button, Icon, useToast, Text, HStack,
+	Popover,
+	PopoverTrigger,
+	Portal,
+	PopoverContent,
+	PopoverArrow,
+	PopoverHeader,
+	PopoverCloseButton,
+	PopoverBody,
+	PopoverFooter
+} from '@chakra-ui/react';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { MdPeopleAlt } from 'react-icons/md';
 
@@ -9,6 +20,7 @@ import FileEditButtons from 'components/FileEditButtons';
 import type { IPCFile } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
+import { FcDownload, FcFile,FcAdvance } from 'react-icons/fc';
 
 type FileCardsProps = {
 	files: IPCFile[];
@@ -48,7 +60,69 @@ const FileCards = ({
 			{files.map((file: IPCFile) => (
 				<FileCard key={file.created_at} file={file}>
 					<>
-						<Button
+						<HStack>
+							<FcFile size="35"></FcFile>
+							<Popover placement='right' closeOnBlur={false}>
+								<PopoverTrigger>
+									<Button display="flex" w="600px" backgroundColor={'white'} justifyContent="start">
+										{file.name}
+									</Button>
+								</PopoverTrigger>
+								<Portal>
+									<PopoverContent w="300px">
+										<PopoverHeader>
+											<HStack>
+												<FcDownload size="30"></FcDownload>
+												<Button
+													backgroundColor={'white'} justifyContent="flex-start"
+													w="100%"
+													p="0px"
+													mx="4px"
+													onClick={async () => downloadFile(file)}
+													isLoading={isDownloadLoading}
+													id="ipc-dashboard-download-button"
+												>Download</Button>
+											</HStack>
+										</PopoverHeader>
+										<PopoverBody>
+											<HStack>
+												<FcAdvance size="30"></FcAdvance>
+												<Button
+													backgroundColor={'white'} justifyContent="flex-start"
+													w="100%"
+													p="0px"
+													mx="4px"
+													onClick={async () => downloadFile(file)}
+													isLoading={isDownloadLoading}
+													id="ipc-dashboard-download-button"
+												>Move to..</Button>
+											</HStack>
+										</PopoverBody>
+										<PopoverFooter>
+											<HStack>
+												<FileEditButtons
+													file={file}
+													isUpdateLoading={isUpdateLoading}
+													setSelectedFile={setSelectedFile}
+													onOpenUpdateFileName={onOpenUpdateFileName}
+													onOpenUpdateFileContent={onOpenUpdateFileContent}
+												/>
+											</HStack>
+										</PopoverFooter>
+									</PopoverContent>
+								</Portal>
+							</Popover>
+						</HStack>
+						<Text justifyContent="center">
+							me
+						</Text>
+						<Text justifyContent="right">
+							{file.created_at}
+						</Text>
+						<Text justifyContent="end">
+							17ko
+						</Text>
+						{/* <Button
 							variant="inline"
 							size="sm"
 							w="100%"
@@ -81,7 +155,7 @@ const FileCards = ({
 							setSelectedFile={setSelectedFile}
 							onOpenUpdateFileName={onOpenUpdateFileName}
 							onOpenUpdateFileContent={onOpenUpdateFileContent}
-						/>
+						/> */}
 					</>
 				</FileCard>
 			))}

@@ -15,15 +15,6 @@ import {
 	Divider,
 	FormControl,
 	FormLabel,
-	Popover,
-	PopoverTrigger,
-	Portal,
-	PopoverContent,
-	PopoverArrow,
-	PopoverHeader,
-	PopoverCloseButton,
-	PopoverBody,
-	PopoverFooter,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -343,7 +334,7 @@ const Dashboard = (): JSX.Element => {
 				selectedTab={selectedTab}
 			/>
 			<Box w="100%" m="32px !important">
-				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayFileCards
 						myFiles={files}
 						myPrograms={programs}
