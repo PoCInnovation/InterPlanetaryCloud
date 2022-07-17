@@ -62,7 +62,7 @@ const FileCards = ({
 					<>
 						<HStack>
 							<FcFile size="35"></FcFile>
-							<Popover placement='right' closeOnBlur={false}>
+							<Popover placement='right'>
 								<PopoverTrigger>
 									<Button display="flex" w="600px" backgroundColor={'white'} justifyContent="start">
 										{file.name}
@@ -113,49 +113,15 @@ const FileCards = ({
 								</Portal>
 							</Popover>
 						</HStack>
-						<Text justifyContent="center">
+						<Text w="10%">
 							me
 						</Text>
-						<Text justifyContent="right">
+						<Text w="10%">
 							{file.created_at}
 						</Text>
-						<Text justifyContent="end">
+						<Text w="4%">
 							17ko
 						</Text>
-						{/* <Button
-							variant="inline"
-							size="sm"
-							w="100%"
-							p="0px"
-							mx="4px"
-							onClick={async () => downloadFile(file)}
-							isLoading={isDownloadLoading}
-							id="ipc-dashboard-download-button"
-						>
-							<DownloadIcon />
-						</Button>
-						<Button
-							variant="reverseInline"
-							size="sm"
-							w="100%"
-							p="0px"
-							mx="4px"
-							onClick={() => {
-								setSelectedFile(file);
-								onOpenShare();
-							}}
-							isLoading={isDownloadLoading}
-							id="ipc-dashboard-share-button"
-						>
-							<Icon as={MdPeopleAlt} />
-						</Button>
-						<FileEditButtons
-							file={file}
-							isUpdateLoading={isUpdateLoading}
-							setSelectedFile={setSelectedFile}
-							onOpenUpdateFileName={onOpenUpdateFileName}
-							onOpenUpdateFileContent={onOpenUpdateFileContent}
-						/> */}
 					</>
 				</FileCard>
 			))}

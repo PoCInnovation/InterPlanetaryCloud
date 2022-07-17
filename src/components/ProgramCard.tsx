@@ -12,7 +12,7 @@ const ProgramCard = ({ program, children }: ProgramCardProps): JSX.Element => (
 		p="16px"
 		bg="white"
 		w="100%"
-		boxShadow="0px 2px 3px 3px rgb(240, 240, 240)"
+		boxShadow="0px 2px 5px 15px rgb(240, 240, 240)"
 		borderRadius="4px"
 		border="1px solid rgb(200, 200, 200)"
 		mb="8px"

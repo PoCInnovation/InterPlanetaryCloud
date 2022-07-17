@@ -59,7 +59,7 @@ const SideBar = ({
 			>
 				Inter Planetary Cloud
 			</Text>
-			<Popover placement='right' closeOnBlur={false}>
+			<Popover placement='right'>
 				<PopoverTrigger>
 					<Button variant="inline" w="80%" borderRadius="lg" id="ipc-deploy-button">New Elem</Button>
 				</PopoverTrigger>
