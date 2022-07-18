@@ -20,6 +20,9 @@ type FileCardsProps = {
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
+	onOpenRedeployProgram: () => void;
+	isRedeployLoading: boolean;
+	setSelectedProgram: (program: IPCProgram) => void;
 };
 
 export const DisplayFileCards = ({
@@ -37,6 +40,9 @@ export const DisplayFileCards = ({
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
 	deleteContact,
+	onOpenRedeployProgram,
+	isRedeployLoading,
+	setSelectedProgram,
 }: FileCardsProps): JSX.Element => {
 	if (index === 0)
 		return (
@@ -70,7 +76,15 @@ export const DisplayFileCards = ({
 				deleteContact={deleteContact}
 			/>
 		);
-	if (index === 3) return <ProgramCards programs={myPrograms} />;
+	if (index === 3)
+		return (
+			<ProgramCards
+				programs={myPrograms}
+				onOpenRedeployProgram={onOpenRedeployProgram}
+				isRedeployLoading={isRedeployLoading}
+				setSelectedProgram={setSelectedProgram}
+			/>
+		);
 	return (
 		<ProfileCard profile={contacts[0]} setContactInfo={setContactInfo} onOpenContactUpdate={onOpenContactUpdate} />
 	);
