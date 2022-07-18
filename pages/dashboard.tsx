@@ -27,8 +27,8 @@ import type { IPCFile, IPCFolder, IPCContact, IPCProgram } from 'types/types';
 import Modal from 'components/Modal';
 
 import { generateFileKey } from 'utils/generateFileKey';
-
 import { getFileContent, extractFilename } from 'utils/fileManipulation';
+import { formatPath, isValidFolderPath } from 'utils/path';
 
 import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayCards } from 'components/DisplayCards';
@@ -189,13 +189,20 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const moveFile = async () => {
-		const moved = await user.contact.moveFile(selectedFile, newPath);
+		const formattedPath = formatPath(newPath);
+
+		if (!isValidFolderPath(formattedPath, user.drive.folders)) {
+			toast({ title: 'Invalid path', status: 'error' });
+			return;
+		}
+
+		const moved = await user.contact.moveFile(selectedFile, formattedPath);
 
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 		const index = files.indexOf(selectedFile);
 		if (index !== -1) {
-			files[index].path = newPath;
+			files[index].path = formattedPath;
 			setFiles(files);
 		}
 		onCloseMoveFile();
