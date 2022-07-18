@@ -28,11 +28,10 @@ const MoveFileButton = ({
 
 	return (
 		<Button
-			variant="inline"
-			size="sm"
-			w="100%"
-			p="0px"
-			mx="4px"
+		backgroundColor={'white'} justifyContent="flex-start"
+		w="100%"
+		p="0px"
+		mx="4px"
 			onClick={async () => {
 				setSelectedFile(file);
 				onOpenMoveFile();
@@ -40,7 +39,7 @@ const MoveFileButton = ({
 			isLoading={isUpdateLoading}
 			id="ipc-dashboard-move-filebutton"
 		>
-			Move
+			Move to..
 		</Button>
 	);
 };
