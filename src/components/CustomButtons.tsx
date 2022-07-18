@@ -23,3 +23,9 @@ export const DeployButton = ({ text, onClick, isLoading }: UploadButtonProps): J
 		{text}
 	</Button>
 );
+
+export const RedeployButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
+	<Button variant="inline" w="45%" size="sm" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-redeploy-button">
+		{text}
+	</Button>
+);
