@@ -24,6 +24,7 @@ type SideBarPropsType = {
 	newElemButton: JSX.Element;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
+	createFolderButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
 	currentTabIndex: number;
 };
@@ -37,6 +38,7 @@ const SideBar = ({
 	newElemButton,
 	uploadButton,
 	deployButton,
+	createFolderButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -68,7 +70,7 @@ const SideBar = ({
 						<PopoverHeader>
 							<HStack>
 								<FcFolder display="flex" size="40" ></FcFolder>
-								<Button w="100%" backgroundColor={'white'} justifyContent="flex-start" >Folder</Button>
+								{createFolderButton}
 							</HStack>
 						</PopoverHeader>
 						<PopoverBody>

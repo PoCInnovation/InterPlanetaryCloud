@@ -37,7 +37,7 @@ class Computing {
 		});
 	}
 
-	public async loadPrograms(): Promise<ResponseType> {
+	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
@@ -57,7 +57,7 @@ class Computing {
 		}
 	}
 
-	public async uploadProgram(myProgram: IPCProgram, uploadFile: File): Promise<ResponseType> {
+	public async upload(myProgram: IPCProgram, uploadFile: File): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const programHashPublishProgram = await program.publish({
@@ -73,7 +73,7 @@ class Computing {
 				const newProgram: IPCProgram = {
 					name: myProgram.name,
 					hash: programHashPublishProgram.item_hash,
-					created_at: myProgram.created_at,
+					createdAt: myProgram.createdAt,
 				};
 
 				this.programs.push(newProgram);

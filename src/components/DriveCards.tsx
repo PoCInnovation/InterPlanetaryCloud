@@ -1,44 +1,80 @@
 import { useState } from 'react';
 import {
-	Button, Icon, useToast, Text, HStack,
+	Button, useToast, Text, HStack,
 	Popover,
 	PopoverTrigger,
 	Portal,
 	PopoverContent,
-	PopoverArrow,
 	PopoverHeader,
-	PopoverCloseButton,
 	PopoverBody,
 	PopoverFooter
 } from '@chakra-ui/react';
-import { DownloadIcon } from '@chakra-ui/icons';
-import { MdPeopleAlt } from 'react-icons/md';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import FileCard from 'components/FileCard';
+import FolderCard from 'components/FolderCard';
 import FileEditButtons from 'components/FileEditButtons';
+import MoveFileButton from 'components/MoveFileButton';
 
-import type { IPCFile } from 'types/types';
+import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
-import { FcDownload, FcFile,FcAdvance } from 'react-icons/fc';
+import { FcDownload, FcFile, FcAdvance, FcFolder } from 'react-icons/fc';
 
-type FileCardsProps = {
+type DriveCardsProps = {
 	files: IPCFile[];
+	folders: IPCFolder[];
+	path: string;
+	setPath: (path: string) => void;
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
+	onOpenMoveFile: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 };
 
-const FileCards = ({
+type PathCardProps = {
+	path: string;
+	setPath: (path: string) => void;
+};
+
+const PathCard = ({ path, setPath }: PathCardProps): JSX.Element => {
+	if (path === '/') return <></>;
+
+	return (
+		<HStack w="100%" align="center">
+			<Button
+				backgroundColor={'white'}
+				size="sm"
+				w="10%"
+				p="0px"
+				mx="4px"
+				boxShadow="1px 2px 3px 3px rgb(240, 240, 240)"
+				onClick={() => setPath(path.replace(/([^/]+)\/$/, ''))}
+				id="ipc-dashboard-back-path-button"
+			>
+				<ArrowBackIcon fontSize="30" />
+			</Button>
+			<Text fontWeight="500" isTruncated>
+				{path}
+			</Text>
+		</HStack>
+	);
+};
+
+const DriveCards = ({
 	files,
+	folders,
+	path,
+	setPath,
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
+	onOpenMoveFile,
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
-}: FileCardsProps): JSX.Element => {
+}: DriveCardsProps): JSX.Element => {
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
@@ -57,8 +93,21 @@ const FileCards = ({
 
 	return (
 		<>
-			{files.map((file: IPCFile) => (
-				<FileCard key={file.created_at} file={file}>
+			<PathCard path={path} setPath={setPath} />
+			{folders.map((folder) => (
+				<FolderCard key={folder.createdAt} name={folder.name} path={path} setPath={setPath}>
+					<>
+						<HStack>
+							<FcFolder display="flex" size="30" ></FcFolder>
+							<Text>
+								{folder.name}
+							</Text>
+						</HStack>
+					</>
+				</FolderCard>
+			))}
+			{files.map((file) => (
+				<FileCard key={file.createdAt} file={file}>
 					<>
 						<HStack>
 							<FcFile size="35"></FcFile>
@@ -87,15 +136,12 @@ const FileCards = ({
 										<PopoverBody>
 											<HStack>
 												<FcAdvance size="30"></FcAdvance>
-												<Button
-													backgroundColor={'white'} justifyContent="flex-start"
-													w="100%"
-													p="0px"
-													mx="4px"
-													onClick={async () => downloadFile(file)}
-													isLoading={isDownloadLoading}
-													id="ipc-dashboard-download-button"
-												>Move to..</Button>
+												<MoveFileButton
+													file={file}
+													isUpdateLoading={isUpdateLoading}
+													setSelectedFile={setSelectedFile}
+													onOpenMoveFile={onOpenMoveFile}
+												/>
 											</HStack>
 										</PopoverBody>
 										<PopoverFooter>
@@ -117,7 +163,7 @@ const FileCards = ({
 							me
 						</Text>
 						<Text w="10%">
-							{file.created_at}
+							{file.createdAt}
 						</Text>
 						<Text w="4%">
 							17ko
@@ -129,4 +175,4 @@ const FileCards = ({
 	);
 };
 
-export default FileCards;
+export default DriveCards;

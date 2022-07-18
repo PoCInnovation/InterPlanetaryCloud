@@ -1,61 +1,77 @@
-import FileCards from 'components/FileCards';
+import DriveCards from 'components/DriveCards';
 import ProgramCards from 'components/ProgramCards';
 import ContactCards from 'components/ContactCards';
 import ProfileCard from 'components/ProfileCard';
 
-import type { IPCContact, IPCFile, IPCProgram } from 'types/types';
+import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
-type FileCardsProps = {
+type CardsProps = {
 	myFiles: IPCFile[];
+	myFolders: IPCFolder[];
 	myPrograms: IPCProgram[];
 	sharedFiles: IPCFile[];
 	contacts: IPCContact[];
 	index: number;
+	path: string;
+	setPath: (path: string) => void;
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
 	onOpenShare: () => void;
 	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
 	onOpenContactAdd: () => void;
+	onOpenMoveFile: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
-export const DisplayFileCards = ({
+export const DisplayCards = ({
 	myFiles,
+	myFolders,
 	myPrograms,
 	sharedFiles,
 	contacts,
 	index,
+	path,
+	setPath,
 	isUpdateLoading,
 	setSelectedFile,
 	onOpenShare,
+	onOpenMoveFile,
 	setContactInfo,
 	onOpenContactUpdate,
 	onOpenContactAdd,
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
 	deleteContact,
-}: FileCardsProps): JSX.Element => {
+}: CardsProps): JSX.Element => {
 	if (index === 0)
 		return (
-			<FileCards
-				files={myFiles}
+			<DriveCards
+				files={myFiles.filter((elem) => elem.path === path)}
+				folders={myFolders.filter((elem) => elem.path === path)}
+				path={path}
+				setPath={setPath}
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenMoveFile={onOpenMoveFile}
 				onOpenUpdateFileName={onOpenUpdateFileName}
 				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>
 		);
 	if (index === 1)
 		return (
-			<FileCards
+			<DriveCards
 				files={sharedFiles}
+				folders={[]}
+				path={path}
+				setPath={setPath}
 				isUpdateLoading={isUpdateLoading}
 				setSelectedFile={setSelectedFile}
 				onOpenShare={onOpenShare}
+				onOpenMoveFile={onOpenMoveFile}
 				onOpenUpdateFileName={onOpenUpdateFileName}
 				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>

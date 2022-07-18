@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType, IPCFolder } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Contact {
@@ -46,7 +46,7 @@ class Contact {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
 					APIServer: DEFAULT_API_V2,
-					address: this.account!.address,
+					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});
 
@@ -83,12 +83,10 @@ class Contact {
 		try {
 			if (this.account) {
 				if (contactAddress !== this.account.address) {
-					this.contacts.map((contact, index) => {
+					this.contacts.forEach((contact, index) => {
 						if (contact.address === contactAddress) {
 							this.contacts.splice(index, 1);
-							return true;
 						}
-						return false;
 					});
 
 					await this.publishAggregate();
@@ -106,15 +104,10 @@ class Contact {
 	public async update(contactAddress: string, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					this.contacts.find((contact, index) => {
-						if (contact.address === contactAddress) {
-							this.contacts[index].name = newName;
-							return true;
-						}
-						return false;
-					})
-				) {
+				const contact = this.contacts.find((c) => c.address === contactAddress);
+
+				if (contact) {
+					contact.name = newName;
 					await this.publishAggregate();
 					return { success: true, message: 'Contact updated' };
 				}
@@ -132,16 +125,16 @@ class Contact {
 			if (this.account) {
 				await Promise.all(
 					this.contacts.map(async (contact, i) => {
-						this.contacts[i].files.map(async (file, j) => {
-							if (file.hash === oldHash) {
-								this.contacts[i].files[j].hash = newFile.hash;
-								this.contacts[i].files[j].key = await encryptWithPublicKey(
-									contact.publicKey.slice(2),
-									await decryptWithPrivateKey(this.private_key, newFile.key),
-								);
-								await this.publishAggregate();
-							}
-						});
+						const file = this.contacts[i].files.find((f) => f.hash === oldHash);
+
+						if (file) {
+							file.hash = newFile.hash;
+							file.key = await encryptWithPublicKey(
+								contact.publicKey.slice(2),
+								await decryptWithPrivateKey(this.private_key, newFile.key),
+							);
+							await this.publishAggregate();
+						}
 					}),
 				);
 				return { success: true, message: 'File content updated' };
@@ -156,10 +149,9 @@ class Contact {
 	public hasEditPermission(hash: string): ResponseType {
 		try {
 			if (this.account) {
-				const owner = this.account.address;
 				if (
 					this.contacts.find((contact, index) => {
-						if (owner === contact.address) {
+						if (this.account?.address === contact.address) {
 							return this.contacts[index].files.find((file) => file.hash === hash);
 						}
 						return false;
@@ -188,18 +180,12 @@ class Contact {
 		}
 	}
 
-	public async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
+	private async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					this.contacts[contactIndex].files.find((file, fileIndex) => {
-						if (file.hash === fileHash) {
-							this.contacts[contactIndex].files[fileIndex].name = newName;
-							return true;
-						}
-						return false;
-					})
-				) {
+				const file = this.contacts[contactIndex].files.find((f) => f.hash === fileHash);
+				if (file) {
+					file.name = newName;
 					await this.publishAggregate();
 					return { success: true, message: 'Filename updated' };
 				}
@@ -228,8 +214,9 @@ class Contact {
 										contact.publicKey.slice(2),
 										await decryptWithPrivateKey(this.private_key, mainFile.key),
 									),
-									created_at: mainFile.created_at,
+									createdAt: mainFile.createdAt,
 									name: mainFile.name,
+									path: mainFile.path,
 								});
 								await this.publishAggregate();
 								return true;
@@ -245,6 +232,48 @@ class Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to share the file with the contact' };
+		}
+	}
+
+	public async createFolder(folder: IPCFolder): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					contact.folders.push(folder);
+					await this.publishAggregate();
+					return { success: true, message: 'Folder created' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
+
+	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					const currentFile = contact.files.find((f) => f.hash === file.hash);
+					if (currentFile) {
+						currentFile.path = newPath;
+						await this.publishAggregate();
+						return { success: true, message: 'File moved' };
+					}
+					return { success: false, message: 'File does not exist' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to move the file' };
 		}
 	}
 }
