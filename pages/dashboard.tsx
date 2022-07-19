@@ -334,25 +334,6 @@ const Dashboard = (): JSX.Element => {
 			/>
 			<VStack w="100%" m="32px !important">
 				<Box w="100%">
-					<Text fontSize="35">
-						Path/To/Current/Folder
-					</Text>
-					<HStack w="100%" marginTop="5">
-						<Text w="51%" marginLeft="5">
-							Name
-						</Text>
-						<Text w="19%">
-							Owner
-						</Text>
-						<Text>
-							Lastest upload on Aleph
-						</Text>
-						<Text>
-							File Size
-						</Text>
-					</HStack>
-				</Box>
-				<Box w="100%">
 					<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 						<DisplayCards
 							myFiles={files}

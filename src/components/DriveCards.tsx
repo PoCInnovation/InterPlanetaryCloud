@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import {
 	Button, useToast, Text, HStack,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
 	Popover,
 	PopoverTrigger,
 	Portal,
@@ -94,16 +98,28 @@ const DriveCards = ({
 	return (
 		<>
 			<PathCard path={path} setPath={setPath} />
+			<HStack w="100%" marginTop="5">
+				<Text w="51%" marginLeft="5">
+					Name
+				</Text>
+				<Text w="19%">
+					Owner
+				</Text>
+				<Text>
+					Latest upload on Aleph
+				</Text>
+				<Text>
+					File Size
+				</Text>
+			</HStack>
 			{folders.map((folder) => (
 				<FolderCard key={folder.createdAt} name={folder.name} path={path} setPath={setPath}>
-					<>
-						<HStack>
-							<FcFolder display="flex" size="30" ></FcFolder>
-							<Text>
-								{folder.name}
-							</Text>
-						</HStack>
-					</>
+					<HStack>
+						<FcFolder display="flex" size="30" ></FcFolder>
+						<Text>
+							{folder.name}
+						</Text>
+					</HStack>
 				</FolderCard>
 			))}
 			{files.map((file) => (

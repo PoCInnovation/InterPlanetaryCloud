@@ -5,6 +5,8 @@ import ProfileCard from 'components/ProfileCard';
 
 import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
+import { VStack, HStack, Box, Text } from '@chakra-ui/react';
+
 type CardsProps = {
 	myFiles: IPCFile[];
 	myFolders: IPCFolder[];
@@ -48,21 +50,30 @@ export const DisplayCards = ({
 }: CardsProps): JSX.Element => {
 	if (index === 0)
 		return (
-			<DriveCards
-				files={myFiles.filter((elem) => elem.path === path)}
-				folders={myFolders.filter((elem) => elem.path === path)}
-				path={path}
-				setPath={setPath}
-				isUpdateLoading={isUpdateLoading}
-				setSelectedFile={setSelectedFile}
-				onOpenShare={onOpenShare}
-				onOpenMoveFile={onOpenMoveFile}
-				onOpenUpdateFileName={onOpenUpdateFileName}
-				onOpenUpdateFileContent={onOpenUpdateFileContent}
-			/>
+			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<Box w="100%">
+					<Text fontSize="35">My Files</Text>
+				</Box>
+				<DriveCards
+					files={myFiles.filter((elem) => elem.path === path)}
+					folders={myFolders.filter((elem) => elem.path === path)}
+					path={path}
+					setPath={setPath}
+					isUpdateLoading={isUpdateLoading}
+					setSelectedFile={setSelectedFile}
+					onOpenShare={onOpenShare}
+					onOpenMoveFile={onOpenMoveFile}
+					onOpenUpdateFileName={onOpenUpdateFileName}
+					onOpenUpdateFileContent={onOpenUpdateFileContent}
+				/>
+			</VStack>
 		);
 	if (index === 1)
 		return (
+			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<Box w="100%">
+					<Text fontSize="35">Shared with me</Text>
+				</Box>
 			<DriveCards
 				files={sharedFiles}
 				folders={[]}
@@ -75,6 +86,7 @@ export const DisplayCards = ({
 				onOpenUpdateFileName={onOpenUpdateFileName}
 				onOpenUpdateFileContent={onOpenUpdateFileContent}
 			/>
+			</VStack>
 		);
 	if (index === 2)
 		return (
