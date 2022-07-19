@@ -74,7 +74,7 @@ const Signup = (): JSX.Element => {
 						Signup
 					</Button>
 					<VStack w="100%">
-						<Text fontSize="14px">Already an account ?</Text>
+						<Text fontSize="14px">Already got an account ?</Text>
 						<Link href="/login">
 							<div style={{ width: '100%' }}>
 								<OutlineButton w="100%" text="Login" id="ipc-signup-login-button" />
