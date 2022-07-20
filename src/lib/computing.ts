@@ -57,9 +57,23 @@ class Computing {
 		}
 	}
 
-	public async upload(myProgram: IPCProgram, uploadFile: File): Promise<ResponseType> {
+	public async uploadProgram(myProgram: IPCProgram, uploadFile: File, isRedeploy: boolean, oldProgramHash: IPCProgram | undefined): Promise<ResponseType> {
 		try {
 			if (this.account) {
+
+				console.log("bite", isRedeploy, oldProgramHash, myProgram);
+
+				// remove old program from user's programs array
+				if (isRedeploy && oldProgramHash) {
+					const newProgramsArray: IPCProgram[] = this.programs.filter((oldProgram: IPCProgram) => {
+						return oldProgram !== oldProgramHash;
+					});
+					this.programs = newProgramsArray;
+					console.log("coucou");
+				}
+
+				console.log("programs", this.programs);
+
 				const programHashPublishProgram = await program.publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
@@ -77,6 +91,8 @@ class Computing {
 				};
 
 				this.programs.push(newProgram);
+
+				console.log("programs two", this.programs);
 
 				await this.publishAggregate();
 

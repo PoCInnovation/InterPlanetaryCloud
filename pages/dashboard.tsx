@@ -72,6 +72,7 @@ const Dashboard = (): JSX.Element => {
 	const [path, setPath] = useState('/');
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
+	const [isRedeployLoading, setIsRedeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [isCreateFolderLoading, setIsCreateFolderLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -88,6 +89,11 @@ const Dashboard = (): JSX.Element => {
 		createdAt: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		path: '/',
+	});
+	const [selectedProgram, setSelectedProgram] = useState<IPCProgram>({
+		name: '',
+		hash: '',
+		created_at: 0,
 	});
 
 	useEffect(() => {
@@ -113,24 +119,31 @@ const Dashboard = (): JSX.Element => {
 		setPrograms(user.computing.programs);
 	};
 
-	const uploadProgram = async () => {
+	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
 		if (!fileEvent || !fileEvent.target.files) return;
 		const filename = extractFilename(fileEvent.target.value);
 
 		if (!filename) return;
 
 		setIsDeployLoading(true);
-
-		const upload = await user.computing.upload(
-			{
-				name: filename,
-				hash: '',
-				createdAt: Date.now(),
-			},
-			fileEvent.target.files[0],
-		);
-		toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-		onCloseProgram();
+		try {
+			const upload = await user.computing.uploadProgram(
+				{
+					name: filename,
+					hash: '',
+					createdAt: Date.now(),
+				},
+				fileEvent.target.files[0],
+				(oldProgram) ? true : false,
+				oldProgram,
+			);
+			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
+			setPrograms(user.computing.programs);
+			onCloseProgram();
+		} catch (error) {
+			console.error(error);
+			toast({ title: 'Unable to upload file', status: 'error' });
+		}
 		setFileEvent(undefined);
 		setIsDeployLoading(false);
 	};
@@ -361,6 +374,9 @@ const Dashboard = (): JSX.Element => {
 							onOpenUpdateFileName={onOpenUpdateFileName}
 							onOpenUpdateFileContent={onOpenUpdateFileContent}
 							deleteContact={deleteContact}
+							isRedeployLoading={isDeployLoading}
+							onOpenRedeployProgram={onOpenProgram}
+							setSelectedProgram={setSelectedProgram}
 						/>
 					</VStack>
 				</Box>
@@ -374,7 +390,7 @@ const Dashboard = (): JSX.Element => {
 						variant="inline"
 						w="100%"
 						mb="16px"
-						onClick={uploadProgram}
+						onClick={() => uploadProgram(selectedProgram)}
 						isLoading={isDeployLoading}
 						id="ipc-dashboard-deploy-program-modal-button"
 					>
