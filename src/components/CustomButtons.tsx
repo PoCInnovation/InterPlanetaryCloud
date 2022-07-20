@@ -30,6 +30,6 @@ export const NewElemButton = ({ onClick, isLoading }: CustomButtonProps): JSX.El
 );
 export const RedeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
 	<Button variant="inline" w="45%" size="sm" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-redeploy-button">
-		redeploy
+		Redeploy
 	</Button>
 );

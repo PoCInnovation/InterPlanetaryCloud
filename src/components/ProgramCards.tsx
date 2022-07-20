@@ -36,7 +36,6 @@ const ProgramCards = ({
 						Go to site
 					</Button>
 					<RedeployButton
-						text="redeploy"
 						onClick={() => {
 							setSelectedProgram(program);
 							onOpenRedeployProgram()

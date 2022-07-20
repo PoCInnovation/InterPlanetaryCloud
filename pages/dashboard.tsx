@@ -93,7 +93,7 @@ const Dashboard = (): JSX.Element => {
 	const [selectedProgram, setSelectedProgram] = useState<IPCProgram>({
 		name: '',
 		hash: '',
-		created_at: 0,
+		createdAt: 0,
 	});
 
 	useEffect(() => {
