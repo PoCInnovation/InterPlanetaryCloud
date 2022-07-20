@@ -82,6 +82,7 @@ const DriveCards = ({
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
+	const [dateFile, setDateFile] = useState("");
 
 	const downloadFile = async (file: IPCFile) => {
 		setIsDownloadLoading(true);
@@ -93,6 +94,13 @@ const DriveCards = ({
 			toast({ title: 'Unable to download file', status: 'error' });
 		}
 		setIsDownloadLoading(false);
+	};
+
+	function dateFileFunc (file: IPCFile) : any {
+		console.log("aaaaaaaaaaaaaaaaaaaaa");
+		var d = file.createdAt.toString();
+		setDateFile(d.toString());
+		console.log(dateFile);
 	};
 
 	return (
@@ -179,7 +187,7 @@ const DriveCards = ({
 							me
 						</Text>
 						<Text w="10%">
-							{file.createdAt}
+							{new Date(file.createdAt).toString().substr(4, 11).slice(0, 3) + ' /' + new Date(file.createdAt).toString().substr(4, 11).slice(3, 6) + ' /' + new Date(file.createdAt).toString().substr(4, 11).slice(6)}
 						</Text>
 						<Text w="4%">
 							17ko
