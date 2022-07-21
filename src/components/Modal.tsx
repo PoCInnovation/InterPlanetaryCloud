@@ -1,10 +1,10 @@
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Modal as UIModal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 
 import OutlineButton from 'components/OutlineButton';
 
-type PopupProps = {
+type ModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	title: string;
@@ -12,8 +12,8 @@ type PopupProps = {
 	CTA?: JSX.Element;
 };
 
-const Popup = ({ isOpen, onClose, title, children, CTA }: PopupProps): JSX.Element => (
-	<Modal isOpen={isOpen} onClose={onClose}>
+const Modal = ({ isOpen, onClose, title, children, CTA }: ModalProps): JSX.Element => (
+	<UIModal isOpen={isOpen} onClose={onClose}>
 		<ModalOverlay />
 		<ModalContent w="75%">
 			<ModalHeader
@@ -33,7 +33,7 @@ const Popup = ({ isOpen, onClose, title, children, CTA }: PopupProps): JSX.Eleme
 				<OutlineButton w="100%" text="Close" onClick={onClose} id="ipc-modal-close-button" />
 			</ModalFooter>
 		</ModalContent>
-	</Modal>
+	</UIModal>
 );
 
-export default Popup;
+export default Modal;

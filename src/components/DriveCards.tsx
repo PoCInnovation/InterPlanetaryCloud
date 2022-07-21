@@ -106,7 +106,7 @@ const DriveCards = ({
 				</FolderCard>
 			))}
 			{files.map((file) => (
-				<FileCard key={file.createdAt} file={file}>
+				<FileCard key={file.createdAt}>
 					<>
 						<HStack>
 							<FcFile size="35"></FcFile>
@@ -163,10 +163,10 @@ const DriveCards = ({
 						</HStack>
 						<Box w="33%">
 							<Text>
-								{`${new Date(file.createdAt).toString().substr(4, 11).slice(0, 3)} /${new Date(file.createdAt)
+								{`${new Date(file.createdAt).toString().substring(4, 15).slice(0, 3)} /${new Date(file.createdAt)
 									.toString()
-									.substr(4, 11)
-									.slice(3, 6)} /${new Date(file.createdAt).toString().substr(4, 11).slice(6)}`}
+									.substring(4, 15)
+									.slice(3, 6)} /${new Date(file.createdAt).toString().substring(4, 15).slice(6)}`}
 							</Text>
 						</Box>
 						<Box>
