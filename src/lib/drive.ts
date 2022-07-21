@@ -85,6 +85,7 @@ class Drive {
 					name: file.name,
 					hash: fileHashPublishStore.content.item_hash,
 					createdAt: file.createdAt,
+					size: file.size,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
 					path: file.path,
 				};

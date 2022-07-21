@@ -217,6 +217,7 @@ class Contact {
 									createdAt: mainFile.createdAt,
 									name: mainFile.name,
 									path: mainFile.path,
+									size: mainFile.size,
 								});
 								await this.publishAggregate();
 								return true;

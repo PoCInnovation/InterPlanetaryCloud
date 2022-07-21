@@ -83,11 +83,10 @@ const Dashboard = (): JSX.Element => {
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
-	const [fileSize, setFileSize] = useState(null);
 	const [selectedFile, setSelectedFile] = useState<IPCFile>({
 		name: '',
 		hash: '',
-		size: '0',
+		size: 0,
 		createdAt: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		path: '/',
@@ -153,8 +152,6 @@ const Dashboard = (): JSX.Element => {
 	const uploadFile = async () => {
 		if (!fileEvent) return;
 		const filename = extractFilename(fileEvent.target.value);
-		console.log(fileEvent.target.files[0].size);
-		const a = setFileSize(fileEvent.target.files[0].size);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
 		const key = generateFileKey();
 		if (!filename || !fileContent) {
@@ -168,7 +165,7 @@ const Dashboard = (): JSX.Element => {
 		const file: IPCFile = {
 			name: filename,
 			hash: fileContent,
-			size: 89,
+			size: fileEvent.target.files[0].size,
 			createdAt: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path,
@@ -188,7 +185,6 @@ const Dashboard = (): JSX.Element => {
 		} else {
 			toast({ title: 'Failed to load account', status: 'error' });
 		}
-		console.log(fileSize);
 		onClose();
 		setFileEvent(undefined);
 		setIsUploadLoading(false);
@@ -241,7 +237,7 @@ const Dashboard = (): JSX.Element => {
 		const newFile: IPCFile = {
 			name: oldFile.name,
 			hash: fileContent,
-			size: "89",
+			size: 89,
 			createdAt: oldFile.createdAt,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path: oldFile.path,
