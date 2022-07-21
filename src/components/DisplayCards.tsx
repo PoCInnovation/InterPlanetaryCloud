@@ -5,7 +5,7 @@ import ProfileCard from 'components/ProfileCard';
 
 import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
-import { VStack, HStack, Box, Text, Flex, Spacer } from '@chakra-ui/react';
+import { VStack, HStack, Box, Text, Spacer } from '@chakra-ui/react';
 
 type CardsProps = {
 	myFiles: IPCFile[];

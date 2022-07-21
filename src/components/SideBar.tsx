@@ -39,7 +39,6 @@ const SideBar = ({
 	sharedFilesTab,
 	myProgramsTab,
 	profileTab,
-	newElemButton,
 	uploadButton,
 	deployButton,
 	createFolderButton,

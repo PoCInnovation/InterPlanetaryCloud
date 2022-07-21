@@ -1,5 +1,4 @@
 import { Box, Flex, HStack } from '@chakra-ui/react';
-import { FcFile } from 'react-icons/fc';
 import { MouseEvent, useState } from 'react';
 
 import type { IPCFile } from 'types/types';

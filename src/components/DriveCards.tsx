@@ -74,7 +74,6 @@ const DriveCards = ({
 	setPath,
 	isUpdateLoading,
 	setSelectedFile,
-	onOpenShare,
 	onOpenMoveFile,
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
@@ -109,7 +108,6 @@ const DriveCards = ({
 			{files.map((file) => (
 				<FileCard key={file.createdAt} file={file}>
 					<>
-						{console.log(file.size)}
 						<HStack>
 							<FcFile size="35"></FcFile>
 							<Popover placement="right">
@@ -172,7 +170,7 @@ const DriveCards = ({
 							</Text>
 						</Box>
 						<Box>
-							<Text>{file.size}</Text>
+							<Text>{file.size / 1000} ko</Text>
 						</Box>
 					</>
 				</FileCard>

@@ -31,7 +31,6 @@ import { getFileContent, extractFilename } from 'utils/fileManipulation';
 import { formatPath, isValidFolderPath } from 'utils/path';
 
 import { ResponsiveBar } from 'components/ResponsiveBar';
-import { NewElemButton } from 'components/CustomButtons';
 import { DisplayCards } from 'components/DisplayCards';
 
 const Dashboard = (): JSX.Element => {
@@ -237,7 +236,7 @@ const Dashboard = (): JSX.Element => {
 		const newFile: IPCFile = {
 			name: oldFile.name,
 			hash: fileContent,
-			size: 89,
+			size: oldFile.size,
 			createdAt: oldFile.createdAt,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path: oldFile.path,
