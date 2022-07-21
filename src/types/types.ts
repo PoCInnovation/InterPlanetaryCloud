@@ -4,6 +4,7 @@ export type IPCFile = {
 	hash: string;
 	key: Encrypted;
 	name: string;
+	size: number;
 	createdAt: number;
 	path: string;
 };

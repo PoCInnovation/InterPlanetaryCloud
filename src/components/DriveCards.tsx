@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import {
 	Button, useToast, Text, HStack,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
 	Popover,
 	PopoverTrigger,
 	Portal,
 	PopoverContent,
 	PopoverHeader,
 	PopoverBody,
-	PopoverFooter
+	PopoverFooter,
+	Box
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
@@ -47,7 +44,7 @@ const PathCard = ({ path, setPath }: PathCardProps): JSX.Element => {
 	if (path === '/') return <></>;
 
 	return (
-		<HStack w="100%" align="center">
+		<HStack w="100%">
 			<Button
 				backgroundColor={'white'}
 				size="sm"
@@ -82,7 +79,6 @@ const DriveCards = ({
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const [isDownloadLoading, setIsDownloadLoading] = useState(false);
-	const [dateFile, setDateFile] = useState("");
 
 	const downloadFile = async (file: IPCFile) => {
 		setIsDownloadLoading(true);
@@ -96,30 +92,9 @@ const DriveCards = ({
 		setIsDownloadLoading(false);
 	};
 
-	function dateFileFunc (file: IPCFile) : any {
-		console.log("aaaaaaaaaaaaaaaaaaaaa");
-		var d = file.createdAt.toString();
-		setDateFile(d.toString());
-		console.log(dateFile);
-	};
-
 	return (
 		<>
 			<PathCard path={path} setPath={setPath} />
-			<HStack w="100%" marginTop="5">
-				<Text w="51%" marginLeft="5">
-					Name
-				</Text>
-				<Text w="19%">
-					Owner
-				</Text>
-				<Text>
-					Latest upload on Aleph
-				</Text>
-				<Text>
-					File Size
-				</Text>
-			</HStack>
 			{folders.map((folder) => (
 				<FolderCard key={folder.createdAt} name={folder.name} path={path} setPath={setPath}>
 					<HStack>
@@ -133,11 +108,12 @@ const DriveCards = ({
 			{files.map((file) => (
 				<FileCard key={file.createdAt} file={file}>
 					<>
+						{console.log(file.size)}
 						<HStack>
 							<FcFile size="35"></FcFile>
 							<Popover placement='right'>
 								<PopoverTrigger>
-									<Button display="flex" w="600px" backgroundColor={'white'} justifyContent="start">
+									<Button display="flex" w="100%" backgroundColor={'white'} justifyContent="start">
 										{file.name}
 									</Button>
 								</PopoverTrigger>
@@ -183,15 +159,16 @@ const DriveCards = ({
 								</Portal>
 							</Popover>
 						</HStack>
-						<Text w="10%">
-							me
-						</Text>
-						<Text w="10%">
-							{new Date(file.createdAt).toString().substr(4, 11).slice(0, 3) + ' /' + new Date(file.createdAt).toString().substr(4, 11).slice(3, 6) + ' /' + new Date(file.createdAt).toString().substr(4, 11).slice(6)}
-						</Text>
-						<Text w="4%">
-							17ko
-						</Text>
+						<Box w="33%">
+							<Text>
+								{new Date(file.createdAt).toString().substr(4, 11).slice(0, 3) + ' /' + new Date(file.createdAt).toString().substr(4, 11).slice(3, 6) + ' /' + new Date(file.createdAt).toString().substr(4, 11).slice(6)}
+							</Text>
+						</Box>
+						<Box>
+							<Text>
+								{file.size}
+							</Text>
+						</Box>
 					</>
 				</FileCard>
 			))}

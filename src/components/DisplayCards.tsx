@@ -5,7 +5,7 @@ import ProfileCard from 'components/ProfileCard';
 
 import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
-import { VStack, HStack, Box, Text } from '@chakra-ui/react';
+import { VStack, HStack, Box, Text, Flex, Spacer } from '@chakra-ui/react';
 
 type CardsProps = {
 	myFiles: IPCFile[];
@@ -57,9 +57,28 @@ export const DisplayCards = ({
 	if (index === 0)
 		return (
 			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-				<Box w="100%">
-					<Text fontSize="35">My Files</Text>
-				</Box>
+					<Box w="100%">
+						<Text fontSize="35">My Files</Text>
+					</Box>
+				<HStack w="100%">
+					<Box>
+						<Text marginLeft="10">
+							Name
+						</Text>
+					</Box>
+					<Spacer />
+					<Box>
+						<Text align="center">
+							Latest upload on Aleph
+						</Text>
+					</Box>
+					<Spacer />
+					<Box>
+						<Text align="center">
+							File Size
+						</Text>
+					</Box>
+				</HStack>
 				<DriveCards
 					files={myFiles.filter((elem) => elem.path === path)}
 					folders={myFolders.filter((elem) => elem.path === path)}
@@ -80,18 +99,18 @@ export const DisplayCards = ({
 				<Box w="100%">
 					<Text fontSize="35">Shared with me</Text>
 				</Box>
-			<DriveCards
-				files={sharedFiles}
-				folders={[]}
-				path={path}
-				setPath={setPath}
-				isUpdateLoading={isUpdateLoading}
-				setSelectedFile={setSelectedFile}
-				onOpenShare={onOpenShare}
-				onOpenMoveFile={onOpenMoveFile}
-				onOpenUpdateFileName={onOpenUpdateFileName}
-				onOpenUpdateFileContent={onOpenUpdateFileContent}
-			/>
+				<DriveCards
+					files={sharedFiles}
+					folders={[]}
+					path={path}
+					setPath={setPath}
+					isUpdateLoading={isUpdateLoading}
+					setSelectedFile={setSelectedFile}
+					onOpenShare={onOpenShare}
+					onOpenMoveFile={onOpenMoveFile}
+					onOpenUpdateFileName={onOpenUpdateFileName}
+					onOpenUpdateFileContent={onOpenUpdateFileContent}
+				/>
 			</VStack>
 		);
 	if (index === 2)
