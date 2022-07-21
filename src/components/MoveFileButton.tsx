@@ -28,10 +28,11 @@ const MoveFileButton = ({
 
 	return (
 		<Button
-		backgroundColor={'white'} justifyContent="flex-start"
-		w="100%"
-		p="0px"
-		mx="4px"
+			backgroundColor={'white'}
+			justifyContent="flex-start"
+			w="100%"
+			p="0px"
+			mx="4px"
 			onClick={async () => {
 				setSelectedFile(file);
 				onOpenMoveFile();

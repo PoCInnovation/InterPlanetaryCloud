@@ -57,26 +57,20 @@ export const DisplayCards = ({
 	if (index === 0)
 		return (
 			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-					<Box w="100%">
-						<Text fontSize="35">My Files</Text>
-					</Box>
+				<Box w="100%">
+					<Text fontSize="35">My Files</Text>
+				</Box>
 				<HStack w="100%">
 					<Box>
-						<Text marginLeft="10">
-							Name
-						</Text>
+						<Text marginLeft="10">Name</Text>
 					</Box>
 					<Spacer />
 					<Box>
-						<Text align="center">
-							Latest upload on Aleph
-						</Text>
+						<Text align="center">Latest upload on Aleph</Text>
 					</Box>
 					<Spacer />
 					<Box>
-						<Text align="center">
-							File Size
-						</Text>
+						<Text align="center">File Size</Text>
 					</Box>
 				</HStack>
 				<DriveCards

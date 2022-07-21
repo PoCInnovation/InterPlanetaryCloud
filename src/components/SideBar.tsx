@@ -1,5 +1,9 @@
 import {
-	Tab, TabList, Tabs, Text, VStack,
+	Tab,
+	TabList,
+	Tabs,
+	Text,
+	VStack,
 	Popover,
 	PopoverTrigger,
 	Portal,
@@ -8,10 +12,10 @@ import {
 	PopoverHeader,
 	PopoverFooter,
 	PopoverBody,
-	HStack
+	HStack,
 } from '@chakra-ui/react';
 
-import { FcFile, FcFolder, FcRules } from "react-icons/fc";
+import { FcFile, FcFolder, FcRules } from 'react-icons/fc';
 
 import colors from 'theme/foundations/colors';
 
@@ -61,15 +65,17 @@ const SideBar = ({
 			>
 				Inter Planetary Cloud
 			</Text>
-			<Popover placement='right'>
+			<Popover placement="right">
 				<PopoverTrigger>
-					<Button variant="inline" w="80%" borderRadius="lg" id="ipc-deploy-button">New Elem</Button>
+					<Button variant="inline" w="80%" borderRadius="lg" id="ipc-deploy-button">
+						New Elem
+					</Button>
 				</PopoverTrigger>
 				<Portal>
 					<PopoverContent w="300px">
 						<PopoverHeader>
 							<HStack>
-								<FcFolder display="flex" size="40" ></FcFolder>
+								<FcFolder display="flex" size="40"></FcFolder>
 								{createFolderButton}
 							</HStack>
 						</PopoverHeader>
@@ -81,7 +87,7 @@ const SideBar = ({
 						</PopoverBody>
 						<PopoverFooter>
 							<HStack>
-								<FcRules display="flex" size="40" ></FcRules>
+								<FcRules display="flex" size="40"></FcRules>
 								{deployButton}
 							</HStack>
 						</PopoverFooter>

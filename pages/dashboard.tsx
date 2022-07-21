@@ -135,7 +135,7 @@ const Dashboard = (): JSX.Element => {
 					createdAt: Date.now(),
 				},
 				fileEvent.target.files[0],
-				(oldProgram) ? true : false,
+				!!oldProgram,
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
@@ -644,9 +644,7 @@ const Dashboard = (): JSX.Element => {
 							);
 						return <Divider key={contact.address} />;
 					})}
-
 				</VStack>
-
 			</Modal>
 		</HStack>
 	);

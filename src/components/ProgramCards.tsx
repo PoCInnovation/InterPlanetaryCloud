@@ -38,7 +38,7 @@ const ProgramCards = ({
 					<RedeployButton
 						onClick={() => {
 							setSelectedProgram(program);
-							onOpenRedeployProgram()
+							onOpenRedeployProgram();
 						}}
 						isLoading={isRedeployLoading}
 					/>
