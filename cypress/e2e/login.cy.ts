@@ -41,7 +41,7 @@ describe('Login with credentials Button for Login', () => {
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-login-credentials-button').click().url().should('eq', 'http://localhost:8080/dashboard');
+		cy.get('#ipc-login-credentials-button').click().url().should('eq', Cypress.config().baseUrl + '/dashboard');
 	});
 });
 
@@ -51,6 +51,6 @@ describe('Signup Button for Login', () => {
 	});
 
 	it('Good URL redirect for signup button', () => {
-		cy.get('#ipc-login-signup-button').click().url().should('eq', 'http://localhost:8080/signup');
+		cy.get('#ipc-login-signup-button').click().url().should('eq', Cypress.config().baseUrl + '/signup');
 	});
 });
