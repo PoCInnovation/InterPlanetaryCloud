@@ -156,7 +156,6 @@ const Dashboard = (): JSX.Element => {
 			toast({ title: 'Invalid file', status: 'error' });
 			setFileEvent(undefined);
 			setIsUploadLoading(false);
-			onClose();
 			return;
 		}
 
