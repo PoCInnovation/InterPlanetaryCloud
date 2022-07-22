@@ -17,13 +17,13 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
-import { FileRenameButtons, FileContentButtons } from 'components/FileEditButtons';
+import { FileRenameButton, FileContentButton, FileDeleteButton } from 'components/FileEditButtons';
 import MoveFileButton from 'components/MoveFileButton';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
-import { FcDownload, FcFile, FcAdvance, FcFolder, FcUpload, FcEditImage } from 'react-icons/fc';
+import { FcDownload, FcFile, FcAdvance, FcFolder, FcUpload, FcEditImage, FcFullTrash } from 'react-icons/fc';
 
 type DriveCardsProps = {
 	files: IPCFile[];
@@ -36,6 +36,7 @@ type DriveCardsProps = {
 	onOpenMoveFile: () => void;
 	onOpenUpdateFileName: () => void;
 	onOpenUpdateFileContent: () => void;
+	onOpenDeleteFile: () => void;
 };
 
 type PathCardProps = {
@@ -77,6 +78,7 @@ const DriveCards = ({
 	onOpenMoveFile,
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
+	onOpenDeleteFile,
 }: DriveCardsProps): JSX.Element => {
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -149,7 +151,7 @@ const DriveCards = ({
 										<PopoverFooter>
 											<HStack>
 												<FcEditImage size="30"></FcEditImage>
-												<FileRenameButtons
+												<FileRenameButton
 													file={file}
 													isUpdateLoading={isUpdateLoading}
 													setSelectedFile={setSelectedFile}
@@ -160,11 +162,21 @@ const DriveCards = ({
 										<PopoverFooter>
 											<HStack>
 												<FcUpload size="30"></FcUpload>
-												<FileContentButtons
+												<FileContentButton
 													file={file}
 													isUpdateLoading={isUpdateLoading}
 													setSelectedFile={setSelectedFile}
 													onOpenUpdateFileContent={onOpenUpdateFileContent}
+												/>
+											</HStack>
+										</PopoverFooter>
+										<PopoverFooter>
+											<HStack>
+												<FcFullTrash size="30"></FcFullTrash>
+												<FileDeleteButton
+													file={file}
+													setSelectedFile={setSelectedFile}
+													onOpenDeleteFile={onOpenDeleteFile}
 												/>
 											</HStack>
 										</PopoverFooter>

@@ -49,6 +49,7 @@ export const NewElemButton = ({ onClick, isLoading }: CustomButtonProps): JSX.El
 		New Elem
 	</Button>
 );
+
 export const RedeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
 	<Button
 		variant="inline"

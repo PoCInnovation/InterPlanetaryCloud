@@ -236,6 +236,32 @@ class Contact {
 		}
 	}
 
+	public async removeFileFromContact(contactAddress: string, file: IPCFile): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				if (
+					await Promise.all(
+						this.contacts.map(async (contact, index) => {
+							if (contact.address === contactAddress) {
+								this.contacts[index].files = this.contacts[index].files.filter((f) => f.hash !== file.hash);
+
+								await this.publishAggregate();
+								return true;
+							}
+							return false;
+						}),
+					)
+				)
+					return { success: true, message: 'File deleted from the contact' };
+				return { success: false, message: 'Contact does not exist' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to delete the file from the contact' };
+		}
+	}
+
 	public async createFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			if (this.account) {

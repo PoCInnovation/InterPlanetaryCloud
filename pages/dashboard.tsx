@@ -44,6 +44,7 @@ const Dashboard = (): JSX.Element => {
 		onOpen: onOpenUpdateFileName,
 		onClose: onCloseUpdateFileName,
 	} = useDisclosure();
+	const { isOpen: isOpenDeleteFile, onOpen: onOpenDeleteFile, onClose: onCloseDeleteFile } = useDisclosure();
 	const { isOpen: isOpenMoveFile, onOpen: onOpenMoveFile, onClose: onCloseMoveFile } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
@@ -184,6 +185,26 @@ const Dashboard = (): JSX.Element => {
 		onClose();
 		setFileEvent(undefined);
 		setIsUploadLoading(false);
+	};
+
+	const deleteFile = async () => {
+		if (user.account) {
+			const deleted = await user.drive.delete(selectedFile.hash);
+
+			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
+			if (deleted.success) {
+				const removed = await user.contact.removeFileFromContact(user.account.address, selectedFile);
+
+				if (!removed.success) {
+					toast({ title: removed.message, status: 'error' });
+				} else {
+					setFiles(user.drive.files.filter((file) => file.hash !== selectedFile.hash));
+				}
+			}
+		} else {
+			toast({ title: 'Failed to load account', status: 'error' });
+		}
+		onCloseDeleteFile();
 	};
 
 	const updateFileName = async () => {
@@ -374,6 +395,7 @@ const Dashboard = (): JSX.Element => {
 							onOpenUpdateFileContent={onOpenUpdateFileContent}
 							deleteContact={deleteContact}
 							isRedeployLoading={isDeployLoading}
+							onOpenDeleteFile={onOpenDeleteFile}
 							onOpenRedeployProgram={onOpenProgram}
 							setSelectedProgram={setSelectedProgram}
 						/>
@@ -558,6 +580,18 @@ const Dashboard = (): JSX.Element => {
 						id="ipc-dashboard-input-update-filename"
 					/>
 				</FormControl>
+			</Modal>
+			<Modal
+				isOpen={isOpenDeleteFile}
+				onClose={onCloseDeleteFile}
+				title="Delete the file"
+				CTA={
+					<Button variant="inline" w="100%" mb="16px" onClick={deleteFile} id="ipc-dashboard-delete-file-button">
+						Delete
+					</Button>
+				}
+			>
+				<Text>Are you sure you want to delete this file ?</Text>
 			</Modal>
 			<Modal
 				isOpen={isOpenMoveFile}

@@ -27,6 +27,7 @@ type CardsProps = {
 	onOpenUpdateFileContent: () => void;
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 	onOpenRedeployProgram: () => void;
+	onOpenDeleteFile: () => void;
 	isRedeployLoading: boolean;
 	setSelectedProgram: (program: IPCProgram) => void;
 };
@@ -51,6 +52,7 @@ export const DisplayCards = ({
 	onOpenUpdateFileContent,
 	deleteContact,
 	onOpenRedeployProgram,
+	onOpenDeleteFile,
 	isRedeployLoading,
 	setSelectedProgram,
 }: CardsProps): JSX.Element => {
@@ -84,6 +86,7 @@ export const DisplayCards = ({
 					onOpenMoveFile={onOpenMoveFile}
 					onOpenUpdateFileName={onOpenUpdateFileName}
 					onOpenUpdateFileContent={onOpenUpdateFileContent}
+					onOpenDeleteFile={onOpenDeleteFile}
 				/>
 			</VStack>
 		);
@@ -104,6 +107,7 @@ export const DisplayCards = ({
 					onOpenMoveFile={onOpenMoveFile}
 					onOpenUpdateFileName={onOpenUpdateFileName}
 					onOpenUpdateFileContent={onOpenUpdateFileContent}
+					onOpenDeleteFile={onOpenDeleteFile}
 				/>
 			</VStack>
 		);
