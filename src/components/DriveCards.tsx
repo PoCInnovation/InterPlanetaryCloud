@@ -17,13 +17,13 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
-import FileEditButtons from 'components/FileEditButtons';
+import { FileRenameButtons, FileContentButtons } from 'components/FileEditButtons';
 import MoveFileButton from 'components/MoveFileButton';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
-import { FcDownload, FcFile, FcAdvance, FcFolder } from 'react-icons/fc';
+import { FcDownload, FcFile, FcAdvance, FcFolder, FcUpload, FcEditImage } from 'react-icons/fc';
 
 type DriveCardsProps = {
 	files: IPCFile[];
@@ -148,11 +148,22 @@ const DriveCards = ({
 										</PopoverBody>
 										<PopoverFooter>
 											<HStack>
-												<FileEditButtons
+												<FcEditImage size="30"></FcEditImage>
+												<FileRenameButtons
 													file={file}
 													isUpdateLoading={isUpdateLoading}
 													setSelectedFile={setSelectedFile}
 													onOpenUpdateFileName={onOpenUpdateFileName}
+												/>
+											</HStack>
+										</PopoverFooter>
+										<PopoverFooter>
+											<HStack>
+												<FcUpload size="30"></FcUpload>
+												<FileContentButtons
+													file={file}
+													isUpdateLoading={isUpdateLoading}
+													setSelectedFile={setSelectedFile}
 													onOpenUpdateFileContent={onOpenUpdateFileContent}
 												/>
 											</HStack>
