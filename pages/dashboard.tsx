@@ -48,7 +48,7 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
-	const { isOpen: isOpenElem, onOpen: onOpenElem, onClose: onCloseElem } = useDisclosure();
+	const { onOpen: onOpenElem } = useDisclosure();
 	const {
 		isOpen: isOpenUpdateFileContent,
 		onOpen: onOpenUpdateFileContent,
@@ -71,7 +71,6 @@ const Dashboard = (): JSX.Element => {
 	const [path, setPath] = useState('/');
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
-	const [isRedeployLoading, setIsRedeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [isCreateFolderLoading, setIsCreateFolderLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -157,14 +156,13 @@ const Dashboard = (): JSX.Element => {
 			toast({ title: 'Invalid file', status: 'error' });
 			setFileEvent(undefined);
 			setIsUploadLoading(false);
-			onClose();
 			return;
 		}
 
 		const file: IPCFile = {
 			name: filename,
 			hash: fileContent,
-			size: fileEvent.target.files[0].size,
+			size: fileEvent.target.files![0].size,
 			createdAt: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path,
