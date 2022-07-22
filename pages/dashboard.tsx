@@ -133,7 +133,6 @@ const Dashboard = (): JSX.Element => {
 					createdAt: Date.now(),
 				},
 				fileEvent.target.files[0],
-				!!oldProgram,
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
