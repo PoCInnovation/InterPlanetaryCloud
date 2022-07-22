@@ -85,11 +85,8 @@ class Computing {
 	): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (oldProgram && oldProgram.hash) {
-					const newProgramsArray: IPCProgram[] = this.programs.filter(
-						(prog: IPCProgram) => prog.hash !== oldProgram.hash,
-					);
-					this.programs = newProgramsArray;
+				if (oldProgram) {
+					this.programs = this.programs.filter((prog) => prog.hash !== oldProgram.hash);
 					await this.deleteProgram(oldProgram.hash);
 				}
 
@@ -104,9 +101,8 @@ class Computing {
 				});
 
 				const newProgram: IPCProgram = {
-					name: myProgram.name,
+					...myProgram,
 					hash: programHashPublishProgram.item_hash,
-					createdAt: myProgram.createdAt,
 				};
 
 				this.programs.push(newProgram);

@@ -123,20 +123,18 @@ class Contact {
 	public async updateFileContent(newFile: IPCFile, oldHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await Promise.all(
-					this.contacts.map(async (contact, i) => {
-						const file = this.contacts[i].files.find((f) => f.hash === oldHash);
+				this.contacts.forEach(async (contact, i) => {
+					const file = this.contacts[i].files.find((f) => f.hash === oldHash);
 
-						if (file) {
-							file.hash = newFile.hash;
-							file.key = await encryptWithPublicKey(
-								contact.publicKey.slice(2),
-								await decryptWithPrivateKey(this.private_key, newFile.key),
-							);
-							await this.publishAggregate();
-						}
-					}),
-				);
+					if (file) {
+						file.hash = newFile.hash;
+						file.key = await encryptWithPublicKey(
+							contact.publicKey.slice(2),
+							await decryptWithPrivateKey(this.private_key, newFile.key),
+						);
+						await this.publishAggregate();
+					}
+				});
 				return { success: true, message: 'File content updated' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -170,28 +168,15 @@ class Contact {
 
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
-			for (let i = 0; this.contacts[i] != null; i += 1) {
-				this.updateOneFileName(concernedFile.hash, newName, i);
-			}
-			return { success: true, message: 'Filename updated' };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to update this filename' };
-		}
-	}
+			this.contacts.forEach(async (contact) => {
+				const file = contact.files.find((f) => f.hash === concernedFile.hash);
 
-	private async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				const file = this.contacts[contactIndex].files.find((f) => f.hash === fileHash);
 				if (file) {
 					file.name = newName;
 					await this.publishAggregate();
-					return { success: true, message: 'Filename updated' };
 				}
-				return { success: false, message: 'File does not exist' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			});
+			return { success: true, message: 'Filename updated' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
@@ -201,32 +186,24 @@ class Contact {
 	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					await Promise.all(
-						this.contacts.map(async (contact, index) => {
-							if (contact.address === contactAddress) {
-								if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
-									return { success: false, message: 'The file is already shared' };
-								}
-								this.contacts[index].files.push({
-									hash: mainFile.hash,
-									key: await encryptWithPublicKey(
-										contact.publicKey.slice(2),
-										await decryptWithPrivateKey(this.private_key, mainFile.key),
-									),
-									createdAt: mainFile.createdAt,
-									name: mainFile.name,
-									path: mainFile.path,
-									size: mainFile.size,
-								});
-								await this.publishAggregate();
-								return true;
-							}
-							return false;
-						}),
-					)
-				)
+				const index = this.contacts.findIndex((contact) => contact.address === contactAddress);
+
+				if (index !== -1) {
+					if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
+						return { success: false, message: 'The file is already shared' };
+					}
+					const newFile: IPCFile = {
+						...mainFile,
+						key: await encryptWithPublicKey(
+							this.contacts[index].publicKey.slice(2),
+							await decryptWithPrivateKey(this.private_key, mainFile.key),
+						),
+					};
+
+					this.contacts[index].files.push(newFile);
+					await this.publishAggregate();
 					return { success: true, message: 'File shared with the contact' };
+				}
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -239,20 +216,14 @@ class Contact {
 	public async removeFileFromContact(contactAddress: string, file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					await Promise.all(
-						this.contacts.map(async (contact, index) => {
-							if (contact.address === contactAddress) {
-								this.contacts[index].files = this.contacts[index].files.filter((f) => f.hash !== file.hash);
+				const index = this.contacts.findIndex((contact) => contact.address === contactAddress);
 
-								await this.publishAggregate();
-								return true;
-							}
-							return false;
-						}),
-					)
-				)
+				if (index !== -1) {
+					this.contacts[index].files = this.contacts[index].files.filter((f) => f.hash !== file.hash);
+
+					await this.publishAggregate();
 					return { success: true, message: 'File deleted from the contact' };
+				}
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };

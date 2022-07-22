@@ -75,10 +75,7 @@ const Dashboard = (): JSX.Element => {
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [isCreateFolderLoading, setIsCreateFolderLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [fileNameEvent, setFileNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [folderNameEvent, setFolderNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [newPath, setNewPath] = useState('');
+	const [nameEvent, setNameEvent] = useState('');
 	const [contactsPublicKeyEvent, setContactPublicKeyEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(
 		undefined,
 	);
@@ -208,8 +205,8 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const updateFileName = async () => {
-		if (fileNameEvent) {
-			const filename = fileNameEvent.target.value;
+		if (nameEvent) {
+			const filename = nameEvent;
 			const update = await user.contact.updateFileName(selectedFile, filename);
 			toast({ title: update.message, status: update.success ? 'success' : 'error' });
 			if (update.success) {
@@ -218,12 +215,13 @@ const Dashboard = (): JSX.Element => {
 				if (index !== -1) files[index].name = filename;
 				setFiles(files);
 			}
-			onCloseUpdateFileName();
 		}
+		setNameEvent('');
+		onCloseUpdateFileName();
 	};
 
 	const moveFile = async () => {
-		const formattedPath = formatPath(newPath);
+		const formattedPath = formatPath(nameEvent);
 
 		if (!isValidFolderPath(formattedPath, user.drive.folders)) {
 			toast({ title: 'Invalid path', status: 'error' });
@@ -231,7 +229,6 @@ const Dashboard = (): JSX.Element => {
 		}
 
 		const moved = await user.contact.moveFile(selectedFile, formattedPath);
-
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 		const index = files.indexOf(selectedFile);
@@ -239,6 +236,7 @@ const Dashboard = (): JSX.Element => {
 			files[index].path = formattedPath;
 			setFiles(files);
 		}
+		setNameEvent('');
 		onCloseMoveFile();
 	};
 
@@ -252,12 +250,9 @@ const Dashboard = (): JSX.Element => {
 		if (!fileContent) return;
 
 		const newFile: IPCFile = {
-			name: oldFile.name,
+			...oldFile,
 			hash: fileContent,
-			size: oldFile.size,
-			createdAt: oldFile.createdAt,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			path: oldFile.path,
 		};
 		setIsUpdateLoading(true);
 		const upload = await user.drive.upload(newFile, key);
@@ -294,9 +289,9 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const addContact = async () => {
-		if (contactsNameEvent && contactsPublicKeyEvent) {
+		if (nameEvent && contactsPublicKeyEvent) {
 			const add = await user.contact.add({
-				name: contactsNameEvent.target.value,
+				name: nameEvent,
 				address: EthCrypto.publicKey.toAddress(contactsPublicKeyEvent.target.value.slice(2)),
 				publicKey: contactsPublicKeyEvent.target.value,
 				files: [],
@@ -308,20 +303,19 @@ const Dashboard = (): JSX.Element => {
 		} else {
 			toast({ title: 'Bad contact infos', status: 'error' });
 		}
+		setNameEvent('');
 		onCloseContactAdd();
 	};
 
 	const updateContact = async () => {
 		if (contactsPublicKeyEvent) {
-			const update = await user.contact.update(
-				contactInfos.address,
-				contactsNameEvent ? contactsNameEvent.target.value : contactInfos.name,
-			);
+			const update = await user.contact.update(contactInfos.address, nameEvent || contactInfos.name);
 			toast({ title: update.message, status: update.success ? 'success' : 'error' });
 			setContacts(user.contact.contacts);
 		} else {
 			toast({ title: 'Invalid address', status: 'error' });
 		}
+		setNameEvent('');
 		onCloseContactUpdate();
 	};
 
@@ -340,11 +334,9 @@ const Dashboard = (): JSX.Element => {
 
 	const createFolder = async () => {
 		setIsCreateFolderLoading(true);
-		if (folderNameEvent) {
-			const name = folderNameEvent.target.value;
-
+		if (nameEvent) {
 			const folder: IPCFolder = {
-				name,
+				name: nameEvent,
 				path,
 				createdAt: Date.now(),
 			};
@@ -354,9 +346,10 @@ const Dashboard = (): JSX.Element => {
 			if (created.success) {
 				setFolders([...folders, folder]);
 			}
-			onCloseCreateFolder();
 		}
 		setIsCreateFolderLoading(false);
+		setNameEvent('');
+		onCloseCreateFolder();
 	};
 
 	return (
@@ -478,7 +471,7 @@ const Dashboard = (): JSX.Element => {
 						w="100%"
 						p="10px"
 						my="4px"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setFolderNameEvent(e)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setNameEvent(e.target.value)}
 						id="ipc-dashboard-input-folder-name"
 					/>
 				</FormControl>
@@ -507,7 +500,7 @@ const Dashboard = (): JSX.Element => {
 						p="10px"
 						my="4px"
 						placeholder="Name"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setNameEvent(e.target.value)}
 						id="ipc-dashboard-input-contact-name"
 					/>
 					<Input
@@ -546,7 +539,7 @@ const Dashboard = (): JSX.Element => {
 						p="10px"
 						my="4px"
 						placeholder={contactInfos.name}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setContactNameEvent(e)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setNameEvent(e.target.value)}
 						id="ipc-dashboard-input-contact-name"
 					/>
 				</FormControl>
@@ -576,7 +569,7 @@ const Dashboard = (): JSX.Element => {
 						p="10px"
 						my="4px"
 						placeholder={selectedFile.name}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileNameEvent(e)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setNameEvent(e.target.value)}
 						id="ipc-dashboard-input-update-filename"
 					/>
 				</FormControl>
@@ -618,7 +611,7 @@ const Dashboard = (): JSX.Element => {
 						p="10px"
 						my="4px"
 						placeholder={`Current: '${selectedFile.path}'`}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setNewPath(e.target.value)}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setNameEvent(e.target.value)}
 						id="ipc-dashboard-input-move-file"
 					/>
 				</FormControl>

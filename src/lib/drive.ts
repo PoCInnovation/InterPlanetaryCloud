@@ -43,16 +43,15 @@ class Drive {
 							keys: ['InterPlanetaryCloud'],
 						});
 
-						aggr.InterPlanetaryCloud.contacts.forEach((contactToFind: IPCContact) => {
-							if (contactToFind.address === this.account!.address) {
-								if (contact.address === this.account!.address) {
-									this.files = contactToFind.files;
-									this.folders = contactToFind.folders;
-								} else {
-									this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
-								}
+						const found = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account!.address);
+						if (found) {
+							if (contact.address === this.account!.address) {
+								this.files = found.files;
+								this.folders = found.folders;
+							} else {
+								this.sharedFiles = this.sharedFiles.concat(found.files);
 							}
-						});
+						}
 					}),
 				);
 				return { success: true, message: 'Shared drive loaded' };
@@ -82,12 +81,9 @@ class Drive {
 				});
 
 				const newFile: IPCFile = {
-					name: file.name,
+					...file,
 					hash: fileHashPublishStore.content.item_hash,
-					createdAt: file.createdAt,
-					size: file.size,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
-					path: file.path,
 				};
 
 				return { success: true, message: 'File uploaded', file: newFile };
