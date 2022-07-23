@@ -25,7 +25,7 @@ export const DeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Ele
 		justifyContent="flex-start"
 		onClick={onClick}
 		isLoading={isLoading}
-		id="ipc-upload-button"
+		id="ipc-deploy-button"
 	>
 		Deploy a program
 	</Button>
@@ -38,15 +38,9 @@ export const CreateFolderButton = ({ onClick, isLoading }: CustomButtonProps): J
 		justifyContent="flex-start"
 		onClick={onClick}
 		isLoading={isLoading}
-		id="ipc-upload-button"
+		id="ipc-create-folder-button"
 	>
 		Create a folder
-	</Button>
-);
-
-export const NewElemButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
-	<Button variant="inline" w="80%" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-deploy-button">
-		New Elem
 	</Button>
 );
 

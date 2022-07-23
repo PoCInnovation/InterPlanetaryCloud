@@ -114,7 +114,13 @@ const DriveCards = ({
 							<FcFile size="35"></FcFile>
 							<Popover placement="right">
 								<PopoverTrigger>
-									<Button display="flex" w="100%" backgroundColor={'white'} justifyContent="start">
+									<Button
+										display="flex"
+										w="100%"
+										backgroundColor={'white'}
+										className="ipc-file-popover-button"
+										justifyContent="start"
+									>
 										{file.name}
 									</Button>
 								</PopoverTrigger>

@@ -49,7 +49,6 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
-	const { onOpen: onOpenElem } = useDisclosure();
 	const {
 		isOpen: isOpenUpdateFileContent,
 		onOpen: onOpenUpdateFileContent,
@@ -355,7 +354,6 @@ const Dashboard = (): JSX.Element => {
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBar
-				onOpenElem={onOpenElem}
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
 				onOpenCreateFolder={onOpenCreateFolder}

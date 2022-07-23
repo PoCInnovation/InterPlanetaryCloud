@@ -19,7 +19,8 @@ describe('Upload a program modal for Dashboard', () => {
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
-		cy.get('#ipc-deploy-button').click().wait(2500);
+		cy.get('.ipc-new-elem-button').click();
+		cy.get('#ipc-deploy-button').click({ force: true }).wait(2500);
 	});
 
 	it('Good number of buttons after upload', () => {
