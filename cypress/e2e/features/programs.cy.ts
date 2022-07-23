@@ -11,7 +11,7 @@ describe('Create account for Dashboard tests', () => {
 	});
 });
 
-describe('Upload a program modal for Dashboard', () => {
+describe('Deploy a program modal for Dashboard', () => {
 	const fixtureFile = 'upload_test_program.zip';
 
 	beforeEach(() => {
@@ -23,7 +23,7 @@ describe('Upload a program modal for Dashboard', () => {
 		cy.get('#ipc-deploy-button').click({ force: true }).wait(2500);
 	});
 
-	it('Good number of buttons after upload', () => {
+	it('Good number of buttons after deployment', () => {
 		cy.get('#ipc-dashboard-deploy-program').attachFile(fixtureFile);
 		cy.get('#ipc-dashboard-deploy-program-modal-button').click();
 		cy.wait(2000);
