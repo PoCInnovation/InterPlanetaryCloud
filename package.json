@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.9.3",
     "@types/cross-zip": "^4.0.0",
     "@types/git-clone": "^0.2.0",
+    "@types/next-auth": "^3.15.0",
     "aleph-sdk-ts": "^2.2.2",
     "cross-zip": "^4.0.0",
     "crypto-js": "^4.1.1",
