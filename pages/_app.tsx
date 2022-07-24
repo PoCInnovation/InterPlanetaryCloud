@@ -4,6 +4,8 @@ import { AppProps } from 'next/app';
 
 import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
 
+import { SessionProvider } from 'next-auth/react';
+
 import theme from 'theme';
 import 'theme/index.css';
 
@@ -13,7 +15,7 @@ import Auth from 'lib/auth';
 import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
@@ -61,7 +63,9 @@ const App = ({ Component, pageProps }: AppProps) => {
 			<ChakraProvider theme={theme} resetCSS>
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<Component {...pageProps} />
+						<SessionProvider session={session}>
+							<Component {...pageProps} />
+						</SessionProvider>
 					</UserContext.Provider>
 				</AuthContext.Provider>
 			</ChakraProvider>
