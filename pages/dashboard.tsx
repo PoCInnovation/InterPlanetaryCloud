@@ -121,7 +121,6 @@ const Dashboard = (): JSX.Element => {
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
 		if (!fileEvent || !fileEvent.target.files) return;
 		const filename = extractFilename(fileEvent.target.value);
-
 		if (!filename) return;
 
 		setIsDeployLoading(true);

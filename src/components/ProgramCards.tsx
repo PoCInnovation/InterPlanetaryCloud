@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
 
 import ProgramCard from 'components/ProgramCard';
 
@@ -42,6 +42,12 @@ const ProgramCards = ({
 						}}
 						isLoading={isRedeployLoading}
 					/>
+					<Text>
+						{`${new Date(program.createdAt).toString().substring(4, 15).slice(0, 3)} /${new Date(program.createdAt)
+							.toString()
+							.substring(4, 15)
+							.slice(3, 6)} /${new Date(program.createdAt).toString().substring(4, 15).slice(6)}`}
+					</Text>
 				</>
 			</ProgramCard>
 		))}
