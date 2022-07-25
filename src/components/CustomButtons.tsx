@@ -47,7 +47,7 @@ export const CreateFolderButton = ({ onClick, isLoading }: CustomButtonProps): J
 export const RedeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
 	<Button
 		variant="inline"
-		w="45%"
+		w="25%"
 		size="sm"
 		borderRadius="lg"
 		onClick={onClick}

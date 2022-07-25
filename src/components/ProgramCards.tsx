@@ -1,10 +1,11 @@
-import { Button, Text } from '@chakra-ui/react';
+import { Box, Button, HStack, Text } from '@chakra-ui/react';
 
 import ProgramCard from 'components/ProgramCard';
 
 import type { IPCProgram } from 'types/types';
 
 import { RedeployButton } from 'components/CustomButtons';
+import { FcRules } from 'react-icons/fc';
 
 type ProgramCardsProps = {
 	programs: IPCProgram[];
@@ -23,13 +24,19 @@ const ProgramCards = ({
 		{programs.map((program: IPCProgram) => (
 			<ProgramCard key={program.createdAt} program={program}>
 				<>
+					<Box>
+						<HStack>
+							<FcRules display="flex" size="40"></FcRules>
+							<Text>{program.name}</Text>
+						</HStack>
+					</Box>
 					<Button
 						as="a"
 						href={`https://aleph.sh/vm/${program.hash}`}
 						target="_blank"
 						variant="inline"
 						size="sm"
-						w="45%"
+						w="25%"
 						p="0px"
 						id="ipc-computing-forwardUrl-button"
 					>
