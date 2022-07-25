@@ -2,8 +2,6 @@ import { Tab, TabList, Tabs, Text, VStack, Button } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 
-import { useSession, signIn, signOut } from 'next-auth/react';
-
 type SideBarPropsType = {
 	contactTab: string;
 	myFilesTab: string;
@@ -27,8 +25,6 @@ const SideBar = ({
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => {
-	const { data: session } = useSession();
-
 	return (
 
 		<VStack
@@ -97,10 +93,6 @@ const SideBar = ({
 				</Tabs>
 				{uploadButton}
 				{deployButton}
-				{!session
-					? <Button onClick={() => signIn()}>Sign in with GitHub</Button>
-					: <Button onClick={() => signOut()}>Sign Out ({session.user?.name})</Button>
-				}
 			</VStack>
 		</VStack>
 	);

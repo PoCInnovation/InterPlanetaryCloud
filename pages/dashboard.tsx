@@ -341,6 +341,7 @@ const Dashboard = (): JSX.Element => {
 				isDeployLoading={isDeployLoading}
 				selectedTab={selectedTab}
 			/>
+			<Button as="a" href={`https://github.com/login/oauth/authorize?scope=repo&client_id=f3c2a1b46331278ff2ec`}>Sign In with GitHub</Button>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayFileCards
