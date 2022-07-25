@@ -39,7 +39,7 @@ const ProgramCards = ({
 						text="redeploy"
 						onClick={() => {
 							setSelectedProgram(program);
-							onOpenRedeployProgram();
+							onOpenRedeployProgram()
 						}}
 						isLoading={isRedeployLoading}
 					/>

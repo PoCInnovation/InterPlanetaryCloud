@@ -65,6 +65,7 @@ const Dashboard = (): JSX.Element => {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
+	const [isRedeployLoading, setIsRedeployLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -126,6 +127,7 @@ const Dashboard = (): JSX.Element => {
 					created_at: Date.now(),
 				},
 				fileEvent.target.files[0],
+				(oldProgram) ? true : false,
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });

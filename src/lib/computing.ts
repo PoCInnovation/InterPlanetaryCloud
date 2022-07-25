@@ -1,4 +1,4 @@
-import { accounts, program, aggregate, forget } from 'aleph-sdk-ts';
+import { accounts, program, aggregate } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
@@ -57,41 +57,22 @@ class Computing {
 		}
 	}
 
-	public async deleteProgram(programHash: string): Promise<ResponseType> {
+	public async uploadProgram(myProgram: IPCProgram, uploadFile: File, isRedeploy: boolean, oldProgramHash: IPCProgram | undefined): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await forget.publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					hashes: [programHash],
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-				});
 
-				return { success: true, message: 'program deleted' };
-			}
-			return { success: false, message: 'Failed to load account' };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to delete program' };
-		}
-	}
+				console.log("bite", isRedeploy, oldProgramHash, myProgram);
 
-	public async uploadProgram(
-		myProgram: IPCProgram,
-		uploadFile: File,
-		oldProgram: IPCProgram | undefined,
-	): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				if (oldProgram && oldProgram.hash) {
-					const newProgramsArray: IPCProgram[] = this.programs.filter(
-						(prog: IPCProgram) => prog.hash !== oldProgram.hash,
-					);
+				// remove old program from user's programs array
+				if (isRedeploy && oldProgramHash) {
+					const newProgramsArray: IPCProgram[] = this.programs.filter((oldProgram: IPCProgram) => {
+						return oldProgram !== oldProgramHash;
+					});
 					this.programs = newProgramsArray;
-					await this.deleteProgram(oldProgram.hash);
+					console.log("coucou");
 				}
+
+				console.log("programs", this.programs);
 
 				const programHashPublishProgram = await program.publish({
 					channel: ALEPH_CHANNEL,
@@ -110,6 +91,8 @@ class Computing {
 				};
 
 				this.programs.push(newProgram);
+
+				console.log("programs two", this.programs);
 
 				await this.publishAggregate();
 
