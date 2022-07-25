@@ -15,44 +15,34 @@ describe('Create account for File tests', () => {
 
 describe('Upload a file modal in Dashboard', () => {
 	const fixtureFile = 'upload_test_file.txt';
+	const emptyFixtureFile = 'upload_empty_file.txt';
 
 	beforeEach(() => {
 		cy.visit('/login');
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
-		cy.get('#ipc-upload-button').click();
+		cy.get('.ipc-new-elem-button').click();
+		cy.get('#ipc-upload-button').click({ force: true });
 	});
 
 	it('Good number of buttons after upload', () => {
 		cy.get('#ipc-dashboard-upload-file').attachFile(fixtureFile);
 		cy.get('#ipc-dashboard-upload-file-modal-button').click();
 		cy.wait(2000);
-		cy.get('button').should('have.length', 12);
+		cy.get('button').should('have.length', 16);
 	});
 
 	it('Good number of buttons after closing modal', () => {
 		cy.get('#ipc-modal-close-button').click();
-		cy.get('button').should('have.length', 12);
-	});
-});
-
-describe('Upload an empty file in Dashboard', () => {
-	const fixtureFile = 'upload_empty_file.txt';
-
-	beforeEach(() => {
-		cy.visit('/login');
-		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-login-credentials-button').click();
-		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
-		cy.get('#ipc-upload-button').click();
+		cy.get('button').should('have.length', 16);
 	});
 
 	it('Good number of buttons after failed upload', () => {
-		cy.get('#ipc-dashboard-upload-file').attachFile(fixtureFile, { allowEmpty: true });
+		cy.get('#ipc-dashboard-upload-file').attachFile(emptyFixtureFile, { allowEmpty: true });
 		cy.get('#ipc-dashboard-upload-file-modal-button').click();
 		cy.wait(2000);
-		cy.get('button').should('have.length', 12);
+		cy.get('button').should('have.length', 18);
 	});
 });
 
@@ -61,6 +51,7 @@ describe('Download a file in Dashboard', () => {
 		cy.visit('/login');
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click();
+		cy.get('.ipc-file-popover-button').click();
 		cy.get('#ipc-dashboard-download-button').click();
 	});
 

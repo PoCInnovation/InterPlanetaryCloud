@@ -17,10 +17,9 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
 import Sidebar from 'components/SideBar';
-import { UploadButton, DeployButton, NewElemButton, CreateFolderButton } from 'components/CustomButtons';
+import { UploadButton, DeployButton, CreateFolderButton } from 'components/CustomButtons';
 
 type BarProps = {
-	onOpenElem: () => void;
 	onOpen: () => void;
 	onOpenProgram: () => void;
 	onOpenCreateFolder: () => void;
@@ -32,7 +31,6 @@ type BarProps = {
 };
 
 export const LeftBar = ({
-	onOpenElem,
 	onOpen,
 	onOpenProgram,
 	onOpenCreateFolder,
@@ -43,7 +41,6 @@ export const LeftBar = ({
 	selectedTab,
 }: BarProps): JSX.Element => (
 	<Sidebar
-		newElemButton={<NewElemButton onClick={onOpenElem} isLoading={isDeployLoading} />}
 		uploadButton={<UploadButton onClick={() => onOpen()} isLoading={isUploadLoading} />}
 		deployButton={<DeployButton onClick={onOpenProgram} isLoading={isDeployLoading} />}
 		createFolderButton={<CreateFolderButton onClick={onOpenCreateFolder} isLoading={isCreateFolderLoading} />}
@@ -58,7 +55,6 @@ export const LeftBar = ({
 );
 
 export const BarWithDrawer = ({
-	onOpenElem,
 	onOpen,
 	onOpenProgram,
 	onOpenCreateFolder,
@@ -77,7 +73,6 @@ export const BarWithDrawer = ({
 				<DrawerOverlay />
 				<DrawerContent w="75%">
 					<LeftBar
-						onOpenElem={onOpenElem}
 						onOpen={onOpen}
 						onOpenProgram={onOpenProgram}
 						onOpenCreateFolder={onOpenCreateFolder}
@@ -114,7 +109,6 @@ export const BarWithDrawer = ({
 };
 
 export const ResponsiveBar = ({
-	onOpenElem,
 	onOpen,
 	onOpenProgram,
 	onOpenCreateFolder,
@@ -129,7 +123,6 @@ export const ResponsiveBar = ({
 	if (!isDrawerNeeded)
 		return (
 			<LeftBar
-				onOpenElem={onOpenElem}
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
 				onOpenCreateFolder={onOpenCreateFolder}
@@ -142,7 +135,6 @@ export const ResponsiveBar = ({
 		);
 	return (
 		<BarWithDrawer
-			onOpenElem={onOpenElem}
 			onOpen={onOpen}
 			onOpenProgram={onOpenProgram}
 			onOpenCreateFolder={onOpenCreateFolder}

@@ -25,7 +25,6 @@ type SideBarPropsType = {
 	sharedFilesTab: string;
 	myProgramsTab: string;
 	profileTab: string;
-	newElemButton: JSX.Element;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
 	createFolderButton: JSX.Element;
@@ -66,7 +65,7 @@ const SideBar = ({
 			</Text>
 			<Popover placement="right">
 				<PopoverTrigger>
-					<Button variant="inline" w="80%" borderRadius="lg" id="ipc-deploy-button">
+					<Button variant="inline" w="80%" borderRadius="lg" className="ipc-new-elem-button">
 						New Elem
 					</Button>
 				</PopoverTrigger>
