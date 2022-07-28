@@ -100,11 +100,53 @@ const DriveCards = ({
 		<>
 			<PathCard path={path} setPath={setPath} />
 			{folders.map((folder) => (
-				<FolderCard key={folder.createdAt} name={folder.name} path={path} setPath={setPath}>
-					<HStack>
-						<FcFolder display="flex" size="30"></FcFolder>
-						<Text>{folder.name}</Text>
-					</HStack>
+				<FolderCard key={folder.createdAt}>
+					<>
+						<HStack w="100%">
+							<FcFolder display="flex" size="30"></FcFolder>
+							<Button
+								display="flex"
+								w="70%"
+								backgroundColor={'white'}
+								className="ipc-file-popover-button"
+								justifyContent="start"
+								onClick={() => setPath(`${path}${folder.name}/`)}
+							>
+								{folder.name}
+							</Button>
+						</HStack>
+						<Popover placement="left">
+							<PopoverTrigger>
+								<Box>
+									<Button
+										display="flex"
+										w="5%"
+										backgroundColor={'white'}
+										className="ipc-file-popover-button"
+										justifyContent="start"
+									>
+										...
+									</Button>
+								</Box>
+							</PopoverTrigger>
+							<Portal>
+								<PopoverContent w="300px">
+									<PopoverBody>
+										<HStack>
+											<FcAdvance size="30"></FcAdvance>
+											<Text>move to ...</Text>
+										</HStack>
+									</PopoverBody>
+									<PopoverFooter>
+										<HStack>
+											<FcFullTrash size="30"></FcFullTrash>
+											<Text>Delete Folder</Text>
+										</HStack>
+									</PopoverFooter>
+								</PopoverContent>
+							</Portal>
+						</Popover>
+					</>
 				</FolderCard>
 			))}
 			{files.map((file) => (
