@@ -45,6 +45,7 @@ const Dashboard = (): JSX.Element => {
 		onClose: onCloseUpdateFileName,
 	} = useDisclosure();
 	const { isOpen: isOpenDeleteFile, onOpen: onOpenDeleteFile, onClose: onCloseDeleteFile } = useDisclosure();
+	const { isOpen: isOpenDeleteFolder, onOpen: onOpenDeleteFolder, onClose: onCloseDeleteFolder } = useDisclosure();
 	const { isOpen: isOpenMoveFile, onOpen: onOpenMoveFile, onClose: onCloseMoveFile } = useDisclosure();
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
@@ -84,6 +85,11 @@ const Dashboard = (): JSX.Element => {
 		size: 0,
 		createdAt: 0,
 		key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+		path: '/',
+	});
+	const [selectedFolder, setSelectedFolder] = useState<IPCFolder>({
+		name: '',
+		createdAt: 0,
 		path: '/',
 	});
 	const [selectedProgram, setSelectedProgram] = useState<IPCProgram>({
@@ -184,22 +190,53 @@ const Dashboard = (): JSX.Element => {
 
 	const deleteFile = async () => {
 		if (user.account) {
-			const deleted = await user.drive.delete(selectedFile.hash);
+			const deleted = await user.drive.delete([selectedFile.hash]);
 
 			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			if (deleted.success) {
-				const removed = await user.contact.removeFileFromContact(user.account.address, selectedFile);
+				const removed = await user.contact.removeFilesFromContact(user.account.address, [selectedFile.hash]);
 
 				if (!removed.success) {
 					toast({ title: removed.message, status: 'error' });
 				} else {
-					setFiles(user.drive.files.filter((file) => file.hash !== selectedFile.hash));
+					setFiles(user.drive.files);
 				}
 			}
 		} else {
 			toast({ title: 'Failed to load account', status: 'error' });
 		}
 		onCloseDeleteFile();
+	};
+
+	const deleteFolder = async () => {
+		const folderPath = selectedFolder.path;
+		const fullPath = `${folderPath}${selectedFolder.name}/`;
+
+		if (user.account) {
+			const foldersResponse = await user.contact.deleteFolder(selectedFolder);
+			setFolders(
+				folders.filter(
+					(f) => !f.path.startsWith(fullPath) && (f.path !== folderPath || f.createdAt !== selectedFolder.createdAt),
+				),
+			);
+
+			if (foldersResponse.success) {
+				const filesToDelete = user.drive.files.filter((file) => file.path.startsWith(fullPath));
+				if (filesToDelete.length > 0) {
+					const filesResponse = await user.drive.delete(filesToDelete.map((file) => file.hash));
+					await user.contact.removeFilesFromContact(
+						user.account.address,
+						filesToDelete.map((file) => file.hash),
+					);
+					foldersResponse.success = filesResponse.success;
+				}
+			}
+			toast({ title: foldersResponse.message, status: foldersResponse.success ? 'success' : 'error' });
+		} else {
+			toast({ title: 'Failed to load account', status: 'error' });
+		}
+		setFiles(user.drive.files);
+		onCloseDeleteFolder();
 	};
 
 	const updateFileName = async () => {
@@ -264,7 +301,7 @@ const Dashboard = (): JSX.Element => {
 				if (index !== -1) files[index] = upload.file;
 				setFiles(files);
 
-				const deleted = await user.drive.delete(oldFile.hash);
+				const deleted = await user.drive.delete([oldFile.hash]);
 				toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			}
 		}
@@ -377,6 +414,7 @@ const Dashboard = (): JSX.Element => {
 							isUpdateLoading={isUpdateLoading}
 							onOpenMoveFile={onOpenMoveFile}
 							setSelectedFile={setSelectedFile}
+							setSelectedFolder={setSelectedFolder}
 							onOpenShare={onOpenShare}
 							setContactInfo={setContactInfo}
 							onOpenContactUpdate={onOpenContactUpdate}
@@ -386,6 +424,7 @@ const Dashboard = (): JSX.Element => {
 							deleteContact={deleteContact}
 							isRedeployLoading={isDeployLoading}
 							onOpenDeleteFile={onOpenDeleteFile}
+							onOpenDeleteFolder={onOpenDeleteFolder}
 							onOpenRedeployProgram={onOpenProgram}
 							setSelectedProgram={setSelectedProgram}
 						/>
@@ -582,6 +621,18 @@ const Dashboard = (): JSX.Element => {
 				}
 			>
 				<Text>Are you sure you want to delete this file ?</Text>
+			</Modal>
+			<Modal
+				isOpen={isOpenDeleteFolder}
+				onClose={onCloseDeleteFolder}
+				title="Delete the folder"
+				CTA={
+					<Button variant="inline" w="100%" mb="16px" onClick={deleteFolder} id="ipc-dashboard-delete-folder-button">
+						Delete
+					</Button>
+				}
+			>
+				<Text>Are you sure you want to delete this folder and all it's content ?</Text>
 			</Modal>
 			<Modal
 				isOpen={isOpenMoveFile}

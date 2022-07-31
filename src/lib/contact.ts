@@ -213,13 +213,13 @@ class Contact {
 		}
 	}
 
-	public async removeFileFromContact(contactAddress: string, file: IPCFile): Promise<ResponseType> {
+	public async removeFilesFromContact(address: string, hashes: string[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const index = this.contacts.findIndex((contact) => contact.address === contactAddress);
+				const index = this.contacts.findIndex((contact) => contact.address === address);
 
 				if (index !== -1) {
-					this.contacts[index].files = this.contacts[index].files.filter((f) => f.hash !== file.hash);
+					this.contacts[index].files = this.contacts[index].files.filter((f) => !hashes.includes(f.hash));
 
 					await this.publishAggregate();
 					return { success: true, message: 'File deleted from the contact' };
@@ -249,6 +249,30 @@ class Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
+
+	public async deleteFolder(folder: IPCFolder): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					const fullPath = `${folder.path}${folder.name}/`;
+					contact.folders = contact.folders.filter(
+						(f) => !f.path.startsWith(fullPath) && (f.path !== folder.path || f.createdAt !== folder.createdAt),
+					);
+
+					await this.publishAggregate();
+
+					return { success: true, message: 'Folder deleted' };
+				}
+				return { success: false, message: 'Failed to find your contact' };
+			}
+			return { success: false, message: 'Failed to load contact' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to delete the folder' };
 		}
 	}
 

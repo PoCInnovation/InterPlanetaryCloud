@@ -18,6 +18,7 @@ type CardsProps = {
 	setPath: (path: string) => void;
 	isUpdateLoading: boolean;
 	setSelectedFile: (file: IPCFile) => void;
+	setSelectedFolder: (folder: IPCFolder) => void;
 	onOpenShare: () => void;
 	setContactInfo: (contact: IPCContact) => void;
 	onOpenContactUpdate: () => void;
@@ -28,6 +29,7 @@ type CardsProps = {
 	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 	onOpenRedeployProgram: () => void;
 	onOpenDeleteFile: () => void;
+	onOpenDeleteFolder: () => void;
 	isRedeployLoading: boolean;
 	setSelectedProgram: (program: IPCProgram) => void;
 };
@@ -43,6 +45,7 @@ export const DisplayCards = ({
 	setPath,
 	isUpdateLoading,
 	setSelectedFile,
+	setSelectedFolder,
 	onOpenShare,
 	onOpenMoveFile,
 	setContactInfo,
@@ -53,6 +56,7 @@ export const DisplayCards = ({
 	deleteContact,
 	onOpenRedeployProgram,
 	onOpenDeleteFile,
+	onOpenDeleteFolder,
 	isRedeployLoading,
 	setSelectedProgram,
 }: CardsProps): JSX.Element => {
@@ -82,11 +86,13 @@ export const DisplayCards = ({
 					setPath={setPath}
 					isUpdateLoading={isUpdateLoading}
 					setSelectedFile={setSelectedFile}
+					setSelectedFolder={setSelectedFolder}
 					onOpenShare={onOpenShare}
 					onOpenMoveFile={onOpenMoveFile}
 					onOpenUpdateFileName={onOpenUpdateFileName}
 					onOpenUpdateFileContent={onOpenUpdateFileContent}
 					onOpenDeleteFile={onOpenDeleteFile}
+					onOpenDeleteFolder={onOpenDeleteFolder}
 				/>
 			</VStack>
 		);
@@ -103,11 +109,13 @@ export const DisplayCards = ({
 					setPath={setPath}
 					isUpdateLoading={isUpdateLoading}
 					setSelectedFile={setSelectedFile}
+					setSelectedFolder={setSelectedFolder}
 					onOpenShare={onOpenShare}
 					onOpenMoveFile={onOpenMoveFile}
 					onOpenUpdateFileName={onOpenUpdateFileName}
 					onOpenUpdateFileContent={onOpenUpdateFileContent}
 					onOpenDeleteFile={onOpenDeleteFile}
+					onOpenDeleteFolder={onOpenDeleteFolder}
 				/>
 			</VStack>
 		);

@@ -19,25 +19,12 @@ import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
 import { FileRenameButton, FileContentButton, FileDeleteButton } from 'components/FileEditButtons';
 import MoveFileButton from 'components/MoveFileButton';
+import DeleteFolderButton from 'components/DeleteFolderButton';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 import { FcDownload, FcFile, FcAdvance, FcFolder, FcUpload, FcEditImage, FcFullTrash } from 'react-icons/fc';
-
-type DriveCardsProps = {
-	files: IPCFile[];
-	folders: IPCFolder[];
-	path: string;
-	setPath: (path: string) => void;
-	isUpdateLoading: boolean;
-	setSelectedFile: (file: IPCFile) => void;
-	onOpenShare: () => void;
-	onOpenMoveFile: () => void;
-	onOpenUpdateFileName: () => void;
-	onOpenUpdateFileContent: () => void;
-	onOpenDeleteFile: () => void;
-};
 
 type PathCardProps = {
 	path: string;
@@ -68,6 +55,22 @@ const PathCard = ({ path, setPath }: PathCardProps): JSX.Element => {
 	);
 };
 
+type DriveCardsProps = {
+	files: IPCFile[];
+	folders: IPCFolder[];
+	path: string;
+	setPath: (path: string) => void;
+	isUpdateLoading: boolean;
+	setSelectedFile: (file: IPCFile) => void;
+	setSelectedFolder: (folder: IPCFolder) => void;
+	onOpenShare: () => void;
+	onOpenMoveFile: () => void;
+	onOpenUpdateFileName: () => void;
+	onOpenUpdateFileContent: () => void;
+	onOpenDeleteFile: () => void;
+	onOpenDeleteFolder: () => void;
+};
+
 const DriveCards = ({
 	files,
 	folders,
@@ -75,10 +78,12 @@ const DriveCards = ({
 	setPath,
 	isUpdateLoading,
 	setSelectedFile,
+	setSelectedFolder,
 	onOpenMoveFile,
 	onOpenUpdateFileName,
 	onOpenUpdateFileContent,
 	onOpenDeleteFile,
+	onOpenDeleteFolder,
 }: DriveCardsProps): JSX.Element => {
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -108,7 +113,7 @@ const DriveCards = ({
 								display="flex"
 								w="70%"
 								backgroundColor={'white'}
-								className="ipc-file-popover-button"
+								className="ipc-folder-popover-button"
 								justifyContent="start"
 								onClick={() => setPath(`${path}${folder.name}/`)}
 							>
@@ -122,7 +127,7 @@ const DriveCards = ({
 										display="flex"
 										w="5%"
 										backgroundColor={'white'}
-										className="ipc-file-popover-button"
+										className="ipc-folder-popover-button"
 										justifyContent="start"
 									>
 										...
@@ -134,13 +139,18 @@ const DriveCards = ({
 									<PopoverBody>
 										<HStack>
 											<FcAdvance size="30"></FcAdvance>
-											<Text>move to ...</Text>
+											<Text>Move</Text>
 										</HStack>
 									</PopoverBody>
 									<PopoverFooter>
 										<HStack>
 											<FcFullTrash size="30"></FcFullTrash>
-											<Text>Delete Folder</Text>
+											<DeleteFolderButton
+												folder={folder}
+												isUpdateLoading={isUpdateLoading}
+												setSelectedFolder={setSelectedFolder}
+												onOpenDeleteFolder={onOpenDeleteFolder}
+											/>
 										</HStack>
 									</PopoverFooter>
 								</PopoverContent>

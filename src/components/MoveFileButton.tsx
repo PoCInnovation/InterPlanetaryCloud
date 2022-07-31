@@ -40,7 +40,7 @@ const MoveFileButton = ({
 			isLoading={isUpdateLoading}
 			id="ipc-dashboard-move-filebutton"
 		>
-			Move to..
+			Move
 		</Button>
 	);
 };

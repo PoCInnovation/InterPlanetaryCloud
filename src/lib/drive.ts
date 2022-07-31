@@ -95,17 +95,19 @@ class Drive {
 		}
 	}
 
-	public async delete(fileHash: string): Promise<ResponseType> {
+	public async delete(fileHashes: string[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				await forget.publish({
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
-					hashes: [fileHash],
+					hashes: fileHashes,
 					inlineRequested: true,
 					storageEngine: ItemType.ipfs,
 					account: this.account,
 				});
+
+				this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
 
 				return { success: true, message: 'File deleted' };
 			}
