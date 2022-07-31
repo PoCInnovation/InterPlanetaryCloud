@@ -1,10 +1,10 @@
 import { Box, Flex, HStack } from '@chakra-ui/react';
 
-type FileCardProps = {
+type FolderCardProps = {
 	children: JSX.Element;
 };
 
-const FileCard = ({ children }: FileCardProps): JSX.Element => (
+const FolderCard = ({ children }: FolderCardProps): JSX.Element => (
 	<Box
 		p="16px"
 		bg="white"
@@ -24,4 +24,4 @@ const FileCard = ({ children }: FileCardProps): JSX.Element => (
 	</Box>
 );
 
-export default FileCard;
+export default FolderCard;

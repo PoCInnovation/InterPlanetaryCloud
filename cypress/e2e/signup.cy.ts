@@ -68,7 +68,7 @@ describe('Signup with credentials Button for Signup', () => {
 	});
 
 	it('Good URL redirect for close button', () => {
-		cy.get('#ipc-modal-close-button').click().url().should('eq', 'http://localhost:8080/dashboard');
+		cy.get('#ipc-modal-close-button').click().url().should('eq', Cypress.config().baseUrl + '/dashboard');
 	});
 });
 
@@ -78,6 +78,6 @@ describe('Login Button for Signup', () => {
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-signup-login-button').click().url().should('eq', 'http://localhost:8080/login');
+		cy.get('#ipc-signup-login-button').click().url().should('eq', Cypress.config().baseUrl +'/login');
 	});
 });

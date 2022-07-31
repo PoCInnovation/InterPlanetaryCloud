@@ -40,6 +40,7 @@ class Auth {
 							address: account.address,
 							publicKey: account.publicKey,
 							files: [],
+							folders: [],
 						},
 					],
 					programs: [],

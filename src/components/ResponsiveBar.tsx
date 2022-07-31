@@ -17,13 +17,15 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
 import Sidebar from 'components/SideBar';
-import { UploadButton, DeployButton } from 'components/CustomButtons';
+import { UploadButton, DeployButton, CreateFolderButton } from 'components/CustomButtons';
 
 type BarProps = {
 	onOpen: () => void;
 	onOpenProgram: () => void;
+	onOpenCreateFolder: () => void;
 	isUploadLoading: boolean;
 	isDeployLoading: boolean;
+	isCreateFolderLoading: boolean;
 	setSelectedTab: (tab: number) => void;
 	selectedTab: number;
 };
@@ -31,14 +33,17 @@ type BarProps = {
 export const LeftBar = ({
 	onOpen,
 	onOpenProgram,
+	onOpenCreateFolder,
 	isUploadLoading,
 	isDeployLoading,
+	isCreateFolderLoading,
 	setSelectedTab,
 	selectedTab,
 }: BarProps): JSX.Element => (
 	<Sidebar
-		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-		deployButton={<DeployButton text="Deploy a program" onClick={onOpenProgram} isLoading={isDeployLoading} />}
+		uploadButton={<UploadButton onClick={() => onOpen()} isLoading={isUploadLoading} />}
+		deployButton={<DeployButton onClick={onOpenProgram} isLoading={isDeployLoading} />}
+		createFolderButton={<CreateFolderButton onClick={onOpenCreateFolder} isLoading={isCreateFolderLoading} />}
 		contactTab="Contacts"
 		myFilesTab="My files"
 		myProgramsTab="My programs"
@@ -52,9 +57,11 @@ export const LeftBar = ({
 export const BarWithDrawer = ({
 	onOpen,
 	onOpenProgram,
+	onOpenCreateFolder,
 	setSelectedTab,
 	isDeployLoading,
 	isUploadLoading,
+	isCreateFolderLoading,
 	selectedTab,
 }: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
@@ -68,9 +75,11 @@ export const BarWithDrawer = ({
 					<LeftBar
 						onOpen={onOpen}
 						onOpenProgram={onOpenProgram}
+						onOpenCreateFolder={onOpenCreateFolder}
 						setSelectedTab={setSelectedTab}
 						isUploadLoading={isUploadLoading}
 						isDeployLoading={isDeployLoading}
+						isCreateFolderLoading={isCreateFolderLoading}
 						selectedTab={selectedTab}
 					/>
 				</DrawerContent>
@@ -102,9 +111,11 @@ export const BarWithDrawer = ({
 export const ResponsiveBar = ({
 	onOpen,
 	onOpenProgram,
+	onOpenCreateFolder,
 	setSelectedTab,
 	isUploadLoading,
 	isDeployLoading,
+	isCreateFolderLoading,
 	selectedTab,
 }: BarProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
@@ -114,9 +125,11 @@ export const ResponsiveBar = ({
 			<LeftBar
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
+				onOpenCreateFolder={onOpenCreateFolder}
 				setSelectedTab={setSelectedTab}
 				isUploadLoading={isUploadLoading}
 				isDeployLoading={isDeployLoading}
+				isCreateFolderLoading={isCreateFolderLoading}
 				selectedTab={selectedTab}
 			/>
 		);
@@ -124,9 +137,11 @@ export const ResponsiveBar = ({
 		<BarWithDrawer
 			onOpen={onOpen}
 			onOpenProgram={onOpenProgram}
+			onOpenCreateFolder={onOpenCreateFolder}
 			setSelectedTab={setSelectedTab}
 			isUploadLoading={isUploadLoading}
 			isDeployLoading={isDeployLoading}
+			isCreateFolderLoading={isCreateFolderLoading}
 			selectedTab={selectedTab}
 		/>
 	);

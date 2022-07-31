@@ -1,4 +1,21 @@
-import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
+import {
+	Tab,
+	TabList,
+	Tabs,
+	Text,
+	VStack,
+	Popover,
+	PopoverTrigger,
+	Portal,
+	PopoverContent,
+	Button,
+	PopoverHeader,
+	PopoverFooter,
+	PopoverBody,
+	HStack,
+} from '@chakra-ui/react';
+
+import { FcFile, FcFolder, FcRules } from 'react-icons/fc';
 
 import colors from 'theme/foundations/colors';
 
@@ -10,6 +27,7 @@ type SideBarPropsType = {
 	profileTab: string;
 	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
+	createFolderButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
 	currentTabIndex: number;
 };
@@ -22,6 +40,7 @@ const SideBar = ({
 	profileTab,
 	uploadButton,
 	deployButton,
+	createFolderButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -41,10 +60,38 @@ const SideBar = ({
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"
 				id="ipc-sideBar-title"
-				pb="64px"
 			>
 				Inter Planetary Cloud
 			</Text>
+			<Popover placement="right">
+				<PopoverTrigger>
+					<Button variant="inline" w="80%" borderRadius="lg" className="ipc-new-elem-button">
+						New Elem
+					</Button>
+				</PopoverTrigger>
+				<Portal>
+					<PopoverContent w="300px">
+						<PopoverHeader>
+							<HStack>
+								<FcFolder display="flex" size="40"></FcFolder>
+								{createFolderButton}
+							</HStack>
+						</PopoverHeader>
+						<PopoverBody>
+							<HStack>
+								<FcFile display="flex" size="40"></FcFile>
+								{uploadButton}
+							</HStack>
+						</PopoverBody>
+						<PopoverFooter>
+							<HStack>
+								<FcRules display="flex" size="40"></FcRules>
+								{deployButton}
+							</HStack>
+						</PopoverFooter>
+					</PopoverContent>
+				</Portal>
+			</Popover>
 			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
 				<TabList>
 					<Tab
@@ -89,8 +136,6 @@ const SideBar = ({
 					</Tab>
 				</TabList>
 			</Tabs>
-			{uploadButton}
-			{deployButton}
 		</VStack>
 	</VStack>
 );

@@ -10,11 +10,13 @@ import CryptoJS from 'crypto-js';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
 
-import type { IPCContact, IPCFile, ResponseType, UploadResponse, AggregateType } from 'types/types';
+import type { IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse, AggregateType } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Drive {
 	public files: IPCFile[];
+
+	public folders: IPCFolder[];
 
 	public sharedFiles: IPCFile[];
 
@@ -24,6 +26,7 @@ class Drive {
 
 	constructor(importedAccount: accounts.base.Account, private_key: string) {
 		this.files = [];
+		this.folders = [];
 		this.sharedFiles = [];
 		this.account = importedAccount;
 		this.private_key = private_key;
@@ -40,17 +43,15 @@ class Drive {
 							keys: ['InterPlanetaryCloud'],
 						});
 
-						aggr.InterPlanetaryCloud.contacts.map((contactToFind: IPCContact) => {
-							if (contactToFind.address === this.account!.address) {
-								if (contact.address === this.account!.address) {
-									this.files = this.files.concat(contactToFind.files);
-								} else {
-									this.sharedFiles = this.sharedFiles.concat(contactToFind.files);
-								}
-								return true;
+						const found = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account!.address);
+						if (found) {
+							if (contact.address === this.account!.address) {
+								this.files = found.files;
+								this.folders = found.folders;
+							} else {
+								this.sharedFiles = this.sharedFiles.concat(found.files);
 							}
-							return false;
-						});
+						}
 					}),
 				);
 				return { success: true, message: 'Shared drive loaded' };
@@ -80,9 +81,8 @@ class Drive {
 				});
 
 				const newFile: IPCFile = {
-					name: file.name,
+					...file,
 					hash: fileHashPublishStore.content.item_hash,
-					created_at: file.created_at,
 					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
 				};
 
@@ -95,17 +95,19 @@ class Drive {
 		}
 	}
 
-	public async delete(fileHash: string): Promise<ResponseType> {
+	public async delete(fileHashes: string[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				await forget.publish({
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
-					hashes: [fileHash],
+					hashes: fileHashes,
 					inlineRequested: true,
 					storageEngine: ItemType.ipfs,
 					account: this.account,
 				});
+
+				this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
 
 				return { success: true, message: 'File deleted' };
 			}
