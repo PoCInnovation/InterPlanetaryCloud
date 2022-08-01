@@ -1,6 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import axios from 'axios';
+
 import {
 	Box,
 	VStack,
@@ -15,6 +17,7 @@ import {
 	Divider,
 	FormControl,
 	FormLabel,
+	Select,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 
@@ -33,6 +36,8 @@ import { getFileContent, extractFilename } from 'utils/fileManipulation';
 import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayFileCards } from 'components/DisplayFileCards';
 
+import { useSession, signIn, signOut } from 'next-auth/react';
+
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
@@ -47,6 +52,7 @@ const Dashboard = (): JSX.Element => {
 	const { isOpen: isOpenContactUpdate, onOpen: onOpenContactUpdate, onClose: onCloseContactUpdate } = useDisclosure();
 	const { isOpen: isOpenShare, onOpen: onOpenShare, onClose: onCloseShare } = useDisclosure();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
+	const { isOpen: isOpenGithub, onOpen: onOpenGithub, onClose: onCloseGithub } = useDisclosure();
 	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const {
 		isOpen: isOpenUpdateFileContent,
@@ -65,7 +71,7 @@ const Dashboard = (): JSX.Element => {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isUploadLoading, setIsUploadLoading] = useState(false);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
-	const [isRedeployLoading, setIsRedeployLoading] = useState(false);
+	const [isGithubLoading] = useState(false);
 	const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [contactsNameEvent, setContactNameEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
@@ -84,6 +90,9 @@ const Dashboard = (): JSX.Element => {
 		hash: '',
 		created_at: 0,
 	});
+	const [repositories, setRepositories] = useState<any[]>([]);
+	const [selectedRepository, setSelectedRepository] = useState<string>('');
+	const { data: session } = useSession();
 
 	useEffect(() => {
 		(async () => {
@@ -92,6 +101,7 @@ const Dashboard = (): JSX.Element => {
 			} else {
 				await loadContact();
 				await loadUserContents();
+				await getRepositories();
 			}
 		})();
 	}, []);
@@ -112,6 +122,16 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
+	const getRepositories = async () => {
+		try {
+			const result = await axios.get('/api/computing/github/repositories');
+			if (result.status !== 200) throw "Unable to load repositories from Github's API";
+			setRepositories(result.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
 		if (!fileEvent || !fileEvent.target.files) return;
 		const filename = extractFilename(fileEvent.target.value);
@@ -127,7 +147,7 @@ const Dashboard = (): JSX.Element => {
 					created_at: Date.now(),
 				},
 				fileEvent.target.files[0],
-				(oldProgram) ? true : false,
+				!!oldProgram,
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
@@ -336,12 +356,13 @@ const Dashboard = (): JSX.Element => {
 			<ResponsiveBar
 				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
+				onOpenGithub={onOpenGithub}
 				setSelectedTab={setSelectedTab}
 				isUploadLoading={isUploadLoading}
 				isDeployLoading={isDeployLoading}
+				isGithubLoading={isGithubLoading}
 				selectedTab={selectedTab}
 			/>
-			<Button as="a" href={`https://github.com/login/oauth/authorize?scope=repo&client_id=f3c2a1b46331278ff2ec`}>Sign In with GitHub</Button>
 			<Box w="100%" m="32px !important">
 				<VStack w="100%" maxW="350px" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 					<DisplayFileCards
@@ -391,6 +412,56 @@ const Dashboard = (): JSX.Element => {
 					id="ipc-dashboard-deploy-program"
 				/>
 			</Modal>
+			<Modal
+				isOpen={isOpenGithub}
+				onClose={onCloseGithub}
+				title="Deploy from Github"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={() => console.log(`url:${selectedRepository}`)}
+						isLoading={isDeployLoading}
+						id="ipc-dashboard-deploy-from-github-modal-button"
+					>
+						Deploy program
+					</Button>
+				}
+			>
+				<>
+					{!session && (
+						<Button variant="inline" w="100%" onClick={() => signIn('github')} id="ipc-dashboard-github-signin-button">
+							Sign in with Github
+						</Button>
+					)}
+					{session && (
+						<>
+							<VStack spacing="5%">
+								<Select
+									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
+									placeholder="Select repository"
+								>
+									{repositories.map((repository, index: number) => (
+										<option key={index} value={repository.html_url}>
+											{repository.name}
+										</option>
+									))}
+								</Select>
+								<Button
+									variant="inline"
+									w="100%"
+									onClick={async () => signOut()}
+									id="ipc-dashboard-github-signout-button"
+								>
+									Sign out
+								</Button>
+							</VStack>
+						</>
+					)}
+				</>
+			</Modal>
+			*{' '}
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

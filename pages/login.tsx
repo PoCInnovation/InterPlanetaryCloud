@@ -30,6 +30,7 @@ const Login = (): JSX.Element => {
 		if (login.user) {
 			toast({ title: login.message, status: 'success' });
 			setUser(login.user);
+
 			router.push('/dashboard');
 		} else {
 			toast({ title: login.message, status: 'error' });

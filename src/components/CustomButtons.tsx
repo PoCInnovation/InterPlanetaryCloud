@@ -25,7 +25,28 @@ export const DeployButton = ({ text, onClick, isLoading }: UploadButtonProps): J
 );
 
 export const RedeployButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
-	<Button variant="inline" w="45%" size="sm" borderRadius="lg" onClick={onClick} isLoading={isLoading} id="ipc-redeploy-button">
+	<Button
+		variant="inline"
+		w="45%"
+		size="sm"
+		borderRadius="lg"
+		onClick={onClick}
+		isLoading={isLoading}
+		id="ipc-redeploy-button"
+	>
+		{text}
+	</Button>
+);
+
+export const GithubDeployButton = ({ text, onClick, isLoading }: UploadButtonProps): JSX.Element => (
+	<Button
+		variant="inline"
+		w="80%"
+		borderRadius="lg"
+		onClick={onClick}
+		isLoading={isLoading}
+		id="ipc-github-deploy-button"
+	>
 		{text}
 	</Button>
 );

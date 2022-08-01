@@ -9,8 +9,6 @@ import Computing from 'lib/computing';
 class User {
 	public account: accounts.base.Account | undefined;
 
-	public githubAccessToken: string | undefined;
-
 	public drive: Drive;
 
 	public computing: Computing;
@@ -19,7 +17,6 @@ class User {
 
 	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
 		this.account = importedAccount;
-		this.githubAccessToken = undefined
 		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));
 		this.computing = new Computing(this.account);
 		this.contact = new Contact(this.account, mnemonicToPrivateKey(mnemonic));
