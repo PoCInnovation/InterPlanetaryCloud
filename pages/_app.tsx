@@ -9,14 +9,19 @@ import 'theme/index.css';
 
 import User from 'lib/user';
 import Auth from 'lib/auth';
+import type { IPCFile, IPCFolder, IPCContact } from 'types/types';
 
 import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
+import DriveContext from 'contexts/drive';
 
 const App = ({ Component, pageProps }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
+	const [files, setFiles] = useState<IPCFile[] | undefined>([]);
+	const [folders, setFolders] = useState<IPCFolder[] | undefined>([]);
+	const [contacts, setContacts] = useState<IPCContact[] | undefined>([]);
 	const toast = useToast();
 
 	useEffect(() => {
@@ -61,7 +66,18 @@ const App = ({ Component, pageProps }: AppProps) => {
 			<ChakraProvider theme={theme} resetCSS>
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<Component {...pageProps} />
+						<DriveContext.Provider
+							value={{
+								files: files as IPCFile[],
+								setFiles,
+								folders: folders as IPCFolder[],
+								setFolders,
+								contacts: contacts as IPCContact[],
+								setContacts,
+							}}
+						>
+							<Component {...pageProps} />
+						</DriveContext.Provider>
 					</UserContext.Provider>
 				</AuthContext.Provider>
 			</ChakraProvider>
