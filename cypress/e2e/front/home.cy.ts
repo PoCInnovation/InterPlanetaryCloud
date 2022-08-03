@@ -30,7 +30,7 @@ describe('Signup Button front in Home', () => {
 	});
 
 	it('Good URL redirect for create account button', () => {
-		cy.get('#ipc-home-create-account-button').click().url().should('eq', Cypress.config().baseUrl + '/signup');
+		cy.get('#ipc-home-create-account-button').click().url().should('eq', `${Cypress.config().baseUrl}/signup`);
 	});
 });
 
@@ -40,6 +40,6 @@ describe('Login Button front in Home', () => {
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-home-login-button').click().url().should('eq', Cypress.config().baseUrl + '/login');
+		cy.get('#ipc-home-login-button').click().url().should('eq', `${Cypress.config().baseUrl}/login`);
 	});
 });

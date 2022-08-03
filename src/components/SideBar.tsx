@@ -15,9 +15,12 @@ import {
 	HStack,
 } from '@chakra-ui/react';
 
-import { FcFile, FcFolder, FcRules } from 'react-icons/fc';
+import { FcRules } from 'react-icons/fc';
 
 import colors from 'theme/foundations/colors';
+
+import CreateFolder from 'components/folder/CreateFolder';
+import UploadFile from './file/UploadFile';
 
 type SideBarPropsType = {
 	contactTab: string;
@@ -25,9 +28,7 @@ type SideBarPropsType = {
 	sharedFilesTab: string;
 	myProgramsTab: string;
 	profileTab: string;
-	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
-	createFolderButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
 	currentTabIndex: number;
 };
@@ -38,9 +39,7 @@ const SideBar = ({
 	sharedFilesTab,
 	myProgramsTab,
 	profileTab,
-	uploadButton,
 	deployButton,
-	createFolderButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -72,16 +71,10 @@ const SideBar = ({
 				<Portal>
 					<PopoverContent w="300px">
 						<PopoverHeader>
-							<HStack>
-								<FcFolder display="flex" size="40"></FcFolder>
-								{createFolderButton}
-							</HStack>
+							<CreateFolder />
 						</PopoverHeader>
 						<PopoverBody>
-							<HStack>
-								<FcFile display="flex" size="40"></FcFile>
-								{uploadButton}
-							</HStack>
+							<UploadFile />
 						</PopoverBody>
 						<PopoverFooter>
 							<HStack>

@@ -4,11 +4,13 @@ import type { IPCContact, IPCFile, IPCFolder } from 'types/types';
 
 type DriveContextProps = {
 	files: IPCFile[];
-	setFiles: Dispatch<IPCFile[] | undefined>;
+	setFiles: Dispatch<IPCFile[]>;
 	folders: IPCFolder[];
-	setFolders: Dispatch<IPCFolder[] | undefined>;
+	setFolders: Dispatch<IPCFolder[]>;
 	contacts: IPCContact[];
-	setContacts: Dispatch<IPCContact[] | undefined>;
+	setContacts: Dispatch<IPCContact[]>;
+	path: string;
+	setPath: Dispatch<string>;
 };
 
 type DriveContextType = undefined | DriveContextProps;

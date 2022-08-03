@@ -19,9 +19,10 @@ const App = ({ Component, pageProps }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
-	const [files, setFiles] = useState<IPCFile[] | undefined>([]);
-	const [folders, setFolders] = useState<IPCFolder[] | undefined>([]);
-	const [contacts, setContacts] = useState<IPCContact[] | undefined>([]);
+	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [folders, setFolders] = useState<IPCFolder[]>([]);
+	const [contacts, setContacts] = useState<IPCContact[]>([]);
+	const [path, setPath] = useState('/');
 	const toast = useToast();
 
 	useEffect(() => {
@@ -68,12 +69,14 @@ const App = ({ Component, pageProps }: AppProps) => {
 					<UserContext.Provider value={{ user: user as User, setUser }}>
 						<DriveContext.Provider
 							value={{
-								files: files as IPCFile[],
+								files,
 								setFiles,
-								folders: folders as IPCFolder[],
+								folders,
 								setFolders,
-								contacts: contacts as IPCContact[],
+								contacts,
 								setContacts,
+								path,
+								setPath,
 							}}
 						>
 							<Component {...pageProps} />

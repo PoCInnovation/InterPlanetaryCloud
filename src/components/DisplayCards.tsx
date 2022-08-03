@@ -14,8 +14,6 @@ type CardsProps = {
 	myPrograms: IPCProgram[];
 	sharedFiles: IPCFile[];
 	index: number;
-	path: string;
-	setPath: (path: string) => void;
 	onOpenRedeployProgram: () => void;
 	isRedeployLoading: boolean;
 	setSelectedProgram: (program: IPCProgram) => void;
@@ -25,14 +23,12 @@ export const DisplayCards = ({
 	myPrograms,
 	sharedFiles,
 	index,
-	path,
-	setPath,
 	onOpenRedeployProgram,
 	isRedeployLoading,
 	setSelectedProgram,
 }: CardsProps): JSX.Element => {
 	const { user } = useUserContext();
-	const { files, folders } = useDriveContext();
+	const { path, files, folders } = useDriveContext();
 
 	if (index === 0)
 		return (
@@ -56,8 +52,6 @@ export const DisplayCards = ({
 				<DriveCards
 					files={files.filter((elem) => elem.path === path)}
 					folders={folders.filter((elem) => elem.path === path)}
-					path={path}
-					setPath={setPath}
 				/>
 			</VStack>
 		);
@@ -67,7 +61,7 @@ export const DisplayCards = ({
 				<Box w="100%">
 					<Text fontSize="35">Shared with me</Text>
 				</Box>
-				<DriveCards files={sharedFiles} folders={[]} path={path} setPath={setPath} />
+				<DriveCards files={sharedFiles} folders={[]} />
 			</VStack>
 		);
 	if (index === 2) return <ContactCards contacts={user.contact.contacts} />;
