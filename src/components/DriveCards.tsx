@@ -24,10 +24,11 @@ import ShareFile from 'components/file/ShareFile';
 import UpdateContentFile from 'components/file/UpdateContentFile';
 
 import DeleteFolder from 'components/folder/DeleteFolder';
+import MoveFolder from 'components/folder/MoveFolder';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
-import { FcFile, FcAdvance, FcFolder } from 'react-icons/fc';
+import { FcFile, FcFolder } from 'react-icons/fc';
 import { useDriveContext } from 'contexts/drive';
 
 const PathCard = (): JSX.Element => {
@@ -100,10 +101,7 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 							<Portal>
 								<PopoverContent w="300px">
 									<PopoverBody>
-										<HStack>
-											<FcAdvance size="30"></FcAdvance>
-											<Text>Move</Text>
-										</HStack>
+										<MoveFolder folder={folder} />
 									</PopoverBody>
 									<PopoverFooter>
 										<DeleteFolder folder={folder} />
@@ -142,9 +140,9 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 										<PopoverBody>
 											<MoveFile file={file} />
 										</PopoverBody>
-										<PopoverFooter>
+										<PopoverBody>
 											<RenameFile file={file} />
-										</PopoverFooter>
+										</PopoverBody>
 										<PopoverFooter>
 											<UpdateContentFile file={file} />
 										</PopoverFooter>

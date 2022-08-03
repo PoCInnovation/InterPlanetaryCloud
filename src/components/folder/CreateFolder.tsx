@@ -18,20 +18,24 @@ const CreateFolder = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const createFolder = async () => {
-		setIsLoading(true);
-		if (name) {
-			const folder: IPCFolder = {
-				name,
-				path,
-				createdAt: Date.now(),
-			};
-
-			const created = await user.contact.createFolder(folder);
-			toast({ title: created.message, status: created.success ? 'success' : 'error' });
-			if (created.success) {
-				setFolders([...folders, folder]);
-			}
+		if (!name || name.includes('/')) {
+			toast({ title: 'Invalid folder name', status: 'error' });
+			return;
 		}
+		setIsLoading(true);
+
+		const folder: IPCFolder = {
+			name,
+			path,
+			createdAt: Date.now(),
+		};
+
+		const created = await user.contact.createFolder(folder);
+		toast({ title: created.message, status: created.success ? 'success' : 'error' });
+		if (created.success) {
+			setFolders([...folders, folder]);
+		}
+
 		setIsLoading(false);
 		setName('');
 		onClose();

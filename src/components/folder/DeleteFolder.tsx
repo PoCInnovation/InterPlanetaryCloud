@@ -1,3 +1,5 @@
+import { useDriveContext } from 'contexts/drive';
+import { useEffect, useState } from 'react';
 import { Button, HStack, Text, useToast, useDisclosure } from '@chakra-ui/react';
 import { FcFullTrash } from 'react-icons/fc';
 
@@ -5,7 +7,6 @@ import Modal from 'components/Modal';
 import type { IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
-import { useDriveContext } from 'contexts/drive';
 
 type DeleteFolderProps = {
 	folder: IPCFolder;
@@ -16,7 +17,13 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 	const { folders, setFolders, setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 
+	const [hasPermission, setHasPermission] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	useEffect(() => {
+		setHasPermission(true);
+		return () => setHasPermission(false);
+	}, []);
 
 	const deleteFolder = async () => {
 		const fullPath = `${folder.path}${folder.name}/`;
@@ -47,6 +54,9 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 		setFiles(user.drive.files);
 		onClose();
 	};
+
+	if (!hasPermission) return <></>;
+
 	return (
 		<HStack>
 			<FcFullTrash size="30"></FcFullTrash>

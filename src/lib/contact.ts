@@ -252,6 +252,35 @@ class Contact {
 		}
 	}
 
+	public async moveFolder(folder: IPCFolder, newPath: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				const fullPath = `${folder.path}${folder.name}/`;
+
+				if (contact) {
+					contact.folders = contact.folders.map((f) => {
+						if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+						if (f === folder) return { ...f, path: newPath };
+						return f;
+					});
+					contact.files = contact.files.map((f) => {
+						if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+						return f;
+					});
+
+					await this.publishAggregate();
+					return { success: true, message: 'Folder created' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
+
 	public async deleteFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			if (this.account) {

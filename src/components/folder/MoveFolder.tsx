@@ -4,18 +4,18 @@ import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { FcAdvance, FcFolder } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
+import type { IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
 
-type MoveFileProps = {
-	file: IPCFile;
+type MoveFolderProps = {
+	folder: IPCFolder;
 };
 
-const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
+const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 	const { user } = useUserContext();
-	const { files, setFiles, folders } = useDriveContext();
+	const { files, setFiles, folders, setFolders } = useDriveContext();
 	const [hasPermission, setHasPermission] = useState(false);
 	const toast = useToast({ duration: 2000, isClosable: true });
 
@@ -24,25 +24,35 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	useEffect(() => {
-		const permission = user.contact.hasEditPermission(file.hash);
-		setHasPermission(permission.success);
+		setHasPermission(true);
 		return () => {
 			setHasPermission(false);
 			setNewPath('/');
 		};
 	}, []);
 
-	const moveFile = async () => {
+	const moveFolder = async () => {
 		setIsLoading(true);
+		const fullPath = `${folder.path}${folder.name}/`;
 
-		const moved = await user.contact.moveFile(file, newPath);
+		const moved = await user.contact.moveFolder(folder, newPath);
+
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
+		setFiles(
+			files.map((f) => {
+				if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+				return f;
+			}),
+		);
 
-		const index = files.indexOf(file);
-		if (index !== -1) {
-			files[index].path = newPath;
-			setFiles([...files]);
-		}
+		setFolders(
+			folders.map((f) => {
+				if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+				if (f === folder) return { ...f, path: newPath };
+				return f;
+			}),
+		);
+
 		setNewPath('/');
 		setIsLoading(false);
 		onClose();
@@ -52,7 +62,7 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 
 	return (
 		<HStack>
-			<FcAdvance size="30"></FcAdvance>{' '}
+			<FcAdvance size="30"></FcAdvance>
 			<Button
 				backgroundColor={'white'}
 				justifyContent="flex-start"
@@ -61,22 +71,22 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 				mx="4px"
 				onClick={onOpen}
 				isLoading={isLoading}
-				id="ipc-dashboard-move-filebutton"
+				id="ipc-dashboard-move-folder-option"
 			>
 				Move
 			</Button>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Move file"
+				title="Move folder"
 				CTA={
 					<Button
 						variant="inline"
 						w="100%"
 						mb="16px"
-						onClick={moveFile}
+						onClick={moveFolder}
 						isLoading={isLoading}
-						id="ipc-dashboard-move-file-button"
+						id="ipc-dashboard-move-folder-confirm"
 					>
 						Move
 					</Button>
@@ -92,13 +102,13 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 						boxShadow="1px 2px 3px 3px rgb(240, 240, 240)"
 						disabled={newPath === '/'}
 						onClick={() => setNewPath(newPath.replace(/([^/]+)\/$/, ''))}
-						id="ipc-move-back-path-button"
+						id="ipc-move-folder-back-path-button"
 					>
 						<ArrowBackIcon fontSize="30" />
 					</Button>
 					<br />
 					<br />
-					{folders.filter((f) => f.path === newPath).length ? (
+					{folders.filter((f) => f.path === newPath && f.createdAt !== folder.createdAt).length ? (
 						folders
 							.filter((f) => f.path === newPath)
 							.map((f) => (
@@ -137,4 +147,4 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 	);
 };
 
-export default MoveFile;
+export default MoveFolder;
