@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import axios from 'axios';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
 	const session = await getSession({ req });
 
 	if (!session) return res.status(401).json({ error: 'Permission denied' });
@@ -19,5 +19,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		},
 	});
 	if (userRepos.status !== 200) return res.status(userRepos.status).json({ error: userRepos.statusText });
-	res.status(200).json(userRepos.data);
+	return res.status(200).json(userRepos.data);
 };

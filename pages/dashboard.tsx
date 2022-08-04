@@ -125,7 +125,7 @@ const Dashboard = (): JSX.Element => {
 	const getRepositories = async () => {
 		try {
 			const result = await axios.get('/api/computing/github/repositories');
-			if (result.status !== 200) throw "Unable to load repositories from Github's API";
+			if (result.status !== 200) throw new Error("Unable to load repositories from Github's API");
 			setRepositories(result.data);
 		} catch (error) {
 			console.error(error);
@@ -333,6 +333,22 @@ const Dashboard = (): JSX.Element => {
 		}
 	};
 
+	const cloneToBackend = async (repository: string) => {
+		console.log(`${repository}.git`);
+		axios
+			.post('/api/program/create', {
+				repository: `${repository}.git`,
+			})
+			.then(() => {
+				toast({ title: 'Upload succeeded', status: 'success' });
+				onCloseGithub();
+			})
+			.catch((e) => {
+				toast({ title: 'Upload failed', status: 'error' });
+				console.error(e);
+			});
+	};
+
 	const deleteContact = async (contactToDelete: IPCContact) => {
 		try {
 			const deletedContact = contacts.find((contact) => contact === contactToDelete);
@@ -421,7 +437,10 @@ const Dashboard = (): JSX.Element => {
 						variant="inline"
 						w="100%"
 						mb="16px"
-						onClick={() => console.log(`url:${selectedRepository}`)}
+						onClick={() => {
+							console.log(`url:${selectedRepository}`);
+							cloneToBackend(selectedRepository);
+						}}
 						isLoading={isDeployLoading}
 						id="ipc-dashboard-deploy-from-github-modal-button"
 					>
