@@ -7,10 +7,15 @@ README.md
 
 # Node
 node_modules/
-tests/
+cypress/
+cypress.config.ts
+
+# IPC
+repositories/
 
 # Build
-dist/
+build/
+.next/
 
 # Infra
 *Dockerfile*

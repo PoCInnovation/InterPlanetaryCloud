@@ -20,7 +20,6 @@ cypress/downloads
 
 # next.js
 /.next/
-/build/
 out/
 
 # production
