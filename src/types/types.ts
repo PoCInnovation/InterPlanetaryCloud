@@ -37,3 +37,8 @@ export type AggregateContentType = {
 export type AggregateType = {
 	InterPlanetaryCloud: AggregateContentType;
 };
+
+export type GitHubRepository = {
+	name: string;
+	html_url: string;
+};

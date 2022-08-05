@@ -25,7 +25,7 @@ import EthCrypto from 'eth-crypto';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile, IPCContact, IPCProgram } from 'types/types';
+import type { IPCFile, IPCContact, IPCProgram, GitHubRepository } from 'types/types';
 
 import Modal from 'components/Modal';
 
@@ -90,7 +90,7 @@ const Dashboard = (): JSX.Element => {
 		hash: '',
 		created_at: 0,
 	});
-	const [repositories, setRepositories] = useState<any[]>([]);
+	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
 	const { data: session } = useSession();
 

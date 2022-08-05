@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
 
 import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
 
@@ -12,7 +13,6 @@ import Auth from 'lib/auth';
 
 import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
-import { SessionProvider } from 'next-auth/react';
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
