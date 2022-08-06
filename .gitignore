@@ -20,10 +20,7 @@ cypress/downloads
 
 # next.js
 /.next/
-/build/
-
-# production
-/build
+out/
 
 # misc
 .DS_Store
@@ -38,5 +35,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
+repositories
 .metamask

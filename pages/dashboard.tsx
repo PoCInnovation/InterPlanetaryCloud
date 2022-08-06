@@ -1,11 +1,13 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import axios from 'axios';
 
-import { Box, VStack, Button, HStack, useDisclosure, useToast, Input } from '@chakra-ui/react';
+import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Select } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile, IPCProgram } from 'types/types';
+import type { IPCFile, IPCProgram, GitHubRepository } from 'types/types';
 
 import Modal from 'components/Modal';
 
@@ -20,17 +22,22 @@ const Dashboard = (): JSX.Element => {
 	const router = useRouter();
 	const { user } = useUserContext();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
+	const { isOpen: isOpenGithub, onOpen: onOpenGithub, onClose: onCloseGithub } = useDisclosure();
 	const { setFiles, setFolders, setContacts } = useDriveContext();
 	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
+	const [isGithubLoading] = useState(false);
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [selectedProgram, setSelectedProgram] = useState<IPCProgram>({
 		name: '',
 		hash: '',
 		createdAt: 0,
 	});
+	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
+	const [selectedRepository, setSelectedRepository] = useState<string>('');
+	const { data: session } = useSession();
 
 	useEffect(() => {
 		(async () => {
@@ -39,6 +46,7 @@ const Dashboard = (): JSX.Element => {
 			} else {
 				await loadContact();
 				await loadUserContents();
+				await getRepositories();
 			}
 		})();
 	}, []);
@@ -76,6 +84,7 @@ const Dashboard = (): JSX.Element => {
 					createdAt: Date.now(),
 				},
 				fileEvent.target.files[0],
+				!!oldProgram,
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
@@ -89,12 +98,40 @@ const Dashboard = (): JSX.Element => {
 		setIsDeployLoading(false);
 	};
 
+	const getRepositories = async () => {
+		try {
+			const result = await axios.get('/api/computing/github/repositories');
+			if (result.status !== 200) throw new Error("Unable to load repositories from Github's API");
+			setRepositories(result.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const cloneToBackend = async (repository: string) => {
+		console.log(`${repository}.git`);
+		axios
+			.post('/api/program/create', {
+				repository: `${repository}.git`,
+			})
+			.then(() => {
+				toast({ title: 'Upload succeeded', status: 'success' });
+				onCloseGithub();
+			})
+			.catch((e) => {
+				toast({ title: 'Upload failed', status: 'error' });
+				console.error(e);
+			});
+	};
+
 	return (
 		<HStack minH="100vh" minW="100vw" align="start">
 			<ResponsiveBar
 				onOpenProgram={onOpenProgram}
+				onOpenGithub={onOpenGithub}
 				setSelectedTab={setSelectedTab}
 				isDeployLoading={isDeployLoading}
+				isGithubLoading={isGithubLoading}
 				selectedTab={selectedTab}
 			/>
 			<VStack w="100%" m="32px !important">
@@ -136,6 +173,58 @@ const Dashboard = (): JSX.Element => {
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
 					id="ipc-dashboard-deploy-program"
 				/>
+			</Modal>
+			<Modal
+				isOpen={isOpenGithub}
+				onClose={onCloseGithub}
+				title="Deploy from Github"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={() => {
+							console.log(`url:${selectedRepository}`);
+							cloneToBackend(selectedRepository);
+						}}
+						isLoading={isDeployLoading}
+						id="ipc-dashboard-deploy-from-github-modal-button"
+					>
+						Deploy program
+					</Button>
+				}
+			>
+				<>
+					{!session && (
+						<Button variant="inline" w="100%" onClick={() => signIn('github')} id="ipc-dashboard-github-signin-button">
+							Sign in with Github
+						</Button>
+					)}
+					{session && (
+						<>
+							<VStack spacing="5%">
+								<Select
+									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
+									placeholder="Select repository"
+								>
+									{repositories.map((repository, index: number) => (
+										<option key={index} value={repository.html_url}>
+											{repository.name}
+										</option>
+									))}
+								</Select>
+								<Button
+									variant="inline"
+									w="100%"
+									onClick={async () => signOut()}
+									id="ipc-dashboard-github-signout-button"
+								>
+									Sign out
+								</Button>
+							</VStack>
+						</>
+					)}
+				</>
 			</Modal>
 		</HStack>
 	);

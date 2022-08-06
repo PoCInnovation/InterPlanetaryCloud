@@ -81,13 +81,17 @@ class Computing {
 	public async uploadProgram(
 		myProgram: IPCProgram,
 		uploadFile: File,
-		oldProgram: IPCProgram | undefined,
+		isRedeploy: boolean,
+		oldProgramHash: IPCProgram | undefined,
 	): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (oldProgram) {
-					this.programs = this.programs.filter((prog) => prog.hash !== oldProgram.hash);
-					await this.deleteProgram(oldProgram.hash);
+				// remove old program from user's programs array
+				if (isRedeploy && oldProgramHash) {
+					const newProgramsArray: IPCProgram[] = this.programs.filter(
+						(oldProgram: IPCProgram) => oldProgram !== oldProgramHash,
+					);
+					this.programs = newProgramsArray;
 				}
 
 				const programHashPublishProgram = await program.publish({

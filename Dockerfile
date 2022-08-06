@@ -1,41 +1,35 @@
-###
-# Builder image
-###
-FROM node:16.5-alpine AS builder
+FROM node:16-alpine
 
 WORKDIR /app
 
 # Install dependencies
 COPY package.json .
 COPY yarn.lock .
-
-# Install dependencies
-RUN yarn install
+RUN yarn --frozen-lockfile;
 
 # Copy source (see .dockerignore)
 COPY . .
 
-# Add env variable
+# Add env variables
 ENV NEXT_PUBLIC_ALEPH_CHANNEL=TEST
+ENV NEXTAUTH_URL="http://localhost:8080"
+ENV NEXTAUTH_SECRET = $(openssl rand -base64 32)
+ENV NEXT_PUBLIC_GITCLONE_DIR="repositories"
+ENV NEXT_PUBLIC_GITHUB_CLIENT_ID="your OAuth client id"
+ENV NEXT_PUBLIC_GITHUB_CLIENT_SECRET="your OAuth client secret"
 
-# Build source
-RUN yarn run build
+RUN yarn build
 
-###
-# Production image
-###
-FROM nginx:1.21.6-alpine as app
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+RUN mv next.config.js .next/standalone/
+RUN mv public .next/standalone/
+RUN mv .next/static .next/standalone/.next/
 
-WORKDIR /app
+WORKDIR /app/.next/standalone
 
-# Copy code
-COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 8080
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+ENV PORT 8080
 
-# Expose PORT
-EXPOSE 80
-
-# Prefix commands and start production
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
 
 import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
 
@@ -15,7 +16,7 @@ import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
 import DriveContext from 'contexts/drive';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
@@ -79,7 +80,9 @@ const App = ({ Component, pageProps }: AppProps) => {
 								setPath,
 							}}
 						>
-							<Component {...pageProps} />
+							<SessionProvider session={session}>
+								<Component {...pageProps} />
+							</SessionProvider>
 						</DriveContext.Provider>
 					</UserContext.Provider>
 				</AuthContext.Provider>

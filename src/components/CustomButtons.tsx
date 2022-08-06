@@ -21,7 +21,7 @@ export const DeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Ele
 export const RedeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
 	<Button
 		variant="inline"
-		w="25%"
+		w="45%"
 		size="sm"
 		borderRadius="lg"
 		onClick={onClick}
@@ -29,5 +29,18 @@ export const RedeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.E
 		id="ipc-redeploy-button"
 	>
 		Redeploy
+	</Button>
+);
+
+export const GithubDeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
+	<Button
+		variant="inline"
+		w="80%"
+		borderRadius="lg"
+		onClick={onClick}
+		isLoading={isLoading}
+		id="ipc-github-deploy-button"
+	>
+		Deploy from Github
 	</Button>
 );

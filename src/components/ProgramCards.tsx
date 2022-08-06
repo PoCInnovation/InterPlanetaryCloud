@@ -36,7 +36,7 @@ const ProgramCards = ({
 						target="_blank"
 						variant="inline"
 						size="sm"
-						w="25%"
+						w="45%"
 						p="0px"
 						id="ipc-computing-forwardUrl-button"
 					>

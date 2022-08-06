@@ -30,6 +30,7 @@ type SideBarPropsType = {
 	profileTab: string;
 	deployButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
+	githubButton: JSX.Element;
 	currentTabIndex: number;
 };
 
@@ -40,6 +41,7 @@ const SideBar = ({
 	myProgramsTab,
 	profileTab,
 	deployButton,
+	githubButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -80,6 +82,12 @@ const SideBar = ({
 							<HStack>
 								<FcRules display="flex" size="40"></FcRules>
 								{deployButton}
+							</HStack>
+						</PopoverFooter>
+						<PopoverFooter>
+							<HStack>
+								<FcRules display="flex" size="40"></FcRules>
+								{githubButton}
 							</HStack>
 						</PopoverFooter>
 					</PopoverContent>

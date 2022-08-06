@@ -17,18 +17,28 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
 import Sidebar from 'components/SideBar';
-import { DeployButton } from 'components/CustomButtons';
+import { DeployButton, GithubDeployButton } from 'components/CustomButtons';
 
 type BarProps = {
 	onOpenProgram: () => void;
 	isDeployLoading: boolean;
+	onOpenGithub: () => void;
 	setSelectedTab: (tab: number) => void;
+	isGithubLoading: boolean;
 	selectedTab: number;
 };
 
-export const LeftBar = ({ onOpenProgram, isDeployLoading, setSelectedTab, selectedTab }: BarProps): JSX.Element => (
+export const LeftBar = ({
+	onOpenProgram,
+	isDeployLoading,
+	isGithubLoading,
+	onOpenGithub,
+	setSelectedTab,
+	selectedTab,
+}: BarProps): JSX.Element => (
 	<Sidebar
 		deployButton={<DeployButton onClick={onOpenProgram} isLoading={isDeployLoading} />}
+		githubButton={<GithubDeployButton onClick={onOpenGithub} isLoading={isGithubLoading} />}
 		contactTab="Contacts"
 		myFilesTab="My files"
 		myProgramsTab="My programs"
@@ -43,6 +53,8 @@ export const BarWithDrawer = ({
 	onOpenProgram,
 	setSelectedTab,
 	isDeployLoading,
+	onOpenGithub,
+	isGithubLoading,
 	selectedTab,
 }: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
@@ -55,6 +67,8 @@ export const BarWithDrawer = ({
 				<DrawerContent w="75%">
 					<LeftBar
 						onOpenProgram={onOpenProgram}
+						onOpenGithub={onOpenGithub}
+						isGithubLoading={isGithubLoading}
 						setSelectedTab={setSelectedTab}
 						isDeployLoading={isDeployLoading}
 						selectedTab={selectedTab}
@@ -87,6 +101,8 @@ export const BarWithDrawer = ({
 
 export const ResponsiveBar = ({
 	onOpenProgram,
+	onOpenGithub,
+	isGithubLoading,
 	setSelectedTab,
 	isDeployLoading,
 	selectedTab,
@@ -97,6 +113,8 @@ export const ResponsiveBar = ({
 		return (
 			<LeftBar
 				onOpenProgram={onOpenProgram}
+				onOpenGithub={onOpenGithub}
+				isGithubLoading={isGithubLoading}
 				setSelectedTab={setSelectedTab}
 				isDeployLoading={isDeployLoading}
 				selectedTab={selectedTab}
@@ -106,6 +124,8 @@ export const ResponsiveBar = ({
 		<BarWithDrawer
 			onOpenProgram={onOpenProgram}
 			setSelectedTab={setSelectedTab}
+			onOpenGithub={onOpenGithub}
+			isGithubLoading={isGithubLoading}
 			isDeployLoading={isDeployLoading}
 			selectedTab={selectedTab}
 		/>
