@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FcRules } from 'react-icons/fc';
+import { GoMarkGithub } from 'react-icons/go';
 
 import colors from 'theme/foundations/colors';
 
@@ -86,7 +87,7 @@ const SideBar = ({
 						</PopoverFooter>
 						<PopoverFooter>
 							<HStack>
-								<FcRules display="flex" size="40"></FcRules>
+								<GoMarkGithub display="flex" size="40"></GoMarkGithub>
 								{githubButton}
 							</HStack>
 						</PopoverFooter>

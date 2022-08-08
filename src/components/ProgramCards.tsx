@@ -24,31 +24,34 @@ const ProgramCards = ({
 		{programs.map((program: IPCProgram) => (
 			<ProgramCard key={program.createdAt} program={program}>
 				<>
-					<Box>
+					<Box w="25%">
 						<HStack>
 							<FcRules display="flex" size="40"></FcRules>
 							<Text>{program.name}</Text>
 						</HStack>
 					</Box>
-					<Button
-						as="a"
-						href={`https://aleph.sh/vm/${program.hash}`}
-						target="_blank"
-						variant="inline"
-						size="sm"
-						w="45%"
-						p="0px"
-						id="ipc-computing-forwardUrl-button"
-					>
-						Go to site
-					</Button>
-					<RedeployButton
-						onClick={() => {
-							setSelectedProgram(program);
-							onOpenRedeployProgram();
-						}}
-						isLoading={isRedeployLoading}
-					/>
+					<Box w="45%">
+						<Button
+							as="a"
+							href={`https://aleph.sh/vm/${program.hash}`}
+							target="_blank"
+							variant="inline"
+							size="sm"
+							w="45%"
+							p="0px"
+							id="ipc-computing-forwardUrl-button"
+							marginRight="10"
+						>
+							Go to site
+						</Button>
+						<RedeployButton
+							onClick={() => {
+								setSelectedProgram(program);
+								onOpenRedeployProgram();
+							}}
+							isLoading={isRedeployLoading}
+						/>
+					</Box>
 					<Text>
 						{`${new Date(program.createdAt).toString().substring(4, 15).slice(0, 3)} /${new Date(program.createdAt)
 							.toString()

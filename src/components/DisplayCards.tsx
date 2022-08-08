@@ -67,12 +67,26 @@ export const DisplayCards = ({
 	if (index === 2) return <ContactCards contacts={user.contact.contacts} />;
 	if (index === 3)
 		return (
-			<ProgramCards
-				programs={myPrograms}
-				onOpenRedeployProgram={onOpenRedeployProgram}
-				isRedeployLoading={isRedeployLoading}
-				setSelectedProgram={setSelectedProgram}
-			/>
+			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<Box w="100%">
+					<Text fontSize="35">My Programs</Text>
+				</Box>
+				<HStack w="100%">
+					<Box>
+						<Text marginLeft="10">Name</Text>
+					</Box>
+					<Spacer />
+					<Box>
+						<Text align="center">Latest upload on Aleph</Text>
+					</Box>
+				</HStack>
+				<ProgramCards
+					programs={myPrograms}
+					onOpenRedeployProgram={onOpenRedeployProgram}
+					isRedeployLoading={isRedeployLoading}
+					setSelectedProgram={setSelectedProgram}
+				/>
+			</VStack>
 		);
 	return <ProfileCard profile={user.contact.contacts[0]} />;
 };
