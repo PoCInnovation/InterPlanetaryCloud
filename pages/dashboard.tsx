@@ -46,7 +46,7 @@ const Dashboard = (): JSX.Element => {
 			} else {
 				await loadContact();
 				await loadUserContents();
-				await getRepositories();
+				if (session) await getRepositories();
 			}
 		})();
 	}, []);
@@ -113,7 +113,16 @@ const Dashboard = (): JSX.Element => {
 			.post('/api/program/create', {
 				repository: `${repository}.git`,
 			})
-			.then(() => {
+			.then(async (response) => {
+				console.log(response.data);
+				const newProgram: IPCProgram = {
+					name: response.data.name,
+					hash: response.data.item_hash,
+					created_at: Date.now(),
+				};
+				user.computing.programs.push(newProgram);
+				await user.computing.publishAggregate();
+				setPrograms(user.computing.programs);
 				toast({ title: 'Upload succeeded', status: 'success' });
 				onCloseGithub();
 			})

@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 import Joi from 'joi';
 import validate from 'lib/middlewares/validation';
-import { clone } from 'lib/services/git';
-// import { clone, cleanup } from 'lib/services/git'; for future use
+// import { clone, cleanup, getProgramName } from 'lib/services/git'; for future use
+import { clone, getProgramName } from 'lib/services/git';
 import { compress, programPublish } from 'lib/services/deploy';
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
@@ -15,13 +15,13 @@ const postSchema = Joi.object({
 
 router.post(validate({ body: postSchema }), async (req, res) => {
 	const { repository } = req.body;
+	let itemHash = '';
 	await clone(repository).then(async (path: string) => {
 		const fileName: string = await compress(path);
-		// deploy
-		await programPublish(fileName);
-		// cleanup(path);
+		itemHash = await programPublish(fileName);
+		// await cleanup(GITCLONE_DIR);
 	});
-	return res.status(200).end(`Deploying repository ${repository}`);
+	return res.status(200).json({ name: getProgramName(repository), item_hash: itemHash });
 });
 
 export default router.handler();
