@@ -1,4 +1,4 @@
-import { accounts, program, aggregate } from 'aleph-sdk-ts';
+import { accounts, program, aggregate, forget } from 'aleph-sdk-ts';
 
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
@@ -16,7 +16,7 @@ class Computing {
 		this.account = importedAccount;
 	}
 
-	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
+	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
 			APIServer: DEFAULT_API_V2,
 			address: this.account!.address,
@@ -37,7 +37,7 @@ class Computing {
 		});
 	}
 
-	public async loadPrograms(): Promise<ResponseType> {
+	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
@@ -57,9 +57,43 @@ class Computing {
 		}
 	}
 
-	public async uploadProgram(myProgram: IPCProgram, uploadFile: File): Promise<ResponseType> {
+	public async deleteProgram(programHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
+				await forget.publish({
+					APIServer: DEFAULT_API_V2,
+					channel: ALEPH_CHANNEL,
+					hashes: [programHash],
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+					account: this.account,
+				});
+
+				return { success: true, message: 'program deleted' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to delete program' };
+		}
+	}
+
+	public async uploadProgram(
+		myProgram: IPCProgram,
+		uploadFile: File,
+		isRedeploy: boolean,
+		oldProgramHash: IPCProgram | undefined,
+	): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				// remove old program from user's programs array
+				if (isRedeploy && oldProgramHash) {
+					const newProgramsArray: IPCProgram[] = this.programs.filter(
+						(oldProgram: IPCProgram) => oldProgram !== oldProgramHash,
+					);
+					this.programs = newProgramsArray;
+				}
+
 				const programHashPublishProgram = await program.publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
@@ -71,9 +105,8 @@ class Computing {
 				});
 
 				const newProgram: IPCProgram = {
-					name: myProgram.name,
+					...myProgram,
 					hash: programHashPublishProgram.item_hash,
-					created_at: myProgram.created_at,
 				};
 
 				this.programs.push(newProgram);

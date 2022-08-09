@@ -1,15 +1,15 @@
 import { Box, VStack, Text, Flex, Tooltip, Button } from '@chakra-ui/react';
-import { CopyIcon, EditIcon } from '@chakra-ui/icons';
+import { CopyIcon } from '@chakra-ui/icons';
 
 import type { IPCContact } from 'types/types';
 
+import UpdateContact from './contact/UpdateContact';
+
 type ProfileCardProps = {
 	profile: IPCContact;
-	setContactInfo: (contact: IPCContact) => void;
-	onOpenContactUpdate: () => void;
 };
 
-const ProfileCard = ({ profile, setContactInfo, onOpenContactUpdate }: ProfileCardProps): JSX.Element => (
+const ProfileCard = ({ profile }: ProfileCardProps): JSX.Element => (
 	<Box
 		p="16px"
 		bg="white"
@@ -41,18 +41,7 @@ const ProfileCard = ({ profile, setContactInfo, onOpenContactUpdate }: ProfileCa
 					</Button>
 				</Tooltip>
 				<Tooltip label="Update the contact">
-					<Button
-						size="sm"
-						w="100%"
-						p="0px"
-						mx="4px"
-						onClick={() => {
-							setContactInfo(profile);
-							onOpenContactUpdate();
-						}}
-					>
-						<EditIcon />
-					</Button>
+					<UpdateContact contact={profile} />
 				</Tooltip>
 			</Flex>
 		</VStack>
