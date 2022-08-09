@@ -17,10 +17,12 @@ function getRepoUsername(repoUrl: string): string {
 	return usernameBase.split(':')[1];
 }
 
+function getProgramName(repoUrl: string): string {
+	return `${getRepoUsername(repoUrl)}@${getRepoName(repoUrl)}`;
+}
+
 function getPath(repoUrl: string): string {
-	const username = getRepoUsername(repoUrl);
-	const repoName = getRepoName(repoUrl);
-	return node_path.join(GITCLONE_DIR, `${username}@${repoName}`);
+	return node_path.join(GITCLONE_DIR, `${getProgramName(repoUrl)}`);
 }
 
 function cleanup(path: string): Promise<void> {
@@ -36,4 +38,4 @@ async function clone(repoUrl: string): Promise<string> {
 	return node_path.resolve(path);
 }
 
-export { cleanup, clone };
+export { cleanup, clone, getProgramName };

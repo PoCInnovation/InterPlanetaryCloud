@@ -34,12 +34,12 @@ export const RedeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.E
 
 export const GithubDeployButton = ({ onClick, isLoading }: CustomButtonProps): JSX.Element => (
 	<Button
-		w="100%"
-		backgroundColor={'white'}
-		justifyContent="flex-start"
+		variant="inline"
+		w="80%"
+		borderRadius="lg"
 		onClick={onClick}
 		isLoading={isLoading}
-		id="ipc-deploy-button"
+		id="ipc-github-deploy-button"
 	>
 		Deploy from Github
 	</Button>
