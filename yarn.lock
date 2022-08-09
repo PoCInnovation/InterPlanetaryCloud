@@ -2087,11 +2087,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/cross-zip@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/cross-zip/-/cross-zip-4.0.0.tgz#322953492dcadc67bcf3991c1d51a56fd499ed9f"
-  integrity sha512-jZRaaM3aib7qgVhCWeo76vVNJW+8+ujJzP/JHPPA4WUp5YBNMsqiyu5uYWg2eS05+jgSfb5NN8eqrAG72Ab2kA==
-
 "@types/crypto-js@^4.1.1":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-4.1.1.tgz#602859584cecc91894eb23a4892f38cfa927890d"

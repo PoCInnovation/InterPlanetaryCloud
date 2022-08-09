@@ -32,6 +32,6 @@ describe('Deploy a program modal for Dashboard', () => {
 
 	it('Good number of buttons after closing modal', () => {
 		cy.get('#ipc-modal-close-button').click();
-		cy.get('button').should('have.length', 10);
+		cy.get('button').should('have.length', 11);
 	});
 });

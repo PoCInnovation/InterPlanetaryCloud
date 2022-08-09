@@ -53,7 +53,6 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.2.3",
-    "@types/cross-zip": "^4.0.0",
     "@types/crypto-js": "^4.1.1",
     "@types/git-clone": "^0.2.0",
     "@types/node": "^12.20.15",

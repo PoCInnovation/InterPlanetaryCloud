@@ -52,7 +52,7 @@ describe('Good Upload file modal front in Dashboard', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 12);
+		cy.get('button').should('have.length', 13);
 	});
 
 	it('Good number of input', () => {
@@ -83,7 +83,7 @@ describe('Good Deploy program modal front in Dashboard', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 12);
+		cy.get('button').should('have.length', 13);
 	});
 
 	it('Good number of input', () => {
@@ -114,7 +114,7 @@ describe('Good Create folder modal front in Dashboard', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 12);
+		cy.get('button').should('have.length', 13);
 	});
 
 	it('Good number of input', () => {

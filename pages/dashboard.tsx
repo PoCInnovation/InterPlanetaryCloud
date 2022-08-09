@@ -114,11 +114,10 @@ const Dashboard = (): JSX.Element => {
 				repository: `${repository}.git`,
 			})
 			.then(async (response) => {
-				console.log(response.data);
 				const newProgram: IPCProgram = {
 					name: response.data.name,
 					hash: response.data.item_hash,
-					created_at: Date.now(),
+					createdAt: Date.now(),
 				};
 				user.computing.programs.push(newProgram);
 				await user.computing.publishAggregate();
@@ -192,7 +191,6 @@ const Dashboard = (): JSX.Element => {
 						w="100%"
 						mb="16px"
 						onClick={() => {
-							console.log(`url:${selectedRepository}`);
 							cloneToBackend(selectedRepository);
 						}}
 						isLoading={isDeployLoading}
