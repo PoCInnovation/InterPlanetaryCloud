@@ -109,7 +109,6 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const cloneToBackend = async (repository: string) => {
-		console.log(`${repository}.git`);
 		axios
 			.post('/api/program/create', {
 				repository: `${repository}.git`,
