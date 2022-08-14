@@ -144,28 +144,6 @@ class Contact {
 		}
 	}
 
-	public hasEditPermission(hash: string): ResponseType {
-		try {
-			if (this.account) {
-				if (
-					this.contacts.find((contact, index) => {
-						if (this.account?.address === contact.address) {
-							return this.contacts[index].files.find((file) => file.hash === hash);
-						}
-						return false;
-					})
-				) {
-					return { success: true, message: 'You have edit permission' };
-				}
-				return { success: false, message: 'Failed to load account' };
-			}
-			return { success: false, message: 'Failed to load account' };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to update this filename' };
-		}
-	}
-
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
 			this.contacts.forEach(async (contact) => {

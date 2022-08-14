@@ -7,6 +7,7 @@ export type IPCFile = {
 	size: number;
 	createdAt: number;
 	path: string;
+	permission: IPCPermission;
 };
 
 export type IPCFolder = {
@@ -36,6 +37,8 @@ export type IPCContact = {
 	folders: IPCFolder[];
 	config: IPCConfig;
 };
+
+export type IPCPermission = 'owner' | 'viewer' | 'editor';
 
 export type ResponseType = {
 	success: boolean;

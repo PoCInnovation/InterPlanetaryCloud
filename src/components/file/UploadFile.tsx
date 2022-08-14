@@ -43,6 +43,7 @@ const UploadFile = (): JSX.Element => {
 			createdAt: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path,
+			permission: 'owner',
 		};
 
 		if (user.account) {

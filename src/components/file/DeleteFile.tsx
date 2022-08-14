@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Button, HStack, Text, useToast, useDisclosure, useColorModeValue } from '@chakra-ui/react';
+import { Button, HStack, Text, PopoverFooter, useToast, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { FcFullTrash } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -17,17 +16,10 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
-	const [hasPermission, setHasPermission] = useState(false);
 	const { config } = useConfigContext();
 	const colorText = useColorModeValue('gray.800', 'white');
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
-	useEffect(() => {
-		const permission = user.contact.hasEditPermission(file.hash);
-		setHasPermission(permission.success);
-		return () => setHasPermission(false);
-	}, []);
 
 	const deleteFile = async () => {
 		if (user.account) {
@@ -49,43 +41,44 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 		onClose();
 	};
 
-	if (!hasPermission) return <></>;
+	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
-		<HStack>
-			<FcFullTrash size="30"></FcFullTrash>
-			<Button
-				backgroundColor={config?.theme ?? 'white'}
-				textColor={colorText}
-				justifyContent="flex-start"
-				w="100%"
-				p="0px"
-				mx="4px"
-				onClick={() => onOpen()}
-				isLoading={false}
-				id="ipc-dashboard-delete-file-button"
-			>
-				Delete
-			</Button>
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				title="Delete the file"
-				CTA={
-					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
-						onClick={async () => deleteFile()}
-						id="ipc-dashboard-delete-file-button"
-					>
-						Delete
-					</Button>
-				}
-			>
-				<Text>Are you sure you want to delete this file ?</Text>
-			</Modal>
-		</HStack>
+		<PopoverFooter>
+			<HStack>
+				<FcFullTrash size="30"></FcFullTrash>
+				<Button
+					backgroundColor={config?.theme ?? 'white'}
+					textColor={colorText}
+					w="100%"
+					p="0px"
+					mx="4px"
+					onClick={() => onOpen()}
+					isLoading={false}
+					id="ipc-dashboard-delete-file-button"
+				>
+					Delete
+				</Button>
+				<Modal
+					isOpen={isOpen}
+					onClose={onClose}
+					title="Delete the file"
+					CTA={
+						<Button
+							variant="inline"
+							w="100%"
+							mb="16px"
+							onClick={async () => deleteFile()}
+							id="ipc-dashboard-delete-file-button"
+						>
+							Delete
+						</Button>
+					}
+				>
+					<Text>Are you sure you want to delete this file ?</Text>
+				</Modal>
+			</HStack>
+		</PopoverFooter>
 	);
 };
 

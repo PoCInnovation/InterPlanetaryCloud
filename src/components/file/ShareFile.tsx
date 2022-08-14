@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react';
 import {
 	Button,
 	Divider,
 	Flex,
 	HStack,
+	PopoverHeader,
+	Select,
 	Text,
-	Spacer,
-	VStack,
-	useToast,
-	useDisclosure,
 	useColorModeValue,
+	useDisclosure,
+	useToast,
+	VStack,
 } from '@chakra-ui/react';
-import { CheckIcon } from '@chakra-ui/icons';
+import { ChangeEvent, useState } from 'react';
 import { FcShare } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
-import type { IPCFile, IPCContact } from 'types/types';
+import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
 
-import { useUserContext } from 'contexts/user';
 import { useConfigContext } from 'contexts/config';
+import { useUserContext } from 'contexts/user';
 
 type ShareFileProps = {
 	file: IPCFile;
@@ -27,63 +27,90 @@ type ShareFileProps = {
 const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
-	const [hasPermission, setHasPermission] = useState(false);
 	const { config } = useConfigContext();
 	const colorText = useColorModeValue('gray.800', 'white');
 
+	const [contact, setContact] = useState<IPCContact | null>(null);
+	const [permission, setPermission] = useState<IPCPermission>('viewer');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	useEffect(() => {
-		const permission = user.contact.hasEditPermission(file.hash);
-		setHasPermission(permission.success);
-		return () => setHasPermission(false);
-	}, []);
-
-	const shareFile = async (contact: IPCContact) => {
-		const share = await user.contact.addFileToContact(contact.address, file);
+	const shareFile = async () => {
+		const share = await user.contact.addFileToContact(contact!.address, { ...file, permission });
 
 		toast({ title: share.message, status: share.success ? 'success' : 'error' });
+		onUnmount();
+	};
+
+	const onUnmount = () => {
+		setContact(null);
+		setPermission('viewer');
 		onClose();
 	};
 
-	if (!hasPermission) return <></>;
+	if (file.permission !== 'owner') return <></>;
 
 	return (
-		<HStack>
-			<FcShare size="30"></FcShare>
-			<Button
-				backgroundColor={config?.theme ?? 'white'}
-				textColor={colorText}
-				justifyContent="flex-start"
-				w="100%"
-				p="0px"
-				mx="4px"
-				onClick={() => onOpen()}
-				id="ipc-dashboard-share-file-button"
-			>
-				Share
-			</Button>
-			<Modal isOpen={isOpen} onClose={onClose} title="Select your contact">
-				<VStack spacing="16px" overflowY="auto">
-					{user.contact.contacts.map((contact) => {
-						if (user.account && contact.address !== user.account.address)
-							return (
-								<Flex key={contact.address} w="100%">
-									<VStack key={contact.address}>
-										<Text fontWeight="600">{contact.name}</Text>
-										<Text fontSize="12px">{contact.address}</Text>
-									</VStack>
-									<Spacer />
-									<Button p="0px" mx="4px" variant="inline" onClick={async () => shareFile(contact)}>
-										<CheckIcon />
-									</Button>
-								</Flex>
-							);
-						return <Divider key={contact.address} />;
-					})}
-				</VStack>
-			</Modal>
-		</HStack>
+		<PopoverHeader>
+			<HStack>
+				<FcShare size="30"></FcShare>
+				<Button
+					backgroundColor={config?.theme ?? 'white'}
+					textColor={colorText}
+					w="100%"
+					p="0px"
+					mx="4px"
+					onClick={onOpen}
+					id="ipc-dashboard-share-file-button"
+				>
+					Share
+				</Button>
+				<Modal
+					isOpen={isOpen}
+					onClose={onUnmount}
+					title={contact ? 'Choose the given permissions' : 'Select your contact'}
+					CTA={
+						contact ? (
+							<Button
+								variant="inline"
+								w="100%"
+								mb="16px"
+								id="ipc-dashboard-confirm-share-file-button"
+								onClick={shareFile}
+							>
+								Share
+							</Button>
+						) : (
+							<></>
+						)
+					}
+				>
+					<VStack spacing="16px" overflowY="auto">
+						{!contact &&
+							user.contact.contacts.map((c) => {
+								if (c.address !== user.account?.address)
+									return (
+										<Flex key={c.address} w="100%" justifyContent="center" onClick={() => setContact(c)}>
+											<VStack key={c.address}>
+												<Text fontWeight="600">{c.name}</Text>
+												<Text fontSize="12px">{c.address}</Text>
+											</VStack>
+										</Flex>
+									);
+								return <Divider key={c.address} />;
+							})}
+						{contact && (
+							<Select
+								onChange={(e: ChangeEvent<HTMLSelectElement>) => setPermission(e.target.value as IPCPermission)}
+								value={permission}
+							>
+								<option value="viewer">Viewer</option>
+								<option value="editor">Editor</option>
+							</Select>
+						)}
+					</VStack>
+				</Modal>
+			</HStack>
+		</PopoverHeader>
 	);
 };
 

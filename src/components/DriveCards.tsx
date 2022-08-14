@@ -1,18 +1,17 @@
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
+	Box,
 	Button,
-	Text,
 	HStack,
 	Popover,
+	PopoverBody,
+	PopoverContent,
+	PopoverFooter,
 	PopoverTrigger,
 	Portal,
-	PopoverContent,
-	PopoverHeader,
-	PopoverBody,
-	PopoverFooter,
-	Box,
+	Text,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
@@ -29,9 +28,9 @@ import MoveFolder from 'components/folder/MoveFolder';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
-import { FcFile, FcFolder } from 'react-icons/fc';
-import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import { useDriveContext } from 'contexts/drive';
+import { FcFile, FcFolder } from 'react-icons/fc';
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();
@@ -141,24 +140,12 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 								</PopoverTrigger>
 								<Portal>
 									<PopoverContent w="300px" backgroundColor={config?.theme ?? 'white'}>
-										<PopoverHeader>
-											<DownloadFile file={file} />
-										</PopoverHeader>
-										<PopoverHeader>
-											<ShareFile file={file} />
-										</PopoverHeader>
-										<PopoverBody>
-											<MoveFile file={file} />
-										</PopoverBody>
-										<PopoverBody>
-											<RenameFile file={file} />
-										</PopoverBody>
-										<PopoverFooter>
-											<UpdateContentFile file={file} />
-										</PopoverFooter>
-										<PopoverFooter>
-											<DeleteFile file={file} />
-										</PopoverFooter>
+										<DownloadFile file={file} />
+										<ShareFile file={file} />
+										<MoveFile file={file} />
+										<RenameFile file={file} />
+										<UpdateContentFile file={file} />
+										<DeleteFile file={file} />
 									</PopoverContent>
 								</Portal>
 							</Popover>
