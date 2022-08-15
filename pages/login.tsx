@@ -25,6 +25,7 @@ const Login = (): JSX.Element => {
 	const loginWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
 		const login = await auth.loginWithCredentials(mnemonics);
+		console.log(login);
 		setIsLoadingCredentials(false);
 
 		if (login.user) {

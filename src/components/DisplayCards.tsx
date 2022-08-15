@@ -6,6 +6,7 @@ import DriveCards from 'components/DriveCards';
 import ProgramCards from 'components/ProgramCards';
 import ContactCards from 'components/ContactCards';
 import ProfileCard from 'components/ProfileCard';
+import ConfigPage from 'components/ConfigPage';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
@@ -88,5 +89,6 @@ export const DisplayCards = ({
 				/>
 			</VStack>
 		);
-	return <ProfileCard profile={user.contact.contacts[0]} />;
+	if (index === 4) return <ProfileCard profile={user.contact.contacts[0]} />;
+	return <ConfigPage />;
 };

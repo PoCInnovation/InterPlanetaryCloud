@@ -5,7 +5,7 @@ import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
 import User from 'lib/user';
-import { AggregateType } from 'types/types';
+import { AggregateType, IPCConfig } from 'types/types';
 
 type AuthReturnType = {
 	user: User | undefined;
@@ -14,6 +14,10 @@ type AuthReturnType = {
 };
 
 class Auth {
+	private defaultConfig: IPCConfig = {
+		theme: 'light',
+	};
+
 	public async logout(): Promise<void> {
 		localStorage.clear();
 	}
@@ -39,6 +43,9 @@ class Auth {
 							name: 'Owner (Me)',
 							address: account.address,
 							publicKey: account.publicKey,
+							config: {
+								theme: 'light',
+							},
 							files: [],
 							folders: [],
 						},
@@ -53,7 +60,7 @@ class Auth {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			const user = new User(account, mnemonic);
+			const user = new User(account, mnemonic, this.defaultConfig);
 
 			await this.createAggregate(account);
 
@@ -67,7 +74,7 @@ class Auth {
 	public async loginWithCredentials(mnemonic: string): Promise<AuthReturnType> {
 		try {
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
-			const user = new User(importedAccount, mnemonic);
+			const user = new User(importedAccount, mnemonic, this.defaultConfig);
 
 			await this.createAggregate(importedAccount);
 

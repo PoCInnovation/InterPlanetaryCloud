@@ -43,6 +43,7 @@ export const LeftBar = ({
 		myFilesTab="My files"
 		myProgramsTab="My programs"
 		profileTab="My profile"
+		configTab="Config"
 		sharedFilesTab="Shared with me"
 		setSelectedTab={setSelectedTab}
 		currentTabIndex={selectedTab}

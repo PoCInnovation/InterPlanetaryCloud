@@ -27,6 +27,11 @@ export type IPCContact = {
 	publicKey: string;
 	files: IPCFile[];
 	folders: IPCFolder[];
+	config: IPCConfig;
+};
+
+export type IPCConfig = {
+	theme: string;
 };
 
 export type ResponseType = {

@@ -68,6 +68,9 @@ const Dashboard = (): JSX.Element => {
 		const loadedPrograms = await user.computing.load();
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
 		setPrograms(user.computing.programs);
+
+		// load config
+		await user.loadConfig();
 	};
 
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
