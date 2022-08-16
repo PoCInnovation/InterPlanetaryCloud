@@ -17,28 +17,28 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
 import Sidebar from 'components/SideBar';
-import { UploadButton, DeployButton } from 'components/CustomButtons';
+import { DeployButton, GithubDeployButton } from 'components/CustomButtons';
 
 type BarProps = {
-	onOpen: () => void;
 	onOpenProgram: () => void;
-	isUploadLoading: boolean;
 	isDeployLoading: boolean;
+	onOpenGithub: () => void;
 	setSelectedTab: (tab: number) => void;
+	isGithubLoading: boolean;
 	selectedTab: number;
 };
 
 export const LeftBar = ({
-	onOpen,
 	onOpenProgram,
-	isUploadLoading,
 	isDeployLoading,
+	isGithubLoading,
+	onOpenGithub,
 	setSelectedTab,
 	selectedTab,
 }: BarProps): JSX.Element => (
 	<Sidebar
-		uploadButton={<UploadButton text="Upload a file" onClick={() => onOpen()} isLoading={isUploadLoading} />}
-		deployButton={<DeployButton text="Deploy a program" onClick={onOpenProgram} isLoading={isDeployLoading} />}
+		deployButton={<DeployButton onClick={onOpenProgram} isLoading={isDeployLoading} />}
+		githubButton={<GithubDeployButton onClick={onOpenGithub} isLoading={isGithubLoading} />}
 		contactTab="Contacts"
 		myFilesTab="My files"
 		myProgramsTab="My programs"
@@ -50,11 +50,11 @@ export const LeftBar = ({
 );
 
 export const BarWithDrawer = ({
-	onOpen,
 	onOpenProgram,
 	setSelectedTab,
 	isDeployLoading,
-	isUploadLoading,
+	onOpenGithub,
+	isGithubLoading,
 	selectedTab,
 }: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
@@ -66,10 +66,10 @@ export const BarWithDrawer = ({
 				<DrawerOverlay />
 				<DrawerContent w="75%">
 					<LeftBar
-						onOpen={onOpen}
 						onOpenProgram={onOpenProgram}
+						onOpenGithub={onOpenGithub}
+						isGithubLoading={isGithubLoading}
 						setSelectedTab={setSelectedTab}
-						isUploadLoading={isUploadLoading}
 						isDeployLoading={isDeployLoading}
 						selectedTab={selectedTab}
 					/>
@@ -100,10 +100,10 @@ export const BarWithDrawer = ({
 };
 
 export const ResponsiveBar = ({
-	onOpen,
 	onOpenProgram,
+	onOpenGithub,
+	isGithubLoading,
 	setSelectedTab,
-	isUploadLoading,
 	isDeployLoading,
 	selectedTab,
 }: BarProps): JSX.Element => {
@@ -112,20 +112,20 @@ export const ResponsiveBar = ({
 	if (!isDrawerNeeded)
 		return (
 			<LeftBar
-				onOpen={onOpen}
 				onOpenProgram={onOpenProgram}
+				onOpenGithub={onOpenGithub}
+				isGithubLoading={isGithubLoading}
 				setSelectedTab={setSelectedTab}
-				isUploadLoading={isUploadLoading}
 				isDeployLoading={isDeployLoading}
 				selectedTab={selectedTab}
 			/>
 		);
 	return (
 		<BarWithDrawer
-			onOpen={onOpen}
 			onOpenProgram={onOpenProgram}
 			setSelectedTab={setSelectedTab}
-			isUploadLoading={isUploadLoading}
+			onOpenGithub={onOpenGithub}
+			isGithubLoading={isGithubLoading}
 			isDeployLoading={isDeployLoading}
 			selectedTab={selectedTab}
 		/>

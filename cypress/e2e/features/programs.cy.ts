@@ -11,7 +11,7 @@ describe('Create account for Dashboard tests', () => {
 	});
 });
 
-describe('Upload a program modal for Dashboard', () => {
+describe('Deploy a program modal for Dashboard', () => {
 	const fixtureFile = 'upload_test_program.zip';
 
 	beforeEach(() => {
@@ -19,18 +19,19 @@ describe('Upload a program modal for Dashboard', () => {
 		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
 		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
-		cy.get('#ipc-deploy-button').click().wait(2500);
+		cy.get('.ipc-new-elem-button').click();
+		cy.get('#ipc-deploy-button').click({ force: true }).wait(2500);
 	});
 
-	it('Good number of buttons after upload', () => {
+	it('Good number of buttons after deployment', () => {
 		cy.get('#ipc-dashboard-deploy-program').attachFile(fixtureFile);
 		cy.get('#ipc-dashboard-deploy-program-modal-button').click();
 		cy.wait(2000);
-		cy.get('button').should('have.length', 10);
+		cy.get('button').should('have.length', 12);
 	});
 
 	it('Good number of buttons after closing modal', () => {
 		cy.get('#ipc-modal-close-button').click();
-		cy.get('button').should('have.length', 10);
+		cy.get('button').should('have.length', 11);
 	});
 });

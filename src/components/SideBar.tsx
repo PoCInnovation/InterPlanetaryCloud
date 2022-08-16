@@ -1,6 +1,27 @@
-import { Tab, TabList, Tabs, Text, VStack } from '@chakra-ui/react';
+import {
+	Tab,
+	TabList,
+	Tabs,
+	Text,
+	VStack,
+	Popover,
+	PopoverTrigger,
+	Portal,
+	PopoverContent,
+	Button,
+	PopoverHeader,
+	PopoverFooter,
+	PopoverBody,
+	HStack,
+} from '@chakra-ui/react';
+
+import { FcRules } from 'react-icons/fc';
+import { GoMarkGithub } from 'react-icons/go';
 
 import colors from 'theme/foundations/colors';
+
+import CreateFolder from 'components/folder/CreateFolder';
+import UploadFile from './file/UploadFile';
 
 type SideBarPropsType = {
 	contactTab: string;
@@ -8,9 +29,9 @@ type SideBarPropsType = {
 	sharedFilesTab: string;
 	myProgramsTab: string;
 	profileTab: string;
-	uploadButton: JSX.Element;
 	deployButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
+	githubButton: JSX.Element;
 	currentTabIndex: number;
 };
 
@@ -20,8 +41,8 @@ const SideBar = ({
 	sharedFilesTab,
 	myProgramsTab,
 	profileTab,
-	uploadButton,
 	deployButton,
+	githubButton,
 	setSelectedTab,
 	currentTabIndex,
 }: SideBarPropsType): JSX.Element => (
@@ -41,10 +62,38 @@ const SideBar = ({
 				bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
 				bgClip="text"
 				id="ipc-sideBar-title"
-				pb="64px"
 			>
 				Inter Planetary Cloud
 			</Text>
+			<Popover placement="right">
+				<PopoverTrigger>
+					<Button variant="inline" w="80%" borderRadius="lg" className="ipc-new-elem-button">
+						New Elem
+					</Button>
+				</PopoverTrigger>
+				<Portal>
+					<PopoverContent w="300px">
+						<PopoverHeader>
+							<CreateFolder />
+						</PopoverHeader>
+						<PopoverBody>
+							<UploadFile />
+						</PopoverBody>
+						<PopoverFooter>
+							<HStack>
+								<FcRules display="flex" size="40"></FcRules>
+								{deployButton}
+							</HStack>
+						</PopoverFooter>
+						<PopoverFooter>
+							<HStack>
+								<GoMarkGithub display="flex" size="40"></GoMarkGithub>
+								{githubButton}
+							</HStack>
+						</PopoverFooter>
+					</PopoverContent>
+				</Portal>
+			</Popover>
 			<Tabs defaultIndex={currentTabIndex} orientation="vertical" isFitted onChange={(index) => setSelectedTab(index)}>
 				<TabList>
 					<Tab
@@ -89,8 +138,6 @@ const SideBar = ({
 					</Tab>
 				</TabList>
 			</Tabs>
-			{uploadButton}
-			{deployButton}
 		</VStack>
 	</VStack>
 );

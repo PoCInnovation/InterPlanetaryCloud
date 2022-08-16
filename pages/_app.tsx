@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
 
 import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
 
@@ -9,14 +10,20 @@ import 'theme/index.css';
 
 import User from 'lib/user';
 import Auth from 'lib/auth';
+import type { IPCFile, IPCFolder, IPCContact } from 'types/types';
 
 import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
+import DriveContext from 'contexts/drive';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
+	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [folders, setFolders] = useState<IPCFolder[]>([]);
+	const [contacts, setContacts] = useState<IPCContact[]>([]);
+	const [path, setPath] = useState('/');
 	const toast = useToast();
 
 	useEffect(() => {
@@ -61,7 +68,22 @@ const App = ({ Component, pageProps }: AppProps) => {
 			<ChakraProvider theme={theme} resetCSS>
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<Component {...pageProps} />
+						<DriveContext.Provider
+							value={{
+								files,
+								setFiles,
+								folders,
+								setFolders,
+								contacts,
+								setContacts,
+								path,
+								setPath,
+							}}
+						>
+							<SessionProvider session={session}>
+								<Component {...pageProps} />
+							</SessionProvider>
+						</DriveContext.Provider>
 					</UserContext.Provider>
 				</AuthContext.Provider>
 			</ChakraProvider>

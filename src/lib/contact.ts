@@ -4,7 +4,7 @@ import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType } from 'types/types';
+import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType, IPCFolder } from 'types/types';
 import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Contact {
@@ -46,7 +46,7 @@ class Contact {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
 					APIServer: DEFAULT_API_V2,
-					address: this.account!.address,
+					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});
 
@@ -83,12 +83,10 @@ class Contact {
 		try {
 			if (this.account) {
 				if (contactAddress !== this.account.address) {
-					this.contacts.map((contact, index) => {
+					this.contacts.forEach((contact, index) => {
 						if (contact.address === contactAddress) {
 							this.contacts.splice(index, 1);
-							return true;
 						}
-						return false;
 					});
 
 					await this.publishAggregate();
@@ -106,15 +104,10 @@ class Contact {
 	public async update(contactAddress: string, newName: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					this.contacts.find((contact, index) => {
-						if (contact.address === contactAddress) {
-							this.contacts[index].name = newName;
-							return true;
-						}
-						return false;
-					})
-				) {
+				const contact = this.contacts.find((c) => c.address === contactAddress);
+
+				if (contact) {
+					contact.name = newName;
 					await this.publishAggregate();
 					return { success: true, message: 'Contact updated' };
 				}
@@ -130,20 +123,18 @@ class Contact {
 	public async updateFileContent(newFile: IPCFile, oldHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await Promise.all(
-					this.contacts.map(async (contact, i) => {
-						this.contacts[i].files.map(async (file, j) => {
-							if (file.hash === oldHash) {
-								this.contacts[i].files[j].hash = newFile.hash;
-								this.contacts[i].files[j].key = await encryptWithPublicKey(
-									contact.publicKey.slice(2),
-									await decryptWithPrivateKey(this.private_key, newFile.key),
-								);
-								await this.publishAggregate();
-							}
-						});
-					}),
-				);
+				this.contacts.forEach(async (contact, i) => {
+					const file = this.contacts[i].files.find((f) => f.hash === oldHash);
+
+					if (file) {
+						file.hash = newFile.hash;
+						file.key = await encryptWithPublicKey(
+							contact.publicKey.slice(2),
+							await decryptWithPrivateKey(this.private_key, newFile.key),
+						);
+						await this.publishAggregate();
+					}
+				});
 				return { success: true, message: 'File content updated' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -156,10 +147,9 @@ class Contact {
 	public hasEditPermission(hash: string): ResponseType {
 		try {
 			if (this.account) {
-				const owner = this.account.address;
 				if (
 					this.contacts.find((contact, index) => {
-						if (owner === contact.address) {
+						if (this.account?.address === contact.address) {
 							return this.contacts[index].files.find((file) => file.hash === hash);
 						}
 						return false;
@@ -178,34 +168,15 @@ class Contact {
 
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
-			for (let i = 0; this.contacts[i] != null; i += 1) {
-				this.updateOneFileName(concernedFile.hash, newName, i);
-			}
-			return { success: true, message: 'Filename updated' };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to update this filename' };
-		}
-	}
+			this.contacts.forEach(async (contact) => {
+				const file = contact.files.find((f) => f.hash === concernedFile.hash);
 
-	public async updateOneFileName(fileHash: string, newName: string, contactIndex: number): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				if (
-					this.contacts[contactIndex].files.find((file, fileIndex) => {
-						if (file.hash === fileHash) {
-							this.contacts[contactIndex].files[fileIndex].name = newName;
-							return true;
-						}
-						return false;
-					})
-				) {
+				if (file) {
+					file.name = newName;
 					await this.publishAggregate();
-					return { success: true, message: 'Filename updated' };
 				}
-				return { success: false, message: 'File does not exist' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			});
+			return { success: true, message: 'Filename updated' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
@@ -215,36 +186,145 @@ class Contact {
 	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				if (
-					await Promise.all(
-						this.contacts.map(async (contact, index) => {
-							if (contact.address === contactAddress) {
-								if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
-									return { success: false, message: 'The file is already shared' };
-								}
-								this.contacts[index].files.push({
-									hash: mainFile.hash,
-									key: await encryptWithPublicKey(
-										contact.publicKey.slice(2),
-										await decryptWithPrivateKey(this.private_key, mainFile.key),
-									),
-									created_at: mainFile.created_at,
-									name: mainFile.name,
-								});
-								await this.publishAggregate();
-								return true;
-							}
-							return false;
-						}),
-					)
-				)
+				const index = this.contacts.findIndex((contact) => contact.address === contactAddress);
+
+				if (index !== -1) {
+					if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
+						return { success: false, message: 'The file is already shared' };
+					}
+					const newFile: IPCFile = {
+						...mainFile,
+						key: await encryptWithPublicKey(
+							this.contacts[index].publicKey.slice(2),
+							await decryptWithPrivateKey(this.private_key, mainFile.key),
+						),
+					};
+
+					this.contacts[index].files.push(newFile);
+					await this.publishAggregate();
 					return { success: true, message: 'File shared with the contact' };
+				}
 				return { success: false, message: 'Contact does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to share the file with the contact' };
+		}
+	}
+
+	public async removeFilesFromContact(address: string, hashes: string[]): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const index = this.contacts.findIndex((contact) => contact.address === address);
+
+				if (index !== -1) {
+					this.contacts[index].files = this.contacts[index].files.filter((f) => !hashes.includes(f.hash));
+
+					await this.publishAggregate();
+					return { success: true, message: 'File deleted from the contact' };
+				}
+				return { success: false, message: 'Contact does not exist' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to delete the file from the contact' };
+		}
+	}
+
+	public async createFolder(folder: IPCFolder): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					contact.folders.push(folder);
+					await this.publishAggregate();
+					return { success: true, message: 'Folder created' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
+
+	public async moveFolder(folder: IPCFolder, newPath: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				const fullPath = `${folder.path}${folder.name}/`;
+
+				if (contact) {
+					contact.folders = contact.folders.map((f) => {
+						if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+						if (f === folder) return { ...f, path: newPath };
+						return f;
+					});
+					contact.files = contact.files.map((f) => {
+						if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+						return f;
+					});
+
+					await this.publishAggregate();
+					return { success: true, message: 'Folder created' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
+
+	public async deleteFolder(folder: IPCFolder): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					const fullPath = `${folder.path}${folder.name}/`;
+					contact.folders = contact.folders.filter(
+						(f) => !f.path.startsWith(fullPath) && (f.path !== folder.path || f.createdAt !== folder.createdAt),
+					);
+
+					await this.publishAggregate();
+
+					return { success: true, message: 'Folder deleted' };
+				}
+				return { success: false, message: 'Failed to find your contact' };
+			}
+			return { success: false, message: 'Failed to load contact' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to delete the folder' };
+		}
+	}
+
+	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+
+				if (contact) {
+					const currentFile = contact.files.find((f) => f.hash === file.hash);
+					if (currentFile) {
+						currentFile.path = newPath;
+						await this.publishAggregate();
+						return { success: true, message: 'File moved' };
+					}
+					return { success: false, message: 'File does not exist' };
+				}
+				return { success: false, message: 'Failed to load contact' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to move the file' };
 		}
 	}
 }

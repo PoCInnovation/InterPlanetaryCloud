@@ -1,25 +1,19 @@
 import { Box, Button, Divider, Tooltip, VStack } from '@chakra-ui/react';
-import { CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { CopyIcon } from '@chakra-ui/icons';
 
 import ContactCard from 'components/ContactCard';
 
 import type { IPCContact } from 'types/types';
 
+import AddContact from 'components/contact/AddContact';
+import DeleteContact from 'components/contact/DeleteContact';
+import UpdateContact from 'components/contact/UpdateContact';
+
 type ContactCardsProps = {
 	contacts: IPCContact[];
-	setContactInfo: (contact: IPCContact) => void;
-	onOpenContactUpdate: () => void;
-	onOpenContactAdd: () => void;
-	deleteContact: (contactToDelete: IPCContact) => Promise<void>;
 };
 
-const ContactCards = ({
-	contacts,
-	setContactInfo,
-	onOpenContactUpdate,
-	onOpenContactAdd,
-	deleteContact,
-}: ContactCardsProps): JSX.Element => (
+const ContactCards = ({ contacts }: ContactCardsProps): JSX.Element => (
 	<>
 		<Box
 			p="16px"
@@ -33,9 +27,7 @@ const ContactCards = ({
 			justifyContent="space-between"
 		>
 			<VStack w="100%" justify="space-between" align="center">
-				<Button variant="inline" onClick={onOpenContactAdd}>
-					Add a contact
-				</Button>
+				<AddContact />
 			</VStack>
 		</Box>
 		{contacts.map((contact, index) => {
@@ -57,23 +49,10 @@ const ContactCards = ({
 								</Button>
 							</Tooltip>
 							<Tooltip label="Update the contact">
-								<Button
-									size="sm"
-									w="100%"
-									p="0px"
-									mx="4px"
-									onClick={() => {
-										setContactInfo(contact);
-										onOpenContactUpdate();
-									}}
-								>
-									<EditIcon />
-								</Button>
+								<UpdateContact contact={contact} />
 							</Tooltip>
 							<Tooltip label="Delete the contact">
-								<Button size="sm" w="100%" mx="4px" p="0px" onClick={async () => deleteContact(contact)}>
-									<DeleteIcon />
-								</Button>
+								<DeleteContact contact={contact} />
 							</Tooltip>
 						</>
 					</ContactCard>
