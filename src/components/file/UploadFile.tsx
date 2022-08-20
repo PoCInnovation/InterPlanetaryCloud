@@ -1,6 +1,7 @@
 import { Button, HStack, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { FcFile } from 'react-icons/fc';
+import { v4 as uuid } from 'uuid';
 
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
@@ -37,6 +38,7 @@ const UploadFile = (): JSX.Element => {
 		}
 
 		const file: IPCFile = {
+			id: uuid(),
 			name: filename,
 			hash: fileContent,
 			size: fileEvent.target.files![0].size,

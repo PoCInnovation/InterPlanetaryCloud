@@ -1,6 +1,7 @@
 import { Encrypted } from 'eth-crypto';
 
 export type IPCFile = {
+	id: string;
 	hash: string;
 	key: Encrypted;
 	name: string;
@@ -39,6 +40,11 @@ export type IPCContact = {
 };
 
 export type IPCPermission = 'owner' | 'viewer' | 'editor';
+
+export type IPCUpdateContent = {
+	tags: string[];
+	file: IPCFile;
+};
 
 export type ResponseType = {
 	success: boolean;

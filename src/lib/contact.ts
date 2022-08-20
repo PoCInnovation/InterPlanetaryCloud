@@ -1,9 +1,17 @@
-import { accounts, aggregate } from 'aleph-sdk-ts';
+import { accounts, aggregate, forget, post } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
 import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
 
-import type { AggregateContentType, AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType } from 'types/types';
+import type {
+	AggregateContentType,
+	AggregateType,
+	IPCContact,
+	IPCFile,
+	IPCFolder,
+	IPCUpdateContent,
+	ResponseType,
+} from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
@@ -52,6 +60,8 @@ class Contact {
 
 				this.contacts = aggr.InterPlanetaryCloud.contacts;
 
+				await this.loadUpdates();
+
 				return { success: true, message: 'Contacts loaded' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -59,6 +69,42 @@ class Contact {
 			console.error(err);
 			return { success: false, message: 'Failed to load contacts' };
 		}
+	}
+
+	private async loadUpdates() {
+		const me = this.contacts.find((contact) => contact.address === this.account?.address)!;
+
+		this.contacts.forEach(async (contact) => {
+			const updatableIds = contact.files.filter((file) => file.permission === 'editor').map((file) => file.id);
+			const updates = await post.Get({
+				APIServer: DEFAULT_API_V2,
+				types: '',
+				pagination: 200,
+				page: 1,
+				refs: [],
+				addresses: [contact.address],
+				tags: updatableIds,
+				hashes: [],
+			});
+			updates.posts.forEach(async (update) => {
+				const { tags, file } = <IPCUpdateContent>update.content;
+				const [type, fileId] = tags;
+				const index = me.files.findIndex((f) => f.id === fileId);
+				me.files[index] = file;
+			});
+
+			await this.publishAggregate();
+
+			const hashes = updates.posts.map((p) => p.hash);
+			await forget.publish({
+				account: this.account!,
+				channel: ALEPH_CHANNEL,
+				storageEngine: ItemType.ipfs,
+				inlineRequested: true,
+				APIServer: DEFAULT_API_V2,
+				hashes,
+			});
+		});
 	}
 
 	public async add(contactToAdd: IPCContact): Promise<ResponseType> {
