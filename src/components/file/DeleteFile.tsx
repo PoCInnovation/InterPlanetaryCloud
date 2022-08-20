@@ -1,12 +1,12 @@
-import { Button, HStack, Text, PopoverFooter, useToast, useDisclosure, useColorModeValue } from '@chakra-ui/react';
+import { Button, HStack, PopoverFooter, Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { FcFullTrash } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
 
-import { useUserContext } from 'contexts/user';
-import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 type DeleteFileProps = {
 	file: IPCFile;

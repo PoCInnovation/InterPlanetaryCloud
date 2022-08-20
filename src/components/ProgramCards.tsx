@@ -1,10 +1,9 @@
 import { Box, Button, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 
-import ProgramCard from 'components/ProgramCard';
-
 import type { IPCProgram } from 'types/types';
 
 import { RedeployButton } from 'components/CustomButtons';
+import ProgramCard from 'components/ProgramCard';
 import { FcRules } from 'react-icons/fc';
 
 type ProgramCardsProps = {

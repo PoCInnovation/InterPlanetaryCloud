@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
@@ -9,9 +9,9 @@ import { useUserContext } from 'contexts/user';
 
 import { AuthReturnType } from 'lib/auth';
 
+import AuthPage from 'components/AuthPage';
 import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
-import AuthPage from 'components/AuthPage';
 
 import colors from 'theme/foundations/colors';
 import { useConfigContext } from 'contexts/config';

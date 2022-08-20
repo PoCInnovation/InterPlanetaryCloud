@@ -1,4 +1,3 @@
-import { ChangeEvent, useState } from 'react';
 import {
 	Button,
 	FormControl,
@@ -9,14 +8,16 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
+import { ChangeEvent, useState } from 'react';
+
 import { FcFolder } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
 import type { IPCFolder } from 'types/types';
 
-import { useUserContext } from 'contexts/user';
-import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();

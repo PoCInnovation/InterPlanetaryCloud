@@ -1,12 +1,12 @@
-import { VStack, HStack, Box, Text, Spacer, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Spacer, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 
 import type { IPCFile, IPCProgram } from 'types/types';
 
-import DriveCards from 'components/DriveCards';
-import ProgramCards from 'components/ProgramCards';
-import ContactCards from 'components/ContactCards';
-import ProfileCard from 'components/ProfileCard';
 import ConfigPage from 'components/ConfigPage';
+import ContactCards from 'components/ContactCards';
+import DriveCards from 'components/DriveCards';
+import ProfileCard from 'components/ProfileCard';
+import ProgramCards from 'components/ProgramCards';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';

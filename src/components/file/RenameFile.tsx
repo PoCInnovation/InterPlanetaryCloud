@@ -9,6 +9,7 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
+
 import { ChangeEvent, useState } from 'react';
 import { FcEditImage } from 'react-icons/fc';
 

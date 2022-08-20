@@ -1,10 +1,11 @@
-import { ALEPH_CHANNEL } from 'config/constants';
 import { program } from 'aleph-sdk-ts';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ethereum } from 'aleph-sdk-ts/accounts';
-import fs from 'fs';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
+import { ItemType } from 'aleph-sdk-ts/messages/message';
 import child_process from 'child_process';
+import fs from 'fs';
+
+import { ALEPH_CHANNEL } from 'config/constants';
 
 async function compress(path: string): Promise<string> {
 	child_process.execSync(`zip -r ${path} *`, { cwd: path });

@@ -1,10 +1,10 @@
+import Joi from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
-import Joi from 'joi';
+
 import validate from 'lib/middlewares/validation';
-// import { clone, cleanup, getProgramName } from 'lib/services/git'; for future use
-import { clone, getProgramName } from 'lib/services/git';
 import { compress, programPublish } from 'lib/services/deploy';
+import { clone, getProgramName } from 'lib/services/git';
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 

@@ -1,16 +1,16 @@
-import { ChangeEvent, useState } from 'react';
 import { Button, HStack, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { ChangeEvent, useState } from 'react';
 import { FcFile } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
 
+import { extractFilename, getFileContent } from 'utils/fileManipulation';
 import { generateFileKey } from 'utils/generateFileKey';
-import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
-import { useUserContext } from 'contexts/user';
-import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();

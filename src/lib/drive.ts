@@ -1,17 +1,15 @@
-import { accounts, forget, aggregate, store } from 'aleph-sdk-ts';
-
+import { accounts, aggregate, forget, store } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
-import { ALEPH_CHANNEL } from 'config/constants';
-
+import CryptoJS from 'crypto-js';
+import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
 import fileDownload from 'js-file-download';
 
-import CryptoJS from 'crypto-js';
+import { ALEPH_CHANNEL } from 'config/constants';
+
+import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
 
 import { ArraybufferToString } from 'utils/arraytbufferToString';
-
-import type { IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse, AggregateType } from 'types/types';
-import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
 
 class Drive {
 	public files: IPCFile[];

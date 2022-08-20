@@ -1,6 +1,6 @@
+import { Button, HStack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { useDriveContext } from 'contexts/drive';
 import { useEffect, useState } from 'react';
-import { Button, HStack, Text, useToast, useDisclosure } from '@chakra-ui/react';
 import { FcFullTrash } from 'react-icons/fc';
 
 import Modal from 'components/Modal';

@@ -1,23 +1,23 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useSession, signIn, signOut } from 'next-auth/react';
 import axios from 'axios';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Select, useColorMode } from '@chakra-ui/react';
+import { Box, Button, HStack, Input, Select, useColorMode, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile, IPCProgram, GitHubRepository } from 'types/types';
+import type { GitHubRepository, IPCFile, IPCProgram } from 'types/types';
 
 import Modal from 'components/Modal';
 
 import { extractFilename } from 'utils/fileManipulation';
 
-import { ResponsiveBar } from 'components/ResponsiveBar';
-import { DisplayCards } from 'components/DisplayCards';
-import { useDriveContext } from 'contexts/drive';
-import { useConfigContext } from 'contexts/config';
 import CustomProgram from 'components/computing/CustomProgram';
+import { DisplayCards } from 'components/DisplayCards';
+import { ResponsiveBar } from 'components/ResponsiveBar';
+import { useConfigContext } from 'contexts/config';
+import { useDriveContext } from 'contexts/drive';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -96,7 +96,7 @@ const Dashboard = (): JSX.Element => {
 					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
-					entrypoint: customEntrypoint || user.config.defaultEntrypoint || 'main:app',
+					entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -128,7 +128,7 @@ const Dashboard = (): JSX.Element => {
 			setIsDeployLoading(true);
 			const result = await axios.post('/api/program/create', {
 				repository: `${repository}.git`,
-				entrypoint: customEntrypoint || user.config.defaultEntrypoint || 'main:app',
+				entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
 			});
 			if (result.status !== 200) throw new Error('Unable to clone repository from Github');
 			const newProgram: IPCProgram = {

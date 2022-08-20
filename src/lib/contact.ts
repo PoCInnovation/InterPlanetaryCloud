@@ -1,11 +1,11 @@
 import { accounts, aggregate } from 'aleph-sdk-ts';
-
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
-import { ALEPH_CHANNEL } from 'config/constants';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
+import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
 
-import type { IPCContact, IPCFile, ResponseType, AggregateType, AggregateContentType, IPCFolder } from 'types/types';
-import { encryptWithPublicKey, decryptWithPrivateKey } from 'eth-crypto';
+import type { AggregateContentType, AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType } from 'types/types';
+
+import { ALEPH_CHANNEL } from 'config/constants';
 
 class Contact {
 	public contacts: IPCContact[];

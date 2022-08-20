@@ -1,5 +1,4 @@
 import { accounts, aggregate } from 'aleph-sdk-ts';
-
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
 import { ALEPH_CHANNEL } from 'config/constants';
@@ -45,16 +44,9 @@ class Auth {
 							name: 'Owner (Me)',
 							address: account.address,
 							publicKey: account.publicKey,
-							config: {
-								theme: 'white',
-							},
 							files: [],
 							folders: [],
-							config: {
-								theme: 'light',
-								defaultEntrypoint: 'main:app',
-								defaultName: '[userName]@[repositoryName]',
-							},
+							config: this.defaultConfig,
 						},
 					],
 					programs: [],

@@ -1,3 +1,4 @@
+import { HamburgerIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
@@ -13,11 +14,11 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
-import Sidebar from 'components/SideBar';
+
 import { DeployButton, GithubDeployButton } from 'components/CustomButtons';
+import Sidebar from 'components/SideBar';
 
 type BarProps = {
 	onOpenProgram: () => void;

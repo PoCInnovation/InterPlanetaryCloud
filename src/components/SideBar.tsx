@@ -1,27 +1,26 @@
 import {
+	Button,
+	HStack,
+	Popover,
+	PopoverBody,
+	PopoverContent,
+	PopoverFooter,
+	PopoverHeader,
+	PopoverTrigger,
+	Portal,
 	Tab,
 	TabList,
 	Tabs,
 	Text,
 	VStack,
-	Popover,
-	PopoverTrigger,
-	Portal,
-	PopoverContent,
-	Button,
-	PopoverHeader,
-	PopoverFooter,
-	PopoverBody,
-	HStack,
 } from '@chakra-ui/react';
-
 import { FcRules } from 'react-icons/fc';
 import { GoMarkGithub } from 'react-icons/go';
 
 import colors from 'theme/foundations/colors';
 
+import UploadFile from 'components/file/UploadFile';
 import CreateFolder from 'components/folder/CreateFolder';
-import UploadFile from './file/UploadFile';
 
 type SideBarPropsType = {
 	contactTab: string;
