@@ -27,7 +27,7 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 
 			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			if (deleted.success) {
-				const removed = await user.contact.removeFilesFromContact(user.account.address, [file.hash]);
+				const removed = await user.contact.removeFilesFromContact(user.account.address, [file.id]);
 
 				if (!removed.success) {
 					toast({ title: removed.message, status: 'error' });

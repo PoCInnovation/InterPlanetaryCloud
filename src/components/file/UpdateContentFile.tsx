@@ -46,7 +46,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		if (!upload.success || !upload.file) {
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 		} else {
-			const updated = await user.contact.updateFileContent(upload.file, oldFile.hash);
+			const updated = await user.contact.updateFileContent(upload.file);
 			toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
 			if (updated.success && upload.file) {
 				const index = files.indexOf(oldFile);

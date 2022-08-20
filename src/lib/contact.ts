@@ -166,11 +166,11 @@ class Contact {
 		}
 	}
 
-	public async updateFileContent(newFile: IPCFile, oldHash: string): Promise<ResponseType> {
+	public async updateFileContent(newFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				this.contacts.forEach(async (contact, i) => {
-					const file = this.contacts[i].files.find((f) => f.hash === oldHash);
+					const file = this.contacts[i].files.find((f) => f.id === newFile.id);
 
 					if (file) {
 						file.hash = newFile.hash;
@@ -193,7 +193,7 @@ class Contact {
 	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
 		try {
 			this.contacts.forEach(async (contact) => {
-				const file = contact.files.find((f) => f.hash === concernedFile.hash);
+				const file = contact.files.find((f) => f.id === concernedFile.id);
 
 				if (file) {
 					file.name = newName;
@@ -213,7 +213,7 @@ class Contact {
 				const index = this.contacts.findIndex((contact) => contact.address === contactAddress);
 
 				if (index !== -1) {
-					if (this.contacts[index].files.find((file) => file.hash === mainFile.hash)) {
+					if (this.contacts[index].files.find((file) => file.id === mainFile.id)) {
 						return { success: false, message: 'The file is already shared' };
 					}
 					const newFile: IPCFile = {
@@ -237,13 +237,13 @@ class Contact {
 		}
 	}
 
-	public async removeFilesFromContact(address: string, hashes: string[]): Promise<ResponseType> {
+	public async removeFilesFromContact(address: string, ids: string[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const index = this.contacts.findIndex((contact) => contact.address === address);
 
 				if (index !== -1) {
-					this.contacts[index].files = this.contacts[index].files.filter((f) => !hashes.includes(f.hash));
+					this.contacts[index].files = this.contacts[index].files.filter((f) => !ids.includes(f.id));
 
 					await this.publishAggregate();
 					return { success: true, message: 'File deleted from the contact' };
@@ -335,7 +335,7 @@ class Contact {
 				const contact = this.contacts.find((c) => c.address === this.account?.address);
 
 				if (contact) {
-					const currentFile = contact.files.find((f) => f.hash === file.hash);
+					const currentFile = contact.files.find((f) => f.id === file.id);
 					if (currentFile) {
 						currentFile.path = newPath;
 						await this.publishAggregate();
