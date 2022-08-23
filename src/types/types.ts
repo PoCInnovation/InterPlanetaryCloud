@@ -46,6 +46,7 @@ export type UploadResponse = ResponseType & {
 export type AggregateContentType = {
 	programs: IPCProgram[];
 	contacts: IPCContact[];
+	config: IPCConfig;
 };
 
 export type AggregateType = {

@@ -327,6 +327,25 @@ class Contact {
 			return { success: false, message: 'Failed to move the file' };
 		}
 	}
+
+	public async configFile(newTheme: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				if (contact) {
+					contact.config.theme = newTheme;
+					await this.publishAggregate();
+					console.log(contact.config.theme);
+					return { success: true, message: 'Theme change' };
+				}
+				return { success: false, message: 'Theme does not exist' };
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to change theme' };
+		}
+	}
 }
 
 export default Contact;

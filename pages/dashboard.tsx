@@ -37,6 +37,7 @@ const Dashboard = (): JSX.Element => {
 	});
 	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
+	const [ColorTheme, setColorTheme] = useState('');
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -69,8 +70,9 @@ const Dashboard = (): JSX.Element => {
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
 		setPrograms(user.computing.programs);
 
-		// load config
-		await user.loadConfig();
+		const loadedConfig = await user.loadConfig();
+		toast({ title: loadedConfig.message, status: loadedConfig.success ? 'success' : 'error' });
+		setColorTheme(user.config.theme);
 	};
 
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
@@ -135,7 +137,7 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	return (
-		<HStack minH="100vh" minW="100vw" align="start">
+		<HStack minH="100vh" minW="100vw" align="start" bg={ColorTheme}>
 			<ResponsiveBar
 				onOpenProgram={onOpenProgram}
 				onOpenGithub={onOpenGithub}

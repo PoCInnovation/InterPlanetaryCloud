@@ -10,15 +10,17 @@ import 'theme/index.css';
 
 import User from 'lib/user';
 import Auth from 'lib/auth';
-import type { IPCFile, IPCFolder, IPCContact } from 'types/types';
+import { IPCFile, IPCFolder, IPCContact, IPCConfig } from 'types/types';
 
 import UserContext from 'contexts/user';
 import AuthContext from 'contexts/auth';
 import DriveContext from 'contexts/drive';
+import ConfigContext from 'contexts/config';
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
+	const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [folders, setFolders] = useState<IPCFolder[]>([]);
@@ -68,22 +70,24 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 			<ChakraProvider theme={theme} resetCSS>
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<DriveContext.Provider
-							value={{
-								files,
-								setFiles,
-								folders,
-								setFolders,
-								contacts,
-								setContacts,
-								path,
-								setPath,
-							}}
-						>
-							<SessionProvider session={session}>
-								<Component {...pageProps} />
-							</SessionProvider>
-						</DriveContext.Provider>
+						<ConfigContext.Provider value={{ config: config as IPCConfig, setConfig }}>
+							<DriveContext.Provider
+								value={{
+									files,
+									setFiles,
+									folders,
+									setFolders,
+									contacts,
+									setContacts,
+									path,
+									setPath,
+								}}
+							>
+								<SessionProvider session={session}>
+									<Component {...pageProps} />
+								</SessionProvider>
+							</DriveContext.Provider>
+						</ConfigContext.Provider>
 					</UserContext.Provider>
 				</AuthContext.Provider>
 			</ChakraProvider>

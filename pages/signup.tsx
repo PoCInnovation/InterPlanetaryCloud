@@ -14,10 +14,12 @@ import OutlineButton from 'components/OutlineButton';
 import AuthPage from 'components/AuthPage';
 
 import colors from 'theme/foundations/colors';
+import { useConfigContext } from 'contexts/config';
 
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
+	const { setConfig } = useConfigContext();
 	const router = useRouter();
 
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -50,6 +52,7 @@ const Signup = (): JSX.Element => {
 		if (!signupResult) return;
 		toast({ title: signupResult.message, status: 'success' });
 		setUser(signupResult.user);
+		setConfig(signupResult.user?.config);
 		router.push('/dashboard');
 	};
 
