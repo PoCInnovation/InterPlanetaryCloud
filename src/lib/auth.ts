@@ -15,7 +15,9 @@ type AuthReturnType = {
 
 class Auth {
 	private defaultConfig: IPCConfig = {
-		theme: 'white',
+		theme: 'light',
+		defaultEntrypoint: 'main:app',
+		defaultName: '[userName]@[repositoryName]',
 	};
 
 	public async logout(): Promise<void> {
@@ -48,6 +50,11 @@ class Auth {
 							},
 							files: [],
 							folders: [],
+							config: {
+								theme: 'light',
+								defaultEntrypoint: 'main:app',
+								defaultName: '[userName]@[repositoryName]',
+							}
 						},
 					],
 					programs: [],
@@ -60,7 +67,7 @@ class Auth {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			const user = new User(account, mnemonic);
+			const user = new User(account, mnemonic, this.defaultConfig);
 
 			await this.createAggregate(account);
 
@@ -71,10 +78,10 @@ class Auth {
 		}
 	}
 
-	public async loginWithCredentials(mnemonic: string): Promise<AuthReturnType> {
+	public async loginWithCredentials(mnemonic: string, importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
-			const user = new User(importedAccount, mnemonic);
+			const user = new User(importedAccount, mnemonic, importedConfig);
 
 			await this.createAggregate(importedAccount);
 			console.log(user.config);

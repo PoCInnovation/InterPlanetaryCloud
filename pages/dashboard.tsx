@@ -37,9 +37,12 @@ const Dashboard = (): JSX.Element => {
 		name: '',
 		hash: '',
 		createdAt: 0,
+		entrypoint: '',
 	});
 	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
+	const [customName, setCustomName] = useState<string>('');
+	const [customEntrypoint, setCustomEntrypoint] = useState<string>('');
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -89,9 +92,10 @@ const Dashboard = (): JSX.Element => {
 		try {
 			const upload = await user.computing.uploadProgram(
 				{
-					name: filename,
+					name: customName ?? filename,
 					hash: '',
 					createdAt: Date.now(),
+					entrypoint: customEntrypoint ?? user.config.defaultEntrypoint ?? 'main:app',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -125,9 +129,10 @@ const Dashboard = (): JSX.Element => {
 			})
 			.then(async (response) => {
 				const newProgram: IPCProgram = {
-					name: response.data.name,
+					name: customName ?? response.data.name,
 					hash: response.data.item_hash,
 					createdAt: Date.now(),
+					entrypoint: customEntrypoint ?? user.config.defaultEntrypoint ?? 'main:app'
 				};
 				user.computing.programs.push(newProgram);
 				await user.computing.publishAggregate();
@@ -183,14 +188,26 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<Input
-					type="file"
-					h="100%"
-					w="100%"
-					p="10px"
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboard-deploy-program"
-				/>
+				<>
+					<Input
+						placeholder="[Optional] Program name"
+						value={customName}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomName(e.target.value)}
+					/>
+					<Input
+						placeholder="[Optional] Program entrypoint"
+						value={customEntrypoint}
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomEntrypoint(e.target.value)}
+					/>
+					<Input
+						type="file"
+						h="100%"
+						w="100%"
+						p="10px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+						id="ipc-dashboard-deploy-program"
+					/>
+				</>
 			</Modal>
 			<Modal
 				isOpen={isOpenGithub}
@@ -220,6 +237,16 @@ const Dashboard = (): JSX.Element => {
 					{session && (
 						<>
 							<VStack spacing="5%">
+								<Input
+									placeholder="[Optional] Program name"
+									value={customName}
+									onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomName(e.target.value)}
+								/>
+								<Input
+									placeholder="[Optional] Program entrypoint"
+									value={customEntrypoint}
+									onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomEntrypoint(e.target.value)}
+								/>
 								<Select
 									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
 									placeholder="Select repository"
