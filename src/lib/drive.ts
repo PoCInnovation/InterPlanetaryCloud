@@ -18,11 +18,11 @@ class Drive {
 
 	public sharedFiles: IPCFile[];
 
-	private readonly account: accounts.base.Account | undefined;
+	private readonly account: accounts.ethereum.ETHAccount | undefined;
 
 	private private_key: string;
 
-	constructor(importedAccount: accounts.base.Account, private_key: string) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount, private_key: string) {
 		this.files = [];
 		this.folders = [];
 		this.sharedFiles = [];

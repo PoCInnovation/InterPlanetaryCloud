@@ -18,11 +18,11 @@ import { ALEPH_CHANNEL } from 'config/constants';
 class Contact {
 	public contacts: IPCContact[];
 
-	private readonly account: accounts.base.Account | undefined;
+	private readonly account: accounts.ethereum.ETHAccount | undefined;
 
 	private private_key: string;
 
-	constructor(importedAccount: accounts.base.Account, private_key: string) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount, private_key: string) {
 		this.contacts = [];
 		this.account = importedAccount;
 		this.private_key = private_key;

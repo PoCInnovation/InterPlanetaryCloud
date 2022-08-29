@@ -9,9 +9,9 @@ import { ALEPH_CHANNEL } from 'config/constants';
 class Computing {
 	public programs: IPCProgram[];
 
-	private readonly account: accounts.base.Account | undefined;
+	private readonly account: accounts.ethereum.ETHAccount | undefined;
 
-	constructor(importedAccount: accounts.base.Account) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.programs = [];
 		this.account = importedAccount;
 	}

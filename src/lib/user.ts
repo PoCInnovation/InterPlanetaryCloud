@@ -3,13 +3,13 @@ import { accounts, aggregate } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { mnemonicToPrivateKey } from 'utils/mnemonicToPrivateKey';
 
-import Drive from 'lib/drive';
-import Contact from 'lib/contact';
 import Computing from 'lib/computing';
-import { IPCConfig, AggregateType, IPCContact } from 'types/types';
+import Contact from 'lib/contact';
+import Drive from 'lib/drive';
+import { AggregateType, IPCConfig, IPCContact } from 'types/types';
 
 class User {
-	public account: accounts.base.Account | undefined;
+	public account: accounts.ethereum.ETHAccount | undefined;
 
 	public drive: Drive;
 
@@ -44,7 +44,7 @@ class User {
 		}
 	}
 
-	constructor(importedAccount: accounts.base.Account, mnemonic: string, importedConfig: IPCConfig) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount, mnemonic: string, importedConfig: IPCConfig) {
 		this.account = importedAccount;
 		this.config = importedConfig;
 		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));

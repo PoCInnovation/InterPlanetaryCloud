@@ -31,7 +31,7 @@ class Auth {
 				keys: ['InterPlanetaryCloud'],
 			});
 		} catch (error) {
-			await aggregate.Publish({
+			aggregate.Publish({
 				APIServer: DEFAULT_API_V2,
 				channel: ALEPH_CHANNEL,
 				inlineRequested: true,
