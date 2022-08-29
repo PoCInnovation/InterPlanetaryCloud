@@ -54,7 +54,7 @@ class Auth {
 								theme: 'light',
 								defaultEntrypoint: 'main:app',
 								defaultName: '[userName]@[repositoryName]',
-							}
+							},
 						},
 					],
 					programs: [],

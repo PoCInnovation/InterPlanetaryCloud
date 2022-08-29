@@ -92,10 +92,10 @@ const Dashboard = (): JSX.Element => {
 		try {
 			const upload = await user.computing.uploadProgram(
 				{
-					name: customName ?? filename,
+					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
-					entrypoint: customEntrypoint ?? user.config.defaultEntrypoint ?? 'main:app',
+					entrypoint: customEntrypoint || user.config.defaultEntrypoint || 'main:app',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -123,27 +123,31 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const cloneToBackend = async (repository: string) => {
-		axios
-			.post('/api/program/create', {
+		try {
+			setIsDeployLoading(true);
+			const result = await axios.post('/api/program/create', {
 				repository: `${repository}.git`,
-			})
-			.then(async (response) => {
-				const newProgram: IPCProgram = {
-					name: customName ?? response.data.name,
-					hash: response.data.item_hash,
-					createdAt: Date.now(),
-					entrypoint: customEntrypoint ?? user.config.defaultEntrypoint ?? 'main:app'
-				};
-				user.computing.programs.push(newProgram);
-				await user.computing.publishAggregate();
-				setPrograms(user.computing.programs);
-				toast({ title: 'Upload succeeded', status: 'success' });
-				onCloseGithub();
-			})
-			.catch((e) => {
-				toast({ title: 'Upload failed', status: 'error' });
-				console.error(e);
+				entrypoint: customEntrypoint || user.config.defaultEntrypoint || 'main:app',
 			});
+			if (result.status !== 200) throw new Error('Unable to clone repository from Github');
+			const newProgram: IPCProgram = {
+				name: customName || result.data.name,
+				hash: result.data.item_hash,
+				createdAt: Date.now(),
+				entrypoint: result.data.entrypoint,
+			};
+			user.computing.programs.push(newProgram);
+			await user.computing.publishAggregate();
+			setPrograms(user.computing.programs);
+			toast({ title: 'Upload succeeded', status: 'success' });
+			onCloseGithub();
+		} catch (err) {
+			toast({ title: 'Upload failed', status: 'error' });
+			console.error(err);
+		}
+		setIsDeployLoading(false);
+		setCustomEntrypoint('');
+		setCustomName('');
 	};
 
 	return (
