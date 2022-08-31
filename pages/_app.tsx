@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 
-import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
+import { ChakraProvider, Center, Spinner, useToast, ColorModeScript } from '@chakra-ui/react';
 
 import theme from 'theme';
 import 'theme/index.css';
@@ -20,7 +20,7 @@ import ConfigContext from 'contexts/config';
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
-	const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
+	const [configContext, setConfig] = useState<IPCConfig | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [folders, setFolders] = useState<IPCFolder[]>([]);
@@ -68,9 +68,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 				<link rel="icon" href="/ipc-logo.svg" />
 			</Head>
 			<ChakraProvider theme={theme} resetCSS>
+				<ColorModeScript initialColorMode={theme.config.initialColorMode} />
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<ConfigContext.Provider value={{ config: config as IPCConfig, setConfig }}>
+						<ConfigContext.Provider value={{ configContext: configContext as IPCConfig, setConfig }}>
 							<DriveContext.Provider
 								value={{
 									files,

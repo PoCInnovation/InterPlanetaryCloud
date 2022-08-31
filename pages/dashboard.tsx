@@ -16,11 +16,13 @@ import { extractFilename } from 'utils/fileManipulation';
 import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayCards } from 'components/DisplayCards';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
 	const { user } = useUserContext();
+	const { configContext, setConfig } = useConfigContext();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
 	const { isOpen: isOpenGithub, onOpen: onOpenGithub, onClose: onCloseGithub } = useDisclosure();
 	const { setFiles, setFolders, setContacts } = useDriveContext();
@@ -37,7 +39,6 @@ const Dashboard = (): JSX.Element => {
 	});
 	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
-	const [ColorTheme, setColorTheme] = useState('');
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -71,8 +72,8 @@ const Dashboard = (): JSX.Element => {
 		setPrograms(user.computing.programs);
 
 		const loadedConfig = await user.loadConfig();
+		setConfig(user.config);
 		toast({ title: loadedConfig.message, status: loadedConfig.success ? 'success' : 'error' });
-		setColorTheme(user.config.theme);
 	};
 
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
@@ -137,7 +138,7 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	return (
-		<HStack minH="100vh" minW="100vw" align="start" bg={ColorTheme}>
+		<HStack minH="100vh" minW="100vw" align="start" bg={configContext?.theme ?? 'white'}>
 			<ResponsiveBar
 				onOpenProgram={onOpenProgram}
 				onOpenGithub={onOpenGithub}

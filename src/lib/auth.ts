@@ -60,7 +60,7 @@ class Auth {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			const user = new User(account, mnemonic, this.defaultConfig);
+			const user = new User(account, mnemonic);
 
 			await this.createAggregate(account);
 
@@ -71,12 +71,13 @@ class Auth {
 		}
 	}
 
-	public async loginWithCredentials(mnemonic: string, importedConfig: IPCConfig): Promise<AuthReturnType> {
+	public async loginWithCredentials(mnemonic: string): Promise<AuthReturnType> {
 		try {
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
-			const user = new User(importedAccount, mnemonic, importedConfig);
+			const user = new User(importedAccount, mnemonic);
 
 			await this.createAggregate(importedAccount);
+			console.log(user.config);
 
 			return { user, mnemonic, message: 'Successful login' };
 		} catch (err) {

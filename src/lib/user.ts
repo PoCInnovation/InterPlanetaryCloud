@@ -18,7 +18,7 @@ class User {
 
 	public contact: Contact;
 
-	public config: IPCConfig;
+	public config: IPCConfig | undefined;
 
 	public async loadConfig() {
 		try {
@@ -45,9 +45,9 @@ class User {
 		}
 	}
 
-	constructor(importedAccount: accounts.base.Account, mnemonic: string, importedConfig: IPCConfig) {
+	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
 		this.account = importedAccount;
-		this.config = importedConfig;
+		this.config = undefined;
 		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));
 		this.computing = new Computing(this.account);
 		this.contact = new Contact(this.account, mnemonicToPrivateKey(mnemonic));

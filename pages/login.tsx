@@ -11,13 +11,11 @@ import OutlineButton from 'components/OutlineButton';
 import AuthPage from 'components/AuthPage';
 
 import colors from 'theme/foundations/colors';
-import { useConfigContext } from 'contexts/config';
 
 const Login = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
 	const router = useRouter();
-	const { config, setConfig } = useConfigContext();
 
 	const [mnemonics, setMnemonics] = useState('');
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -26,14 +24,12 @@ const Login = (): JSX.Element => {
 
 	const loginWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
-		const login = await auth.loginWithCredentials(mnemonics, config);
-		console.log(login);
+		const login = await auth.loginWithCredentials(mnemonics);
 		setIsLoadingCredentials(false);
 
 		if (login.user) {
 			toast({ title: login.message, status: 'success' });
 			setUser(login.user);
-			setConfig(login.user.config);
 			router.push('/dashboard');
 		} else {
 			toast({ title: login.message, status: 'error' });
