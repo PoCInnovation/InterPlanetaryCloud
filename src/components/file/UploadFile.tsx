@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, HStack, Input, useDisclosure, useToast } from '@chakra-ui/react';
+import { Button, HStack, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { FcFile } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -10,15 +10,18 @@ import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
+	const { config } = useConfigContext();
 	const { path, files, setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
@@ -66,7 +69,8 @@ const UploadFile = (): JSX.Element => {
 			<FcFile display="flex" size="40"></FcFile>
 			<Button
 				w="100%"
-				backgroundColor={'white'}
+				backgroundColor={config?.theme}
+				textColor={colorText}
 				justifyContent="flex-start"
 				onClick={onOpen}
 				isLoading={isLoading}

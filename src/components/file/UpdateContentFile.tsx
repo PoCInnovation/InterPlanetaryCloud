@@ -1,5 +1,5 @@
 import { ChangeEvent, useState, useEffect } from 'react';
-import { Button, Input, HStack, useToast, useDisclosure } from '@chakra-ui/react';
+import { Button, Input, HStack, useToast, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { FcUpload } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -10,6 +10,7 @@ import { getFileContent } from 'utils/fileManipulation';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 type UpdateContentFileProps = {
 	file: IPCFile;
@@ -20,6 +21,8 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 	const { files, setFiles } = useDriveContext();
 	const [hasPermission, setHasPermission] = useState(false);
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const { config } = useConfigContext();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +74,8 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		<HStack>
 			<FcUpload size="30"></FcUpload>
 			<Button
-				backgroundColor={'white'}
+				backgroundColor={config?.theme ?? 'white'}
+				textColor={colorText}
 				justifyContent="flex-start"
 				w="100%"
 				p="0px"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Divider, HStack, useToast, useDisclosure } from '@chakra-ui/react';
+import { Button, Divider, HStack, useToast, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { FcAdvance, FcFolder } from 'react-icons/fc';
 
@@ -8,6 +8,7 @@ import type { IPCFile } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 type MoveFileProps = {
 	file: IPCFile;
@@ -18,6 +19,8 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 	const { files, setFiles, folders } = useDriveContext();
 	const [hasPermission, setHasPermission] = useState(false);
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const { config } = useConfigContext();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [newPath, setNewPath] = useState('/');
 	const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +57,8 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 		<HStack>
 			<FcAdvance size="30"></FcAdvance>{' '}
 			<Button
-				backgroundColor={'white'}
+				backgroundColor={config?.theme ?? 'white'}
+				textColor={colorText}
 				justifyContent="flex-start"
 				w="100%"
 				p="0px"

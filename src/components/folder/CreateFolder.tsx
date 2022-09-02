@@ -1,5 +1,14 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, FormControl, FormLabel, HStack, Input, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	Button,
+	FormControl,
+	FormLabel,
+	HStack,
+	Input,
+	useColorModeValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
 import { FcFolder } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -7,15 +16,18 @@ import type { IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();
+	const { config } = useConfigContext();
 	const { folders, setFolders, path } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [name, setName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const createFolder = async () => {
 		if (!name || name.includes('/')) {
@@ -46,7 +58,8 @@ const CreateFolder = (): JSX.Element => {
 			<FcFolder display="flex" size="40"></FcFolder>
 			<Button
 				w="100%"
-				backgroundColor={'white'}
+				backgroundColor={config?.theme}
+				textColor={colorText}
 				justifyContent="flex-start"
 				onClick={onOpen}
 				isLoading={isLoading}

@@ -1,5 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Button, Divider, Flex, HStack, Text, Spacer, VStack, useToast, useDisclosure } from '@chakra-ui/react';
+import {
+	Button,
+	Divider,
+	Flex,
+	HStack,
+	Text,
+	Spacer,
+	VStack,
+	useToast,
+	useDisclosure,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { FcShare } from 'react-icons/fc';
 
@@ -7,6 +18,7 @@ import Modal from 'components/Modal';
 import type { IPCFile, IPCContact } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
+import { useConfigContext } from 'contexts/config';
 
 type ShareFileProps = {
 	file: IPCFile;
@@ -16,6 +28,8 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const [hasPermission, setHasPermission] = useState(false);
+	const { config } = useConfigContext();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,7 +52,8 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 		<HStack>
 			<FcShare size="30"></FcShare>
 			<Button
-				backgroundColor={'white'}
+				backgroundColor={config?.theme ?? 'white'}
+				textColor={colorText}
 				justifyContent="flex-start"
 				w="100%"
 				p="0px"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, Input, Button, useToast, Box, HStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
 
 import { useConfigContext } from 'contexts/config';
@@ -14,6 +14,10 @@ const ConfigPage = (): JSX.Element => {
 	const { toggleColorMode } = useColorMode();
 	const color = useColorModeValue('white', 'gray.800');
 	const colorText = useColorModeValue('gray.800', 'white');
+
+	useEffect(() => {
+		console.log(user.config?.theme);
+	}, []);
 
 	const Theme = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value.toLowerCase() === 'dark') setColorTheme('gray.800');
@@ -39,7 +43,9 @@ const ConfigPage = (): JSX.Element => {
 
 	return (
 		<>
-			<Text fontSize="3xl">InterPlanetaryCloud Configuration</Text>
+			<Text fontSize="3xl" color={colorText}>
+				InterPlanetaryCloud Configuration
+			</Text>
 			<Box borderWidth="2px" w="90%" h="750px">
 				<BsCode size="25" color={colorText}></BsCode>
 				<HStack>

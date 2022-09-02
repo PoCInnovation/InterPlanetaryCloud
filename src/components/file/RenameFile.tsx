@@ -1,5 +1,14 @@
 import { ChangeEvent, useState, useEffect } from 'react';
-import { Button, FormControl, FormLabel, HStack, Input, useToast, useDisclosure } from '@chakra-ui/react';
+import {
+	Button,
+	FormControl,
+	FormLabel,
+	HStack,
+	Input,
+	useToast,
+	useDisclosure,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { FcEditImage } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -7,6 +16,7 @@ import type { IPCFile } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 type RenameFileProps = {
 	file: IPCFile;
@@ -17,6 +27,8 @@ const RenameFile = ({ file }: RenameFileProps): JSX.Element => {
 	const { files, setFiles } = useDriveContext();
 	const [hasPermission, setHasPermission] = useState(false);
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const { config } = useConfigContext();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [name, setName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +63,8 @@ const RenameFile = ({ file }: RenameFileProps): JSX.Element => {
 		<HStack>
 			<FcEditImage size="30"></FcEditImage>
 			<Button
-				backgroundColor={'white'}
+				backgroundColor={config?.theme ?? 'white'}
+				textColor={colorText}
 				justifyContent="flex-start"
 				w="100%"
 				p="0px"

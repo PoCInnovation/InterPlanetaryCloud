@@ -20,7 +20,7 @@ import ConfigContext from 'contexts/config';
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
-	const [configContext, setConfig] = useState<IPCConfig | undefined>(undefined);
+	const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [folders, setFolders] = useState<IPCFolder[]>([]);
@@ -71,7 +71,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 				<ColorModeScript initialColorMode={theme.config.initialColorMode} />
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<ConfigContext.Provider value={{ configContext: configContext as IPCConfig, setConfig }}>
+						<ConfigContext.Provider value={{ config: config as IPCConfig, setConfig }}>
 							<DriveContext.Provider
 								value={{
 									files,

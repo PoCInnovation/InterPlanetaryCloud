@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, HStack, Text, useToast, useDisclosure } from '@chakra-ui/react';
+import { Button, HStack, Text, useToast, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { FcFullTrash } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -7,6 +7,7 @@ import type { IPCFile } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useConfigContext } from 'contexts/config';
 
 type DeleteFileProps = {
 	file: IPCFile;
@@ -17,6 +18,8 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 	const { setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const [hasPermission, setHasPermission] = useState(false);
+	const { config } = useConfigContext();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,7 +55,8 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 		<HStack>
 			<FcFullTrash size="30"></FcFullTrash>
 			<Button
-				backgroundColor={'white'}
+				backgroundColor={config?.theme ?? 'white'}
+				textColor={colorText}
 				justifyContent="flex-start"
 				w="100%"
 				p="0px"

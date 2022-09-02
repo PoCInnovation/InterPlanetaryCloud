@@ -34,6 +34,7 @@ type SideBarPropsType = {
 	setSelectedTab: (tab: number) => void;
 	githubButton: JSX.Element;
 	currentTabIndex: number;
+	configTheme: string;
 };
 
 const SideBar = ({
@@ -47,6 +48,7 @@ const SideBar = ({
 	githubButton,
 	setSelectedTab,
 	currentTabIndex,
+	configTheme,
 }: SideBarPropsType): JSX.Element => (
 	<VStack
 		h="100vh"
@@ -74,7 +76,7 @@ const SideBar = ({
 					</Button>
 				</PopoverTrigger>
 				<Portal>
-					<PopoverContent w="300px">
+					<PopoverContent w="300px" bg={configTheme}>
 						<PopoverHeader>
 							<CreateFolder />
 						</PopoverHeader>
