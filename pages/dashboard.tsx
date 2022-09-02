@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import axios from 'axios';
 
-import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Select } from '@chakra-ui/react';
+import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Select, useColorMode } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
@@ -22,7 +22,8 @@ const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
 	const { user } = useUserContext();
-	const { configContext, setConfig } = useConfigContext();
+	const { config, setConfig } = useConfigContext();
+	const { colorMode, toggleColorMode } = useColorMode();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
 	const { isOpen: isOpenGithub, onOpen: onOpenGithub, onClose: onCloseGithub } = useDisclosure();
 	const { setFiles, setFolders, setContacts } = useDriveContext();
@@ -73,6 +74,9 @@ const Dashboard = (): JSX.Element => {
 
 		const loadedConfig = await user.loadConfig();
 		setConfig(user.config);
+		console.log(user.config);
+		if (user.config?.theme === 'white' && colorMode !== 'light') toggleColorMode();
+		if (user.config?.theme === 'gray.800' && colorMode !== 'dark') toggleColorMode();
 		toast({ title: loadedConfig.message, status: loadedConfig.success ? 'success' : 'error' });
 	};
 
@@ -138,7 +142,7 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	return (
-		<HStack minH="100vh" minW="100vw" align="start" bg={configContext?.theme ?? 'white'}>
+		<HStack minH="100vh" minW="100vw" align="start" bg={config?.theme ?? 'white'}>
 			<ResponsiveBar
 				onOpenProgram={onOpenProgram}
 				onOpenGithub={onOpenGithub}
@@ -146,6 +150,7 @@ const Dashboard = (): JSX.Element => {
 				isDeployLoading={isDeployLoading}
 				isGithubLoading={isGithubLoading}
 				selectedTab={selectedTab}
+				configTheme={config?.theme ?? 'white'}
 			/>
 			<VStack w="100%" m="32px !important">
 				<Box w="100%">

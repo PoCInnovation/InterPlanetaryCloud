@@ -19,7 +19,7 @@ import { useConfigContext } from 'contexts/config';
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
-	const { setConfig } = useConfigContext();
+	const { config, setConfig } = useConfigContext();
 	const router = useRouter();
 
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -80,7 +80,7 @@ const Signup = (): JSX.Element => {
 						<Text fontSize="14px">Already got an account ?</Text>
 						<Link href="/login">
 							<div style={{ width: '100%' }}>
-								<OutlineButton w="100%" text="Login" id="ipc-signup-login-button" />
+								<OutlineButton configTheme={config?.theme} w="100%" text="Login" id="ipc-signup-login-button" />
 							</div>
 						</Link>
 					</VStack>
