@@ -17,6 +17,7 @@ import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayCards } from 'components/DisplayCards';
 import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import CustomProgram from 'components/computing/CustomProgram';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -193,15 +194,11 @@ const Dashboard = (): JSX.Element => {
 				}
 			>
 				<>
-					<Input
-						placeholder="[Optional] Program name"
-						value={customName}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomName(e.target.value)}
-					/>
-					<Input
-						placeholder="[Optional] Program entrypoint"
-						value={customEntrypoint}
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomEntrypoint(e.target.value)}
+					<CustomProgram
+						customName={customName}
+						setCustomName={setCustomName}
+						customEntrypoint={customEntrypoint}
+						setCustomEntrypoint={setCustomEntrypoint}
 					/>
 					<Input
 						type="file"
@@ -241,15 +238,11 @@ const Dashboard = (): JSX.Element => {
 					{session && (
 						<>
 							<VStack spacing="5%">
-								<Input
-									placeholder="[Optional] Program name"
-									value={customName}
-									onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomName(e.target.value)}
-								/>
-								<Input
-									placeholder="[Optional] Program entrypoint"
-									value={customEntrypoint}
-									onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomEntrypoint(e.target.value)}
+								<CustomProgram
+									customName={customName}
+									setCustomName={setCustomName}
+									customEntrypoint={customEntrypoint}
+									setCustomEntrypoint={setCustomEntrypoint}
 								/>
 								<Select
 									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
