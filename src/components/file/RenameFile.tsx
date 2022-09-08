@@ -22,9 +22,10 @@ import { useUserContext } from 'contexts/user';
 
 type RenameFileProps = {
 	file: IPCFile;
+	concernedFiles: IPCFile[];
 };
 
-const RenameFile = ({ file }: RenameFileProps): JSX.Element => {
+const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -38,7 +39,7 @@ const RenameFile = ({ file }: RenameFileProps): JSX.Element => {
 	const renameFile = async () => {
 		setIsLoading(true);
 		if (name) {
-			const update = await user.contact.updateFileName(file, name);
+			const update = await user.contact.updateFileName(file, name, concernedFiles);
 			toast({ title: update.message, status: update.success ? 'success' : 'error' });
 			if (update.success) {
 				const index = files.indexOf(file);

@@ -72,13 +72,11 @@ class Contact {
 	}
 
 	private async loadUpdates() {
-		const me = this.contacts.find((contact) => contact.address === this.account?.address)!;
-
 		this.contacts.forEach(async (contact) => {
 			const updatableIds = contact.files.filter((file) => file.permission === 'editor').map((file) => file.id);
 			const updates = await post.Get({
 				APIServer: DEFAULT_API_V2,
-				types: '',
+				types: ['InterPlanetaryCloud'],
 				pagination: 200,
 				page: 1,
 				refs: [],
@@ -89,8 +87,14 @@ class Contact {
 			updates.posts.forEach(async (update) => {
 				const { tags, file } = <IPCUpdateContent>update.content;
 				const [type, fileId] = tags;
-				const index = me.files.findIndex((f) => f.id === fileId);
-				me.files[index] = file;
+
+				this.contacts.forEach(async (c) => {
+					const foundFile = c.files.find((f) => f.id === fileId);
+
+					if (foundFile && type === 'rename') {
+						foundFile.name = file.name;
+					}
+				});
 			});
 
 			await this.publishAggregate();
@@ -190,16 +194,33 @@ class Contact {
 		}
 	}
 
-	public async updateFileName(concernedFile: IPCFile, newName: string): Promise<ResponseType> {
+	public async updateFileName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
+			let fileFound = false;
 			this.contacts.forEach(async (contact) => {
 				const file = contact.files.find((f) => f.id === concernedFile.id);
 
 				if (file) {
 					file.name = newName;
+					fileFound = true;
 					await this.publishAggregate();
 				}
 			});
+			if (!fileFound) {
+				const file = sharedFiles.find((f) => f.id === concernedFile.id);
+				if (!file) {
+					return { success: false, message: 'File not found' };
+				}
+				await post.Publish({
+					account: this.account!,
+					postType: 'InterPlanetaryCloud',
+					content: { file: { ...concernedFile, name: newName }, tags: ['rename', concernedFile.id] },
+					channel: 'TEST',
+					APIServer: DEFAULT_API_V2,
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+				});
+			}
 			return { success: true, message: 'Filename updated' };
 		} catch (err) {
 			console.error(err);
