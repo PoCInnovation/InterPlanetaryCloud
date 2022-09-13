@@ -32,9 +32,11 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 
 	const [contact, setContact] = useState<IPCContact | null>(null);
 	const [permission, setPermission] = useState<IPCPermission>('viewer');
+	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const shareFile = async () => {
+		setIsLoading(true);
 		const share = await user.contact.addFileToContact(contact!.address, { ...file, permission });
 
 		toast({ title: share.message, status: share.success ? 'success' : 'error' });
@@ -42,6 +44,7 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 	};
 
 	const onUnmount = () => {
+		setIsLoading(false);
 		setContact(null);
 		setPermission('viewer');
 		onClose();
@@ -76,6 +79,7 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 								mb="16px"
 								id="ipc-dashboard-confirm-share-file-button"
 								onClick={shareFile}
+								isLoading={isLoading}
 							>
 								Share
 							</Button>

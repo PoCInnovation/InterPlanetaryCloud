@@ -49,6 +49,25 @@ class Contact {
 		});
 	}
 
+	private async getFileOwner(fileId: string): Promise<string | undefined> {
+		let owner;
+		await Promise.all(
+			this.contacts.map(async (contact) => {
+				const aggr = await aggregate.Get<AggregateType>({
+					APIServer: DEFAULT_API_V2,
+					address: contact.address,
+					keys: ['InterPlanetaryCloud'],
+				});
+
+				const myContact = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account!.address);
+				if (myContact?.files.find((f) => f.id === fileId)) {
+					owner = contact.publicKey;
+				}
+			}),
+		);
+		return owner;
+	}
+
 	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
@@ -91,8 +110,19 @@ class Contact {
 				this.contacts.forEach(async (c) => {
 					const foundFile = c.files.find((f) => f.id === fileId);
 
-					if (foundFile && type === 'rename') {
-						foundFile.name = file.name;
+					if (foundFile) {
+						if (type === 'rename') {
+							foundFile.name = file.name;
+						}
+						if (type === 'update') {
+							foundFile.hash = file.hash;
+							foundFile.size = file.size;
+							const newKey = await encryptWithPublicKey(
+								c.publicKey.slice(2),
+								await decryptWithPrivateKey(this.private_key, file.key),
+							);
+							foundFile.key = { ...newKey };
+						}
 					}
 				});
 			});
@@ -172,22 +202,41 @@ class Contact {
 
 	public async updateFileContent(newFile: IPCFile): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				this.contacts.forEach(async (contact, i) => {
-					const file = this.contacts[i].files.find((f) => f.id === newFile.id);
+			let fileFound = false;
+			this.contacts.forEach(async (contact, i) => {
+				const file = this.contacts[i].files.find((f) => f.id === newFile.id);
 
-					if (file) {
-						file.hash = newFile.hash;
-						file.key = await encryptWithPublicKey(
-							contact.publicKey.slice(2),
-							await decryptWithPrivateKey(this.private_key, newFile.key),
-						);
-						await this.publishAggregate();
-					}
+				if (file) {
+					file.hash = newFile.hash;
+					file.key = await encryptWithPublicKey(
+						contact.publicKey.slice(2),
+						await decryptWithPrivateKey(this.private_key, newFile.key),
+					);
+					fileFound = true;
+					await this.publishAggregate();
+				}
+			});
+
+			if (!fileFound) {
+				const owner = await this.getFileOwner(newFile.id);
+				if (!owner) {
+					return { success: false, message: 'File not found' };
+				}
+				const fileKey = await encryptWithPublicKey(
+					owner.slice(2),
+					await decryptWithPrivateKey(this.private_key, newFile.key),
+				);
+				await post.Publish({
+					account: this.account!,
+					postType: 'InterPlanetaryCloud',
+					content: { file: { ...newFile, key: fileKey }, tags: ['update', newFile.id] },
+					channel: 'TEST',
+					APIServer: DEFAULT_API_V2,
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
 				});
-				return { success: true, message: 'File content updated' };
 			}
-			return { success: false, message: 'Failed to load account' };
+			return { success: true, message: 'File content updated' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to update the file content' };

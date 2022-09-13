@@ -39,6 +39,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		const newFile: IPCFile = {
 			...oldFile,
 			hash: fileContent,
+			size: fileEvent.target.files![0].size,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 		};
 		setIsLoading(true);
@@ -53,8 +54,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 				if (index !== -1) files[index] = upload.file;
 				setFiles(files);
 
-				const deleted = await user.drive.delete([oldFile.hash]);
-				toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
+				await user.drive.delete([oldFile.hash]);
 			}
 		}
 		setIsLoading(false);
