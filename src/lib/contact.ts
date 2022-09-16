@@ -113,8 +113,7 @@ class Contact {
 					if (foundFile) {
 						if (type === 'rename') {
 							foundFile.name = file.name;
-						}
-						if (type === 'update') {
+						} else if (type === 'update') {
 							foundFile.hash = file.hash;
 							foundFile.size = file.size;
 							const newKey = await encryptWithPublicKey(
@@ -122,6 +121,9 @@ class Contact {
 								await decryptWithPrivateKey(this.private_key, file.key),
 							);
 							foundFile.key = { ...newKey };
+						} else if (type === 'delete') {
+							const owner = this.contacts.find((co) => co.address === c.address)!;
+							owner.files = owner.files.filter((f) => f.id !== fileId);
 						}
 					}
 				});
@@ -295,7 +297,7 @@ class Contact {
 					};
 
 					this.contacts[index].files.push(newFile);
-					await this.publishAggregate();
+					this.publishAggregate();
 					return { success: true, message: 'File shared with the contact' };
 				}
 				return { success: false, message: 'Contact does not exist' };
@@ -307,20 +309,31 @@ class Contact {
 		}
 	}
 
-	public async removeFilesFromContact(address: string, ids: string[]): Promise<ResponseType> {
+	public async deleteFiles(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				const index = this.contacts.findIndex((contact) => contact.address === address);
+			ids.forEach(async (id) => {
+				const me = this.contacts.find((c) => c.address === this.account?.address)!;
+				const file = me.files.find((f) => f.id === id);
 
-				if (index !== -1) {
-					this.contacts[index].files = this.contacts[index].files.filter((f) => !ids.includes(f.id));
-
-					await this.publishAggregate();
-					return { success: true, message: 'File deleted from the contact' };
+				if (file) {
+					me.files = me.files.filter((f) => f.id !== id);
+				} else {
+					const sharedFile = sharedFiles.find((f) => f.id === id);
+					if (sharedFile) {
+						post.Publish({
+							account: this.account!,
+							postType: 'InterPlanetaryCloud',
+							content: { file, tags: ['delete', id] },
+							channel: 'TEST',
+							APIServer: DEFAULT_API_V2,
+							inlineRequested: true,
+							storageEngine: ItemType.ipfs,
+						});
+					}
 				}
-				return { success: false, message: 'Contact does not exist' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			});
+			this.publishAggregate();
+			return { success: true, message: 'File deleted from the contact' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to delete the file from the contact' };

@@ -7,27 +7,31 @@ import type { IPCFile } from 'types/types';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+import { useState } from 'react';
 
 type DeleteFileProps = {
 	file: IPCFile;
+	concernedFiles: IPCFile[];
 };
 
-const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
+const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const { config } = useConfigContext();
 	const colorText = useColorModeValue('gray.800', 'white');
 
+	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const deleteFile = async () => {
+		setIsLoading(true);
 		if (user.account) {
 			const deleted = await user.drive.delete([file.hash]);
 
 			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			if (deleted.success) {
-				const removed = await user.contact.removeFilesFromContact(user.account.address, [file.id]);
+				const removed = await user.contact.deleteFiles([file.id], concernedFiles);
 
 				if (!removed.success) {
 					toast({ title: removed.message, status: 'error' });
@@ -38,6 +42,7 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 		} else {
 			toast({ title: 'Failed to load account', status: 'error' });
 		}
+		setIsLoading(false);
 		onClose();
 	};
 
@@ -69,6 +74,7 @@ const DeleteFile = ({ file }: DeleteFileProps): JSX.Element => {
 							w="100%"
 							mb="16px"
 							onClick={async () => deleteFile()}
+							isLoading={isLoading}
 							id="ipc-dashboard-delete-file-button"
 						>
 							Delete

@@ -145,7 +145,7 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 										<MoveFile file={file} />
 										<RenameFile file={file} concernedFiles={files} />
 										<UpdateContentFile file={file} />
-										<DeleteFile file={file} />
+										<DeleteFile file={file} concernedFiles={files} />
 									</PopoverContent>
 								</Portal>
 							</Popover>

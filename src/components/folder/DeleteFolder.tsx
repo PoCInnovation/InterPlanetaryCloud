@@ -40,9 +40,9 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 				const filesToDelete = user.drive.files.filter((file) => file.path.startsWith(fullPath));
 				if (filesToDelete.length > 0) {
 					const filesResponse = await user.drive.delete(filesToDelete.map((file) => file.hash));
-					await user.contact.removeFilesFromContact(
-						user.account.address,
+					await user.contact.deleteFiles(
 						filesToDelete.map((file) => file.id),
+						[],
 					);
 					foldersResponse.success = filesResponse.success;
 				}
