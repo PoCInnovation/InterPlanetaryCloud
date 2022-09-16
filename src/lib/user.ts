@@ -6,8 +6,6 @@ import { mnemonicToPrivateKey } from 'utils/mnemonicToPrivateKey';
 import Drive from 'lib/drive';
 import Contact from 'lib/contact';
 import Computing from 'lib/computing';
-import { IPCConfig } from 'types/types';
-
 import { IPCConfig, AggregateType, IPCContact } from 'types/types';
 
 class User {
