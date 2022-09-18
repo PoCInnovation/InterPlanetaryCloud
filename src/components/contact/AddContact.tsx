@@ -24,6 +24,7 @@ const AddContact = (): JSX.Element => {
 				publicKey: contactPublicKey,
 				files: [],
 				folders: [],
+				config: undefined,
 			});
 
 			toast({ title: add.message, status: add.success ? 'success' : 'error' });

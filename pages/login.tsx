@@ -10,8 +10,8 @@ import { useUserContext } from 'contexts/user';
 import AuthPage from 'components/AuthPage';
 import OutlineButton from 'components/OutlineButton';
 
-import colors from 'theme/foundations/colors';
 import { useConfigContext } from 'contexts/config';
+import colors from 'theme/foundations/colors';
 
 const Login = (): JSX.Element => {
 	const auth = useAuthContext();
@@ -26,7 +26,7 @@ const Login = (): JSX.Element => {
 
 	const loginWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
-		const login = await auth.loginWithCredentials(mnemonics);
+		const login = await auth.loginWithCredentials(mnemonics, config);
 		setIsLoadingCredentials(false);
 
 		if (login.user) {

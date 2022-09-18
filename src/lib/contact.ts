@@ -440,7 +440,7 @@ class Contact {
 			if (this.account) {
 				const contact = this.contacts.find((c) => c.address === this.account?.address);
 				if (contact) {
-					contact.config.theme = newTheme;
+					contact.config!.theme = newTheme;
 					await this.publishAggregate();
 					return { success: true, message: 'Theme change' };
 				}

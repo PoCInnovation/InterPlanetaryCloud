@@ -36,7 +36,7 @@ export type IPCContact = {
 	publicKey: string;
 	files: IPCFile[];
 	folders: IPCFolder[];
-	config: IPCConfig;
+	config: IPCConfig | undefined;
 };
 
 export type IPCPermission = 'owner' | 'viewer' | 'editor';
@@ -58,7 +58,6 @@ export type UploadResponse = ResponseType & {
 export type AggregateContentType = {
 	programs: IPCProgram[];
 	contacts: IPCContact[];
-	config: IPCConfig;
 };
 
 export type AggregateType = {
