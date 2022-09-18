@@ -26,12 +26,12 @@ describe('Deploy a program modal for Dashboard', () => {
 	it('Good number of buttons after deployment', () => {
 		cy.get('#ipc-dashboard-deploy-program').attachFile(fixtureFile);
 		cy.get('#ipc-dashboard-deploy-program-modal-button').click();
-		cy.wait(2000);
-		cy.get('button').should('have.length', 12);
+		cy.wait(20000);
+		cy.get('button').should('have.length', 14);
 	});
 
 	it('Good number of buttons after closing modal', () => {
 		cy.get('#ipc-modal-close-button').click();
-		cy.get('button').should('have.length', 11);
+		cy.get('button').should('have.length', 12);
 	});
 });

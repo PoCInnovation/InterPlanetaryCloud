@@ -3,6 +3,7 @@ import { Modal as UIModal, ModalBody, ModalContent, ModalFooter, ModalHeader, Mo
 import colors from 'theme/foundations/colors';
 
 import OutlineButton from 'components/OutlineButton';
+import { useConfigContext } from 'contexts/config';
 
 type ModalProps = {
 	isOpen: boolean;
@@ -10,6 +11,12 @@ type ModalProps = {
 	title: string;
 	children: JSX.Element;
 	CTA?: JSX.Element;
+};
+
+const ContextColor = () => {
+	const { config } = useConfigContext();
+	if (config?.theme === 'gray.800') return 'gray.700';
+	return 'white';
 };
 
 const Modal = ({ isOpen, onClose, title, children, CTA }: ModalProps): JSX.Element => (
@@ -30,7 +37,13 @@ const Modal = ({ isOpen, onClose, title, children, CTA }: ModalProps): JSX.Eleme
 
 			<ModalFooter flexDirection="column" alignItems="center">
 				{CTA}
-				<OutlineButton w="100%" text="Close" onClick={onClose} id="ipc-modal-close-button" />
+				<OutlineButton
+					configTheme={ContextColor()}
+					w="100%"
+					text="Close"
+					onClick={onClose}
+					id="ipc-modal-close-button"
+				/>
 			</ModalFooter>
 		</ModalContent>
 	</UIModal>

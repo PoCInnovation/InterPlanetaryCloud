@@ -1,6 +1,8 @@
-import node_path from 'path';
 import _clone from 'git-clone';
+import node_path from 'path';
+
 import { GITCLONE_DIR } from 'config/constants';
+
 import { createDir, fileExists, rmdir } from 'utils/fsPromise';
 
 function getRepoName(repoUrl: string): string {

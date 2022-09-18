@@ -1,6 +1,6 @@
+import { Button, HStack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { useDriveContext } from 'contexts/drive';
 import { useEffect, useState } from 'react';
-import { Button, HStack, Text, useToast, useDisclosure } from '@chakra-ui/react';
 import { FcFullTrash } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
@@ -40,9 +40,9 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 				const filesToDelete = user.drive.files.filter((file) => file.path.startsWith(fullPath));
 				if (filesToDelete.length > 0) {
 					const filesResponse = await user.drive.delete(filesToDelete.map((file) => file.hash));
-					await user.contact.removeFilesFromContact(
-						user.account.address,
-						filesToDelete.map((file) => file.hash),
+					await user.contact.deleteFiles(
+						filesToDelete.map((file) => file.id),
+						[],
 					);
 					foldersResponse.success = filesResponse.success;
 				}

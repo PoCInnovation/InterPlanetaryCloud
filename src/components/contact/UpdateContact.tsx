@@ -1,13 +1,13 @@
-import { ChangeEvent, useState } from 'react';
-import { Button, Input, FormControl, FormLabel, useToast, useDisclosure } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
+import { Button, FormControl, FormLabel, Input, useDisclosure, useToast } from '@chakra-ui/react';
+import { ChangeEvent, useState } from 'react';
 
 import Modal from 'components/Modal';
 
 import type { IPCContact } from 'types/types';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 type UpdateContactProps = {
 	contact: IPCContact;

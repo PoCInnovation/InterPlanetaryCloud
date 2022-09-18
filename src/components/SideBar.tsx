@@ -1,27 +1,26 @@
 import {
+	Button,
+	HStack,
+	Popover,
+	PopoverBody,
+	PopoverContent,
+	PopoverFooter,
+	PopoverHeader,
+	PopoverTrigger,
+	Portal,
 	Tab,
 	TabList,
 	Tabs,
 	Text,
 	VStack,
-	Popover,
-	PopoverTrigger,
-	Portal,
-	PopoverContent,
-	Button,
-	PopoverHeader,
-	PopoverFooter,
-	PopoverBody,
-	HStack,
 } from '@chakra-ui/react';
-
 import { FcRules } from 'react-icons/fc';
 import { GoMarkGithub } from 'react-icons/go';
 
 import colors from 'theme/foundations/colors';
 
+import UploadFile from 'components/file/UploadFile';
 import CreateFolder from 'components/folder/CreateFolder';
-import UploadFile from './file/UploadFile';
 
 type SideBarPropsType = {
 	contactTab: string;
@@ -29,10 +28,12 @@ type SideBarPropsType = {
 	sharedFilesTab: string;
 	myProgramsTab: string;
 	profileTab: string;
+	configTab: string;
 	deployButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
 	githubButton: JSX.Element;
 	currentTabIndex: number;
+	configTheme: string;
 };
 
 const SideBar = ({
@@ -41,10 +42,12 @@ const SideBar = ({
 	sharedFilesTab,
 	myProgramsTab,
 	profileTab,
+	configTab,
 	deployButton,
 	githubButton,
 	setSelectedTab,
 	currentTabIndex,
+	configTheme,
 }: SideBarPropsType): JSX.Element => (
 	<VStack
 		h="100vh"
@@ -72,7 +75,7 @@ const SideBar = ({
 					</Button>
 				</PopoverTrigger>
 				<Portal>
-					<PopoverContent w="300px">
+					<PopoverContent w="300px" bg={configTheme}>
 						<PopoverHeader>
 							<CreateFolder />
 						</PopoverHeader>
@@ -135,6 +138,14 @@ const SideBar = ({
 						}}
 					>
 						{profileTab}
+					</Tab>
+					<Tab
+						borderLeft={`5px solid ${colors.blue[700]}`}
+						_selected={{
+							borderLeft: `5px solid ${colors.red[700]}`,
+						}}
+					>
+						{configTab}
 					</Tab>
 				</TabList>
 			</Tabs>

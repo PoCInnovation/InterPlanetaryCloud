@@ -1,10 +1,9 @@
-import { Box, Button, HStack, Text } from '@chakra-ui/react';
-
-import ProgramCard from 'components/ProgramCard';
+import { Box, Button, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 
 import type { IPCProgram } from 'types/types';
 
 import { RedeployButton } from 'components/CustomButtons';
+import ProgramCard from 'components/ProgramCard';
 import { FcRules } from 'react-icons/fc';
 
 type ProgramCardsProps = {
@@ -12,6 +11,11 @@ type ProgramCardsProps = {
 	onOpenRedeployProgram: () => void;
 	isRedeployLoading: boolean;
 	setSelectedProgram: (program: IPCProgram) => void;
+};
+
+const ChoseColor = () => {
+	const colorText = useColorModeValue('gray.800', 'white');
+	return colorText;
 };
 
 const ProgramCards = ({
@@ -27,7 +31,7 @@ const ProgramCards = ({
 					<Box w="25%">
 						<HStack>
 							<FcRules display="flex" size="40"></FcRules>
-							<Text>{program.name}</Text>
+							<Text textColor={ChoseColor()}>{program.name}</Text>
 						</HStack>
 					</Box>
 					<Box w="45%">
@@ -52,7 +56,7 @@ const ProgramCards = ({
 							isLoading={isRedeployLoading}
 						/>
 					</Box>
-					<Text>
+					<Text textColor={ChoseColor()}>
 						{`${new Date(program.createdAt).toString().substring(4, 15).slice(0, 3)} /${new Date(program.createdAt)
 							.toString()
 							.substring(4, 15)

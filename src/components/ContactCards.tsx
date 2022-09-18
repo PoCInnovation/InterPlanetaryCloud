@@ -1,5 +1,5 @@
-import { Box, Button, Divider, Tooltip, VStack } from '@chakra-ui/react';
 import { CopyIcon } from '@chakra-ui/icons';
+import { Box, Button, Divider, Tooltip, VStack } from '@chakra-ui/react';
 
 import ContactCard from 'components/ContactCard';
 
