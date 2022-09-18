@@ -1,3 +1,4 @@
+import { HamburgerIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
@@ -13,11 +14,11 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
 
 import colors from 'theme/foundations/colors';
-import Sidebar from 'components/SideBar';
+
 import { DeployButton, GithubDeployButton } from 'components/CustomButtons';
+import Sidebar from 'components/SideBar';
 
 type BarProps = {
 	onOpenProgram: () => void;
@@ -26,6 +27,7 @@ type BarProps = {
 	setSelectedTab: (tab: number) => void;
 	isGithubLoading: boolean;
 	selectedTab: number;
+	configTheme: string;
 };
 
 export const LeftBar = ({
@@ -35,6 +37,7 @@ export const LeftBar = ({
 	onOpenGithub,
 	setSelectedTab,
 	selectedTab,
+	configTheme,
 }: BarProps): JSX.Element => (
 	<Sidebar
 		deployButton={<DeployButton onClick={onOpenProgram} isLoading={isDeployLoading} />}
@@ -43,9 +46,11 @@ export const LeftBar = ({
 		myFilesTab="My files"
 		myProgramsTab="My programs"
 		profileTab="My profile"
+		configTab="Config"
 		sharedFilesTab="Shared with me"
 		setSelectedTab={setSelectedTab}
 		currentTabIndex={selectedTab}
+		configTheme={configTheme}
 	/>
 );
 
@@ -56,6 +61,7 @@ export const BarWithDrawer = ({
 	onOpenGithub,
 	isGithubLoading,
 	selectedTab,
+	configTheme,
 }: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
 	const placement: SlideDirection = 'left';
@@ -72,6 +78,7 @@ export const BarWithDrawer = ({
 						setSelectedTab={setSelectedTab}
 						isDeployLoading={isDeployLoading}
 						selectedTab={selectedTab}
+						configTheme={configTheme}
 					/>
 				</DrawerContent>
 			</Drawer>
@@ -106,6 +113,7 @@ export const ResponsiveBar = ({
 	setSelectedTab,
 	isDeployLoading,
 	selectedTab,
+	configTheme,
 }: BarProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
 
@@ -118,6 +126,7 @@ export const ResponsiveBar = ({
 				setSelectedTab={setSelectedTab}
 				isDeployLoading={isDeployLoading}
 				selectedTab={selectedTab}
+				configTheme={configTheme}
 			/>
 		);
 	return (
@@ -128,6 +137,7 @@ export const ResponsiveBar = ({
 			isGithubLoading={isGithubLoading}
 			isDeployLoading={isDeployLoading}
 			selectedTab={selectedTab}
+			configTheme={configTheme}
 		/>
 	);
 };

@@ -29,20 +29,15 @@ describe('Upload a file modal in Dashboard', () => {
 	it('Good number of buttons after upload', () => {
 		cy.get('#ipc-dashboard-upload-file').attachFile(fixtureFile);
 		cy.get('#ipc-dashboard-upload-file-modal-button').click();
-		cy.wait(2000);
-		cy.get('button').should('have.length', 13);
-	});
-
-	it('Good number of buttons after closing modal', () => {
-		cy.get('#ipc-modal-close-button').click();
-		cy.get('button').should('have.length', 18);
+		cy.wait(20000);
+		cy.get('button').should('have.length', 19);
 	});
 
 	it('Good number of buttons after failed upload', () => {
 		cy.get('#ipc-dashboard-upload-file').attachFile(emptyFixtureFile, { allowEmpty: true });
 		cy.get('#ipc-dashboard-upload-file-modal-button').click();
-		cy.wait(2000);
-		cy.get('button').should('have.length', 20);
+		cy.wait(20000);
+		cy.get('button').should('have.length', 21);
 	});
 });
 

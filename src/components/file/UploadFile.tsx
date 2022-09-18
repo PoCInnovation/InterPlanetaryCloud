@@ -1,24 +1,28 @@
+import { Button, HStack, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { Button, HStack, Input, useDisclosure, useToast } from '@chakra-ui/react';
 import { FcFile } from 'react-icons/fc';
+import { v4 as uuid } from 'uuid';
 
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
 
+import { extractFilename, getFileContent } from 'utils/fileManipulation';
 import { generateFileKey } from 'utils/generateFileKey';
-import { getFileContent, extractFilename } from 'utils/fileManipulation';
 
-import { useUserContext } from 'contexts/user';
+import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
+	const { config } = useConfigContext();
 	const { path, files, setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
@@ -34,12 +38,14 @@ const UploadFile = (): JSX.Element => {
 		}
 
 		const file: IPCFile = {
+			id: uuid(),
 			name: filename,
 			hash: fileContent,
 			size: fileEvent.target.files![0].size,
 			createdAt: Date.now(),
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
 			path,
+			permission: 'owner',
 		};
 
 		if (user.account) {
@@ -66,7 +72,8 @@ const UploadFile = (): JSX.Element => {
 			<FcFile display="flex" size="40"></FcFile>
 			<Button
 				w="100%"
-				backgroundColor={'white'}
+				backgroundColor={config?.theme}
+				textColor={colorText}
 				justifyContent="flex-start"
 				onClick={onOpen}
 				isLoading={isLoading}

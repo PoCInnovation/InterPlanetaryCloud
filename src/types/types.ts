@@ -1,12 +1,14 @@
 import { Encrypted } from 'eth-crypto';
 
 export type IPCFile = {
+	id: string;
 	hash: string;
 	key: Encrypted;
 	name: string;
 	size: number;
 	createdAt: number;
 	path: string;
+	permission: IPCPermission;
 };
 
 export type IPCFolder = {
@@ -19,6 +21,13 @@ export type IPCProgram = {
 	hash: string;
 	name: string;
 	createdAt: number;
+	entrypoint: string;
+};
+
+export type IPCConfig = {
+	theme: string;
+	defaultEntrypoint: string;
+	defaultName: string;
 };
 
 export type IPCContact = {
@@ -27,6 +36,14 @@ export type IPCContact = {
 	publicKey: string;
 	files: IPCFile[];
 	folders: IPCFolder[];
+	config: IPCConfig | undefined;
+};
+
+export type IPCPermission = 'owner' | 'viewer' | 'editor';
+
+export type IPCUpdateContent = {
+	tags: string[];
+	file: IPCFile;
 };
 
 export type ResponseType = {

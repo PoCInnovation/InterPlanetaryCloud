@@ -1,17 +1,17 @@
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
+	Box,
 	Button,
-	Text,
 	HStack,
 	Popover,
+	PopoverBody,
+	PopoverContent,
+	PopoverFooter,
 	PopoverTrigger,
 	Portal,
-	PopoverContent,
-	PopoverHeader,
-	PopoverBody,
-	PopoverFooter,
-	Box,
+	Text,
+	useColorModeValue,
 } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
@@ -28,27 +28,31 @@ import MoveFolder from 'components/folder/MoveFolder';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
-import { FcFile, FcFolder } from 'react-icons/fc';
+import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
+import { FcFile, FcFolder } from 'react-icons/fc';
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();
+	const colorText = useColorModeValue('gray.800', 'white');
+	const colorShadow = useColorModeValue('1px 2px 3px 3px rgb(240, 240, 240)', '1px 2px 3px 3px rgb(66, 66, 66)');
+	const { config } = useConfigContext();
 
 	if (path === '/') return <></>;
 
 	return (
 		<HStack w="100%">
 			<Button
-				backgroundColor={'white'}
+				backgroundColor={config?.theme}
 				size="sm"
 				w="10%"
 				p="0px"
 				mx="4px"
-				boxShadow="1px 2px 3px 3px rgb(240, 240, 240)"
+				boxShadow={colorShadow}
 				onClick={() => setPath(path.replace(/([^/]+)\/$/, ''))}
 				id="ipc-dashboard-back-path-button"
 			>
-				<ArrowBackIcon fontSize="30" />
+				<ArrowBackIcon fontSize="30" color={colorText} />
 			</Button>
 			<Text fontWeight="500" isTruncated>
 				{path}
@@ -64,6 +68,8 @@ type DriveCardsProps = {
 
 const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 	const { path, setPath } = useDriveContext();
+	const { config } = useConfigContext();
+	const colorText = useColorModeValue('gray.800', 'white');
 
 	return (
 		<>
@@ -76,7 +82,8 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 							<Button
 								display="flex"
 								w="70%"
-								backgroundColor={'white'}
+								backgroundColor={config?.theme ?? 'white'}
+								textColor={colorText}
 								className="ipc-folder-popover-button"
 								justifyContent="start"
 								onClick={() => setPath(`${path}${folder.name}/`)}
@@ -90,7 +97,8 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 									<Button
 										display="flex"
 										w="5%"
-										backgroundColor={'white'}
+										backgroundColor={config?.theme ?? 'white'}
+										textColor={colorText}
 										className="ipc-folder-popover-button"
 										justifyContent="start"
 									>
@@ -122,39 +130,28 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 									<Button
 										display="flex"
 										w="100%"
-										backgroundColor={'white'}
+										backgroundColor={config?.theme ?? 'white'}
 										className="ipc-file-popover-button"
 										justifyContent="start"
+										textColor={colorText}
 									>
 										{file.name}
 									</Button>
 								</PopoverTrigger>
 								<Portal>
-									<PopoverContent w="300px">
-										<PopoverHeader>
-											<DownloadFile file={file} />
-										</PopoverHeader>
-										<PopoverHeader>
-											<ShareFile file={file} />
-										</PopoverHeader>
-										<PopoverBody>
-											<MoveFile file={file} />
-										</PopoverBody>
-										<PopoverBody>
-											<RenameFile file={file} />
-										</PopoverBody>
-										<PopoverFooter>
-											<UpdateContentFile file={file} />
-										</PopoverFooter>
-										<PopoverFooter>
-											<DeleteFile file={file} />
-										</PopoverFooter>
+									<PopoverContent w="300px" backgroundColor={config?.theme ?? 'white'}>
+										<DownloadFile file={file} />
+										<ShareFile file={file} />
+										<MoveFile file={file} />
+										<RenameFile file={file} concernedFiles={files} />
+										<UpdateContentFile file={file} />
+										<DeleteFile file={file} concernedFiles={files} />
 									</PopoverContent>
 								</Portal>
 							</Popover>
 						</HStack>
 						<Box w="33%">
-							<Text>
+							<Text textColor={colorText}>
 								{`${new Date(file.createdAt).toString().substring(4, 15).slice(0, 3)} /${new Date(file.createdAt)
 									.toString()
 									.substring(4, 15)
@@ -162,7 +159,7 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 							</Text>
 						</Box>
 						<Box>
-							<Text>{file.size / 1000} ko</Text>
+							<Text textColor={colorText}>{file.size / 1000} ko</Text>
 						</Box>
 					</>
 				</FileCard>

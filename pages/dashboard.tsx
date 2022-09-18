@@ -1,26 +1,30 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useSession, signIn, signOut } from 'next-auth/react';
 import axios from 'axios';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import { Box, VStack, Button, HStack, useDisclosure, useToast, Input, Select } from '@chakra-ui/react';
+import { Box, Button, HStack, Input, Select, useColorMode, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile, IPCProgram, GitHubRepository } from 'types/types';
+import type { GitHubRepository, IPCFile, IPCProgram } from 'types/types';
 
 import Modal from 'components/Modal';
 
 import { extractFilename } from 'utils/fileManipulation';
 
-import { ResponsiveBar } from 'components/ResponsiveBar';
+import CustomProgram from 'components/computing/CustomProgram';
 import { DisplayCards } from 'components/DisplayCards';
+import { ResponsiveBar } from 'components/ResponsiveBar';
+import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
 	const { user } = useUserContext();
+	const { config, setConfig } = useConfigContext();
+	const { colorMode, toggleColorMode } = useColorMode();
 	const { isOpen: isOpenProgram, onOpen: onOpenProgram, onClose: onCloseProgram } = useDisclosure();
 	const { isOpen: isOpenGithub, onOpen: onOpenGithub, onClose: onCloseGithub } = useDisclosure();
 	const { setFiles, setFolders, setContacts } = useDriveContext();
@@ -34,9 +38,12 @@ const Dashboard = (): JSX.Element => {
 		name: '',
 		hash: '',
 		createdAt: 0,
+		entrypoint: '',
 	});
 	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
+	const [customName, setCustomName] = useState<string>('');
+	const [customEntrypoint, setCustomEntrypoint] = useState<string>('');
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -68,6 +75,13 @@ const Dashboard = (): JSX.Element => {
 		const loadedPrograms = await user.computing.load();
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
 		setPrograms(user.computing.programs);
+
+		const loadedConfig = await user.loadConfig();
+		setConfig(user.config);
+		console.log(user.config);
+		if (user.config?.theme === 'white' && colorMode !== 'light') toggleColorMode();
+		if (user.config?.theme === 'gray.800' && colorMode !== 'dark') toggleColorMode();
+		toast({ title: loadedConfig.message, status: loadedConfig.success ? 'success' : 'error' });
 	};
 
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
@@ -79,9 +93,10 @@ const Dashboard = (): JSX.Element => {
 		try {
 			const upload = await user.computing.uploadProgram(
 				{
-					name: filename,
+					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
+					entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -109,30 +124,35 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const cloneToBackend = async (repository: string) => {
-		axios
-			.post('/api/program/create', {
+		try {
+			setIsDeployLoading(true);
+			const result = await axios.post('/api/program/create', {
 				repository: `${repository}.git`,
-			})
-			.then(async (response) => {
-				const newProgram: IPCProgram = {
-					name: response.data.name,
-					hash: response.data.item_hash,
-					createdAt: Date.now(),
-				};
-				user.computing.programs.push(newProgram);
-				await user.computing.publishAggregate();
-				setPrograms(user.computing.programs);
-				toast({ title: 'Upload succeeded', status: 'success' });
-				onCloseGithub();
-			})
-			.catch((e) => {
-				toast({ title: 'Upload failed', status: 'error' });
-				console.error(e);
+				entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
 			});
+			if (result.status !== 200) throw new Error('Unable to clone repository from Github');
+			const newProgram: IPCProgram = {
+				name: customName || result.data.name,
+				hash: result.data.item_hash,
+				createdAt: Date.now(),
+				entrypoint: result.data.entrypoint,
+			};
+			user.computing.programs.push(newProgram);
+			await user.computing.publishAggregate();
+			setPrograms(user.computing.programs);
+			toast({ title: 'Upload succeeded', status: 'success' });
+			onCloseGithub();
+		} catch (err) {
+			toast({ title: 'Upload failed', status: 'error' });
+			console.error(err);
+		}
+		setIsDeployLoading(false);
+		setCustomEntrypoint('');
+		setCustomName('');
 	};
 
 	return (
-		<HStack minH="100vh" minW="100vw" align="start">
+		<HStack minH="100vh" minW="100vw" align="start" bg={config?.theme ?? 'white'}>
 			<ResponsiveBar
 				onOpenProgram={onOpenProgram}
 				onOpenGithub={onOpenGithub}
@@ -140,6 +160,7 @@ const Dashboard = (): JSX.Element => {
 				isDeployLoading={isDeployLoading}
 				isGithubLoading={isGithubLoading}
 				selectedTab={selectedTab}
+				configTheme={config?.theme ?? 'white'}
 			/>
 			<VStack w="100%" m="32px !important">
 				<Box w="100%">
@@ -172,14 +193,22 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<Input
-					type="file"
-					h="100%"
-					w="100%"
-					p="10px"
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboard-deploy-program"
-				/>
+				<>
+					<CustomProgram
+						customName={customName}
+						setCustomName={setCustomName}
+						customEntrypoint={customEntrypoint}
+						setCustomEntrypoint={setCustomEntrypoint}
+					/>
+					<Input
+						type="file"
+						h="100%"
+						w="100%"
+						p="10px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+						id="ipc-dashboard-deploy-program"
+					/>
+				</>
 			</Modal>
 			<Modal
 				isOpen={isOpenGithub}
@@ -209,6 +238,12 @@ const Dashboard = (): JSX.Element => {
 					{session && (
 						<>
 							<VStack spacing="5%">
+								<CustomProgram
+									customName={customName}
+									setCustomName={setCustomName}
+									customEntrypoint={customEntrypoint}
+									setCustomEntrypoint={setCustomEntrypoint}
+								/>
 								<Select
 									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
 									placeholder="Select repository"

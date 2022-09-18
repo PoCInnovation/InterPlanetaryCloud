@@ -1,21 +1,23 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import { Button, FormControl, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
 
-import OutlineButton from 'components/OutlineButton';
 import AuthPage from 'components/AuthPage';
+import OutlineButton from 'components/OutlineButton';
 
+import { useConfigContext } from 'contexts/config';
 import colors from 'theme/foundations/colors';
 
 const Login = (): JSX.Element => {
 	const auth = useAuthContext();
 	const { setUser } = useUserContext();
 	const router = useRouter();
+	const { config } = useConfigContext();
 
 	const [mnemonics, setMnemonics] = useState('');
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -24,7 +26,7 @@ const Login = (): JSX.Element => {
 
 	const loginWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
-		const login = await auth.loginWithCredentials(mnemonics);
+		const login = await auth.loginWithCredentials(mnemonics, config);
 		setIsLoadingCredentials(false);
 
 		if (login.user) {
@@ -63,7 +65,7 @@ const Login = (): JSX.Element => {
 						<Text fontSize="14px">Create an account</Text>
 						<Link href="/signup">
 							<div style={{ width: '100%' }}>
-								<OutlineButton w="100%" text="Signup" id="ipc-login-signup-button" />
+								<OutlineButton configTheme={config?.theme} w="100%" text="Signup" id="ipc-login-signup-button" />
 							</div>
 						</Link>
 					</VStack>

@@ -1,12 +1,11 @@
-import { ChangeEvent, useState } from 'react';
-import { Button, Input, useToast, useDisclosure } from '@chakra-ui/react';
-
+import { Button, Input, useDisclosure, useToast } from '@chakra-ui/react';
 import EthCrypto from 'eth-crypto';
+import { ChangeEvent, useState } from 'react';
 
 import Modal from 'components/Modal';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 const AddContact = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -25,6 +24,7 @@ const AddContact = (): JSX.Element => {
 				publicKey: contactPublicKey,
 				files: [],
 				folders: [],
+				config: undefined,
 			});
 
 			toast({ title: add.message, status: add.success ? 'success' : 'error' });
