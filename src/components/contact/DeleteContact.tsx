@@ -1,10 +1,10 @@
-import { Button, useToast } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
+import { Button, useToast } from '@chakra-ui/react';
 
 import type { IPCContact } from 'types/types';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 type DeleteContactProps = {
 	contact: IPCContact;

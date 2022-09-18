@@ -1,5 +1,5 @@
-import { Box, VStack, Text, Flex, Tooltip, Button } from '@chakra-ui/react';
 import { CopyIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Text, Tooltip, VStack } from '@chakra-ui/react';
 
 import type { IPCContact } from 'types/types';
 

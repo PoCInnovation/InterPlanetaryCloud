@@ -1,24 +1,27 @@
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
 
-import { ChakraProvider, Center, Spinner, useToast } from '@chakra-ui/react';
+import { Center, ChakraProvider, ColorModeScript, Spinner, useToast } from '@chakra-ui/react';
 
 import theme from 'theme';
 import 'theme/index.css';
 
-import User from 'lib/user';
 import Auth from 'lib/auth';
-import type { IPCFile, IPCFolder, IPCContact } from 'types/types';
+import User from 'lib/user';
 
-import UserContext from 'contexts/user';
+import { IPCConfig, IPCContact, IPCFile, IPCFolder } from 'types/types';
+
 import AuthContext from 'contexts/auth';
+import ConfigContext from 'contexts/config';
 import DriveContext from 'contexts/drive';
+import UserContext from 'contexts/user';
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
+	const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
 	const [files, setFiles] = useState<IPCFile[]>([]);
 	const [folders, setFolders] = useState<IPCFolder[]>([]);
@@ -66,24 +69,27 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 				<link rel="icon" href="/ipc-logo.svg" />
 			</Head>
 			<ChakraProvider theme={theme} resetCSS>
+				<ColorModeScript initialColorMode={theme.config.initialColorMode} />
 				<AuthContext.Provider value={auth}>
 					<UserContext.Provider value={{ user: user as User, setUser }}>
-						<DriveContext.Provider
-							value={{
-								files,
-								setFiles,
-								folders,
-								setFolders,
-								contacts,
-								setContacts,
-								path,
-								setPath,
-							}}
-						>
-							<SessionProvider session={session}>
-								<Component {...pageProps} />
-							</SessionProvider>
-						</DriveContext.Provider>
+						<ConfigContext.Provider value={{ config: config as IPCConfig, setConfig }}>
+							<DriveContext.Provider
+								value={{
+									files,
+									setFiles,
+									folders,
+									setFolders,
+									contacts,
+									setContacts,
+									path,
+									setPath,
+								}}
+							>
+								<SessionProvider session={session}>
+									<Component {...pageProps} />
+								</SessionProvider>
+							</DriveContext.Provider>
+						</ConfigContext.Provider>
 					</UserContext.Provider>
 				</AuthContext.Provider>
 			</ChakraProvider>

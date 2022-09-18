@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import { Button } from '@chakra-ui/react';
+import Link from 'next/link';
 
-import OutlineButton from 'components/OutlineButton';
 import AuthPage from 'components/AuthPage';
+import OutlineButton from 'components/OutlineButton';
 
 const Home = (): JSX.Element => (
 	<AuthPage

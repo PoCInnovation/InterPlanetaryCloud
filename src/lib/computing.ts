@@ -1,17 +1,17 @@
-import { accounts, program, aggregate, forget } from 'aleph-sdk-ts';
-
+import { accounts, aggregate, forget, program } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType, AggregateMessage } from 'aleph-sdk-ts/messages/message';
-import { ALEPH_CHANNEL } from 'config/constants';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
 
-import type { IPCProgram, ResponseType, AggregateType, AggregateContentType } from 'types/types';
+import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
+
+import { ALEPH_CHANNEL } from 'config/constants';
 
 class Computing {
 	public programs: IPCProgram[];
 
-	private readonly account: accounts.base.Account | undefined;
+	private readonly account: accounts.ethereum.ETHAccount | undefined;
 
-	constructor(importedAccount: accounts.base.Account) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.programs = [];
 		this.account = importedAccount;
 	}
@@ -101,7 +101,7 @@ class Computing {
 					inlineRequested: true,
 					APIServer: DEFAULT_API_V2,
 					file: uploadFile,
-					entrypoint: 'main:app',
+					entrypoint: myProgram.entrypoint,
 				});
 
 				const newProgram: IPCProgram = {

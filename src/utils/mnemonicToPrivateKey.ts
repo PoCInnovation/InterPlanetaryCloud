@@ -1,3 +1,3 @@
-import * as ethers from 'ethers';
+import { Wallet } from 'ethers';
 
-export const mnemonicToPrivateKey = (mnemonic: string): string => ethers.Wallet.fromMnemonic(mnemonic).privateKey;
+export const mnemonicToPrivateKey = (mnemonic: string): string => Wallet.fromMnemonic(mnemonic).privateKey;

@@ -2,9 +2,9 @@ import { extendTheme } from '@chakra-ui/react';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
 // Foundation overrides
-import fonts from 'theme/foundations/fonts';
-import colors from 'theme/foundations/colors';
 import radius from 'theme/foundations/borderRadius';
+import colors from 'theme/foundations/colors';
+import fonts from 'theme/foundations/fonts';
 import shadows from 'theme/foundations/shadows';
 
 import Button from 'theme/components/button';
