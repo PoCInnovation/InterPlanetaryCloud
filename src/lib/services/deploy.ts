@@ -11,7 +11,7 @@ async function compress(path: string): Promise<string> {
 	return `${path}.zip`;
 }
 
-async function programPublish(path: string): Promise<string> {
+async function programPublish(path: string, entrypoint: string): Promise<string> {
 	const programHashPublishProgram = await program.publish({
 		channel: ALEPH_CHANNEL,
 		account: ethereum.NewAccount().account,
@@ -19,7 +19,7 @@ async function programPublish(path: string): Promise<string> {
 		inlineRequested: true,
 		APIServer: DEFAULT_API_V2,
 		file: fs.readFileSync(path),
-		entrypoint: `main:app`,
+		entrypoint,
 	});
 	return programHashPublishProgram.item_hash;
 }

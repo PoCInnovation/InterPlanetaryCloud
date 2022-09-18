@@ -17,6 +17,7 @@ import { ResponsiveBar } from 'components/ResponsiveBar';
 import { DisplayCards } from 'components/DisplayCards';
 import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import CustomProgram from 'components/computing/CustomProgram';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -37,9 +38,12 @@ const Dashboard = (): JSX.Element => {
 		name: '',
 		hash: '',
 		createdAt: 0,
+		entrypoint: '',
 	});
 	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
+	const [customName, setCustomName] = useState<string>('');
+	const [customEntrypoint, setCustomEntrypoint] = useState<string>('');
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -89,9 +93,10 @@ const Dashboard = (): JSX.Element => {
 		try {
 			const upload = await user.computing.uploadProgram(
 				{
-					name: filename,
+					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
+					entrypoint: customEntrypoint || user.config.defaultEntrypoint || 'main:app',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -119,26 +124,31 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const cloneToBackend = async (repository: string) => {
-		axios
-			.post('/api/program/create', {
+		try {
+			setIsDeployLoading(true);
+			const result = await axios.post('/api/program/create', {
 				repository: `${repository}.git`,
-			})
-			.then(async (response) => {
-				const newProgram: IPCProgram = {
-					name: response.data.name,
-					hash: response.data.item_hash,
-					createdAt: Date.now(),
-				};
-				user.computing.programs.push(newProgram);
-				await user.computing.publishAggregate();
-				setPrograms(user.computing.programs);
-				toast({ title: 'Upload succeeded', status: 'success' });
-				onCloseGithub();
-			})
-			.catch((e) => {
-				toast({ title: 'Upload failed', status: 'error' });
-				console.error(e);
+				entrypoint: customEntrypoint || user.config.defaultEntrypoint || 'main:app',
 			});
+			if (result.status !== 200) throw new Error('Unable to clone repository from Github');
+			const newProgram: IPCProgram = {
+				name: customName || result.data.name,
+				hash: result.data.item_hash,
+				createdAt: Date.now(),
+				entrypoint: result.data.entrypoint,
+			};
+			user.computing.programs.push(newProgram);
+			await user.computing.publishAggregate();
+			setPrograms(user.computing.programs);
+			toast({ title: 'Upload succeeded', status: 'success' });
+			onCloseGithub();
+		} catch (err) {
+			toast({ title: 'Upload failed', status: 'error' });
+			console.error(err);
+		}
+		setIsDeployLoading(false);
+		setCustomEntrypoint('');
+		setCustomName('');
 	};
 
 	return (
@@ -183,14 +193,22 @@ const Dashboard = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<Input
-					type="file"
-					h="100%"
-					w="100%"
-					p="10px"
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboard-deploy-program"
-				/>
+				<>
+					<CustomProgram
+						customName={customName}
+						setCustomName={setCustomName}
+						customEntrypoint={customEntrypoint}
+						setCustomEntrypoint={setCustomEntrypoint}
+					/>
+					<Input
+						type="file"
+						h="100%"
+						w="100%"
+						p="10px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+						id="ipc-dashboard-deploy-program"
+					/>
+				</>
 			</Modal>
 			<Modal
 				isOpen={isOpenGithub}
@@ -220,6 +238,12 @@ const Dashboard = (): JSX.Element => {
 					{session && (
 						<>
 							<VStack spacing="5%">
+								<CustomProgram
+									customName={customName}
+									setCustomName={setCustomName}
+									customEntrypoint={customEntrypoint}
+									setCustomEntrypoint={setCustomEntrypoint}
+								/>
 								<Select
 									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
 									placeholder="Select repository"

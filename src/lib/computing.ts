@@ -101,7 +101,7 @@ class Computing {
 					inlineRequested: true,
 					APIServer: DEFAULT_API_V2,
 					file: uploadFile,
-					entrypoint: 'main:app',
+					entrypoint: myProgram.entrypoint,
 				});
 
 				const newProgram: IPCProgram = {

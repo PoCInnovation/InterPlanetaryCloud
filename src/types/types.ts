@@ -19,6 +19,13 @@ export type IPCProgram = {
 	hash: string;
 	name: string;
 	createdAt: number;
+	entrypoint: string;
+};
+
+export type IPCConfig = {
+	theme: string;
+	defaultEntrypoint: string;
+	defaultName: string;
 };
 
 export type IPCContact = {
@@ -28,10 +35,6 @@ export type IPCContact = {
 	files: IPCFile[];
 	folders: IPCFolder[];
 	config: IPCConfig;
-};
-
-export type IPCConfig = {
-	theme: string;
 };
 
 export type ResponseType = {

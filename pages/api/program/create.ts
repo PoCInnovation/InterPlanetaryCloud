@@ -11,17 +11,18 @@ const router = createRouter<NextApiRequest, NextApiResponse>();
 const postSchema = Joi.object({
 	// eslint-disable-next-line no-useless-escape
 	repository: Joi.string().pattern(/((git|http(s)?)|(git@[\w\.]+))(:(\/\/)?)([\w\.@\:\/\-~]+)(\.git)(\/)?/),
+	entrypoint: Joi.string(),
 });
 
 router.post(validate({ body: postSchema }), async (req, res) => {
-	const { repository } = req.body;
+	const { repository, entrypoint } = req.body;
 	let itemHash = '';
 	await clone(repository).then(async (path: string) => {
 		const fileName: string = await compress(path);
-		itemHash = await programPublish(fileName);
+		itemHash = await programPublish(fileName, entrypoint);
 		// await cleanup(GITCLONE_DIR);
 	});
-	return res.status(200).json({ name: getProgramName(repository), item_hash: itemHash });
+	return res.status(200).json({ name: getProgramName(repository), item_hash: itemHash, entrypoint });
 });
 
 export default router.handler();

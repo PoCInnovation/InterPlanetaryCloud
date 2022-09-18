@@ -6,7 +6,6 @@ import { mnemonicToPrivateKey } from 'utils/mnemonicToPrivateKey';
 import Drive from 'lib/drive';
 import Contact from 'lib/contact';
 import Computing from 'lib/computing';
-
 import { IPCConfig, AggregateType, IPCContact } from 'types/types';
 
 class User {
@@ -45,9 +44,9 @@ class User {
 		}
 	}
 
-	constructor(importedAccount: accounts.base.Account, mnemonic: string) {
+	constructor(importedAccount: accounts.base.Account, mnemonic: string, importedConfig: IPCConfig) {
 		this.account = importedAccount;
-		this.config = undefined;
+		this.config = importedConfig;
 		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));
 		this.computing = new Computing(this.account);
 		this.contact = new Contact(this.account, mnemonicToPrivateKey(mnemonic));
