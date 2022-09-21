@@ -2,15 +2,17 @@
 
 InterPlanetaryCloud (IPC) is a distributed cloud built on top of [Aleph](https://aleph.im/#/), the next generation network of distributed big data applications.
 
+<div align="center">
+  <img src=".github/assets/home.png" width="80%" />
+</div>
+
 IPC offers two services :
 
 ***Cloud Storage***
 
 A distributed personal file storage and management system plateform, protecting your data.
 
-<div align="center">
-  <img src=".github/assets/ipc.gif" width="80%" />
-</div>
+<br>
 
 ***Cloud Computing***
 
@@ -69,16 +71,22 @@ You are now ready to access to your decentralized cloud at [`http://localhost:80
   <p>Files can be shared among contacts with viewer or editor permissions, allowing for collaboration on your drive 🚀</p>
 </details>
 
-<details>
-  <summary>Dashboard - Upload a program from github</summary>
+### Cloud Computing
+<img src=".github/assets/ipc-upload-a-program.png" width="80%" />
 
-![Dashboard Upload Program](.github/assets/ipc-upload-a-program.png)
+<details>
+  <summary>Upload and execute simple programs</summary>
+  <p>Using Aleph VMs, programs listening on port <code>8080</code> can be executed if their source code has a size under 1 MB.<br>
+  Large files sould be attached in a secondary volume, which is not a feature implemented on our side... yet :wink:<br><br>
+  The VMs support binary executables, shell scrips, NodeJS and Python ASGI programs.<br>
+  For further information, here is the [official aleph documentation](https://github.com/aleph-im/aleph-vm/blob/main/tutorials/README.md).</p>
 </details>
 
 <details>
-  <summary>Dashboard - User's profile</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-my-profile.png)
+  <summary>Import programs from GitHub</summary>
+  <p>Uploading programs compressed in an archive is great, but importing it directly from GitHub is way better 🚀<br>
+  GitHub OAuth was implemented in IPC to import public and private repositories.<br>
+  :warning: This feature is only available when running IPC locally as its using the filesystem to clone and zip the repository content</p>
 </details>
   
 
@@ -104,18 +112,6 @@ You're invited to join this project ! Check out the [contributing guide](./CONTR
 
 If you're interested in how the project is organized at a higher level, please contact the current project manager.
 
-### Dashboard - Upload a program from github
-
-Simple program registration on Aleph VMs is now possible. 
-
-- Programs must listen to port 8080
-- *Source code must be under 1 MB size.* It is unlikely that your node_modules or python packages, as well as other associated files such as pictures or videos, are under that limit. This is because large files should be attached in a secondary volume, which is not a feature implemented on our side... yet :wink: 
-
-- The VMs support binary executables, shell scripts, nodejs programs, and python ASGI programs.
-
- For further information, here is the [official aleph documentation](https://github.com/aleph-im/aleph-vm/blob/main/tutorials/README.md).
-
-
 
 ## Our PoC team :ok_hand:
 
@@ -140,7 +136,7 @@ Reviewers :
 
 ### September 2021 - April 2022
 Developers:
-| [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/lolboysg.png?size=85" width=85><br><sub>Matéo Viel</sub>](https://github.com/lolboysg)
+| [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/0xtekgrinder.png?size=85" width=85><br><sub>Matéo Viel</sub>](https://github.com/0xtekgrinder)
 | :---: | :---: |
 
 Project Managers:
