@@ -78,7 +78,6 @@ const Dashboard = (): JSX.Element => {
 
 		const loadedConfig = await user.loadConfig();
 		setConfig(user.config);
-		console.log(user.config);
 		if (user.config?.theme === 'white' && colorMode !== 'light') toggleColorMode();
 		if (user.config?.theme === 'gray.800' && colorMode !== 'dark') toggleColorMode();
 		toast({ title: loadedConfig.message, status: loadedConfig.success ? 'success' : 'error' });
