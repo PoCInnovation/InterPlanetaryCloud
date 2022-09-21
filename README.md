@@ -133,6 +133,12 @@ If you're interested in how the project is organized at a higher level, please c
 </details>
 
 <details>
+  <summary>Dashboard - Upload a program from github</summary>
+
+![Dashboard Upload Program](.github/assets/ipc-upload-a-program.png)
+</details>
+
+<details>
   <summary>Dashboard - User's profile</summary>
 
 ![Dashboard Upload](.github/assets/ipc-dashboard-my-profile.png)
@@ -163,12 +169,14 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 ---
 
+### Upload a file
+
 - For each file, a random key is generated and the content of the file is encrypted with this key.
 - The content is pushed into a store message via the aleph network.
 - The hash of the store message and the key are added to the 'Contacts' post message.
 
 <details>
-    <summary>Upload a file</summary>
+    <summary>Schema</summary>
 
 <img src=".github/assets/ipc-upload-a-file.png" width="50%" />
 
@@ -176,12 +184,14 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 ---
 
+### Load a file
+
 - For each contacts into the 'Post Message - Contacts', the files and contacts are get.
 - An occurrence between the address of the user and the contacts is searched.
 - For each file found, metadata about the files are retrieved.
 
 <details>
-    <summary>Load a file</summary>
+    <summary>Schema</summary>
 
 <img src=".github/assets/ipc-file-loading.png" width="50%" />
 
@@ -189,11 +199,13 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 ---
 
+### Download a file
+
 - The content is retrieved from the aleph network from his hash.
 - The content is decrypted with the key, itself decrypted with the private key of the user.
 
 <details>
-    <summary>Download a file</summary>
+    <summary>Schema</summary>
 
 <img src=".github/assets/ipc-download-a-file.png" width="50%" />
 
@@ -201,11 +213,13 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 ---
 
+Share a file
+
 - The hash and the key are encrypted with the public key of the contact.
 - These infos are added to the list of shared files of the contact.
 
 <details>
-    <summary>Share a file</summary>
+    <summary>Schema</summary>
 
 <img src=".github/assets/ipc-share-a-file.png" width="50%" />
 
@@ -213,17 +227,34 @@ We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
 ---
 
+### Post messages
+
 - One post message, with the list of contacts and the list of shared files for each contacts
 - The post message contains the info about the contact, his name, address, public key and a list of shared files
 
 <details>
-    <summary>Post messages</summary>
+    <summary>Schema</summary>
 
 <div>
 <img src=".github/assets/ipc-post-message.png" width="50%" />
 </div>
 
 </details>
+
+___
+
+### Dashboard - Upload a program from github
+
+Simple program registration on Aleph VMs is now possible. 
+
+- Programs must listen to port 8080
+- *Source code must be under 1 MB size.* It is unlikely that your node_modules or python packages, as well as other associated files such as pictures or videos, are under that limit. This is because large files should be attached in a secondary volume, which is not a feature implemented on our side... yet :wink: 
+
+- The VMs support binary executables, shell scripts, nodejs programs, and python ASGI programs.
+
+ For further information, [this](https://github.com/aleph-im/aleph-vm/blob/main/tutorials/README.md) is the official aleph documentation.
+
+
 
 ## Our PoC team :ok_hand:
 
