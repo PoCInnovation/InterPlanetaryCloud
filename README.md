@@ -2,15 +2,17 @@
 
 InterPlanetaryCloud (IPC) is a distributed cloud built on top of [Aleph](https://aleph.im/#/), the next generation network of distributed big data applications.
 
+<div align="center">
+  <img src=".github/assets/home.png" width="80%" />
+</div>
+
 IPC offers two services :
 
 ***Cloud Storage***
 
 A distributed personal file storage and management system plateform, protecting your data.
 
-<div align="center">
-  <img src=".github/assets/ipc.gif" width="80%" />
- </div>
+<br>
 
 ***Cloud Computing***
 
@@ -42,109 +44,58 @@ docker build . -t ipc:latest
 
 ```
 # Run IPC docker image
-docker run -p 8080:80 ipc:latest
+docker run -p 8080:8080 ipc:latest
 ```
 
 You are now ready to access to your decentralized cloud at [`http://localhost:8080`](http://localhost:8080) :boom: !
 
-## Get involved
-
-You're invited to join this project ! Check out the [contributing guide](./CONTRIBUTING.md).
-
-If you're interested in how the project is organized at a higher level, please contact the current project manager.
-
 ## Features :dizzy:
 
+### Cloud Storage
+
+<img src=".github/assets/ipc-storage.png" width="80%" />
+
 <details>
-  <summary>Home Page</summary>
-
- ![Home Page](.github/assets/home.png)
-
+  <summary>Upload and use files</summary>
+  <p>Once files are uploaded on IPC, they are not immutable!<br>
+  You can rename, modify the content or remove them as you want!</p>
 </details>
 
 <details>
-  <summary>Signup Page</summary>
-
- ![Signup Page](.github/assets/signup.png)
-
+  <summary>Create folders to organize your drive</summary>
+  <p>Files are great, but virtual folders are also available on IPC to let you organize your files the way you want :start_struck:</p>
 </details>
 
 <details>
-  <summary>Signup Page - Mnemonics given</summary>
+  <summary>Share your files (with access control)</summary>
+  <p>Files can be shared among contacts with viewer or editor permissions, allowing for collaboration on your drive 🚀</p>
+</details>
 
- ![Signup Page Mnemonics](.github/assets/signupMnemonics.png)
+### Cloud Computing
+<img src=".github/assets/ipc-upload-a-program.png" width="80%" />
 
+<details>
+  <summary>Upload and execute simple programs</summary>
+  <p>Using Aleph VMs, programs listening on port <code>8080</code> can be executed if their source code has a size under 1 MB.<br>
+  Large files sould be attached in a secondary volume, which is not a feature implemented on our side... yet :wink:<br><br>
+  The VMs support binary executables, shell scrips, NodeJS and Python ASGI programs.<br>
+  For further information, here is the [official aleph documentation](https://github.com/aleph-im/aleph-vm/blob/main/tutorials/README.md).</p>
 </details>
 
 <details>
-  <summary>Login Page</summary>
-
- ![Login Page](.github/assets/login.png)
-
+  <summary>Import programs from GitHub</summary>
+  <p>Uploading programs compressed in an archive is great, but importing it directly from GitHub is way better 🚀<br>
+  GitHub OAuth was implemented in IPC to import public and private repositories.<br>
+  :warning: This feature is only available when running IPC locally as its using the filesystem to clone and zip the repository content</p>
 </details>
-
-<details>
-  <summary>Dashboard</summary>
-
- ![Dashboard](.github/assets/ipc-dashboard.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - Upload a file</summary>
-
- ![Dashboard Upload](.github/assets/ipc-dashboard-upload-a-file.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - Share a file</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-share-a-file.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - Files shared</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-files-shared.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - Contacts</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-contacts.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - Add a contact</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-add-a-contact.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - Update a contact</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-update-a-contact.png)
-
-</details>
-
-<details>
-  <summary>Dashboard - User's profile</summary>
-
-![Dashboard Upload](.github/assets/ipc-dashboard-my-profile.png)
-
-</details>
+  
 
 ## How does it work? :thinking:
 
 ### Technologies 🧑‍💻
 
 - [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
-- [React](https://reactjs.org/docs/getting-started.html)
+- [React](https://reactjs.org/docs/getting-started.html) and [NextJS](https://nextjs.org/)
 - [Chakra UI](https://chakra-ui.com)
 
 ### Security 🛡️
@@ -155,75 +106,12 @@ Every file that you upload will be encrypted thanks to [crypto-js](https://www.n
 
 We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
-<details>
-  <summary>Full overview</summary>
+## Get involved
 
-  <img src=".github/assets/ipc-graph.png" width="85%" />
-</details>
+You're invited to join this project ! Check out the [contributing guide](./CONTRIBUTING.md).
 
----
+If you're interested in how the project is organized at a higher level, please contact the current project manager.
 
-- For each file, a random key is generated and the content of the file is encrypted with this key.
-- The content is pushed into a store message via the aleph network.
-- The hash of the store message and the key are added to the 'Contacts' post message.
-
-<details>
-    <summary>Upload a file</summary>
-
-<img src=".github/assets/ipc-upload-a-file.png" width="50%" />
-
-</details>
-
----
-
-- For each contacts into the 'Post Message - Contacts', the files and contacts are get.
-- An occurrence between the address of the user and the contacts is searched.
-- For each file found, metadata about the files are retrieved.
-
-<details>
-    <summary>Load a file</summary>
-
-<img src=".github/assets/ipc-file-loading.png" width="50%" />
-
-</details>
-
----
-
-- The content is retrieved from the aleph network from his hash.
-- The content is decrypted with the key, itself decrypted with the private key of the user.
-
-<details>
-    <summary>Download a file</summary>
-
-<img src=".github/assets/ipc-download-a-file.png" width="50%" />
-
-</details>
-
----
-
-- The hash and the key are encrypted with the public key of the contact.
-- These infos are added to the list of shared files of the contact.
-
-<details>
-    <summary>Share a file</summary>
-
-<img src=".github/assets/ipc-share-a-file.png" width="50%" />
-
-</details>
-
----
-
-- One post message, with the list of contacts and the list of shared files for each contacts
-- The post message contains the info about the contact, his name, address, public key and a list of shared files
-
-<details>
-    <summary>Post messages</summary>
-
-<div>
-<img src=".github/assets/ipc-post-message.png" width="50%" />
-</div>
-
-</details>
 
 ## Our PoC team :ok_hand:
 
@@ -248,7 +136,7 @@ Reviewers :
 
 ### September 2021 - April 2022
 Developers:
-| [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/lolboysg.png?size=85" width=85><br><sub>Matéo Viel</sub>](https://github.com/lolboysg)
+| [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/0xtekgrinder.png?size=85" width=85><br><sub>Matéo Viel</sub>](https://github.com/0xtekgrinder)
 | :---: | :---: |
 
 Project Managers:

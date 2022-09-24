@@ -4,7 +4,7 @@ import {
 	FormLabel,
 	HStack,
 	Input,
-	PopoverBody,
+	PopoverFooter,
 	useColorModeValue,
 	useDisclosure,
 	useToast,
@@ -56,13 +56,12 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
-		<PopoverBody>
+		<PopoverFooter>
 			<HStack>
 				<FcEditImage size="30"></FcEditImage>
 				<Button
 					backgroundColor={config?.theme ?? 'white'}
 					textColor={colorText}
-					justifyContent="flex-start"
 					w="100%"
 					p="0px"
 					mx="4px"
@@ -103,7 +102,7 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 					</FormControl>
 				</Modal>
 			</HStack>
-		</PopoverBody>
+		</PopoverFooter>
 	);
 };
 
