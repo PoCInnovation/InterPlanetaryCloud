@@ -50,7 +50,6 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 				<Button
 					backgroundColor={config?.theme ?? 'white'}
 					textColor={colorText}
-					justifyContent="flex-start"
 					w="100%"
 					p="0px"
 					mx="4px"

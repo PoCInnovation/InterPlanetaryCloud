@@ -76,7 +76,6 @@ class Auth {
 			const user = new User(importedAccount, mnemonic, importedConfig);
 
 			await this.createAggregate(importedAccount);
-			console.log(user.config);
 
 			return { user, mnemonic, message: 'Successful login' };
 		} catch (err) {
