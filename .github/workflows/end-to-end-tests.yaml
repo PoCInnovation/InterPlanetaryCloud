@@ -10,14 +10,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Create IPC docker image
-        run: docker build . -t ipc:latest
+      - name: Create env file
+        run: |
+          touch .env
+          echo NEXT_PUBLIC_ALEPH_CHANNEL=${{ secrets.NEXT_PUBLIC_ALEPH_CHANNEL }} >> .env
+          echo NEXT_PUBLIC_GITCLONE_DIR=${{ secrets.NEXT_PUBLIC_GITCLONE_DIR }} >> .env
+          echo NEXT_PUBLIC_GITHUB_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_ID }} >> .env
+          echo NEXT_PUBLIC_GITHUB_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_SECRET }} >> .env
+          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
 
       - name: Run cypress
         uses: cypress-io/github-action@v4
         with:
-          start: docker run -p 8080:8080 ipc:latest
+          start: docker compose up
           wait-on: "http://localhost:8080"
+          wait-on-timeout: 300
 
       - name: Get screenshots
         uses: actions/upload-artifact@v1
