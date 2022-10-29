@@ -1,5 +1,6 @@
+import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
-import { AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
@@ -18,7 +19,12 @@ import ConfigContext from 'contexts/config';
 import DriveContext from 'contexts/drive';
 import UserContext from 'contexts/user';
 
-const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
+const App = ({
+	Component,
+	pageProps: { session, ...pageProps },
+}: AppProps<{
+	session: Session;
+}>) => {
 	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
