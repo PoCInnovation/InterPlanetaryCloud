@@ -4,19 +4,6 @@
 
 [Explain here the objective of the milestone]
 
-### Timeline
-
-#### Duration
-
-- [ ] 1 week
-- [ ] 2 weeks
-- [ ] 3 weeks
-
-#### Date
-
-- Start date : [dd/mm/yyyy]
-- End date : [dd/mm/yyyy]
-
 ### Checklist
 
 - [ ] Clear objective
@@ -37,13 +24,3 @@
 - [ ] Release created
 - [ ] Tasks archived
 - [ ] Branches cleared
-
-### Questions
-
-**Was this objective fulfilled on time ?**
-
-[Answer this question]
-
-**If not, why ?**
-
-[Answer this question if needed, otherwise delete it]
