@@ -1,13 +1,3 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
 //
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
@@ -25,3 +15,19 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import 'cypress-file-upload';
+
+Cypress.Commands.add('signup', () => {
+	cy.visit('/signup');
+	cy.get('#ipc-signup-credentials-signup-button').click();
+	cy.get('#ipc-signup-text-area');
+	cy.get('#ipc-modal-close-button').click();
+});
+
+
+Cypress.Commands.add('uploadFile', (file, params = null) => {
+	cy.get('#ipc-dashboard-drawer-button').click({ force: true });
+	cy.get('.ipc-new-elem-button').click();
+	cy.get('#ipc-upload-button').click({ force: true });
+	cy.get('#ipc-dashboard-upload-file').attachFile(file, params);
+	cy.get('#ipc-dashboard-upload-file-modal-button').click();
+});
