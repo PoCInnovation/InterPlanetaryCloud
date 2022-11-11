@@ -1,4 +1,4 @@
-import { Box, HStack, Spacer, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Spacer, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 
 import type { IPCFile, IPCProgram } from 'types/types';
 
@@ -60,7 +60,7 @@ export const DisplayCards = ({
 					</Box>
 				</HStack>
 				<DriveCards
-					files={files.filter((elem) => elem.path === path)}
+					files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
 					folders={folders.filter((elem) => elem.path === path)}
 				/>
 			</VStack>
@@ -107,5 +107,20 @@ export const DisplayCards = ({
 			</VStack>
 		);
 	if (index === 4) return <ProfileCard profile={user.contact.contacts[0]} />;
+	if (index === 6)
+		return (
+			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<Box w="100%">
+					<Text fontSize="35" textColor={colorText}>
+						Your bin
+					</Text>
+				</Box>
+				<DriveCards
+					files={files.filter((elem) => elem.path === path && elem.deletedAt !== null)}
+					folders={folders.filter((elem) => elem.path === path)}
+				/>
+				<Button variant="inline">Delete all files</Button>
+			</VStack>
+		);
 	return <ConfigPage />;
 };

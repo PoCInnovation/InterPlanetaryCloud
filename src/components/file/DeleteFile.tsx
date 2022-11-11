@@ -28,7 +28,6 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		setIsLoading(true);
 		if (user.account) {
 			const deleted = await user.drive.delete([file.hash]);
-
 			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			if (deleted.success) {
 				const removed = await user.contact.deleteFiles([file.id], concernedFiles);
@@ -46,6 +45,10 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		onClose();
 	};
 
+	const moveToBin = () => {
+		file.deletedAt = Date.now();
+	};
+
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
@@ -58,11 +61,17 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 					w="100%"
 					p="0px"
 					mx="4px"
-					onClick={() => onOpen()}
+					onClick={() => {
+						if (!file.deletedAt) {
+							moveToBin();
+						} else {
+							onOpen();
+						}
+					}}
 					isLoading={false}
 					id="ipc-dashboard-delete-file-button"
 				>
-					Delete
+					{file.deletedAt === null ? 'Move to trash' : 'Delete'}
 				</Button>
 				<Modal
 					isOpen={isOpen}
