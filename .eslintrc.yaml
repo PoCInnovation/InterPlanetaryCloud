@@ -1,8 +1,10 @@
 parser: "@typescript-eslint/parser"
 
 parserOptions:
-  ecmaVersion: 6
-  project: tsconfig.json
+  ecmaVersion: latest
+  project:
+    - tsconfig.json
+    - cypress/tsconfig.json
 
 env:
   node: true
@@ -16,32 +18,21 @@ extends:
   - plugin:@next/next/recommended
   - prettier
 
-plugins:
-  - prettier
-
-globals:
-  "cy": true
-
 rules:
-  prettier/prettier: warn
-
-  react/react-in-jsx-scope: 0
-  react/jsx-filename-extension: 0
-  react/no-unescaped-entities: 0
-  react/jsx-props-no-spreading: 0
-  react/require-default-props: 0
-  react/no-children-prop: 0
+  react/react-in-jsx-scope: off
+  react/jsx-filename-extension: off
+  react/no-unescaped-entities: off
+  react/jsx-props-no-spreading: off
+  react/require-default-props: off
+  react/no-children-prop: off
   react-hooks/exhaustive-deps: off
 
-  no-alert: 0
-  no-console: 0
-  no-nested-ternary: 0
-  max-classes-per-file: 0
-  class-methods-use-this: 0
-
-  import/prefer-default-export: 0
+  no-console: off
+  no-nested-ternary: off
+  max-classes-per-file: off
+  class-methods-use-this: off
 
   "@typescript-eslint/no-non-null-assertion": off
   "@typescript-eslint/no-unused-vars": ["warn", { ignoreRestSiblings: true }]
-  "@typescript-eslint/no-use-before-define": 0
+  "@typescript-eslint/no-use-before-define": off
   "@typescript-eslint/ban-ts-comment": off

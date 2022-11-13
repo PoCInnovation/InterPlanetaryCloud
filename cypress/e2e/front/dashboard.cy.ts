@@ -1,3 +1,5 @@
+let dashboardSpecMnemonic = '';
+
 describe('Create account for Dashboard tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');

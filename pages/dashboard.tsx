@@ -14,7 +14,7 @@ import Modal from 'components/Modal';
 import { extractFilename } from 'utils/fileManipulation';
 
 import CustomProgram from 'components/computing/CustomProgram';
-import { DisplayCards } from 'components/DisplayCards';
+import DisplayCards from 'components/DisplayCards';
 import { ResponsiveBar } from 'components/ResponsiveBar';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
@@ -235,34 +235,32 @@ const Dashboard = (): JSX.Element => {
 						</Button>
 					)}
 					{session && (
-						<>
-							<VStack spacing="5%">
-								<CustomProgram
-									customName={customName}
-									setCustomName={setCustomName}
-									customEntrypoint={customEntrypoint}
-									setCustomEntrypoint={setCustomEntrypoint}
-								/>
-								<Select
-									onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
-									placeholder="Select repository"
-								>
-									{repositories.map((repository, index: number) => (
-										<option key={index} value={repository.html_url}>
-											{repository.name}
-										</option>
-									))}
-								</Select>
-								<Button
-									variant="inline"
-									w="100%"
-									onClick={async () => signOut()}
-									id="ipc-dashboard-github-signout-button"
-								>
-									Sign out
-								</Button>
-							</VStack>
-						</>
+						<VStack spacing="5%">
+							<CustomProgram
+								customName={customName}
+								setCustomName={setCustomName}
+								customEntrypoint={customEntrypoint}
+								setCustomEntrypoint={setCustomEntrypoint}
+							/>
+							<Select
+								onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedRepository(e.target.value)}
+								placeholder="Select repository"
+							>
+								{repositories.map((repository, index: number) => (
+									<option key={index} value={repository.html_url}>
+										{repository.name}
+									</option>
+								))}
+							</Select>
+							<Button
+								variant="inline"
+								w="100%"
+								onClick={async () => signOut()}
+								id="ipc-dashboard-github-signout-button"
+							>
+								Sign out
+							</Button>
+						</VStack>
 					)}
 				</>
 			</Modal>
