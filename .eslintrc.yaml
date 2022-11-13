@@ -21,18 +21,12 @@ extends:
 rules:
   react/react-in-jsx-scope: off
   react/jsx-filename-extension: off
-  react/no-unescaped-entities: off
-  react/jsx-props-no-spreading: off
-  react/require-default-props: off
-  react/no-children-prop: off
+
   react-hooks/exhaustive-deps: off
 
   no-console: off
-  no-nested-ternary: off
-  max-classes-per-file: off
+
   class-methods-use-this: off
 
   "@typescript-eslint/no-non-null-assertion": off
-  "@typescript-eslint/no-unused-vars": ["warn", { ignoreRestSiblings: true }]
   "@typescript-eslint/no-use-before-define": off
-  "@typescript-eslint/ban-ts-comment": off
