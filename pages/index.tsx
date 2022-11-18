@@ -1,26 +1,23 @@
-import { Button } from '@chakra-ui/react';
-import Link from 'next/link';
+import { VStack } from '@chakra-ui/react';
 
-import AuthPage from 'components/AuthPage';
-import OutlineButton from 'components/OutlineButton';
+import NavBar from 'components/landingPage/NavBar';
+import HeadingSection from 'components/landingPage/HeadingSection';
+import PartnersSection from 'components/landingPage/PartnersSection';
+import ServicesSection from 'components/landingPage/ServicesSection';
+import FeaturesSection from 'components/landingPage/FeaturesSection';
+import Footer from 'components/landingPage/Footer';
 
 const Home = (): JSX.Element => (
-	<AuthPage
-		children={
-			<>
-				<Link href="/signup">
-					<Button variant="inline" w="100%" id="ipc-home-create-account-button">
-						Create an account
-					</Button>
-				</Link>
-				<Link href="/login">
-					<div style={{ width: '100%' }}>
-						<OutlineButton w="100%" id="ipc-home-login-button" text="Login" />
-					</div>
-				</Link>
-			</>
-		}
-	/>
+	<VStack w="100%" spacing="256px" pt="64px" overflowY="hidden">
+		<NavBar />
+		<HeadingSection />
+		<VStack w="100%" spacing="128px">
+			<PartnersSection />
+			<ServicesSection />
+			<FeaturesSection />
+		</VStack>
+		<Footer />
+	</VStack>
 );
 
 export default Home;
