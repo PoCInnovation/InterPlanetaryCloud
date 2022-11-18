@@ -14,7 +14,7 @@ const HeadingSection = (): JSX.Element => {
 	return (
 		<VStack w="100%" spacing="64px" textAlign="center">
 			<VStack spacing="32px" w={{ base: '300px', sm: '550px', md: '600px', lg: '1000px' }}>
-				<Text size={isMobile ? '4xl' : '7xl'}>
+				<Text size={isMobile ? '4xl' : '7xl'} id="ipc-landing-headline">
 					The first distributed cloud{' '}
 					<Box
 						as="span"
@@ -25,7 +25,7 @@ const HeadingSection = (): JSX.Element => {
 					</Box>{' '}
 					your data.
 				</Text>
-				<Text size="xl" maxW="512px">
+				<Text size="xl" maxW="512px" id="ipc-landing-subHeadline">
 					Build on top of Aleph, the next generation network of{' '}
 					<Box as="span" fontWeight="700">
 						distributed
@@ -41,6 +41,7 @@ const HeadingSection = (): JSX.Element => {
 				onClick={() => {
 					router.push('/connection');
 				}}
+				id="ipc-landing-heading-start-button"
 			>
 				Start the experiment{!isMobile && ' for free'}
 			</Button>
