@@ -9,12 +9,12 @@ import colors from 'theme/foundations/colors';
 
 const HeadingSection = (): JSX.Element => {
 	const router = useRouter();
-	const imageDisplayable: boolean = useBreakpointValue({ base: false, lg: true }) || false;
+	const isMobile: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 
 	return (
 		<VStack w="100%" spacing="64px" textAlign="center">
-			<VStack spacing="32px" maxW="1000px">
-				<Text size="7xl" lineHeight="80px">
+			<VStack spacing="32px" w={{ base: '300px', sm: '550px', md: '600px', lg: '1000px' }}>
+				<Text size={isMobile ? '4xl' : '7xl'}>
 					The first distributed cloud{' '}
 					<Box
 						as="span"
@@ -25,7 +25,7 @@ const HeadingSection = (): JSX.Element => {
 					</Box>{' '}
 					your data.
 				</Text>
-				<Text size="xl" w="512px">
+				<Text size="xl" maxW="512px">
 					Build on top of Aleph, the next generation network of{' '}
 					<Box as="span" fontWeight="700">
 						distributed
@@ -35,16 +35,16 @@ const HeadingSection = (): JSX.Element => {
 			</VStack>
 			<Button
 				variant="special"
-				size="2xl"
+				size={isMobile ? 'xl' : '2xl'}
 				buttonType="left-icon"
 				icon={IoRocketSharp}
 				onClick={() => {
 					router.push('/connection');
 				}}
 			>
-				Start the experiment for free
+				Start the experiment{!isMobile && ' for free'}
 			</Button>
-			{imageDisplayable && (
+			{!isMobile && (
 				<>
 					<Box as="div" position="absolute" top="75px" left="0px" w="600px" zIndex={-10}>
 						<Img

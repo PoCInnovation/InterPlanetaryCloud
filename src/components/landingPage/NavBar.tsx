@@ -12,7 +12,7 @@ const NavBar = (): JSX.Element => {
 	return (
 		<>
 			{buttonDisplayable ? (
-				<HStack justify="space-between" w={{ base: '650px', lg: '750px', '2xl': '1000px' }}>
+				<HStack justify="space-between" w={{ base: '300px', lg: '750px', '2xl': '1000px' }}>
 					<Text size="2xl" variant="gradient">
 						Inter Planetary Cloud
 					</Text>
@@ -29,8 +29,8 @@ const NavBar = (): JSX.Element => {
 					</Button>
 				</HStack>
 			) : (
-				<VStack w={{ base: '650px', lg: '750px', '2xl': '1000px' }}>
-					<Text size="4xl" variant="gradient">
+				<VStack w={{ base: '300px', md: '650px', lg: '750px', '2xl': '1000px' }}>
+					<Text size="4xl" variant="gradient" textAlign="center">
 						Inter Planetary Cloud
 					</Text>
 				</VStack>

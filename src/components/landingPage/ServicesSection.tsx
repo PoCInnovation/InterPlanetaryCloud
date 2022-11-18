@@ -1,4 +1,4 @@
-import { Box, HStack, Img, Stack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { Box, Img, Stack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
 
@@ -20,10 +20,10 @@ const ServicesCard = ({
 		p="5px"
 		borderRadius="16px"
 		filter={`drop-shadow(4px 4px 4px ${position === 'left' ? '#FF003625' : '#0027FF25'})`}
-		w="425px"
+		w={{ base: '250px', sm: '425px' }}
 		textAlign="center"
 	>
-		<VStack bg="blue.50" borderRadius="12px" p="64px 24px" spacing="48px">
+		<VStack bg="blue.50" borderRadius="12px" p={{ base: '32px 24px', sm: '64px 24px' }} spacing="48px">
 			<VStack spacing="24px">
 				<Img src={icon} />
 				<Text variant={`${position === 'left' ? 'gradient' : 'reverseGradient'}`} size="2xl">
@@ -36,19 +36,19 @@ const ServicesCard = ({
 );
 
 const ServicesSection = (): JSX.Element => {
-	const imageDisplayable: boolean = useBreakpointValue({ base: false, '2xl': true }) || false;
+	const isMobile: boolean = useBreakpointValue({ base: true, '2xl': false }) || false;
 
 	return (
 		<VStack
 			spacing="72px"
 			bg="blue.50"
 			w="100%"
-			py="222px"
+			py={{ base: '128px', '2xl': '222px' }}
 			pl={{ base: '0px', '2xl': '400px', '4xl': '0px' }}
 			position="relative"
 			boxShadow={`0px 0px 128px ${colors.blue[100]}`}
 		>
-			<Text size="4xl" zIndex={10} textAlign="center" w={{ base: '550px', lg: '100%' }}>
+			<Text size="4xl" zIndex={10} textAlign="center" w={{ base: '300px', md: '500px', lg: '100%' }}>
 				Inter Planetary Cloud offers{' '}
 				<Box
 					as="span"
@@ -72,7 +72,7 @@ const ServicesSection = (): JSX.Element => {
 					position="right"
 				/>
 			</Stack>
-			{imageDisplayable && (
+			{!isMobile && (
 				<Box as="div" position="absolute" top="0px" left="-200px" w="1000px">
 					<Img src="/assets/meshes/gradient-mesh-1.svg" transform="rotate(-153deg)" w="700px" h="auto" />
 				</Box>

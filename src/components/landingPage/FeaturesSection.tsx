@@ -7,16 +7,20 @@ import Button from 'components/Button';
 
 import colors from 'theme/foundations/colors';
 
-const FeatureCard = ({ title, icon }: { title: string; icon: string }): JSX.Element => (
-	<HStack bg="blue.100" borderRadius="12px" p="8px 16px">
-		<Img src={icon} w="30px" h="auto" />
-		<Text size="2xl">{title}</Text>
-	</HStack>
-);
+const FeatureCard = ({ title, icon }: { title: string; icon: string }): JSX.Element => {
+	const isMobile: boolean = useBreakpointValue({ base: true, sm: false }) || false;
+
+	return (
+		<HStack bg="blue.100" borderRadius="12px" p="8px 16px">
+			<Img src={icon} w={isMobile ? '24px' : '30px'} h="auto" />
+			<Text size={isMobile ? 'boldXl' : '2xl'}>{title}</Text>
+		</HStack>
+	);
+};
 
 const FeaturesSection = (): JSX.Element => {
 	const router = useRouter();
-	const imageDisplayable: boolean = useBreakpointValue({ base: false, lg: true }) || false;
+	const isMobile: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 
 	const features: { icon: string; title: string }[] = [
 		{
@@ -42,9 +46,9 @@ const FeaturesSection = (): JSX.Element => {
 	];
 
 	return (
-		<VStack spacing="256px" w="100%" position="relative">
-			<Stack spacing="32px" mr={{ base: '0px', lg: '400px' }}>
-				<Text size="4xl">
+		<VStack spacing={{ base: '128px', lg: '256px' }} w="100%" position="relative">
+			<Stack spacing="32px" mr={{ base: '0px', lg: '400px' }} px="32px">
+				<Text size={isMobile ? '3xl' : '4xl'}>
 					Our{' '}
 					<Box
 						as="span"
@@ -58,17 +62,17 @@ const FeaturesSection = (): JSX.Element => {
 					<FeatureCard key={feature.title} title={feature.title} icon={feature.icon} />
 				))}
 			</Stack>
-			<VStack spacing="42px">
+			<VStack spacing={{ base: '24px', md: '42px' }}>
 				<Box
-					w={{ base: '550px', xl: '750px', '3xl': '1000px' }}
+					w={{ base: '250px', sm: '400px', lg: '600px', xl: '750px', '3xl': '1000px' }}
 					h="5px"
 					bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
 					borderRadius="16px"
 				/>
-				<Text size="4xl">Are you ready?</Text>
+				<Text size={isMobile ? '2xl' : '4xl'}>Are you ready?</Text>
 				<Button
 					variant="special"
-					size="2xl"
+					size={isMobile ? 'xl' : '2xl'}
 					buttonType="left-icon"
 					icon={IoRocketSharp}
 					onClick={() => {
@@ -78,7 +82,7 @@ const FeaturesSection = (): JSX.Element => {
 					Start the experiment
 				</Button>
 			</VStack>
-			{imageDisplayable && (
+			{!isMobile && (
 				<Box as="div" w="1000px" h="1200px" position="absolute" top="-350px" right="0px" overflow="hidden" zIndex={-10}>
 					<Img
 						src="/assets/meshes/gradient-mesh-2.svg"

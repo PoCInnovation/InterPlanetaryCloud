@@ -8,10 +8,10 @@ import FeaturesSection from 'components/landingPage/FeaturesSection';
 import Footer from 'components/landingPage/Footer';
 
 const Home = (): JSX.Element => (
-	<VStack w="100%" spacing="256px" pt="64px" overflowY="hidden">
+	<VStack w="100%" spacing={{ base: '128px', lg: '256px' }} pt="64px" overflowY="hidden">
 		<NavBar />
 		<HeadingSection />
-		<VStack w="100%" spacing="128px">
+		<VStack w="100%" spacing={{ base: '96px', lg: '128px' }}>
 			<PartnersSection />
 			<ServicesSection />
 			<FeaturesSection />
