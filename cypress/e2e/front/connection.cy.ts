@@ -1,6 +1,6 @@
-describe('Good front for Home', () => {
-	it('Go to home', () => {
-		cy.visit('');
+describe('Good front for Connection', () => {
+	it('Go to connection', () => {
+		cy.visit('/connection');
 	});
 
 	it('Good title', () => {
@@ -24,9 +24,9 @@ describe('Good front for Home', () => {
 	});
 });
 
-describe('Signup Button front in Home', () => {
-	it('Go to home', () => {
-		cy.visit('');
+describe('Signup Button front in Connection', () => {
+	it('Go to connection', () => {
+		cy.visit('/connection');
 	});
 
 	it('Good URL redirect for create account button', () => {
@@ -34,9 +34,9 @@ describe('Signup Button front in Home', () => {
 	});
 });
 
-describe('Login Button front in Home', () => {
-	it('Go to home', () => {
-		cy.visit('');
+describe('Login Button front in Connection', () => {
+	it('Go to connection', () => {
+		cy.visit('/connection');
 	});
 
 	it('Good URL redirect for login button', () => {
