@@ -94,17 +94,22 @@ const NoIconButton = ({ children, ...props }: ButtonProps): JSX.Element =>
 		<ChakraButton {...props}>{children}</ChakraButton>
 	);
 
-const Button = ({ children, buttonType = 'no-icon', icon, ...props }: CustomButtonProps & ButtonProps): JSX.Element =>
-	buttonType === 'no-icon' || !icon ? (
-		<NoIconButton {...props}>{children}</NoIconButton>
-	) : buttonType === 'left-icon' ? (
-		<LeftIconButton icon={icon} {...props}>
-			{children}
-		</LeftIconButton>
-	) : (
+const Button = ({ children, buttonType = 'no-icon', icon, ...props }: CustomButtonProps & ButtonProps): JSX.Element => {
+	if (buttonType === 'no-icon' || !icon) {
+		return <NoIconButton {...props}>{children}</NoIconButton>;
+	}
+	if (buttonType === 'left-icon') {
+		return (
+			<LeftIconButton icon={icon} {...props}>
+				{children}
+			</LeftIconButton>
+		);
+	}
+	return (
 		<RightIconButton icon={icon} {...props}>
 			{children}
 		</RightIconButton>
 	);
+};
 
 export default Button;
