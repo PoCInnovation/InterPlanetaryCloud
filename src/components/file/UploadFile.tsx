@@ -7,7 +7,7 @@ import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
-import { generateFileKey } from 'utils/generateFileKey';
+import generateFileKey from 'utils/generateFileKey';
 
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';

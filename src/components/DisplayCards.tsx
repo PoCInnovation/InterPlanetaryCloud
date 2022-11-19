@@ -20,7 +20,7 @@ type CardsProps = {
 	setSelectedProgram: (program: IPCProgram) => void;
 };
 
-export const DisplayCards = ({
+const DisplayCards = ({
 	myPrograms,
 	sharedFiles,
 	index,
@@ -109,3 +109,5 @@ export const DisplayCards = ({
 	if (index === 4) return <ProfileCard profile={user.contact.contacts[0]} />;
 	return <ConfigPage />;
 };
+
+export default DisplayCards;
