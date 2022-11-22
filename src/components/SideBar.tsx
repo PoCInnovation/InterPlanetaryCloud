@@ -28,8 +28,8 @@ type SideBarPropsType = {
 	sharedFilesTab: string;
 	myProgramsTab: string;
 	profileTab: string;
-	configTab: string;
 	binTab: string;
+	configTab: string;
 	deployButton: JSX.Element;
 	setSelectedTab: (tab: number) => void;
 	githubButton: JSX.Element;
@@ -147,7 +147,7 @@ const SideBar = ({
 							borderLeft: `5px solid ${colors.red[700]}`,
 						}}
 					>
-						{configTab}
+						{binTab}
 					</Tab>
 					<Tab
 						borderLeft={`5px solid ${colors.blue[700]}`}
@@ -155,7 +155,7 @@ const SideBar = ({
 							borderLeft: `5px solid ${colors.red[700]}`,
 						}}
 					>
-						{binTab}
+						{configTab}
 					</Tab>
 				</TabList>
 			</Tabs>

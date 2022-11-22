@@ -279,6 +279,40 @@ class Contact {
 		}
 	}
 
+	public async moveFileToBin(concernedFile: IPCFile, deletedAt: number | null, sharedFiles: IPCFile[]): Promise<ResponseType> {
+		try {
+			let fileFound = false;
+			this.contacts.forEach(async (contact) => {
+				const file = contact.files.find((f) => f.id === concernedFile.id);
+
+				if (file) {
+					file.deletedAt = deletedAt;
+					fileFound = true;
+					await this.publishAggregate();
+				}
+			});
+			if (!fileFound) {
+				const file = sharedFiles.find((f) => f.id === concernedFile.id);
+				if (!file) {
+					return { success: false, message: 'File not found' };
+				}
+				await post.Publish({
+					account: this.account!,
+					postType: 'InterPlanetaryCloud',
+					content: { file: { ...concernedFile, deletedAt }, tags: ['rename', concernedFile.id] },
+					channel: 'TEST',
+					APIServer: DEFAULT_API_V2,
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+				});
+			}
+			return { success: true, message: `File ${deletedAt === null ? "removed from" : "moved to"} the bin` };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: `Failed to ${deletedAt === null ? "remove the file from" : "move the file to"} the bin` };
+		}
+	}
+
 	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {

@@ -107,7 +107,7 @@ const DisplayCards = ({
 			</VStack>
 		);
 	if (index === 4) return <ProfileCard profile={user.contact.contacts[0]} />;
-	if (index === 6)
+	if (index === 5)
 		return (
 			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 				<Box w="100%">

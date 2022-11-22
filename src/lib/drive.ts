@@ -93,6 +93,15 @@ class Drive {
 		}
 	}
 
+	public async autoDelete() {
+		try {
+			const filesToDelete = this.files.filter((file) => file.deletedAt !== null && Date.now() - file.deletedAt >= 2592000000)
+			await this.delete(filesToDelete.map((file) => file.hash))
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
 	public async delete(fileHashes: string[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
