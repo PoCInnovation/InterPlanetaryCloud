@@ -9,7 +9,7 @@ import { ALEPH_CHANNEL } from 'config/constants';
 
 import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
 
-import { ArraybufferToString } from 'utils/arraytbufferToString';
+import ArraybufferToString from 'utils/arraybufferToString';
 
 class Drive {
 	public files: IPCFile[];

@@ -7,38 +7,155 @@ const Button = {
 		fontWeight: 500,
 		fontSize: '16px',
 		lineHeight: '24px',
-		_hover: {
-			opacity: '90%',
-		},
 	},
 	sizes: {
-		sm: {
-			padding: '8px 16px',
-			height: '44px',
-			fontSize: '12px',
-		},
-		md: {
+		// TODO: clean needed
+		oldMd: {
 			padding: '16px 32px',
 			height: '56px',
 			fontSize: '16px',
 		},
+		sm: {
+			padding: '2px 12px',
+			height: 'auto',
+			fontSize: '12px',
+			fontWeight: 700,
+			borderRadius: '8px',
+		},
+		md: {
+			padding: '4px 16px',
+			height: 'auto',
+			fontSize: '16px',
+			fontWeight: 700,
+			borderRadius: '8px',
+		},
+		lg: {
+			padding: '4px 16px',
+			height: 'auto',
+			fontSize: '20px',
+			fontWeight: 700,
+			borderRadius: '8px',
+		},
+		xl: {
+			padding: '6px 16px',
+			height: 'auto',
+			fontSize: '24px',
+			fontWeight: 700,
+			borderRadius: '12px',
+		},
+		'2xl': {
+			padding: '8px 20px',
+			height: 'auto',
+			fontSize: '28px',
+			fontWeight: 700,
+			borderRadius: '12px',
+		},
+		'3xl': {
+			padding: '8px 24px',
+			height: 'auto',
+			fontSize: '32px',
+			fontWeight: 700,
+			borderRadius: '12px',
+		},
 	},
 	variants: {
+		primary: {
+			backgroundImage: `linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 50%, ${colors.blue[900]} 100%)`,
+			color: 'blue.100',
+			bgClip: 'text',
+			backgroundSize: '200% 100%',
+
+			mozTransition: 'all .6s ease-in-out',
+			oTransition: 'all .6s ease-in-out',
+			webkitTransition: 'all .6s ease-in-out',
+			transition: 'all .6s ease-in-out',
+			_hover: {
+				_disabled: {
+					backgroundImage: `linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 50%, ${colors.blue[900]} 100%)`,
+					backgroundSize: '200% 100%',
+					color: 'blue.100',
+					bgClip: 'text',
+				},
+				color: 'blue.100',
+				background: 'blue.1100',
+
+				mozTransition: 'all .6s ease-in-out',
+				oTransition: 'all .6s ease-in-out',
+				webkitTransition: 'all .6s ease-in-out',
+				transition: 'all .6s ease-in-out',
+			},
+		},
+		secondary: {
+			background: 'blue.100',
+			color: 'blue.1100',
+
+			mozTransition: 'all .6s ease-in-out',
+			oTransition: 'all .6s ease-in-out',
+			webkitTransition: 'all .6s ease-in-out',
+			transition: 'all .6s ease-in-out',
+			_disabled: {
+				opacity: 0.5,
+			},
+			_hover: {
+				_disabled: {
+					background: 'blue.100',
+					color: 'blue.1100',
+				},
+				color: 'blue.100',
+				background: 'blue.1100',
+
+				mozTransition: 'all .6s ease-in-out',
+				oTransition: 'all .6s ease-in-out',
+				webkitTransition: 'all .6s ease-in-out',
+				transition: 'all .6s ease-in-out',
+			},
+		},
+		special: {
+			backgroundImage: `linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 50%, ${colors.blue[900]} 100%)`,
+			color: 'blue.100',
+			backgroundSize: '200% 100%',
+
+			mozTransition: 'all .6s ease-in-out',
+			oTransition: 'all .6s ease-in-out',
+			webkitTransition: 'all .6s ease-in-out',
+			transition: 'all .6s ease-in-out',
+
+			_disabled: {
+				opacity: 0.5,
+			},
+
+			_hover: {
+				_disabled: {
+					backgroundImage: `linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 50%, ${colors.blue[900]} 100%)`,
+					color: 'blue.100',
+					backgroundSize: '200% 100%',
+				},
+				backgroundPosition: '100% 0',
+
+				mozTransition: 'all .6s ease-in-out',
+				oTransition: 'all .6s ease-in-out',
+				webkitTransition: 'all .6s ease-in-out',
+				transition: 'all .6s ease-in-out',
+			},
+		},
+		// TODO: clean needed
 		gray: {
 			background: `${colors.gray[300]}`,
 			color: `${colors.gray[700]}`,
 		},
+		// TODO: clean needed
 		inline: {
 			bgGradient: `linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`,
 			color: 'white',
 		},
+		// TODO: clean needed
 		reverseInline: {
 			bgGradient: `linear-gradient(90deg, ${colors.red[700]} 0%, ${colors.blue[700]} 100%)`,
 			color: 'white',
 		},
 	},
 	defaultProps: {
-		size: 'md',
+		size: 'oldMd',
 		variant: 'gray',
 	},
 };

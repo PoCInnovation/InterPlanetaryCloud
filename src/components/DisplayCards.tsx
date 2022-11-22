@@ -20,7 +20,7 @@ type CardsProps = {
 	setSelectedProgram: (program: IPCProgram) => void;
 };
 
-export const DisplayCards = ({
+const DisplayCards = ({
 	myPrograms,
 	sharedFiles,
 	index,
@@ -124,3 +124,5 @@ export const DisplayCards = ({
 		);
 	return <ConfigPage />;
 };
+
+export default DisplayCards;

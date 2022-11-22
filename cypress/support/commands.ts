@@ -23,7 +23,6 @@ Cypress.Commands.add('signup', () => {
 	cy.get('#ipc-modal-close-button').click();
 });
 
-
 Cypress.Commands.add('uploadFile', (file, params = null) => {
 	cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 	cy.get('.ipc-new-elem-button').click();
