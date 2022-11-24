@@ -16,7 +16,7 @@ type DeleteFileProps = {
 
 const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
-	const { setFiles } = useDriveContext();
+	const { files, setFiles } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const { config } = useConfigContext();
 	const colorText = useColorModeValue('gray.800', 'white');
@@ -45,17 +45,30 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		onClose();
 	};
 
-	const moveToBin = async (deletedAt: number | null) => {
+	const moveToBin = async (deletedAt: number) => {
 		setIsLoading(true);
 		if (user.account) {
 			const moved = await user.contact.moveFileToBin(file, deletedAt, concernedFiles)
 			toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
+
+			const index = files.indexOf(file);
+			if (index !== -1) {
+				files[index].deletedAt = deletedAt;
+				setFiles([...files]);
+			}
 		} else {
 			toast({ title: 'Failed to load account', status: 'error' });
 		}
 		setIsLoading(false);
-		onClose();
 	};
+
+	const onBinClicked = async () => {
+		if (!file.deletedAt) {
+			await moveToBin(Date.now());
+		} else {
+			onOpen();
+		}
+	}
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
@@ -69,14 +82,8 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 					w="100%"
 					p="0px"
 					mx="4px"
-					onClick={async () => {
-						if (!file.deletedAt) {
-							moveToBin(Date.now());
-						} else {
-							onOpen();
-						}
-					}}
-					isLoading={false}
+					onClick={onBinClicked}
+					isLoading={isLoading}
 					id="ipc-dashboard-delete-file-button"
 				>
 					{file.deletedAt === null ? 'Move to bin' : 'Delete'}

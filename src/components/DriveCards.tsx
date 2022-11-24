@@ -31,6 +31,7 @@ import type { IPCFile, IPCFolder } from 'types/types';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { FcFile, FcFolder } from 'react-icons/fc';
+import RestoreFile from "./file/RestoreFile";
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();
@@ -140,12 +141,19 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 								</PopoverTrigger>
 								<Portal>
 									<PopoverContent w="300px" backgroundColor={config?.theme ?? 'white'}>
-										<DownloadFile file={file} />
-										<ShareFile file={file} />
-										<MoveFile file={file} />
-										<RenameFile file={file} concernedFiles={files} />
-										<UpdateContentFile file={file} />
-										<DeleteFile file={file} concernedFiles={files} />
+										<>
+											{file.deletedAt === null ? (
+												<>
+													<DownloadFile file={file} />
+													<ShareFile file={file} />
+													<MoveFile file={file} />
+													<RenameFile file={file} concernedFiles={files} />
+													<UpdateContentFile file={file} />
+												</>
+											) : <RestoreFile file={file} concernedFiles={files} />
+											}
+											<DeleteFile file={file} concernedFiles={files} />
+										</>
 									</PopoverContent>
 								</Portal>
 							</Popover>

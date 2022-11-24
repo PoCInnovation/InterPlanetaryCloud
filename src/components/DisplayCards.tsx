@@ -115,11 +115,11 @@ const DisplayCards = ({
 						Your bin
 					</Text>
 				</Box>
+				<Button variant="inline">Delete all files</Button>
 				<DriveCards
 					files={files.filter((elem) => elem.path === path && elem.deletedAt !== null)}
 					folders={folders.filter((elem) => elem.path === path)}
 				/>
-				<Button variant="inline">Delete all files</Button>
 			</VStack>
 		);
 	return <ConfigPage />;

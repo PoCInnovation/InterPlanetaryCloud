@@ -124,6 +124,8 @@ class Contact {
 						} else if (type === 'delete') {
 							const owner = this.contacts.find((co) => co.address === c.address)!;
 							owner.files = owner.files.filter((f) => f.id !== fileId);
+						} else if (type === 'bin') {
+							foundFile.deletedAt = file.deletedAt;
 						}
 					}
 				});
@@ -299,7 +301,7 @@ class Contact {
 				await post.Publish({
 					account: this.account!,
 					postType: 'InterPlanetaryCloud',
-					content: { file: { ...concernedFile, deletedAt }, tags: ['rename', concernedFile.id] },
+					content: { file: { ...concernedFile, deletedAt }, tags: ['bin', concernedFile.id] },
 					channel: 'TEST',
 					APIServer: DEFAULT_API_V2,
 					inlineRequested: true,
