@@ -9,6 +9,7 @@ export type IPCFile = {
 	createdAt: number;
 	path: string;
 	permission: IPCPermission;
+	deletedAt: number | null;
 };
 
 export type IPCFolder = {

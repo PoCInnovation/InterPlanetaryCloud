@@ -10,6 +10,7 @@ import ProgramCards from 'components/ProgramCards';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+import DeleteBin from "./file/DeleteBin";
 
 type CardsProps = {
 	myPrograms: IPCProgram[];
@@ -60,7 +61,7 @@ const DisplayCards = ({
 					</Box>
 				</HStack>
 				<DriveCards
-					files={files.filter((elem) => elem.path === path)}
+					files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
 					folders={folders.filter((elem) => elem.path === path)}
 				/>
 			</VStack>
@@ -107,6 +108,23 @@ const DisplayCards = ({
 			</VStack>
 		);
 	if (index === 4) return <ProfileCard profile={user.contact.contacts[0]} />;
+	if (index === 5) {
+		const deletedFiles = files.filter((elem) => elem.path === path && elem.deletedAt !== null)
+		const deletedFolders = folders.filter((elem) => elem.path === path)
+
+		return (
+			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+				<Box w="100%">
+					<Text fontSize="35" textColor={colorText}>
+						Your bin
+					</Text>
+				</Box>
+				<DeleteBin files={deletedFiles} folders={deletedFolders} concernedFiles={sharedFiles} />
+				<DriveCards files={deletedFiles} folders={deletedFolders} />
+			</VStack>
+		);
+	}
+
 	return <ConfigPage />;
 };
 

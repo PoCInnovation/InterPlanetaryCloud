@@ -11,6 +11,8 @@ import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, Uploa
 
 import ArraybufferToString from 'utils/arraybufferToString';
 
+export const MONTH_MILLIS = 86400 * 30 * 1000
+
 class Drive {
 	public files: IPCFile[];
 
@@ -90,6 +92,15 @@ class Drive {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to upload the file', file: undefined };
+		}
+	}
+
+	public async autoDelete() {
+		try {
+			const filesToDelete = this.files.filter((file) => file.deletedAt !== null && Date.now() - file.deletedAt >= MONTH_MILLIS)
+			await this.delete(filesToDelete.map((file) => file.hash))
+		} catch (err) {
+			console.error(err)
 		}
 	}
 

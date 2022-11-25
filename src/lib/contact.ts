@@ -124,6 +124,8 @@ class Contact {
 						} else if (type === 'delete') {
 							const owner = this.contacts.find((co) => co.address === c.address)!;
 							owner.files = owner.files.filter((f) => f.id !== fileId);
+						} else if (type === 'bin') {
+							foundFile.deletedAt = file.deletedAt;
 						}
 					}
 				});
@@ -276,6 +278,40 @@ class Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to update this filename' };
+		}
+	}
+
+	public async moveFileToBin(concernedFile: IPCFile, deletedAt: number | null, sharedFiles: IPCFile[]): Promise<ResponseType> {
+		try {
+			let fileFound = false;
+			this.contacts.forEach(async (contact) => {
+				const file = contact.files.find((f) => f.id === concernedFile.id);
+
+				if (file) {
+					file.deletedAt = deletedAt;
+					fileFound = true;
+					await this.publishAggregate();
+				}
+			});
+			if (!fileFound) {
+				const file = sharedFiles.find((f) => f.id === concernedFile.id);
+				if (!file) {
+					return { success: false, message: 'File not found' };
+				}
+				await post.Publish({
+					account: this.account!,
+					postType: 'InterPlanetaryCloud',
+					content: { file: { ...concernedFile, deletedAt }, tags: ['bin', concernedFile.id] },
+					channel: 'TEST',
+					APIServer: DEFAULT_API_V2,
+					inlineRequested: true,
+					storageEngine: ItemType.ipfs,
+				});
+			}
+			return { success: true, message: `File ${deletedAt === null ? "removed from" : "moved to"} the bin` };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: `Failed to ${deletedAt === null ? "remove the file from" : "move the file to"} the bin` };
 		}
 	}
 
