@@ -1,3 +1,5 @@
+let dashboardSpecMnemonic = '';
+
 describe('Create account for Dashboard tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');
@@ -51,10 +53,6 @@ describe('Good Upload file modal front in Dashboard', () => {
 		cy.get('header').should('contain', 'Upload a file');
 	});
 
-	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 14);
-	});
-
 	it('Good number of input', () => {
 		cy.get('input[type=file]').should('have.length', 1);
 	});
@@ -82,10 +80,6 @@ describe('Good Deploy program modal front in Dashboard', () => {
 		cy.get('header').should('contain', 'Deploy a program');
 	});
 
-	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 14);
-	});
-
 	it('Good number of input', () => {
 		cy.get('input[type=file]').should('have.length', 1);
 	});
@@ -111,10 +105,6 @@ describe('Good Create folder modal front in Dashboard', () => {
 
 	it('Good header', () => {
 		cy.get('header').should('contain', 'Create a folder');
-	});
-
-	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 14);
 	});
 
 	it('Good number of input', () => {

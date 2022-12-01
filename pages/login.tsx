@@ -33,6 +33,7 @@ const Login = (): JSX.Element => {
 			toast({ title: login.message, status: 'success' });
 			setUser(login.user);
 			router.push('/dashboard');
+			await login.user.drive.autoDelete()
 		} else {
 			toast({ title: login.message, status: 'error' });
 		}
