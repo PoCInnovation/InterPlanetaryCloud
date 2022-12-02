@@ -7,7 +7,15 @@ import fileDownload from 'js-file-download';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
+import type {
+	AggregateType,
+	IPCContact,
+	IPCFile,
+	IPCFolder,
+	IPCProgram,
+	ResponseType,
+	UploadResponse
+} from "types/types";
 
 import ArraybufferToString from 'utils/arraybufferToString';
 

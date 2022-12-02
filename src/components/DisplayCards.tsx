@@ -100,7 +100,6 @@ const DisplayCards = ({
 					</Box>
 				</HStack>
 				<ProgramCards
-					programs={myPrograms}
 					onOpenRedeployProgram={onOpenRedeployProgram}
 					isRedeployLoading={isRedeployLoading}
 					setSelectedProgram={setSelectedProgram}

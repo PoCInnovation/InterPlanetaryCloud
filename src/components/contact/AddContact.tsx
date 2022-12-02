@@ -18,6 +18,7 @@ const AddContact = (): JSX.Element => {
 
 	const addContact = async () => {
 		if (name && contactPublicKey) {
+			// TODO: crash when contactPublicKey is not a valid public key
 			const add = await user.contact.add({
 				name,
 				address: EthCrypto.publicKey.toAddress(contactPublicKey.slice(2)),

@@ -1,6 +1,6 @@
-import { Button, HStack, PopoverHeader, useColorModeValue, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
-import { FcDownload } from 'react-icons/fc';
+import { FiDownload } from 'react-icons/fi';
 
 import type { IPCFile } from 'types/types';
 
@@ -19,6 +19,8 @@ const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
 
 	const [isLoading, setIsLoading] = useState(false);
 
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+
 	const downloadFile = async () => {
 		setIsLoading(true);
 		try {
@@ -32,23 +34,35 @@ const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
 	};
 
 	return (
-		<PopoverHeader>
-			<HStack>
-				<FcDownload size="30"></FcDownload>
-				<Button
-					backgroundColor={config?.theme ?? 'white'}
-					textColor={colorText}
-					w="100%"
-					p="0px"
-					mx="4px"
-					onClick={downloadFile}
-					isLoading={isLoading}
-					id="ipc-dashboard-download-button"
-				>
-					Download
-				</Button>
-			</HStack>
-		</PopoverHeader>
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={downloadFile}
+			w="100%"
+			cursor="pointer"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={FiDownload}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+			>
+				Download
+			</Text>
+		</HStack>
 	);
 };
 

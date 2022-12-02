@@ -1,6 +1,16 @@
-import { Button, HStack, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	Button,
+	HStack,
+	Icon,
+	Input,
+	Text,
+	useBreakpointValue,
+	useColorModeValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { FcFile } from 'react-icons/fc';
+
 import { v4 as uuid } from 'uuid';
 
 import Modal from 'components/Modal';
@@ -12,6 +22,7 @@ import generateFileKey from 'utils/generateFileKey';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+import { AiOutlineFileAdd } from 'react-icons/ai';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -23,6 +34,8 @@ const UploadFile = (): JSX.Element => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const colorText = useColorModeValue('gray.800', 'white');
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
@@ -69,19 +82,34 @@ const UploadFile = (): JSX.Element => {
 	};
 
 	return (
-		<HStack>
-			<FcFile display="flex" size="40"></FcFile>
-			<Button
-				w="100%"
-				backgroundColor={config?.theme}
-				textColor={colorText}
-				justifyContent="flex-start"
-				onClick={onOpen}
-				isLoading={isLoading}
-				id="ipc-upload-button"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={AiOutlineFileAdd}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
 			>
 				Upload a file
-			</Button>
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

@@ -10,19 +10,14 @@ import {
 	PopoverTrigger,
 	Portal,
 	Text,
+	useBreakpointValue,
 	useColorModeValue,
+	useDisclosure,
+	VStack,
 } from '@chakra-ui/react';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
-
-import DeleteFile from 'components/file/DeleteFile';
-import DownloadFile from 'components/file/DownloadFile';
-import MoveFile from 'components/file/MoveFile';
-import RenameFile from 'components/file/RenameFile';
-import ShareFile from 'components/file/ShareFile';
-import UpdateContentFile from 'components/file/UpdateContentFile';
-import Logs from './file/LogsFile';
 
 import DeleteFolder from 'components/folder/DeleteFolder';
 import MoveFolder from 'components/folder/MoveFolder';
@@ -32,7 +27,9 @@ import type { IPCFile, IPCFolder } from 'types/types';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { FcFile, FcFolder } from 'react-icons/fc';
-import RestoreFile from "./file/RestoreFile";
+import { useState } from 'react';
+import { FileOptionsDrawer, FileOptionsPopover } from './dashboardPage/FileOptions';
+import useToggle from "../contexts/toggle";
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();
@@ -72,6 +69,12 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 	const { path, setPath } = useDriveContext();
 	const { config } = useConfigContext();
 	const colorText = useColorModeValue('gray.800', 'white');
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+	const { toggle: popoverOpeningToggle, toggleHandler: popoverOpeningHandler } = useToggle();
 
 	return (
 		<>
@@ -123,42 +126,33 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 				</FolderCard>
 			))}
 			{files.map((file) => (
-				<FileCard key={file.createdAt}>
+				<FileCard
+					key={file.createdAt}
+					onContextMenu={(e) => {
+						e.preventDefault();
+						if (!isDrawer) {
+							setClickPosition({ x: e.clientX, y: e.clientY });
+							popoverOpeningHandler();
+						} else onOpen();
+					}}
+				>
 					<>
 						<HStack>
-							<FcFile size="35"></FcFile>
-							<Popover placement="right">
-								<PopoverTrigger>
-									<Button
-										display="flex"
-										w="100%"
-										backgroundColor={config?.theme ?? 'white'}
-										className="ipc-file-popover-button"
-										justifyContent="start"
-										textColor={colorText}
-									>
-										{file.name}
-									</Button>
-								</PopoverTrigger>
-								<Portal>
-									<PopoverContent w="300px" backgroundColor={config?.theme ?? 'white'}>
-										<>
-											{file.deletedAt === null ? (
-												<>
-													<DownloadFile file={file} />
-													<ShareFile file={file} />
-													<MoveFile file={file} />
-													<RenameFile file={file} concernedFiles={files} />
-													<UpdateContentFile file={file} />
-												</>
-											) : <RestoreFile file={file} concernedFiles={files} />
-											}
-											<DeleteFile file={file} concernedFiles={files} />
-											<Logs title="Logs" />
-										</>
-									</PopoverContent>
-								</Portal>
-							</Popover>
+							<FcFile size="35" />
+							<Text className="ipc-file-popover-button">{file.name}</Text>
+							<Box>
+								{isDrawer ? (
+									<FileOptionsDrawer file={file} files={files} isOpen={isOpen} onClose={onClose} />
+								) : (
+									<FileOptionsPopover
+										file={file}
+										files={files}
+										clickPosition={clickPosition}
+										popoverOpeningToggle={popoverOpeningToggle}
+										popoverOpeningHandler={popoverOpeningHandler}
+									/>
+								)}
+							</Box>
 						</HStack>
 						<Box w="33%">
 							<Text textColor={colorText}>

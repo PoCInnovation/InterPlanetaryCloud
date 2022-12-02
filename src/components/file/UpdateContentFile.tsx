@@ -1,6 +1,16 @@
-import { Button, HStack, Input, PopoverFooter, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	Button,
+	HStack,
+	Icon,
+	Input,
+	Text,
+	useBreakpointValue,
+	useColorModeValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { FcUpload } from 'react-icons/fc';
+import { GoSync } from 'react-icons/go';
 
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
@@ -27,6 +37,8 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+
 	const updateContent = async () => {
 		if (!fileEvent) return;
 
@@ -49,7 +61,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		} else {
 			const updated = await user.contact.updateFileContent(upload.file);
 			toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
-			if (updated.success && upload.file) {ipc-dashboard-update-content-button
+			if (updated.success && upload.file) {
 				const index = files.indexOf(oldFile);
 				if (index !== -1) files[index] = upload.file;
 				setFiles(files);
@@ -64,49 +76,61 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
-		<PopoverFooter>
-			<HStack>
-				<FcUpload size="30"></FcUpload>
-				<Button
-					backgroundColor={config?.theme ?? 'white'}
-					textColor={colorText}
-					w="100%"
-					p="0px"
-					mx="4px"
-					onClick={async () => onOpen()}
-					isLoading={isLoading}
-					id="ipc-dashboard-update-content-button"
-				>
-					Update content
-				</Button>
-				<Modal
-					isOpen={isOpen}
-					onClose={onClose}
-					title="Update file content from a file"
-					CTA={
-						<Button
-							variant="inline"
-							w="100%"
-							mb="16px"
-							onClick={updateContent}
-							isLoading={isLoading}
-							id="ipc-dashboard-update-file-content-button"
-						>
-							Upload new version
-						</Button>
-					}
-				>
-					<Input
-						type="file"
-						h="100%"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={GoSync}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+			>
+				Update the content
+			</Text>
+			<Modal
+				isOpen={isOpen}
+				onClose={onClose}
+				title="Update file content from a file"
+				CTA={
+					<Button
+						variant="inline"
 						w="100%"
-						p="10px"
-						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-						id="ipc-dashboard-input-new-file-content"
-					/>
-				</Modal>
-			</HStack>
-		</PopoverFooter>
+						mb="16px"
+						onClick={updateContent}
+						isLoading={isLoading}
+						id="ipc-dashboard-update-file-content-button"
+					>
+						Upload new version
+					</Button>
+				}
+			>
+				<Input
+					type="file"
+					h="100%"
+					w="100%"
+					p="10px"
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+					id="ipc-dashboard-input-new-file-content"
+				/>
+			</Modal>
+		</HStack>
 	);
 };
 

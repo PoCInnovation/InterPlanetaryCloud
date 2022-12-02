@@ -12,7 +12,7 @@ import 'theme/index.css';
 import Auth from 'lib/auth';
 import User from 'lib/user';
 
-import { IPCConfig, IPCContact, IPCFile, IPCFolder } from 'types/types';
+import { IPCConfig, IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
 import AuthContext from 'contexts/auth';
 import ConfigContext from 'contexts/config';
@@ -30,7 +30,9 @@ const App = ({
 	const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
 	const [error, setError] = useState<Error | unknown>(undefined);
 	const [files, setFiles] = useState<IPCFile[]>([]);
+	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [folders, setFolders] = useState<IPCFolder[]>([]);
+	const [programs, setPrograms] = useState<IPCProgram[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
 	const [path, setPath] = useState('/');
 	const toast = useToast();
@@ -83,8 +85,12 @@ const App = ({
 								value={{
 									files,
 									setFiles,
+									sharedFiles,
+									setSharedFiles,
 									folders,
 									setFolders,
+									programs,
+									setPrograms,
 									contacts,
 									setContacts,
 									path,

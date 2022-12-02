@@ -50,6 +50,7 @@ const Logs = ({ title }: LogsInfo): JSX.Element => {
                 </>
             )
         }
+		return <></>
 }
 
 export default Logs

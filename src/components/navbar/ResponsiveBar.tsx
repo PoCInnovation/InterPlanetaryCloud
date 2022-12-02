@@ -17,31 +17,17 @@ import {
 
 import colors from 'theme/foundations/colors';
 
-import { DeployButton, GithubDeployButton } from 'components/CustomButtons';
-import Sidebar from 'components/SideBar';
+import { DeployButton, GithubDeployButton } from 'components/computing/CustomButtons';
+import Sidebar from 'components/navbar/SideBar';
 
 type BarProps = {
-	onOpenProgram: () => void;
-	isDeployLoading: boolean;
-	onOpenGithub: () => void;
 	setSelectedTab: (tab: number) => void;
-	isGithubLoading: boolean;
 	selectedTab: number;
 	configTheme: string;
 };
 
-export const LeftBar = ({
-	onOpenProgram,
-	isDeployLoading,
-	isGithubLoading,
-	onOpenGithub,
-	setSelectedTab,
-	selectedTab,
-	configTheme,
-}: BarProps): JSX.Element => (
+export const LeftBar = ({ setSelectedTab, selectedTab, configTheme }: BarProps): JSX.Element => (
 	<Sidebar
-		deployButton={<DeployButton onClick={onOpenProgram} isLoading={isDeployLoading} />}
-		githubButton={<GithubDeployButton onClick={onOpenGithub} isLoading={isGithubLoading} />}
 		contactTab="Contacts"
 		myFilesTab="My files"
 		myProgramsTab="My programs"
@@ -55,15 +41,7 @@ export const LeftBar = ({
 	/>
 );
 
-export const BarWithDrawer = ({
-	onOpenProgram,
-	setSelectedTab,
-	isDeployLoading,
-	onOpenGithub,
-	isGithubLoading,
-	selectedTab,
-	configTheme,
-}: BarProps): JSX.Element => {
+export const BarWithDrawer = ({ setSelectedTab, selectedTab, configTheme }: BarProps): JSX.Element => {
 	const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
 	const placement: SlideDirection = 'left';
 
@@ -72,15 +50,7 @@ export const BarWithDrawer = ({
 			<Drawer isOpen={isOpenDrawer} placement={placement} onClose={onCloseDrawer}>
 				<DrawerOverlay />
 				<DrawerContent w="75%">
-					<LeftBar
-						onOpenProgram={onOpenProgram}
-						onOpenGithub={onOpenGithub}
-						isGithubLoading={isGithubLoading}
-						setSelectedTab={setSelectedTab}
-						isDeployLoading={isDeployLoading}
-						selectedTab={selectedTab}
-						configTheme={configTheme}
-					/>
+					<LeftBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={configTheme} />
 				</DrawerContent>
 			</Drawer>
 			<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0">
@@ -107,38 +77,10 @@ export const BarWithDrawer = ({
 	);
 };
 
-export const ResponsiveBar = ({
-	onOpenProgram,
-	onOpenGithub,
-	isGithubLoading,
-	setSelectedTab,
-	isDeployLoading,
-	selectedTab,
-	configTheme,
-}: BarProps): JSX.Element => {
+export const ResponsiveBar = ({ setSelectedTab, selectedTab, configTheme }: BarProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
 
 	if (!isDrawerNeeded)
-		return (
-			<LeftBar
-				onOpenProgram={onOpenProgram}
-				onOpenGithub={onOpenGithub}
-				isGithubLoading={isGithubLoading}
-				setSelectedTab={setSelectedTab}
-				isDeployLoading={isDeployLoading}
-				selectedTab={selectedTab}
-				configTheme={configTheme}
-			/>
-		);
-	return (
-		<BarWithDrawer
-			onOpenProgram={onOpenProgram}
-			setSelectedTab={setSelectedTab}
-			onOpenGithub={onOpenGithub}
-			isGithubLoading={isGithubLoading}
-			isDeployLoading={isDeployLoading}
-			selectedTab={selectedTab}
-			configTheme={configTheme}
-		/>
-	);
+		return <LeftBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={configTheme} />;
+	return <BarWithDrawer setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={configTheme} />;
 };
