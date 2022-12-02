@@ -84,6 +84,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-update-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

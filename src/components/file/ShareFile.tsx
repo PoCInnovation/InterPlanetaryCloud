@@ -64,6 +64,7 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-share-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

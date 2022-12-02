@@ -42,6 +42,7 @@ const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
 			onClick={downloadFile}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-download-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

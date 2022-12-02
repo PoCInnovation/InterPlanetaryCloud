@@ -85,7 +85,7 @@ const ProgramModal = ({
 					w="100%"
 					p="10px"
 					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboard-deploy-program"
+					id="ipc-dashboard-deploy-program-modal"
 				/>
 			</>
 		</Modal>

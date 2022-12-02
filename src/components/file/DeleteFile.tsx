@@ -68,6 +68,7 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-delete-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

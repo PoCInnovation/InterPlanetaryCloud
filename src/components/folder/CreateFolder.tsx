@@ -67,6 +67,7 @@ const CreateFolder = (): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-create-folder-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

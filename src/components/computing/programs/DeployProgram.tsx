@@ -16,6 +16,7 @@ const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): J
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-deploy-program-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

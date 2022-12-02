@@ -15,6 +15,7 @@ const DeployGithub = (): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-deploy-github-program-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

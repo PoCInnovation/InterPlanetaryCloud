@@ -68,6 +68,7 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-rename-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

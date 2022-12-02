@@ -47,9 +47,9 @@ export const BarWithDrawer = ({ setSelectedTab, selectedTab, configTheme }: BarP
 
 	return (
 		<Box zIndex={100} position="relative" height="80px">
-			<Drawer isOpen={isOpenDrawer} placement={placement} onClose={onCloseDrawer}>
-				<DrawerOverlay />
-				<DrawerContent w="75%">
+			<Drawer isOpen={isOpenDrawer} placement={placement} onClose={onCloseDrawer} id="ipc-dashboard-drawer-overlay">
+				<DrawerOverlay  />
+				<DrawerContent w="75%" >
 					<LeftBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={configTheme} />
 				</DrawerContent>
 			</Drawer>

@@ -16,6 +16,7 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-details-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

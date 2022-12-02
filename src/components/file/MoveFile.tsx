@@ -65,6 +65,7 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-move-button"
 			_hover={{
 				bg: 'blue.100',
 			}}

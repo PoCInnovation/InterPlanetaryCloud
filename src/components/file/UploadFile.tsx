@@ -90,6 +90,7 @@ const UploadFile = (): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
+			id="ipc-dashboard-upload-file-button"
 			_hover={{
 				bg: 'blue.100',
 			}}
