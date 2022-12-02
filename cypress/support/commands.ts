@@ -26,7 +26,7 @@ Cypress.Commands.add('signup', () => {
 Cypress.Commands.add('uploadFile', (file, params = null) => {
 	cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 	cy.get('.ipc-new-elem-button').click();
-	cy.get('#ipc-upload-button').click({ force: true });
+	cy.get('#ipc-dashboard-upload-file-button').click({ force: true });
 	cy.get('#ipc-dashboard-upload-file').attachFile(file, params);
 	cy.get('#ipc-dashboard-upload-file-modal-button').click();
 });
