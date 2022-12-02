@@ -27,8 +27,7 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.6.0",
     "typescript": "^4.8.4",
-    "uuid": "^8.3.2",
-    "yarn": "^1.22.19"
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "dev": "next dev -p 8080",
