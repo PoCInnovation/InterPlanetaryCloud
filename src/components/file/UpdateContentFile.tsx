@@ -49,7 +49,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		} else {
 			const updated = await user.contact.updateFileContent(upload.file);
 			toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
-			if (updated.success && upload.file) {
+			if (updated.success && upload.file) {ipc-dashboard-update-content-button
 				const index = files.indexOf(oldFile);
 				if (index !== -1) files[index] = upload.file;
 				setFiles(files);

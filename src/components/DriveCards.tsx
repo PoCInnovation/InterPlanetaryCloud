@@ -22,6 +22,7 @@ import MoveFile from 'components/file/MoveFile';
 import RenameFile from 'components/file/RenameFile';
 import ShareFile from 'components/file/ShareFile';
 import UpdateContentFile from 'components/file/UpdateContentFile';
+import Logs from './file/LogsFile';
 
 import DeleteFolder from 'components/folder/DeleteFolder';
 import MoveFolder from 'components/folder/MoveFolder';
@@ -153,6 +154,7 @@ const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 											) : <RestoreFile file={file} concernedFiles={files} />
 											}
 											<DeleteFile file={file} concernedFiles={files} />
+											<Logs title="Logs" />
 										</>
 									</PopoverContent>
 								</Portal>
