@@ -1,12 +1,13 @@
 import { Button, HStack, Text, useDisclosure, useToast } from '@chakra-ui/react';
-import { useDriveContext } from 'contexts/drive';
 import { useEffect, useState } from 'react';
 import { FcFullTrash } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
-import type { IPCFolder } from 'types/types';
 
 import { useUserContext } from 'contexts/user';
+import { useDriveContext } from 'contexts/drive';
+
+import type { IPCFolder } from 'types/types';
 
 type DeleteFolderProps = {
 	folder: IPCFolder;

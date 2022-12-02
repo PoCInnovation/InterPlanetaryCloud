@@ -1,24 +1,39 @@
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Select, useToast, VStack } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+
+import Modal from 'components/Modal';
+
+import { useUserContext } from 'contexts/user';
+import { useDriveContext } from "contexts/drive";
+
+import { GitHubRepository, IPCProgram } from 'types/types';
+
 import CustomProgram from '../CustomProgram';
-import Modal from '../../Modal';
-import { GitHubRepository, IPCProgram } from '../../../types/types';
-import { useUserContext } from '../../../contexts/user';
 
 const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }): JSX.Element => {
 	const { user } = useUserContext();
 	const { data: session } = useSession();
+	const { setPrograms } = useDriveContext()
+
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const router =  useRouter();
 
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
 	const [customName, setCustomName] = useState<string>('');
 	const [customEntrypoint, setCustomEntrypoint] = useState<string>('');
-
 	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
-	const [programs, setPrograms] = useState<IPCProgram[]>([]);
+
+	useEffect(() => {
+		(async () => {
+			if (!user) {
+				router.push('/');
+			} else if (session) await getRepositories();
+		})();
+	}, []);
 
 	const cloneToBackend = async (repository: string) => {
 		try {
@@ -46,6 +61,16 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 		setIsDeployLoading(false);
 		setCustomEntrypoint('');
 		setCustomName('');
+	};
+
+	const getRepositories = async () => {
+		try {
+			const result = await axios.get('/api/computing/github/repositories');
+			if (result.status !== 200) throw new Error("Unable to load repositories from github's API");
+			setRepositories(result.data);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (

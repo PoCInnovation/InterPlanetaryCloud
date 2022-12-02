@@ -1,4 +1,4 @@
-import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
 import {
 	Button,
 	Divider,
@@ -6,20 +6,19 @@ import {
 	Icon,
 	Text,
 	useBreakpointValue,
-	useColorModeValue,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
+import { FcFolder } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
-import { FcFolder } from 'react-icons/fc';
+
+import type { IPCFile } from 'types/types';
 
 type MoveFileProps = {
 	file: IPCFile;
@@ -28,15 +27,13 @@ type MoveFileProps = {
 const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles, folders } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [newPath, setNewPath] = useState('/');
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const moveFile = async () => {
 		setIsLoading(true);

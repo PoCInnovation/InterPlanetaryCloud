@@ -1,6 +1,7 @@
 import { accounts, aggregate, forget, post } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
+
 import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
 
 import type {

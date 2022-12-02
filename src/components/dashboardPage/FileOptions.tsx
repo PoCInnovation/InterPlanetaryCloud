@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
 	Box,
 	Drawer,
@@ -20,12 +21,11 @@ import RenameFile from 'components/file/RenameFile';
 import UpdateContentFile from 'components/file/UpdateContentFile';
 import DeleteFile from 'components/file/DeleteFile';
 import DetailsFile from 'components/file/DetailsFile';
+import RestoreFile from "components/file/RestoreFile";
 
 import { IPCFile } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
-import { useEffect } from 'react';
-import RestoreFile from "../file/RestoreFile";
 
 const FileOptionsContent = ({ file, files }: { file: IPCFile; files: IPCFile[] }): JSX.Element => (
 	<>

@@ -7,7 +7,6 @@ import {
 	Input,
 	Text,
 	useBreakpointValue,
-	useColorModeValue,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
@@ -16,23 +15,20 @@ import { ChangeEvent, useState } from 'react';
 import Modal from 'components/Modal';
 import type { IPCFolder } from 'types/types';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();
-	const { config } = useConfigContext();
 	const { folders, setFolders, path } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [name, setName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const createFolder = async () => {
 		if (!name || name.includes('/')) {

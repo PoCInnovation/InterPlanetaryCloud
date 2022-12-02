@@ -1,4 +1,4 @@
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
 import {
 	Box,
 	Button,
@@ -13,8 +13,9 @@ import {
 	useBreakpointValue,
 	useColorModeValue,
 	useDisclosure,
-	VStack,
 } from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { FcFile, FcFolder } from 'react-icons/fc';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
@@ -26,10 +27,10 @@ import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
-import { FcFile, FcFolder } from 'react-icons/fc';
-import { useState } from 'react';
+
+import useToggle from "hooks/useToggle";
+
 import { FileOptionsDrawer, FileOptionsPopover } from './dashboardPage/FileOptions';
-import useToggle from "../contexts/toggle";
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();

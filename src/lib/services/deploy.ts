@@ -2,7 +2,9 @@ import { program } from 'aleph-sdk-ts';
 import { ethereum } from 'aleph-sdk-ts/accounts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
+
 import child_process from 'child_process';
+
 import fs from 'fs';
 
 import { ALEPH_CHANNEL } from 'config/constants';

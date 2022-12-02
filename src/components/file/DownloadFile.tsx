@@ -1,11 +1,9 @@
-import { HStack, Icon, Text, useBreakpointValue, useColorModeValue, useToast } from '@chakra-ui/react';
-import { useState } from 'react';
+import { HStack, Icon, Text, useBreakpointValue, useToast } from '@chakra-ui/react';
 import { FiDownload } from 'react-icons/fi';
 
-import type { IPCFile } from 'types/types';
-
-import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
+
+import type { IPCFile } from 'types/types';
 
 type DownloadFileProps = {
 	file: IPCFile;
@@ -13,16 +11,11 @@ type DownloadFileProps = {
 
 const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
 	const { user } = useUserContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
-
-	const [isLoading, setIsLoading] = useState(false);
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const downloadFile = async () => {
-		setIsLoading(true);
 		try {
 			const download = await user.drive.download(file);
 			toast({ title: download.message, status: download.success ? 'success' : 'error' });
@@ -30,7 +23,6 @@ const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
 			console.error(error);
 			toast({ title: 'Unable to download file', status: 'error' });
 		}
-		setIsLoading(false);
 	};
 
 	return (

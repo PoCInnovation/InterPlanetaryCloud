@@ -7,7 +7,6 @@ import {
 	Input,
 	Text,
 	useBreakpointValue,
-	useColorModeValue,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
@@ -16,11 +15,11 @@ import { ChangeEvent, useState } from 'react';
 import { BsPencil } from 'react-icons/bs';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+
+import type { IPCFile } from 'types/types';
 
 type RenameFileProps = {
 	file: IPCFile;
@@ -30,15 +29,13 @@ type RenameFileProps = {
 const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [name, setName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const renameFile = async () => {
 		setIsLoading(true);

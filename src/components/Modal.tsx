@@ -3,6 +3,7 @@ import { Modal as UIModal, ModalBody, ModalContent, ModalFooter, ModalHeader, Mo
 import colors from 'theme/foundations/colors';
 
 import OutlineButton from 'components/OutlineButton';
+
 import { useConfigContext } from 'contexts/config';
 
 type ModalProps = {

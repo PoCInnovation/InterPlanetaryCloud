@@ -1,7 +1,9 @@
 import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import { AiOutlineCode } from 'react-icons/ai';
+
+import { IPCProgram } from 'types/types';
 import ProgramModal from './ProgramModal';
-import { IPCProgram } from '../../../types/types';
+
 
 const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();

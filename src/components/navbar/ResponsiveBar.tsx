@@ -15,10 +15,9 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 
-import colors from 'theme/foundations/colors';
-
-import { DeployButton, GithubDeployButton } from 'components/computing/CustomButtons';
 import Sidebar from 'components/navbar/SideBar';
+
+import colors from 'theme/foundations/colors';
 
 type BarProps = {
 	setSelectedTab: (tab: number) => void;

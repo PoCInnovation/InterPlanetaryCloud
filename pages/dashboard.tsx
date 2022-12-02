@@ -1,19 +1,10 @@
-import axios from 'axios';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Box, Button, HStack, Input, Select, useColorMode, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import { Box, HStack, useColorMode, useToast, VStack } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import type { GitHubRepository, IPCFile, IPCProgram } from 'types/types';
-
-import Modal from 'components/Modal';
-
-import { extractFilename } from 'utils/fileManipulation';
-
-import CustomProgram from 'components/computing/CustomProgram';
 import DisplayCards from 'components/DisplayCards';
 import { ResponsiveBar } from 'components/navbar/ResponsiveBar';
 import { useConfigContext } from 'contexts/config';
@@ -26,17 +17,8 @@ const Dashboard = (): JSX.Element => {
 	const { config, setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { isOpen: isOpenGithub, onOpen: onOpenGithub, onClose: onCloseGithub } = useDisclosure();
-	const { programs, sharedFiles, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
+	const { sharedFiles, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [selectedProgram, setSelectedProgram] = useState<IPCProgram>({
-		name: '',
-		hash: '',
-		createdAt: 0,
-		entrypoint: '',
-	});
-	const [repositories, setRepositories] = useState<GitHubRepository[]>([]);
-	const { data: session } = useSession();
 
 	useEffect(() => {
 		(async () => {
@@ -45,7 +27,6 @@ const Dashboard = (): JSX.Element => {
 			} else {
 				await loadContact();
 				await loadUserContents();
-				if (session) await getRepositories();
 			}
 		})();
 	}, []);
@@ -75,16 +56,6 @@ const Dashboard = (): JSX.Element => {
 		toast({ title: loadedConfig.message, status: loadedConfig.success ? 'success' : 'error' });
 	};
 
-	const getRepositories = async () => {
-		try {
-			const result = await axios.get('/api/computing/github/repositories');
-			if (result.status !== 200) throw new Error("Unable to load repositories from github's API");
-			setRepositories(result.data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
 	return (
 		<HStack minH="100vh" minW="100vw" align="start" bg={config?.theme ?? 'white'}>
 			<ResponsiveBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={config?.theme ?? 'white'} />
@@ -93,12 +64,10 @@ const Dashboard = (): JSX.Element => {
 					<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
 						{/* TODO: clear DisplayCardsParams */}
 						<DisplayCards
-							myPrograms={programs}
 							sharedFiles={sharedFiles}
 							index={selectedTab}
 							isRedeployLoading={false}
 							onOpenRedeployProgram={() => {}}
-							setSelectedProgram={setSelectedProgram}
 						/>
 					</VStack>
 				</Box>

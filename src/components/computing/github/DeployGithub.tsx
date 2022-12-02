@@ -1,5 +1,6 @@
 import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import { AiOutlineGithub } from 'react-icons/ai';
+
 import GithubModal from './GithubModal';
 
 const DeployGithub = (): JSX.Element => {

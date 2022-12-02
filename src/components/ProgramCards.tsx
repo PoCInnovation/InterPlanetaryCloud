@@ -1,16 +1,16 @@
 import { Box, Button, HStack, Text, useColorModeValue } from '@chakra-ui/react';
-
-import type { IPCProgram } from 'types/types';
+import { FcRules } from 'react-icons/fc';
 
 import { RedeployButton } from 'components/computing/CustomButtons';
 import ProgramCard from 'components/ProgramCard';
-import { FcRules } from 'react-icons/fc';
-import { useDriveContext } from '../contexts/drive';
+
+import { useDriveContext } from 'contexts/drive';
+
+import type { IPCProgram } from 'types/types';
 
 type ProgramCardsProps = {
 	onOpenRedeployProgram: () => void;
 	isRedeployLoading: boolean;
-	setSelectedProgram: (program: IPCProgram) => void;
 };
 
 const ChoseColor = () => {
@@ -21,7 +21,6 @@ const ChoseColor = () => {
 const ProgramCards = ({
 	onOpenRedeployProgram,
 	isRedeployLoading,
-	setSelectedProgram,
 }: ProgramCardsProps): JSX.Element => {
 	const { programs } = useDriveContext();
 
@@ -52,7 +51,6 @@ const ProgramCards = ({
 							</Button>
 							<RedeployButton
 								onClick={() => {
-									setSelectedProgram(program);
 									onOpenRedeployProgram();
 								}}
 								isLoading={isRedeployLoading}

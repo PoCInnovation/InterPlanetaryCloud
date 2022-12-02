@@ -1,11 +1,8 @@
 import {
 	Button,
-	HStack,
 	Popover,
 	PopoverBody,
 	PopoverContent,
-	PopoverFooter,
-	PopoverHeader,
 	PopoverTrigger,
 	Portal,
 	Tab,
@@ -13,20 +10,17 @@ import {
 	Tabs,
 	Text,
 	useBreakpointValue,
-	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
-import { FcRules } from 'react-icons/fc';
-import { GoMarkGithub } from 'react-icons/go';
 
 import colors from 'theme/foundations/colors';
 
 import UploadFile from 'components/file/UploadFile';
 import CreateFolder from 'components/folder/CreateFolder';
-import { DeployButton } from '../computing/CustomButtons';
-import DeployProgram from '../computing/programs/DeployProgram';
-import DeployGithub from '../computing/github/DeployGithub';
-import useToggle from '../../contexts/toggle';
+import DeployProgram from 'components/computing/programs/DeployProgram';
+import DeployGithub from 'components/computing/github/DeployGithub';
+
+import useToggle from 'hooks/useToggle';
 
 type SideBarPropsType = {
 	contactTab: string;

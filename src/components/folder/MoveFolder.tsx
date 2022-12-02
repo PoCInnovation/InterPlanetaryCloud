@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { FcAdvance, FcFolder } from 'react-icons/fc';
 
 import Modal from 'components/Modal';
-import type { IPCFolder } from 'types/types';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+
+import type { IPCFolder } from 'types/types';
 
 type MoveFolderProps = {
 	folder: IPCFolder;

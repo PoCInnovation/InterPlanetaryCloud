@@ -5,7 +5,6 @@ import {
 	Input,
 	Text,
 	useBreakpointValue,
-	useColorModeValue,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
@@ -13,14 +12,14 @@ import { ChangeEvent, useState } from 'react';
 import { GoSync } from 'react-icons/go';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 
 import { getFileContent } from 'utils/fileManipulation';
 import generateFileKey from 'utils/generateFileKey';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+
+import type { IPCFile } from 'types/types';
 
 type UpdateContentFileProps = {
 	file: IPCFile;
@@ -29,15 +28,13 @@ type UpdateContentFileProps = {
 const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const updateContent = async () => {
 		if (!fileEvent) return;

@@ -1,9 +1,13 @@
 import { accounts, aggregate, forget, store } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
+
 import CryptoJS from 'crypto-js';
 import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
+
 import fileDownload from 'js-file-download';
+
+import ArraybufferToString from 'utils/arraybufferToString';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
@@ -12,12 +16,9 @@ import type {
 	IPCContact,
 	IPCFile,
 	IPCFolder,
-	IPCProgram,
 	ResponseType,
 	UploadResponse
 } from "types/types";
-
-import ArraybufferToString from 'utils/arraybufferToString';
 
 export const MONTH_MILLIS = 86400 * 30 * 1000
 

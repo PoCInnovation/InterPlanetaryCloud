@@ -7,7 +7,6 @@ import {
 	Select,
 	Text,
 	useBreakpointValue,
-	useColorModeValue,
 	useDisclosure,
 	useToast,
 	VStack,
@@ -16,10 +15,10 @@ import { ChangeEvent, useState } from 'react';
 import { BsShareFill } from 'react-icons/bs';
 
 import Modal from 'components/Modal';
-import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
 
-import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
+
+import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
 
 type ShareFileProps = {
 	file: IPCFile;
@@ -27,9 +26,6 @@ type ShareFileProps = {
 
 const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 	const { user } = useUserContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [contact, setContact] = useState<IPCContact | null>(null);
 	const [permission, setPermission] = useState<IPCPermission>('viewer');
@@ -37,6 +33,7 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const shareFile = async () => {
 		setIsLoading(true);

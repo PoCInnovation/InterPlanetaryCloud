@@ -1,22 +1,21 @@
+import { useState } from 'react';
 import {
 	Button,
 	HStack,
 	Icon,
 	Text,
 	useBreakpointValue,
-	useColorModeValue,
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
+import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
-import { useState } from 'react';
-import { IoTrashSharp } from 'react-icons/io5';
+
+import type { IPCFile } from 'types/types';
 
 type DeleteFileProps = {
 	file: IPCFile;
@@ -26,14 +25,12 @@ type DeleteFileProps = {
 const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { setFiles } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const deleteFile = async () => {
 		setIsLoading(true);

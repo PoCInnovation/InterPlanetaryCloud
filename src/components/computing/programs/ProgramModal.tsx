@@ -1,11 +1,17 @@
 import { ChangeEvent, useState } from 'react';
 import { Button, Input, useToast } from '@chakra-ui/react';
+
+import Modal from 'components/Modal';
+
+import { useUserContext } from 'contexts/user';
+import { useDriveContext } from 'contexts/drive';
+
+
+import { extractFilename } from 'utils/fileManipulation';
+
+import { IPCProgram } from 'types/types';
+
 import CustomProgram from '../CustomProgram';
-import Modal from '../../Modal';
-import { IPCProgram } from '../../../types/types';
-import { extractFilename } from '../../../utils/fileManipulation';
-import { useUserContext } from '../../../contexts/user';
-import { useDriveContext } from '../../../contexts/drive';
 
 const ProgramModal = ({
 	isOpen,

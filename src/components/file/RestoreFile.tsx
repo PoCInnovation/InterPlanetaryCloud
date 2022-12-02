@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import { Button, HStack, PopoverFooter, useColorModeValue, useToast } from '@chakra-ui/react';
 import {FcRedo} from 'react-icons/fc';
-
-import type { IPCFile } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
-import { useState } from 'react';
+
+import type { IPCFile } from 'types/types';
 
 type DeleteFileProps = {
 	file: IPCFile;

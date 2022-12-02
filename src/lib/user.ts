@@ -1,11 +1,12 @@
 import { accounts, aggregate } from 'aleph-sdk-ts';
-
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import mnemonicToPrivateKey from 'utils/mnemonicToPrivateKey';
 
 import Computing from 'lib/computing';
 import Contact from 'lib/contact';
 import Drive from 'lib/drive';
+
+import mnemonicToPrivateKey from 'utils/mnemonicToPrivateKey';
+
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
 
 class User {

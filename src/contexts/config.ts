@@ -1,4 +1,5 @@
 import { createContext, Dispatch, useContext } from 'react';
+
 import { IPCConfig } from 'types/types';
 
 type ConfigContextType = undefined | { config: IPCConfig; setConfig: Dispatch<IPCConfig | undefined> };
