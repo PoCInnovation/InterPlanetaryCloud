@@ -81,7 +81,7 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 					fontWeight: '500',
 				}}
 			>
-				Move to
+				Move to...
 			</Text>
 			<Modal
 				isOpen={isOpen}

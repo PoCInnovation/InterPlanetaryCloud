@@ -1,7 +1,8 @@
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Button, Divider, HStack, useDisclosure, useToast } from '@chakra-ui/react';
+import { Button, Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FcAdvance, FcFolder } from 'react-icons/fc';
+import { FcFolder } from 'react-icons/fc';
+import { MdOutlineDriveFileMove } from 'react-icons/md';
 
 import Modal from 'components/Modal';
 
@@ -19,6 +20,8 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 	const { files, setFiles, folders, setFolders } = useDriveContext();
 	const [hasPermission, setHasPermission] = useState(false);
 	const toast = useToast({ duration: 2000, isClosable: true });
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	const [newPath, setNewPath] = useState('/');
 	const [isLoading, setIsLoading] = useState(false);
@@ -62,20 +65,35 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 	if (!hasPermission) return <></>;
 
 	return (
-		<HStack>
-			<FcAdvance size="30"></FcAdvance>
-			<Button
-				backgroundColor={'white'}
-				justifyContent="flex-start"
-				w="100%"
-				p="0px"
-				mx="4px"
-				onClick={onOpen}
-				isLoading={isLoading}
-				id="ipc-dashboard-move-folder-option"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-move-button"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={MdOutlineDriveFileMove}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
 			>
-				Move
-			</Button>
+				Move to...
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

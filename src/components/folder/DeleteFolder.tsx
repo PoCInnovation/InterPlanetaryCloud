@@ -1,6 +1,6 @@
-import { Button, HStack, Text, useDisclosure, useToast } from '@chakra-ui/react';
+import { Button, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FcFullTrash } from 'react-icons/fc';
+import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
 
@@ -16,6 +16,8 @@ type DeleteFolderProps = {
 const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { folders, setFolders, setFiles } = useDriveContext();
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [hasPermission, setHasPermission] = useState(false);
@@ -59,19 +61,35 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 	if (!hasPermission) return <></>;
 
 	return (
-		<HStack>
-			<FcFullTrash size="30"></FcFullTrash>
-			<Button
-				backgroundColor={'white'}
-				justifyContent="flex-start"
-				w="100%"
-				p="0px"
-				mx="4px"
-				onClick={() => onOpen()}
-				id="ipc-dashboard-delete-folderbutton"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-delete-button"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={IoTrashSharp}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
 			>
 				Delete
-			</Button>
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

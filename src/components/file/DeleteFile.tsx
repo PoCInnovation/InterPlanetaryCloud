@@ -24,7 +24,7 @@ type DeleteFileProps = {
 
 const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
-	const { setFiles } = useDriveContext();
+	const { files, setFiles } = useDriveContext();
 
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,7 +36,6 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		setIsLoading(true);
 		if (user.account) {
 			const deleted = await user.drive.delete([file.hash]);
-
 			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			if (deleted.success) {
 				const removed = await user.contact.deleteFiles([file.id], concernedFiles);
@@ -54,6 +53,31 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		onClose();
 	};
 
+	const moveToBin = async (deletedAt: number) => {
+		setIsLoading(true);
+		if (user.account) {
+			const moved = await user.contact.moveFileToBin(file, deletedAt, concernedFiles)
+			toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
+
+			const index = files.indexOf(file);
+			if (index !== -1) {
+				files[index].deletedAt = deletedAt;
+				setFiles([...files]);
+			}
+		} else {
+			toast({ title: 'Failed to load account', status: 'error' });
+		}
+		setIsLoading(false);
+	};
+
+	const onBinClicked = async () => {
+		if (!file.deletedAt) {
+			await moveToBin(Date.now());
+		} else {
+			onOpen();
+		}
+	}
+
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
@@ -62,7 +86,7 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 			p="8px 12px"
 			borderRadius="8px"
 			role="group"
-			onClick={onOpen}
+			onClick={onBinClicked}
 			w="100%"
 			cursor="pointer"
 			id="ipc-dashboard-delete-button"
@@ -84,7 +108,7 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 					fontWeight: '500',
 				}}
 			>
-				Delete
+				{file.deletedAt ? 'Delete' : 'Move to bin'}
 			</Text>
 			<Modal
 				isOpen={isOpen}

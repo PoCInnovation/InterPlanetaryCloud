@@ -82,7 +82,6 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 			>
 				Share
 			</Text>
-
 			<Modal
 				isOpen={isOpen}
 				onClose={onUnmount}
