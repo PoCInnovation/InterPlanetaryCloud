@@ -45,8 +45,14 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 			if (update.success) {
 				const index = files.indexOf(file);
 
-				if (index !== -1) files[index].name = name;
-				setFiles(files);
+				if (index !== -1) {
+					files[index].name = name;
+					files[index].logs.push({
+						action: `Renamed file to ${name}`,
+						date: Date.now()
+					})
+				}
+				setFiles([...files]);
 			}
 		}
 		setName('');

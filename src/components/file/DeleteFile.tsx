@@ -62,6 +62,10 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 			const index = files.indexOf(file);
 			if (index !== -1) {
 				files[index].deletedAt = deletedAt;
+				files[index].logs.push({
+					action: "Moved file to bin",
+					date: Date.now()
+				})
 				setFiles([...files]);
 			}
 		} else {

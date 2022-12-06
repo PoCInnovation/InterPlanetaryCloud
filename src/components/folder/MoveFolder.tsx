@@ -44,7 +44,14 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 		setFiles(
 			files.map((f) => {
-				if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+				if (f.path.startsWith(fullPath)) return {
+					...f,
+					path: f.path.replace(folder.path, newPath),
+					logs: [...f.logs, {
+						action: `Moved folder to ${fullPath}`,
+						date: Date.now()
+					}]
+				};
 				return f;
 			}),
 		);

@@ -50,6 +50,10 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 			hash: fileContent,
 			size: fileEvent.target.files![0].size,
 			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
+			logs: [...oldFile.logs, {
+				action: "Edit file content",
+				date: Date.now()
+			}]
 		};
 		setIsLoading(true);
 		const upload = await user.drive.upload(newFile, key);

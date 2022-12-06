@@ -256,6 +256,10 @@ class Contact {
 
 				if (file) {
 					file.name = newName;
+					file.logs.push({
+						action: `Renamed file to ${newName}`,
+						date: Date.now()
+					})
 					fileFound = true;
 					await this.publishAggregate();
 				}
@@ -290,6 +294,10 @@ class Contact {
 
 				if (file) {
 					file.deletedAt = deletedAt;
+					file.logs.push({
+						action: deletedAt ? "Moved file to bin" : "Restored file",
+						date: Date.now()
+					})
 					fileFound = true;
 					await this.publishAggregate();
 				}
@@ -327,6 +335,10 @@ class Contact {
 					}
 					const newFile: IPCFile = {
 						...mainFile,
+						logs: [...mainFile.logs, {
+							action: `Shared file with ${this.contacts[index].name}`,
+							date: Date.now()
+						}],
 						key: await encryptWithPublicKey(
 							this.contacts[index].publicKey.slice(2),
 							await decryptWithPrivateKey(this.private_key, mainFile.key),
@@ -404,7 +416,14 @@ class Contact {
 
 				if (contact) {
 					contact.folders = contact.folders.map((f) => {
-						if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+						if (f.path.startsWith(fullPath)) return {
+							...f,
+							path: f.path.replace(folder.path, newPath),
+							logs: [...f.logs, {
+								action: `Moved folder to ${fullPath}`,
+								date: Date.now()
+							}]
+						};
 						if (f === folder) return { ...f, path: newPath };
 						return f;
 					});
@@ -458,6 +477,10 @@ class Contact {
 					const currentFile = contact.files.find((f) => f.id === file.id);
 					if (currentFile) {
 						currentFile.path = newPath;
+						currentFile.logs.push({
+							action: `Moved file to ${newPath}`,
+							date: Date.now()
+						})
 						await this.publishAggregate();
 						return { success: true, message: 'File moved' };
 					}

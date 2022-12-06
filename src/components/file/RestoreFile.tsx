@@ -26,6 +26,10 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 			const index = files.indexOf(file);
 			if (index !== -1) {
 				files[index].deletedAt = null;
+				files[index].logs.push({
+					action: "Restored file",
+					date: Date.now()
+				})
 				setFiles([...files]);
 			}
 		} else {

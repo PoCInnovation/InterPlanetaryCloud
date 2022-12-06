@@ -41,6 +41,10 @@ const CreateFolder = (): JSX.Element => {
 			name,
 			path,
 			createdAt: Date.now(),
+			logs: [{
+				action: "Folder created",
+				date: Date.now()
+			}]
 		};
 
 		const created = await user.contact.createFolder(folder);

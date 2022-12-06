@@ -10,13 +10,20 @@ export type IPCFile = {
 	path: string;
 	permission: IPCPermission;
 	deletedAt: number | null;
+	logs: FileLogs[];
 };
 
 export type IPCFolder = {
 	name: string;
 	createdAt: number;
 	path: string;
+	logs: FileLogs[]
 };
+
+export type FileLogs = {
+	action: string
+	date: number
+}
 
 export type IPCProgram = {
 	hash: string;

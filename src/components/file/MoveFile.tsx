@@ -44,6 +44,10 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 		const index = files.indexOf(file);
 		if (index !== -1) {
 			files[index].path = newPath;
+			files[index].logs.push({
+				action: `Moved file to ${newPath}`,
+				date: Date.now()
+			})
 			setFiles([...files]);
 		}
 		setNewPath('/');
