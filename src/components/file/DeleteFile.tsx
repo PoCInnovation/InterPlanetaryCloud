@@ -131,7 +131,7 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 					</Button>
 				}
 			>
-				<Text>Are you sure you want to delete this file ?</Text>
+				<Text>Are you sure you want to delete this file?</Text>
 			</Modal>
 		</HStack>
 	);
