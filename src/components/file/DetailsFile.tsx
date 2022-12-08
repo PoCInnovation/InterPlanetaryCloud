@@ -15,7 +15,7 @@ import {
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import React, { useState } from 'react';
 import colors from 'theme/foundations/colors';
-import { IPCFile } from 'types/types';
+import { IPCFile, FileLogs } from 'types/types';
 import { useUserContext } from 'contexts/user';
 import type { IPCContact } from 'types/types';
 
@@ -35,6 +35,11 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 				list.push({ name: contact.name });
 			}
 		});
+	});
+
+	const listLogs: { actionLogs: string; dateLogs: number }[] = [];
+	file.logs.forEach((action: FileLogs) => {
+		listLogs.push({ actionLogs: action.action, dateLogs: action.date });
 	});
 
 	return (
@@ -93,26 +98,7 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 						/${new Date(file.createdAt).toString().substring(4, 15).slice(3, 6)}
 						/${new Date(file.createdAt).toString().substring(4, 15).slice(6)}`}
 						</Text>
-						<Text
-							fontSize={{ base: '16px', sm: '20px' }}
-							fontWeight="bold"
-							bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
-							bgClip="text"
-							id="line-title"
-						>
-							By !LUK
-						</Text>
-						<br />
-						<Text fontSize="l"> Update at Nov. 25th 2022 </Text>
-						<Text
-							fontSize={{ base: '16px', sm: '20px' }}
-							fontWeight="bold"
-							bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
-							bgClip="text"
-							id="logs-title"
-						>
-							By Mehdi
-						</Text>
+
 						<br />
 						<Text fontSize="l" marginBottom="10px">
 							{' '}
@@ -135,15 +121,16 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 								borderRadius="6px"
 								padding={'10px 10px 10px 10px'}
 							>
-								<Text fontSize={{ base: '16px', sm: '17px' }}>This file is shared with:</Text>
-								<Text
-									fontSize={{ base: '16px', sm: '17px' }}
-									fontWeight="bold"
-									bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
-									bgClip="text"
-									id="nbr-title"
-								>
-									4 people
+								<Text fontSize={{ base: '16px', sm: '17px' }}>
+									This file is shared with:
+									<Box
+										as="span"
+										bgClip="text"
+										bgGradient={`linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`}
+									>
+										{' '}
+										4 people
+									</Box>{' '}
 								</Text>
 							</Box>
 						</HStack>
@@ -160,6 +147,11 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 							borderRadius="16px"
 						/>
 						<Text fontSize="l"> History : </Text>
+						<br />
+						{listLogs.map((item) => (
+						<Text fontSize="l"> {item.actionLogs} {`${new Date(item.dateLogs).toString().substring(4, 15).slice(0, 3)}
+																									/${new Date(item.dateLogs).toString().substring(4, 15).slice(3, 6)}
+																									/${new Date(item.dateLogs).toString().substring(4, 15).slice(6)}`} </Text>))}
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>
