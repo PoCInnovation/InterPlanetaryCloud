@@ -20,7 +20,7 @@ import MoveFile from 'components/file/MoveFile';
 import RenameFile from 'components/file/RenameFile';
 import UpdateContentFile from 'components/file/UpdateContentFile';
 import DeleteFile from 'components/file/DeleteFile';
-import DetailsFile from 'components/file/DetailsFile';
+import DetailsFile from 'components/file/detailsFile/DetailsFile';
 import RestoreFile from "components/file/RestoreFile";
 
 import { IPCFile } from 'types/types';
