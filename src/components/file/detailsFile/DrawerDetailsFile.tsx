@@ -1,5 +1,5 @@
 import {
-  Box, DrawerContent, Drawer, DrawerOverlay, DrawerCloseButton, DrawerBody, Text, Stack, HStack,
+  Box, DrawerContent, Drawer, DrawerOverlay, DrawerCloseButton, DrawerBody, Text, Stack, HStack, useBreakpointValue,
 } from '@chakra-ui/react';
 
 import useToggle from 'hooks/useToggle';
@@ -13,6 +13,7 @@ import colors from 'theme/foundations/colors';
 const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: boolean, onClose: () => void }): JSX.Element => {
 	const { user } = useUserContext();
 	const { toggle: showShared, toggleHandler: sharedHandler } = useToggle();
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	const list: { name: string, address: string }[] = [];
 	user.contact.contacts.forEach((contact: IPCContact) => {
@@ -24,11 +25,11 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 	});
 
 	return (
-		<Drawer onClose={onClose} isOpen={isOpen} size={'sm'}>
+		<Drawer onClose={onClose} isOpen={isOpen} size={'sm'} placement={isDrawer ? 'bottom': 'right'}>
 			<DrawerOverlay />
-			<DrawerContent m="16px" borderRadius="8px">
-				<DrawerCloseButton />
-				<DrawerBody p="32px 16px 16px 16px">
+			<DrawerContent m={isDrawer ?"" : "16px"} borderRadius={isDrawer ? "16px" : "8px"} maxH="75%">
+				{!isDrawer && <DrawerCloseButton /> }
+				<DrawerBody p={isDrawer ? "32px 16px 64px 16px": "32px 16px 16px 16px"} >
 					<Stack spacing="32px">
 						<Stack px="16px">
 							<Text size="lg"> {file.name} </Text>
@@ -42,7 +43,6 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 						<Stack px="16px">
 							<Text>
 								<Box as="span" fontWeight="500">Created at{' '}</Box>
-
 								{`${new Date(file.createdAt).toString().substring(4, 15).slice(0, 3)}
 								/${new Date(file.createdAt).toString().substring(4, 15).slice(3, 6)}
 								/${new Date(file.createdAt).toString().substring(4, 15).slice(6)}`}
@@ -88,7 +88,7 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 							/>
 							<Text size="lg">History : </Text>
 							{file.logs.map((log) => (
-								<HStack w="100%" justify="space-between">
+								<HStack w="100%" justify="space-between" key={log.date}>
 									<Text>{log.action}</Text>
 									<Text>{`${new Date(log.date).toString().substring(4, 15).slice(0, 3)} /${new Date(log.date).toString().substring(4, 15).slice(3, 6)} /${new Date(log.date).toString().substring(4, 15).slice(6)}`} </Text>
 								</HStack>
