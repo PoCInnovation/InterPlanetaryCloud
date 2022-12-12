@@ -28,7 +28,7 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 	return (
 		<Drawer onClose={onClose} isOpen={isOpen} size={'sm'} placement={isDrawer ? 'bottom': 'right'}>
 			<DrawerOverlay />
-			<DrawerContent m={isDrawer ?"" : "16px"} borderRadius={isDrawer ? "16px" : "8px"} maxH={isDrawer ? "75%" : "100%" }>
+			<DrawerContent m={isDrawer ? "" : "16px"} borderRadius={isDrawer ? "16px" : "8px"} maxH={isDrawer ? "75%" : "100%" }>
 				{!isDrawer && <DrawerCloseButton /> }
 				<DrawerBody p={isDrawer ? "32px 16px 64px 16px": "32px 16px 16px 16px"} >
 					<Stack spacing="32px">
