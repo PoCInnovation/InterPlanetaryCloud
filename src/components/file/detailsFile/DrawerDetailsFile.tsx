@@ -9,6 +9,7 @@ import { useUserContext } from 'contexts/user';
 import { IPCContact, IPCFile } from 'types/types';
 
 import colors from 'theme/foundations/colors';
+import getFileType from '../../../utils/getFileType';
 
 const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: boolean, onClose: () => void }): JSX.Element => {
 	const { user } = useUserContext();
@@ -27,7 +28,7 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 	return (
 		<Drawer onClose={onClose} isOpen={isOpen} size={'sm'} placement={isDrawer ? 'bottom': 'right'}>
 			<DrawerOverlay />
-			<DrawerContent m={isDrawer ?"" : "16px"} borderRadius={isDrawer ? "16px" : "8px"} maxH="75%">
+			<DrawerContent m={isDrawer ?"" : "16px"} borderRadius={isDrawer ? "16px" : "8px"} maxH={isDrawer ? "75%" : "100%" }>
 				{!isDrawer && <DrawerCloseButton /> }
 				<DrawerBody p={isDrawer ? "32px 16px 64px 16px": "32px 16px 16px 16px"} >
 					<Stack spacing="32px">
@@ -55,7 +56,7 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 								<Box as="span" fontWeight="500">Hash of ipfs:</Box> {file.hash}
 							</Text>
 							<Text>
-								<Box as="span" fontWeight="500">Type :</Box> PDF file
+								<Box as="span" fontWeight="500">Type :</Box> {getFileType(file.name)}
 							</Text>
 						</Stack>
 						<Stack spacing="16px">
