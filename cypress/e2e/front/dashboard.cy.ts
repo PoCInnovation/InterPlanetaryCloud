@@ -27,15 +27,15 @@ describe('Good front for Dashboard', () => {
 	it('Good name for upload button', () => {
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
-		cy.get('#ipc-upload-button').should('contain', 'Upload a file');
+		cy.get('#ipc-dashboard-upload-file-button').should('contain', 'Upload a file');
 	});
 
 	it('Good name for deploy button', () => {
-		cy.get('#ipc-deploy-button').should('contain', 'Deploy a program');
+		cy.get('#ipc-dashboard-deploy-program-button').should('contain', 'Deploy a program');
 	});
 
 	it('Good name for create folder button', () => {
-		cy.get('#ipc-create-folder-button').should('contain', 'Create a folder');
+		cy.get('#ipc-dashboard-create-folder-button').should('contain', 'Create a folder');
 	});
 });
 
@@ -46,7 +46,7 @@ describe('Good Upload file modal front in Dashboard', () => {
 		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
-		cy.get('#ipc-upload-button').click({ force: true });
+		cy.get('#ipc-dashboard-upload-file-button').click({ force: true });
 	});
 
 	it('Good header', () => {
@@ -73,7 +73,7 @@ describe('Good Deploy program modal front in Dashboard', () => {
 		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
-		cy.get('#ipc-deploy-button').click({ force: true });
+		cy.get('#ipc-dashboard-deploy-program-button').click({ force: true });
 	});
 
 	it('Good header', () => {
@@ -100,7 +100,7 @@ describe('Good Create folder modal front in Dashboard', () => {
 		cy.get('#ipc-login-credentials-button').click();
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
-		cy.get('#ipc-create-folder-button').click({ force: true });
+		cy.get('#ipc-dashboard-create-folder-button').click({ force: true });
 	});
 
 	it('Good header', () => {

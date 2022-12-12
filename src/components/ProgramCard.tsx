@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
+
 import { useConfigContext } from 'contexts/config';
 
 import type { IPCProgram } from 'types/types';

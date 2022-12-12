@@ -2,12 +2,11 @@ import { CopyIcon } from '@chakra-ui/icons';
 import { Box, Button, Divider, Tooltip, VStack } from '@chakra-ui/react';
 
 import ContactCard from 'components/ContactCard';
-
-import type { IPCContact } from 'types/types';
-
 import AddContact from 'components/contact/AddContact';
 import DeleteContact from 'components/contact/DeleteContact';
 import UpdateContact from 'components/contact/UpdateContact';
+
+import type { IPCContact } from 'types/types';
 
 type ContactCardsProps = {
 	contacts: IPCContact[];

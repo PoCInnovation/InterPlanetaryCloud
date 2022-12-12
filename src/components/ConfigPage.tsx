@@ -1,10 +1,9 @@
 import { Box, Button, HStack, Input, Text, useColorMode, useColorModeValue, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
+import { BsCode, BsCodeSlash } from 'react-icons/bs';
 
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
-
-import { BsCode, BsCodeSlash } from 'react-icons/bs';
 
 const ConfigPage = (): JSX.Element => {
 	const { user } = useUserContext();

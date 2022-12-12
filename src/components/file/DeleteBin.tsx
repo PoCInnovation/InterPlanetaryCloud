@@ -1,9 +1,12 @@
 import {Button, Text, useColorModeValue, useDisclosure, useToast} from "@chakra-ui/react";
 import {useState} from "react";
-import {IPCFile, IPCFolder} from "../../types/types";
-import Modal from "../Modal";
-import {useUserContext} from "../../contexts/user";
-import {useDriveContext} from "../../contexts/drive";
+
+import Modal from "components/Modal";
+
+import {useUserContext} from "contexts/user";
+import {useDriveContext} from "contexts/drive";
+
+import {IPCFile, IPCFolder} from "types/types";
 
 type DeleteBinProps = {
     files: IPCFile[];

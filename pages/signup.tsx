@@ -6,6 +6,7 @@ import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra
 
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
+import { useConfigContext } from 'contexts/config';
 
 import { AuthReturnType } from 'lib/auth';
 
@@ -14,7 +15,6 @@ import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
 
 import colors from 'theme/foundations/colors';
-import { useConfigContext } from 'contexts/config';
 
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();

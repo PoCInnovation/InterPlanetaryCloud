@@ -1,37 +1,28 @@
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
 import {
 	Box,
 	Button,
 	HStack,
-	Popover,
-	PopoverBody,
-	PopoverContent,
-	PopoverFooter,
-	PopoverTrigger,
-	Portal,
 	Text,
+	useBreakpointValue,
 	useColorModeValue,
+	useDisclosure,
 } from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { FcFile, FcFolder } from 'react-icons/fc';
 
 import FileCard from 'components/FileCard';
 import FolderCard from 'components/FolderCard';
-
-import DeleteFile from 'components/file/DeleteFile';
-import DownloadFile from 'components/file/DownloadFile';
-import MoveFile from 'components/file/MoveFile';
-import RenameFile from 'components/file/RenameFile';
-import ShareFile from 'components/file/ShareFile';
-import UpdateContentFile from 'components/file/UpdateContentFile';
-
-import DeleteFolder from 'components/folder/DeleteFolder';
-import MoveFolder from 'components/folder/MoveFolder';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
-import { FcFile, FcFolder } from 'react-icons/fc';
-import RestoreFile from "./file/RestoreFile";
+
+import useToggle from "hooks/useToggle";
+
+import { FileOptionsDrawer, FileOptionsPopover } from './dashboardPage/FileOptions';
+import { FolderOptionsPopover , FolderOptionsDrawer } from './dashboardPage/FolderOptions';
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();
@@ -69,94 +60,83 @@ type DriveCardsProps = {
 
 const DriveCards = ({ files, folders }: DriveCardsProps): JSX.Element => {
 	const { path, setPath } = useDriveContext();
-	const { config } = useConfigContext();
 	const colorText = useColorModeValue('gray.800', 'white');
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const { isOpen: isOpenFolder, onOpen: onOpenFolder, onClose: onCloseFolder } = useDisclosure();
+	const { isOpen: isOpenFile, onOpen: onOpenFile, onClose: onCloseFile } = useDisclosure();
+
+	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+	const { toggle: popoverOpeningToggleFolder, toggleHandler: popoverOpeningHandlerFolder } = useToggle();
+	const { toggle: popoverOpeningToggleFile, toggleHandler: popoverOpeningHandlerFile } = useToggle();
 
 	return (
 		<>
 			<PathCard />
 			{folders.map((folder) => (
-				<FolderCard key={folder.createdAt}>
+				<FolderCard
+					key={folder.createdAt}
+					onContextMenu={(e) => {
+						e.preventDefault();
+						if (!isDrawer) {
+							setClickPosition({ x: e.clientX, y: e.clientY });
+							popoverOpeningHandlerFolder();
+						} else onOpenFolder();
+					}}
+					onClick={(e) => {
+						if (isDrawer || e.detail === 2) setPath(`${path + folder.name  }/`);
+					}}
+					className="ipc-folder-popover-button"
+				>
 					<>
 						<HStack w="100%">
 							<FcFolder display="flex" size="30"></FcFolder>
-							<Button
-								display="flex"
-								w="70%"
-								backgroundColor={config?.theme ?? 'white'}
-								textColor={colorText}
-								className="ipc-folder-popover-button"
-								justifyContent="start"
-								onClick={() => setPath(`${path}${folder.name}/`)}
-							>
-								{folder.name}
-							</Button>
+							<Text>{folder.name}</Text>
+							<Box>
+								{isDrawer ? (
+									<FolderOptionsDrawer folder={folder} isOpen={isOpenFolder} onClose={onCloseFolder} />
+								) : (
+									<FolderOptionsPopover
+										folder={folder}
+										clickPosition={clickPosition}
+										popoverOpeningToggle={popoverOpeningToggleFolder}
+										popoverOpeningHandler={popoverOpeningHandlerFolder}
+									/>
+								)}
+							</Box>
 						</HStack>
-						<Popover placement="left">
-							<PopoverTrigger>
-								<Box>
-									<Button
-										display="flex"
-										w="5%"
-										backgroundColor={config?.theme ?? 'white'}
-										textColor={colorText}
-										className="ipc-folder-popover-button"
-										justifyContent="start"
-									>
-										...
-									</Button>
-								</Box>
-							</PopoverTrigger>
-							<Portal>
-								<PopoverContent w="300px">
-									<PopoverBody>
-										<MoveFolder folder={folder} />
-									</PopoverBody>
-									<PopoverFooter>
-										<DeleteFolder folder={folder} />
-									</PopoverFooter>
-								</PopoverContent>
-							</Portal>
-						</Popover>
 					</>
 				</FolderCard>
 			))}
 			{files.map((file) => (
-				<FileCard key={file.createdAt}>
+				<FileCard
+					key={file.createdAt}
+					className="ipc-file-popover-button"
+					onContextMenu={(e) => {
+						e.preventDefault();
+						if (!isDrawer) {
+							setClickPosition({ x: e.clientX, y: e.clientY });
+							popoverOpeningHandlerFile();
+						} else onOpenFile();
+					}}
+				>
 					<>
 						<HStack>
-							<FcFile size="35"></FcFile>
-							<Popover placement="right">
-								<PopoverTrigger>
-									<Button
-										display="flex"
-										w="100%"
-										backgroundColor={config?.theme ?? 'white'}
-										className="ipc-file-popover-button"
-										justifyContent="start"
-										textColor={colorText}
-									>
-										{file.name}
-									</Button>
-								</PopoverTrigger>
-								<Portal>
-									<PopoverContent w="300px" backgroundColor={config?.theme ?? 'white'}>
-										<>
-											{file.deletedAt === null ? (
-												<>
-													<DownloadFile file={file} />
-													<ShareFile file={file} />
-													<MoveFile file={file} />
-													<RenameFile file={file} concernedFiles={files} />
-													<UpdateContentFile file={file} />
-												</>
-											) : <RestoreFile file={file} concernedFiles={files} />
-											}
-											<DeleteFile file={file} concernedFiles={files} />
-										</>
-									</PopoverContent>
-								</Portal>
-							</Popover>
+							<FcFile size="35" />
+							<Text>{file.name}</Text>
+							<Box>
+								{isDrawer ? (
+									<FileOptionsDrawer file={file} files={files} isOpen={isOpenFile} onClose={onCloseFile} />
+								) : (
+									<FileOptionsPopover
+										file={file}
+										files={files}
+										clickPosition={clickPosition}
+										popoverOpeningToggle={popoverOpeningToggleFile}
+										popoverOpeningHandler={popoverOpeningHandlerFile}
+									/>
+								)}
+							</Box>
 						</HStack>
 						<Box w="33%">
 							<Text textColor={colorText}>

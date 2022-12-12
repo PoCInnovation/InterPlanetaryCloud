@@ -1,9 +1,11 @@
 import { accounts, aggregate } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
 import { ItemType } from 'aleph-sdk-ts/messages/message';
+
 import { ALEPH_CHANNEL } from 'config/constants';
 
 import User from 'lib/user';
+
 import { AggregateType, IPCConfig } from 'types/types';
 
 type AuthReturnType = {

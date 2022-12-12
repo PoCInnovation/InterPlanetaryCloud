@@ -1,4 +1,5 @@
-import { Box, Flex, HStack } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, HStack } from '@chakra-ui/react';
+
 import { useConfigContext } from 'contexts/config';
 
 type FileCardProps = {
@@ -16,7 +17,7 @@ const ContextColor = () => {
 	return config?.theme ?? 'white';
 };
 
-const FileCard = ({ children }: FileCardProps): JSX.Element => (
+const FileCard = ({ children, ...props }: FileCardProps & BoxProps): JSX.Element => (
 	<Box
 		p="16px"
 		bg={ContextColor()}
@@ -27,6 +28,7 @@ const FileCard = ({ children }: FileCardProps): JSX.Element => (
 		mb="8px"
 		display="flex"
 		justifyContent="space-between"
+		{...props}
 	>
 		<HStack w="100%">
 			<Flex w="100%" justify="space-between" align="center">

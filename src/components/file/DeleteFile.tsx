@@ -1,13 +1,21 @@
-import { Button, HStack, PopoverFooter, Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
-import { FcFullTrash } from 'react-icons/fc';
+import { useState } from 'react';
+import {
+	Button,
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
+import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
-import { useState } from 'react';
+
+import type { IPCFile } from 'types/types';
 
 type DeleteFileProps = {
 	file: IPCFile;
@@ -17,12 +25,12 @@ type DeleteFileProps = {
 const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
 
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const deleteFile = async () => {
 		setIsLoading(true);
@@ -54,6 +62,10 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 			const index = files.indexOf(file);
 			if (index !== -1) {
 				files[index].deletedAt = deletedAt;
+				files[index].logs.push({
+					action: "Moved file to bin",
+					date: Date.now()
+				})
 				setFiles([...files]);
 			}
 		} else {
@@ -73,42 +85,55 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
-		<PopoverFooter>
-			<HStack>
-				<FcFullTrash size="30"></FcFullTrash>
-				<Button
-					backgroundColor={config?.theme ?? 'white'}
-					textColor={colorText}
-					w="100%"
-					p="0px"
-					mx="4px"
-					onClick={onBinClicked}
-					isLoading={isLoading}
-					id="ipc-dashboard-delete-file-button"
-				>
-					{file.deletedAt === null ? 'Move to bin' : 'Delete'}
-				</Button>
-				<Modal
-					isOpen={isOpen}
-					onClose={onClose}
-					title="Delete the file"
-					CTA={
-						<Button
-							variant="inline"
-							w="100%"
-							mb="16px"
-							onClick={async () => deleteFile()}
-							isLoading={isLoading}
-							id="ipc-dashboard-delete-file-button"
-						>
-							Delete
-						</Button>
-					}
-				>
-					<Text>Are you sure you want to delete this file ?</Text>
-				</Modal>
-			</HStack>
-		</PopoverFooter>
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onBinClicked}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-delete-button"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={IoTrashSharp}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+			>
+				{file.deletedAt ? 'Delete' : 'Move to bin'}
+			</Text>
+			<Modal
+				isOpen={isOpen}
+				onClose={onClose}
+				title="Delete the file"
+				CTA={
+					<Button
+						variant="inline"
+						w="100%"
+						mb="16px"
+						onClick={async () => deleteFile()}
+						isLoading={isLoading}
+						id="ipc-dashboard-delete-file-button"
+					>
+						Delete
+					</Button>
+				}
+			>
+				<Text>Are you sure you want to delete this file?</Text>
+			</Modal>
+		</HStack>
 	);
 };
 

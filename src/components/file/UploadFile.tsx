@@ -1,28 +1,38 @@
-import { Button, HStack, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { FcFile } from 'react-icons/fc';
+import {
+	Button,
+	HStack,
+	Icon,
+	Input,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
+import { AiOutlineFileAdd } from 'react-icons/ai';
+
 import { v4 as uuid } from 'uuid';
 
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
 import generateFileKey from 'utils/generateFileKey';
 
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
+import type { IPCFile } from 'types/types';
+
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
-	const { config } = useConfigContext();
 	const { path, files, setFiles } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const colorText = useColorModeValue('gray.800', 'white');
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
@@ -47,6 +57,10 @@ const UploadFile = (): JSX.Element => {
 			path,
 			deletedAt: null,
 			permission: 'owner',
+			logs: [{
+				action: "File created",
+				date: Date.now()
+			}],
 		};
 
 		if (user.account) {
@@ -69,19 +83,35 @@ const UploadFile = (): JSX.Element => {
 	};
 
 	return (
-		<HStack>
-			<FcFile display="flex" size="40"></FcFile>
-			<Button
-				w="100%"
-				backgroundColor={config?.theme}
-				textColor={colorText}
-				justifyContent="flex-start"
-				onClick={onOpen}
-				isLoading={isLoading}
-				id="ipc-upload-button"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-upload-file-button"
+			_hover={{
+				bg: 'blue.100',
+			}}
+		>
+			<Icon
+				as={AiOutlineFileAdd}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
 			>
 				Upload a file
-			</Button>
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

@@ -1,33 +1,29 @@
 import { Box, HStack, Spacer, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 
-import type { IPCFile, IPCProgram } from 'types/types';
+import type { IPCFile } from 'types/types';
 
 import ConfigPage from 'components/ConfigPage';
 import ContactCards from 'components/ContactCards';
 import DriveCards from 'components/DriveCards';
 import ProfileCard from 'components/ProfileCard';
 import ProgramCards from 'components/ProgramCards';
+import DeleteBin from "components/file/DeleteBin";
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
-import DeleteBin from "./file/DeleteBin";
 
 type CardsProps = {
-	myPrograms: IPCProgram[];
 	sharedFiles: IPCFile[];
 	index: number;
 	onOpenRedeployProgram: () => void;
 	isRedeployLoading: boolean;
-	setSelectedProgram: (program: IPCProgram) => void;
 };
 
 const DisplayCards = ({
-	myPrograms,
 	sharedFiles,
 	index,
 	onOpenRedeployProgram,
 	isRedeployLoading,
-	setSelectedProgram,
 }: CardsProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { path, files, folders } = useDriveContext();
@@ -100,10 +96,8 @@ const DisplayCards = ({
 					</Box>
 				</HStack>
 				<ProgramCards
-					programs={myPrograms}
 					onOpenRedeployProgram={onOpenRedeployProgram}
 					isRedeployLoading={isRedeployLoading}
-					setSelectedProgram={setSelectedProgram}
 				/>
 			</VStack>
 		);
