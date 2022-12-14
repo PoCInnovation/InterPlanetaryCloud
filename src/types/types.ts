@@ -15,13 +15,13 @@ export type IPCFolder = {
 	name: string;
 	createdAt: number;
 	path: string;
-	logs: FileLog[]
+	logs: FileLog[];
 };
 
 export type FileLog = {
-	action: string
-	date: number
-}
+	action: string;
+	date: number;
+};
 
 export type IPCProgram = {
 	hash: string;
