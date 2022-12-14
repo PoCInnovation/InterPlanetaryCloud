@@ -1,6 +1,7 @@
-import { accounts, aggregate } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
+import { accounts } from 'aleph-sdk-ts';
+import { aggregate } from 'aleph-sdk-ts/dist/messages';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
@@ -61,7 +62,7 @@ class Auth {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			const user = new User(account, mnemonic, this.defaultConfig);
+			const user = new User(account, this.defaultConfig);
 
 			await this.createAggregate(account);
 
@@ -75,7 +76,7 @@ class Auth {
 	public async loginWithCredentials(mnemonic: string, importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
-			const user = new User(importedAccount, mnemonic, importedConfig);
+			const user = new User(importedAccount, importedConfig);
 
 			await this.createAggregate(importedAccount);
 

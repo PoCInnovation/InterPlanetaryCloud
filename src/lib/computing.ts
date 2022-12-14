@@ -1,6 +1,7 @@
-import { accounts, aggregate, forget, program } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
+import { accounts } from 'aleph-sdk-ts';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
 
@@ -60,7 +61,7 @@ class Computing {
 	public async deleteProgram(programHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await forget.publish({
+				await forget.Publish({
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
 					hashes: [programHash],

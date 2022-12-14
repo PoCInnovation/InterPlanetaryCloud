@@ -1,9 +1,7 @@
-import { Encrypted } from 'eth-crypto';
-
 export type IPCFile = {
 	id: string;
 	hash: string;
-	key: Encrypted;
+	encryptInfos: { key: string; iv: string };
 	name: string;
 	size: number;
 	createdAt: number;
@@ -17,13 +15,13 @@ export type IPCFolder = {
 	name: string;
 	createdAt: number;
 	path: string;
-	logs: FileLogs[]
+	logs: FileLogs[];
 };
 
 export type FileLogs = {
-	action: string
-	date: number
-}
+	action: string;
+	date: number;
+};
 
 export type IPCProgram = {
 	hash: string;
@@ -57,6 +55,11 @@ export type IPCUpdateContent = {
 export type ResponseType = {
 	success: boolean;
 	message: string;
+};
+
+export type ToastResponse = {
+	title: string;
+	status: 'success' | 'error';
 };
 
 export type UploadResponse = ResponseType & {

@@ -1,20 +1,10 @@
-import {
-	Button,
-	HStack,
-	Icon,
-	Input,
-	Text,
-	useBreakpointValue,
-	useDisclosure,
-	useToast,
-} from '@chakra-ui/react';
+import { Button, HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { GoSync } from 'react-icons/go';
 
 import Modal from 'components/Modal';
 
 import { getFileContent } from 'utils/fileManipulation';
-import generateFileKey from 'utils/generateFileKey';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
@@ -38,25 +28,36 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 
 	const updateContent = async () => {
 		if (!fileEvent) return;
+		setIsLoading(true);
 
 		const oldFile = file;
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
-		const key = generateFileKey();
 
 		if (!fileContent) return;
 
+		const cryptoKey = await crypto.subtle.generateKey(
+			{
+				name: 'AES-GCM',
+				length: 256,
+			},
+			true,
+			['encrypt', 'decrypt'],
+		);
+		const keyString = await crypto.subtle.exportKey('raw', cryptoKey);
+		const iv = crypto.getRandomValues(new Uint8Array(128));
+
 		const newFile: IPCFile = {
 			...oldFile,
-			hash: fileContent,
 			size: fileEvent.target.files![0].size,
-			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			logs: [...oldFile.logs, {
-				action: "Edit file content",
-				date: Date.now()
-			}]
+			logs: [
+				...oldFile.logs,
+				{
+					action: 'Edit file content',
+					date: Date.now(),
+				},
+			],
 		};
-		setIsLoading(true);
-		const upload = await user.drive.upload(newFile, key);
+		const upload = await user.drive.upload(newFile, fileContent, { key: keyString, iv });
 		if (!upload.success || !upload.file) {
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 		} else {

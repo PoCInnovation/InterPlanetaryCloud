@@ -1,14 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import {
-	Button,
-	HStack,
-	Icon,
-	Input,
-	Text,
-	useBreakpointValue,
-	useDisclosure,
-	useToast,
-} from '@chakra-ui/react';
+import { Button, HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 
 import { v4 as uuid } from 'uuid';
@@ -16,7 +7,6 @@ import { v4 as uuid } from 'uuid';
 import Modal from 'components/Modal';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
-import generateFileKey from 'utils/generateFileKey';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
@@ -36,6 +26,62 @@ const UploadFile = (): JSX.Element => {
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
+		setIsLoading(true);
+		const fileName = extractFilename(fileEvent.target.value);
+		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
+
+		if (!fileName || !fileContent) {
+			toast({ title: 'Invalid file', status: 'error' });
+			setFileEvent(undefined);
+			setIsLoading(false);
+		} else {
+			const cryptoKey = await crypto.subtle.generateKey(
+				{
+					name: 'AES-GCM',
+					length: 256,
+				},
+				true,
+				['encrypt', 'decrypt'],
+			);
+			const keyString = await crypto.subtle.exportKey('raw', cryptoKey);
+			const iv = crypto.getRandomValues(new Uint8Array(128));
+
+			const file: IPCFile = {
+				id: uuid(),
+				name: fileName,
+				hash: '',
+				size: fileEvent.target.files![0].size,
+				createdAt: Date.now(),
+				encryptInfos: { key: '', iv: '' },
+				path,
+				permission: 'owner',
+				deletedAt: null,
+				logs: [
+					{
+						action: 'File created',
+						date: Date.now(),
+					},
+				],
+			};
+
+			if (user.account) {
+				const upload = await user.drive.upload(file, fileContent, { key: keyString, iv });
+				if (!upload.success || !upload.file)
+					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
+				else {
+					setFiles([...files, upload.file]);
+					user.drive.files.push(upload.file);
+
+					const shared = await user.contact.addFileToContact(user.account.address, upload.file);
+					toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
+				}
+			} else toast({ title: 'Failed to load account', status: 'error' });
+			onClose();
+			setFileEvent(undefined);
+			setIsLoading(false);
+		}
+
+		/* if (!fileEvent) return;
 		setIsLoading(true);
 		const filename = extractFilename(fileEvent.target.value);
 		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
@@ -79,7 +125,7 @@ const UploadFile = (): JSX.Element => {
 		}
 		onClose();
 		setFileEvent(undefined);
-		setIsLoading(false);
+		setIsLoading(false); */
 	};
 
 	return (
