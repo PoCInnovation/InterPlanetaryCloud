@@ -1,13 +1,18 @@
-FROM node:16-alpine
+FROM node:16
 
+# Create app directory
 WORKDIR /app
 
-# Copy source (see .dockerignore)
-COPY . .
+# Copy package.json and package-lock.json
+COPY package.json yarn.lock ./
 
 # Install dependencies
 RUN yarn --frozen-lockfile
 
+# Copy source (see .dockerignore)
+COPY . .
+
+# Build
 RUN yarn build
 
 # Automatically leverage output traces to reduce image size
