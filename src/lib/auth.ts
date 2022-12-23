@@ -11,7 +11,6 @@ import { AggregateType, IPCConfig } from 'types/types';
 
 type AuthReturnType = {
 	user: User | undefined;
-	mnemonic: string | undefined;
 	message: string;
 };
 
@@ -58,7 +57,7 @@ class Auth {
 		}
 	}
 
-	public async signup(): Promise<AuthReturnType> {
+	public async signup(): Promise<AuthReturnType & {mnemonic: string | undefined}> {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
@@ -80,10 +79,24 @@ class Auth {
 
 			await this.createAggregate(importedAccount);
 
-			return { user, mnemonic, message: 'Successful login' };
+			return { user, message: 'Successful login' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, mnemonic: undefined, message: 'Failed to login' };
+			return { user: undefined, message: 'Failed to login' };
+		}
+	}
+
+	public async loginWithProvider(importedConfig: IPCConfig): Promise<AuthReturnType> {
+		try {
+			const account = await accounts.ethereum.GetAccountFromProvider(window.ethereum);
+			const user = new User(account, importedConfig);
+
+			await this.createAggregate(account);
+
+			return { user, message: 'Successful login' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'Failed to login' };
 		}
 	}
 }

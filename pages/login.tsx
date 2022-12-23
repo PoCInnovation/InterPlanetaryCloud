@@ -39,6 +39,21 @@ const Login = (): JSX.Element => {
 		}
 	};
 
+	const loginWithAProvider = async (): Promise<void> => {
+		setIsLoadingCredentials(true);
+		const login = await auth.loginWithProvider(config);
+		setIsLoadingCredentials(false);
+
+		if (login.user) {
+			toast({ title: login.message, status: 'success' });
+			setUser(login.user);
+			router.push('/dashboard');
+			await login.user.drive.autoDelete()
+		} else {
+			toast({ title: login.message, status: 'error' });
+		}
+	}
+
 	return (
 		<AuthPage
 			children={
@@ -62,6 +77,20 @@ const Login = (): JSX.Element => {
 							Login with credentials
 						</Button>
 					</FormControl>
+					{/* <VStack>
+						<Text>or</Text>
+						<Button
+							variant="inline"
+							mt="16px"
+							w="100%"
+							type="submit"
+							onClick={() => loginWithAProvider()}
+							isLoading={isLoadingCredentials}
+							id="ipc-login-credentials-button"
+						>
+							Login with a provider
+						</Button>
+					</VStack> */}
 					<VStack w="100%">
 						<Text fontSize="14px">Create an account</Text>
 						<Link href="/signup">
