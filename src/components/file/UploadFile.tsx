@@ -80,52 +80,6 @@ const UploadFile = (): JSX.Element => {
 			setFileEvent(undefined);
 			setIsLoading(false);
 		}
-
-		/* if (!fileEvent) return;
-		setIsLoading(true);
-		const filename = extractFilename(fileEvent.target.value);
-		const fileContent = await getFileContent(fileEvent.target.files ? fileEvent.target.files[0] : []);
-		const key = generateFileKey();
-		if (!filename || !fileContent) {
-			toast({ title: 'Invalid file', status: 'error' });
-			setFileEvent(undefined);
-			setIsLoading(false);
-			return;
-		}
-
-		const file: IPCFile = {
-			id: uuid(),
-			name: filename,
-			hash: fileContent,
-			size: fileEvent.target.files![0].size,
-			createdAt: Date.now(),
-			key: { iv: '', ephemPublicKey: '', ciphertext: '', mac: '' },
-			path,
-			deletedAt: null,
-			permission: 'owner',
-			logs: [{
-				action: "File created",
-				date: Date.now()
-			}],
-		};
-
-		if (user.account) {
-			const upload = await user.drive.upload(file, key);
-			if (!upload.success || !upload.file) {
-				toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-			} else {
-				setFiles([...files, upload.file]);
-				user.drive.files.push(upload.file);
-
-				const shared = await user.contact.addFileToContact(user.account.address, upload.file);
-				toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
-			}
-		} else {
-			toast({ title: 'Failed to load account', status: 'error' });
-		}
-		onClose();
-		setFileEvent(undefined);
-		setIsLoading(false); */
 	};
 
 	return (

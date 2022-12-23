@@ -87,7 +87,6 @@ class Contact {
 		}
 	}
 
-	// TODO: check if it's work
 	private async loadUpdates(): Promise<void> {
 		try {
 			if (this.account) {
@@ -220,7 +219,6 @@ class Contact {
 		}
 	}
 
-	// TODO: check if it's work
 	public async updateFileContent(newFile: IPCFile): Promise<ResponseType> {
 		try {
 			let fileFound = false;
@@ -370,7 +368,6 @@ class Contact {
 		}
 	}
 
-	// TODO: check if it's work
 	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
