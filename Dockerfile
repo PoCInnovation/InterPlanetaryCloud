@@ -12,9 +12,6 @@ RUN yarn
 # Copy source (see .dockerignore)
 COPY . .
 
-# Copy source (see .dockerignore)
-COPY . .
-
 # Build
 RUN yarn build
 
