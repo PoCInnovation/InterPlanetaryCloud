@@ -3,5 +3,6 @@ version: '3.9'
 services:
   ipc:
     build: .
+    image: ipc
     ports:
       - 8080:8080
