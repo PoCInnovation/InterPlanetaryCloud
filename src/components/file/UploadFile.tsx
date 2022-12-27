@@ -2,8 +2,6 @@ import { ChangeEvent, useState } from 'react';
 import { Button, HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 
-import { v4 as uuid } from 'uuid';
-
 import Modal from 'components/Modal';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
@@ -47,7 +45,7 @@ const UploadFile = (): JSX.Element => {
 			const iv = crypto.getRandomValues(new Uint8Array(128));
 
 			const file: IPCFile = {
-				id: uuid(),
+				id: crypto.randomUUID(),
 				name: fileName,
 				hash: '',
 				size: fileEvent.target.files![0].size,
