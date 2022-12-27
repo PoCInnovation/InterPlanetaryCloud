@@ -1,7 +1,7 @@
 import { accounts } from 'aleph-sdk-ts';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 
 import type {
 	AggregateContentType,
@@ -27,7 +27,6 @@ class Contact {
 
 	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
-			APIServer: DEFAULT_API_V2,
 			address: this.account!.address,
 			keys: ['InterPlanetaryCloud'],
 		});
@@ -51,7 +50,6 @@ class Contact {
 		await Promise.all(
 			this.contacts.map(async (contact) => {
 				const aggr = await aggregate.Get<AggregateType>({
-					APIServer: DEFAULT_API_V2,
 					address: contact.address,
 					keys: ['InterPlanetaryCloud'],
 				});
@@ -69,7 +67,6 @@ class Contact {
 		try {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
-					APIServer: DEFAULT_API_V2,
 					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});
@@ -95,14 +92,10 @@ class Contact {
 						const updatableIds = contact.files.filter((file) => file.permission === 'editor').map((file) => file.id);
 
 						const updates = await post.Get({
-							APIServer: DEFAULT_API_V2,
 							types: ['InterPlanetaryCloud'],
 							pagination: 200,
-							page: 1,
-							refs: [],
 							addresses: [contact.address],
 							tags: updatableIds,
-							hashes: [],
 						});
 						await Promise.all(
 							updates.posts.map(async (update) => {

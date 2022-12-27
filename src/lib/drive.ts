@@ -1,6 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
-import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import fileDownload from 'js-file-download';
@@ -33,7 +33,6 @@ class Drive {
 				await Promise.all(
 					contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({
-							APIServer: DEFAULT_API_V2,
 							address: contact.address,
 							keys: ['InterPlanetaryCloud'],
 						});
@@ -145,10 +144,7 @@ class Drive {
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const storeFile = await store.Get({
-					APIServer: DEFAULT_API_V2,
-					fileHash: file.hash!,
-				});
+				const storeFile = await store.Get({ fileHash: file.hash });
 
 				const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
 				const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));

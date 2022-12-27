@@ -42,7 +42,6 @@ class Computing {
 		try {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
-					APIServer: DEFAULT_API_V2,
 					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});

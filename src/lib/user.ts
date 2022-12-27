@@ -1,6 +1,5 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 
 import Computing from 'lib/computing';
 import Contact from 'lib/contact';
@@ -25,7 +24,6 @@ class User {
 				await Promise.all(
 					this.contact.contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({
-							APIServer: DEFAULT_API_V2,
 							address: contact.address,
 							keys: ['InterPlanetaryCloud'],
 						});

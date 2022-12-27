@@ -1,6 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
-import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import { ALEPH_CHANNEL } from 'config/constants';
@@ -28,7 +28,6 @@ class Auth {
 	private async createAggregate(account: accounts.ethereum.ETHAccount): Promise<void> {
 		try {
 			await aggregate.Get<AggregateType>({
-				APIServer: DEFAULT_API_V2,
 				address: account.address,
 				keys: ['InterPlanetaryCloud'],
 			});
@@ -57,7 +56,7 @@ class Auth {
 		}
 	}
 
-	public async signup(): Promise<AuthReturnType & {mnemonic: string | undefined}> {
+	public async signup(): Promise<AuthReturnType & { mnemonic: string | undefined }> {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
