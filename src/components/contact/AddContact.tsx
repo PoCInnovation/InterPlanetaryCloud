@@ -17,24 +17,29 @@ const AddContact = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const addContact = async () => {
-		if (name && contactPublicKey) {
-			// TODO: crash when contactPublicKey is not a valid public key
-			const add = await user.contact.add({
-				name,
-				address: EthCrypto.publicKey.toAddress(contactPublicKey.slice(2)),
-				publicKey: contactPublicKey,
-				files: [],
-				folders: [],
-				config: undefined,
-			});
+		try {
+			if (name && contactPublicKey) {
+				const address = EthCrypto.publicKey.toAddress(contactPublicKey.slice(2));
+				const add = await user.contact.add({
+					name,
+					address,
+					publicKey: contactPublicKey,
+					files: [],
+					folders: [],
+					config: undefined,
+				});
 
-			toast({ title: add.message, status: add.success ? 'success' : 'error' });
-			setContacts(user.contact.contacts);
-		} else {
-			toast({ title: 'Bad contact infos', status: 'error' });
+				toast({ title: add.message, status: add.success ? 'success' : 'error' });
+				setContacts(user.contact.contacts);
+			} else {
+				toast({ title: 'Bad contact infos', status: 'error' });
+			}
+			setName('');
+			onClose();
+		} catch (error) {
+			console.error(error);
+			toast({ title: 'Bad public key given', status: 'error' });
 		}
-		setName('');
-		onClose();
 	};
 
 	return (

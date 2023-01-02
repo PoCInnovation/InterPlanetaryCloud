@@ -1,11 +1,9 @@
-import { accounts, aggregate } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
+import { accounts } from 'aleph-sdk-ts';
+import { aggregate } from 'aleph-sdk-ts/dist/messages';
 
 import Computing from 'lib/computing';
 import Contact from 'lib/contact';
 import Drive from 'lib/drive';
-
-import mnemonicToPrivateKey from 'utils/mnemonicToPrivateKey';
 
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
 
@@ -26,7 +24,6 @@ class User {
 				await Promise.all(
 					this.contact.contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({
-							APIServer: DEFAULT_API_V2,
 							address: contact.address,
 							keys: ['InterPlanetaryCloud'],
 						});
@@ -45,12 +42,12 @@ class User {
 		}
 	}
 
-	constructor(importedAccount: accounts.ethereum.ETHAccount, mnemonic: string, importedConfig: IPCConfig) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount, importedConfig: IPCConfig) {
 		this.account = importedAccount;
 		this.config = importedConfig;
-		this.drive = new Drive(this.account, mnemonicToPrivateKey(mnemonic));
+		this.drive = new Drive(this.account);
 		this.computing = new Computing(this.account);
-		this.contact = new Contact(this.account, mnemonicToPrivateKey(mnemonic));
+		this.contact = new Contact(this.account);
 	}
 }
 

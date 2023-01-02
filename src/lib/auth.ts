@@ -1,6 +1,7 @@
-import { accounts, aggregate } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
+import { accounts } from 'aleph-sdk-ts';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate } from 'aleph-sdk-ts/dist/messages';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
@@ -10,7 +11,6 @@ import { AggregateType, IPCConfig } from 'types/types';
 
 type AuthReturnType = {
 	user: User | undefined;
-	mnemonic: string | undefined;
 	message: string;
 };
 
@@ -28,7 +28,6 @@ class Auth {
 	private async createAggregate(account: accounts.ethereum.ETHAccount): Promise<void> {
 		try {
 			await aggregate.Get<AggregateType>({
-				APIServer: DEFAULT_API_V2,
 				address: account.address,
 				keys: ['InterPlanetaryCloud'],
 			});
@@ -57,11 +56,11 @@ class Auth {
 		}
 	}
 
-	public async signup(): Promise<AuthReturnType> {
+	public async signup(): Promise<AuthReturnType & { mnemonic: string | undefined }> {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 
-			const user = new User(account, mnemonic, this.defaultConfig);
+			const user = new User(account, this.defaultConfig);
 
 			await this.createAggregate(account);
 
@@ -75,14 +74,28 @@ class Auth {
 	public async loginWithCredentials(mnemonic: string, importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
-			const user = new User(importedAccount, mnemonic, importedConfig);
+			const user = new User(importedAccount, importedConfig);
 
 			await this.createAggregate(importedAccount);
 
-			return { user, mnemonic, message: 'Successful login' };
+			return { user, message: 'Successful login' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, mnemonic: undefined, message: 'Failed to login' };
+			return { user: undefined, message: 'Failed to login' };
+		}
+	}
+
+	public async loginWithProvider(importedConfig: IPCConfig): Promise<AuthReturnType> {
+		try {
+			const account = await accounts.ethereum.GetAccountFromProvider(window.ethereum);
+			const user = new User(account, importedConfig);
+
+			await this.createAggregate(account);
+
+			return { user, message: 'Successful login' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'Failed to login' };
 		}
 	}
 }

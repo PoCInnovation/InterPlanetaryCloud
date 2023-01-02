@@ -50,19 +50,19 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 
 							</Text>
 							<Text>
-								<Box as="span" fontWeight="500">Size of :</Box> {file.size / 1000}ko
+								<Box as="span" fontWeight="500">Size of:</Box> {file.size / 1000}ko
 							</Text>
 							<Text>
-								<Box as="span" fontWeight="500">Hash of ipfs:</Box> {file.hash}
+								<Box as="span" fontWeight="500">IPFS hash:</Box> {file.hash}
 							</Text>
 							<Text>
-								<Box as="span" fontWeight="500">Type :</Box> {getFileType(file.name)}
+								<Box as="span" fontWeight="500">Type:</Box> {getFileType(file.name)}
 							</Text>
 						</Stack>
 						<Stack spacing="16px">
 							<Stack onClick={sharedHandler} bg="blue.50" p="12px 16px" w="100%" borderRadius="8px">
 								<Text>
-									<Box as="span" fontWeight="500">This file is shared with :</Box>
+									<Box as="span" fontWeight="500">This file is shared with:</Box>
 									<Box
 										as="span"
 										bgClip="text"
@@ -87,7 +87,7 @@ const DrawerDetailsFile = ({ file, isOpen, onClose }: { file: IPCFile, isOpen: b
 								bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 40%)`}
 								borderRadius="16px"
 							/>
-							<Text size="lg">History : </Text>
+							<Text size="lg">History: </Text>
 							{file.logs.map((log) => (
 								<HStack w="100%" justify="space-between" key={log.date}>
 									<Text>{log.action}</Text>

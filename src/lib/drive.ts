@@ -1,26 +1,15 @@
-import { accounts, aggregate, forget, store } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
-
-import CryptoJS from 'crypto-js';
-import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
+import { accounts } from 'aleph-sdk-ts';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import fileDownload from 'js-file-download';
 
-import ArraybufferToString from 'utils/arraybufferToString';
-
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type {
-	AggregateType,
-	IPCContact,
-	IPCFile,
-	IPCFolder,
-	ResponseType,
-	UploadResponse
-} from "types/types";
+import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
 
-export const MONTH_MILLIS = 86400 * 30 * 1000
+export const MONTH_MILLIS = 86400 * 30 * 1000;
 
 class Drive {
 	public files: IPCFile[];
@@ -31,14 +20,11 @@ class Drive {
 
 	private readonly account: accounts.ethereum.ETHAccount | undefined;
 
-	private private_key: string;
-
-	constructor(importedAccount: accounts.ethereum.ETHAccount, private_key: string) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.files = [];
 		this.folders = [];
 		this.sharedFiles = [];
 		this.account = importedAccount;
-		this.private_key = private_key;
 	}
 
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
@@ -47,7 +33,6 @@ class Drive {
 				await Promise.all(
 					contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({
-							APIServer: DEFAULT_API_V2,
 							address: contact.address,
 							keys: ['InterPlanetaryCloud'],
 						});
@@ -72,19 +57,35 @@ class Drive {
 		}
 	}
 
-	public async upload(file: IPCFile, key: string): Promise<UploadResponse> {
+	public async upload(
+		file: IPCFile,
+		content: ArrayBuffer,
+		infos: { key: ArrayBuffer; iv: Uint8Array },
+	): Promise<UploadResponse> {
 		try {
-			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.hash, key).toString();
-
-				const newStoreFile = new File([encryptedContentFile], file.name, {
-					type: 'text/plain',
-				});
-
+			if (this.account && content) {
 				const fileHashPublishStore = await store.Publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
-					fileObject: newStoreFile,
+					fileObject: Buffer.from(
+						await crypto.subtle.encrypt(
+							{
+								name: 'AES-GCM',
+								iv: infos.iv,
+							},
+							await crypto.subtle.importKey(
+								'raw',
+								infos.key,
+								{
+									name: 'AES-GCM',
+									length: 256,
+								},
+								true,
+								['encrypt', 'decrypt'],
+							),
+							Buffer.from(content),
+						),
+					),
 					storageEngine: ItemType.ipfs,
 					APIServer: DEFAULT_API_V2,
 				});
@@ -92,9 +93,11 @@ class Drive {
 				const newFile: IPCFile = {
 					...file,
 					hash: fileHashPublishStore.content.item_hash,
-					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
+					encryptInfos: {
+						key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
+						iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
+					},
 				};
-
 				return { success: true, message: 'File uploaded', file: newFile };
 			}
 			return { success: false, message: 'Failed to load account', file: undefined };
@@ -106,17 +109,19 @@ class Drive {
 
 	public async autoDelete() {
 		try {
-			const filesToDelete = this.files.filter((file) => file.deletedAt !== null && Date.now() - file.deletedAt >= MONTH_MILLIS)
-			await this.delete(filesToDelete.map((file) => file.hash))
+			const filesToDelete = this.files.filter(
+				(file) => file.deletedAt !== null && Date.now() - file.deletedAt >= MONTH_MILLIS,
+			);
+			await this.delete(filesToDelete.map((file) => file.hash));
 		} catch (err) {
-			console.error(err)
+			console.error(err);
 		}
 	}
 
 	public async delete(fileHashes: string[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await forget.publish({
+				await forget.Publish({
 					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
 					hashes: fileHashes,
@@ -139,20 +144,39 @@ class Drive {
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const storeFile = await store.Get({
-					APIServer: DEFAULT_API_V2,
-					fileHash: file.hash,
-				});
+				const storeFile = await store.Get({ fileHash: file.hash });
 
-				const keyFile = await decryptWithPrivateKey(this.private_key.slice(2), file.key);
-				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
-					CryptoJS.enc.Utf8,
+				const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
+				const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
+
+				const decryptedFile = await crypto.subtle.decrypt(
+					{
+						name: 'AES-GCM',
+						iv: decryptedIv,
+					},
+					await crypto.subtle.importKey(
+						'raw',
+						decryptedKey,
+						{
+							name: 'AES-GCM',
+							length: 256,
+						},
+						true,
+						['encrypt', 'decrypt'],
+					),
+					Buffer.from(storeFile),
 				);
+				// const decryptedFile = await this.account.decrypt(Buffer.from(storeFile), keyFile);
 
-				const newFile = new File([decryptedContentFile], file.name, {
-					type: 'plain/text',
-				});
-				fileDownload(newFile, file.name);
+				// const keyFile = await decryptWithPrivateKey(this.private_key.slice(2), file.key);
+				// const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
+				// 	CryptoJS.enc.Utf8,
+				// );
+				//
+				// const newFile = new File([decryptedContentFile], file.name, {
+				// 	type: 'plain/text',
+				// });
+				fileDownload(decryptedFile, file.name);
 				return { success: true, message: 'File downloaded' };
 			}
 			return { success: false, message: 'Failed to load account' };

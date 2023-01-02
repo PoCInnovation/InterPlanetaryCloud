@@ -44,7 +44,7 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 					fontWeight: '500',
 				}}
 			>
-				Détails
+				Details
 			</Text>
 			<DrawerDetailsFile file={file} isOpen={isOpen} onClose={onClose} />
 		</HStack>

@@ -1,8 +1,7 @@
-import { accounts, aggregate, forget, post } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
-
-import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
+import { accounts } from 'aleph-sdk-ts';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import type {
 	AggregateContentType,
@@ -21,17 +20,13 @@ class Contact {
 
 	private readonly account: accounts.ethereum.ETHAccount | undefined;
 
-	private private_key: string;
-
-	constructor(importedAccount: accounts.ethereum.ETHAccount, private_key: string) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
 		this.account = importedAccount;
-		this.private_key = private_key;
 	}
 
 	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
-			APIServer: DEFAULT_API_V2,
 			address: this.account!.address,
 			keys: ['InterPlanetaryCloud'],
 		});
@@ -55,7 +50,6 @@ class Contact {
 		await Promise.all(
 			this.contacts.map(async (contact) => {
 				const aggr = await aggregate.Get<AggregateType>({
-					APIServer: DEFAULT_API_V2,
 					address: contact.address,
 					keys: ['InterPlanetaryCloud'],
 				});
@@ -73,7 +67,6 @@ class Contact {
 		try {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
-					APIServer: DEFAULT_API_V2,
 					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});
@@ -91,59 +84,73 @@ class Contact {
 		}
 	}
 
-	private async loadUpdates() {
-		this.contacts.forEach(async (contact) => {
-			const updatableIds = contact.files.filter((file) => file.permission === 'editor').map((file) => file.id);
-			const updates = await post.Get({
-				APIServer: DEFAULT_API_V2,
-				types: ['InterPlanetaryCloud'],
-				pagination: 200,
-				page: 1,
-				refs: [],
-				addresses: [contact.address],
-				tags: updatableIds,
-				hashes: [],
-			});
-			updates.posts.forEach(async (update) => {
-				const { tags, file } = <IPCUpdateContent>update.content;
-				const [type, fileId] = tags;
+	private async loadUpdates(): Promise<void> {
+		try {
+			if (this.account) {
+				await Promise.all(
+					this.contacts.map(async (contact) => {
+						const updatableIds = contact.files.filter((file) => file.permission === 'editor').map((file) => file.id);
 
-				this.contacts.forEach(async (c) => {
-					const foundFile = c.files.find((f) => f.id === fileId);
+						const updates = await post.Get({
+							types: ['InterPlanetaryCloud'],
+							pagination: 200,
+							addresses: [contact.address],
+							tags: updatableIds,
+						});
+						await Promise.all(
+							updates.posts.map(async (update) => {
+								const { tags, file } = <IPCUpdateContent>update.content;
+								const [type, fileId] = tags;
 
-					if (foundFile) {
-						if (type === 'rename') {
-							foundFile.name = file.name;
-						} else if (type === 'update') {
-							foundFile.hash = file.hash;
-							foundFile.size = file.size;
-							const newKey = await encryptWithPublicKey(
-								c.publicKey.slice(2),
-								await decryptWithPrivateKey(this.private_key, file.key),
-							);
-							foundFile.key = { ...newKey };
-						} else if (type === 'delete') {
-							const owner = this.contacts.find((co) => co.address === c.address)!;
-							owner.files = owner.files.filter((f) => f.id !== fileId);
-						} else if (type === 'bin') {
-							foundFile.deletedAt = file.deletedAt;
-						}
-					}
-				});
-			});
+								await Promise.all(
+									this.contacts.map(async (c) => {
+										const foundFile = c.files.find((f) => f.id === fileId);
 
-			await this.publishAggregate();
+										if (foundFile && this.account) {
+											if (type === 'rename') foundFile.name = file.name;
+											else if (type === 'update') {
+												foundFile.hash = file.hash;
+												foundFile.size = file.size;
+												foundFile.encryptInfos = {
+													key: (
+														await this.account.encrypt(
+															await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex')),
+															c.publicKey,
+														)
+													).toString('hex'),
+													iv: (
+														await this.account.encrypt(
+															await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex')),
+															c.publicKey,
+														)
+													).toString('hex'),
+												};
+											} else if (type === 'delete') {
+												const owner = this.contacts.find((co) => co.address === c.address)!;
+												owner.files = owner.files.filter((f) => f.id !== fileId);
+											} else if (type === 'bin') foundFile.deletedAt = file.deletedAt;
+										}
+									}),
+								);
+							}),
+						);
+						await this.publishAggregate();
 
-			const hashes = updates.posts.map((p) => p.hash);
-			await forget.publish({
-				account: this.account!,
-				channel: ALEPH_CHANNEL,
-				storageEngine: ItemType.ipfs,
-				inlineRequested: true,
-				APIServer: DEFAULT_API_V2,
-				hashes,
-			});
-		});
+						const hashes = updates.posts.map((p) => p.hash);
+						await forget.Publish({
+							account: this.account!,
+							channel: ALEPH_CHANNEL,
+							storageEngine: ItemType.ipfs,
+							inlineRequested: true,
+							APIServer: DEFAULT_API_V2,
+							hashes,
+						});
+					}),
+				);
+			}
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	public async add(contactToAdd: IPCContact): Promise<ResponseType> {
@@ -208,33 +215,54 @@ class Contact {
 	public async updateFileContent(newFile: IPCFile): Promise<ResponseType> {
 		try {
 			let fileFound = false;
-			this.contacts.forEach(async (contact, i) => {
-				const file = this.contacts[i].files.find((f) => f.id === newFile.id);
+			await Promise.all(
+				this.contacts.map(async (contact) => {
+					const file = contact.files.find((f) => f.id === newFile.id);
 
-				if (file) {
-					file.hash = newFile.hash;
-					file.key = await encryptWithPublicKey(
-						contact.publicKey.slice(2),
-						await decryptWithPrivateKey(this.private_key, newFile.key),
-					);
-					fileFound = true;
-					await this.publishAggregate();
-				}
-			});
+					if (file && this.account) {
+						file.hash = newFile.hash;
+						file.encryptInfos = {
+							key: (
+								await this.account.encrypt(
+									await this.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
+									contact.publicKey,
+								)
+							).toString('hex'),
+							iv: (
+								await this.account.encrypt(
+									await this.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
+									contact.publicKey,
+								)
+							).toString('hex'),
+						};
+						fileFound = true;
+						await this.publishAggregate();
+					}
+				}),
+			);
 
-			if (!fileFound) {
+			if (!fileFound && this.account) {
 				const owner = await this.getFileOwner(newFile.id);
 				if (!owner) {
 					return { success: false, message: 'File not found' };
 				}
-				const fileKey = await encryptWithPublicKey(
-					owner.slice(2),
-					await decryptWithPrivateKey(this.private_key, newFile.key),
-				);
+				// const fileKey = (
+				// 	await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptKey, 'hex')))
+				// ).toString('hex');
+
+				const encryptInfos = {
+					key: (
+						await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')), owner)
+					).toString('hex'),
+					iv: (
+						await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')), owner)
+					).toString('hex'),
+				};
+
 				await post.Publish({
 					account: this.account!,
 					postType: 'InterPlanetaryCloud',
-					content: { file: { ...newFile, key: fileKey }, tags: ['update', newFile.id] },
+					content: { file: { ...newFile, encryptInfos }, tags: ['update', newFile.id] },
 					channel: 'TEST',
 					APIServer: DEFAULT_API_V2,
 					inlineRequested: true,
@@ -251,19 +279,21 @@ class Contact {
 	public async updateFileName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			let fileFound = false;
-			this.contacts.forEach(async (contact) => {
-				const file = contact.files.find((f) => f.id === concernedFile.id);
+			await Promise.all(
+				this.contacts.map(async (contact) => {
+					const file = contact.files.find((f) => f.id === concernedFile.id);
 
-				if (file) {
-					file.name = newName;
-					file.logs.push({
-						action: `Renamed file to ${newName}`,
-						date: Date.now()
-					})
-					fileFound = true;
-					await this.publishAggregate();
-				}
-			});
+					if (file) {
+						file.name = newName;
+						file.logs.push({
+							action: `Renamed file to ${newName}`,
+							date: Date.now(),
+						});
+						fileFound = true;
+						await this.publishAggregate();
+					}
+				}),
+			);
 			if (!fileFound) {
 				const file = sharedFiles.find((f) => f.id === concernedFile.id);
 				if (!file) {
@@ -286,7 +316,11 @@ class Contact {
 		}
 	}
 
-	public async moveFileToBin(concernedFile: IPCFile, deletedAt: number | null, sharedFiles: IPCFile[]): Promise<ResponseType> {
+	public async moveFileToBin(
+		concernedFile: IPCFile,
+		deletedAt: number | null,
+		sharedFiles: IPCFile[],
+	): Promise<ResponseType> {
 		try {
 			let fileFound = false;
 			this.contacts.forEach(async (contact) => {
@@ -295,9 +329,9 @@ class Contact {
 				if (file) {
 					file.deletedAt = deletedAt;
 					file.logs.push({
-						action: deletedAt ? "Moved file to bin" : "Restored file",
-						date: Date.now()
-					})
+						action: deletedAt ? 'Moved file to bin' : 'Restored file',
+						date: Date.now(),
+					});
 					fileFound = true;
 					await this.publishAggregate();
 				}
@@ -317,10 +351,13 @@ class Contact {
 					storageEngine: ItemType.ipfs,
 				});
 			}
-			return { success: true, message: `File ${deletedAt === null ? "removed from" : "moved to"} the bin` };
+			return { success: true, message: `File ${deletedAt === null ? 'removed from' : 'moved to'} the bin` };
 		} catch (err) {
 			console.error(err);
-			return { success: false, message: `Failed to ${deletedAt === null ? "remove the file from" : "move the file to"} the bin` };
+			return {
+				success: false,
+				message: `Failed to ${deletedAt === null ? 'remove the file from' : 'move the file to'} the bin`,
+			};
 		}
 	}
 
@@ -335,14 +372,33 @@ class Contact {
 					}
 					const newFile: IPCFile = {
 						...mainFile,
-						logs: [...mainFile.logs, {
-							action: `Shared file with ${this.contacts[index].name}`,
-							date: Date.now()
-						}],
-						key: await encryptWithPublicKey(
-							this.contacts[index].publicKey.slice(2),
-							await decryptWithPrivateKey(this.private_key, mainFile.key),
-						),
+						logs: [
+							...mainFile.logs,
+							{
+								action: `Shared file with ${this.contacts[index].name}`,
+								date: Date.now(),
+							},
+						],
+						// encryptKey: (
+						// 	await this.account.encrypt(
+						// 		await this.account.decrypt(Buffer.from(mainFile.encryptKey, 'hex')),
+						// 		this.contacts[index].publicKey,
+						// 	)
+						// ).toString('hex'),
+						encryptInfos: {
+							key: (
+								await this.account.encrypt(
+									await this.account.decrypt(Buffer.from(mainFile.encryptInfos.key, 'hex')),
+									this.contacts[index].publicKey,
+								)
+							).toString('hex'),
+							iv: (
+								await this.account.encrypt(
+									await this.account.decrypt(Buffer.from(mainFile.encryptInfos.iv, 'hex')),
+									this.contacts[index].publicKey,
+								)
+							).toString('hex'),
+						},
 					};
 
 					this.contacts[index].files.push(newFile);
@@ -416,14 +472,18 @@ class Contact {
 
 				if (contact) {
 					contact.folders = contact.folders.map((f) => {
-						if (f.path.startsWith(fullPath)) return {
-							...f,
-							path: f.path.replace(folder.path, newPath),
-							logs: [...f.logs, {
-								action: `Moved folder to ${fullPath}`,
-								date: Date.now()
-							}]
-						};
+						if (f.path.startsWith(fullPath))
+							return {
+								...f,
+								path: f.path.replace(folder.path, newPath),
+								logs: [
+									...f.logs,
+									{
+										action: `Moved folder to ${fullPath}`,
+										date: Date.now(),
+									},
+								],
+							};
 						if (f === folder) return { ...f, path: newPath };
 						return f;
 					});
@@ -479,8 +539,8 @@ class Contact {
 						currentFile.path = newPath;
 						currentFile.logs.push({
 							action: `Moved file to ${newPath}`,
-							date: Date.now()
-						})
+							date: Date.now(),
+						});
 						await this.publishAggregate();
 						return { success: true, message: 'File moved' };
 					}

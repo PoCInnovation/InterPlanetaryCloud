@@ -13,12 +13,13 @@ describe('File tests', () => {
 		cy.get('#chakra-toast-portal').contains('File uploaded');
 	});
 
-	it('Good number of buttons after failed upload', () => {
+	// Removed this test because the user could upload an empty file - Lucas
+	/*it('Good number of buttons after failed upload', () => {
 		cy.uploadFile(emptyFixtureFile, { allowEmpty: true });
 
 		cy.get('#chakra-toast-portal').contains('Invalid file');
 		cy.get('#ipc-modal-close-button').click();
-	});
+	});*/
 
 	it('Good content for downloaded file', () => {
 		cy.get('.ipc-file-popover-button').first().rightclick({ force: true });

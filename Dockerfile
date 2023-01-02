@@ -1,23 +1,32 @@
-FROM node:16-alpine
+FROM node:16 AS builder
 
+# Create app directory
 WORKDIR /app
+
+# Copy dependencies files
+COPY package.json yarn.lock ./
+
+# Install dependencies
+RUN yarn
 
 # Copy source (see .dockerignore)
 COPY . .
 
-# Install dependencies
-RUN yarn --frozen-lockfile
-
+# Build
 RUN yarn build
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-RUN mv next.config.js .next/standalone/
-RUN mv public .next/standalone/
-RUN mv .next/static .next/standalone/.next/
 
-WORKDIR /app/.next/standalone
+
+FROM node:16.19.0-alpine3.17 AS runner
+
+WORKDIR /app
 
 ENV PORT 8080
 
-CMD ["node", "server.js"]
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder /app/.next/standalone ./standalone
+COPY --from=builder /app/public ./standalone/public
+COPY --from=builder /app/.next/static ./standalone/.next/static
+
+CMD ["node", "./standalone/server.js"]
