@@ -65,9 +65,9 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 
 	const getRepositories = async () => {
 		try {
-			const result = await axios.get('/api/computing/github/repositories');
+			const result = await axios.get('/api/computing/github/repositories?page=0');
 			if (result.status !== 200) throw new Error("Unable to load repositories from github's API");
-			setRepositories(result.data);
+			setRepositories(result.data.repositories);
 		} catch (error) {
 			console.error(error);
 		}
@@ -114,7 +114,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 							>
 								{repositories.map((repository, index: number) => (
 									<option key={index} value={repository.html_url}>
-										{repository.name}
+										{repository.owner.login} - {repository.name}
 									</option>
 								))}
 							</Select>

@@ -13,11 +13,23 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 	});
 	if (userInfo.status !== 200) return res.status(userInfo.status).json({ error: userInfo.statusText });
 
-	const userRepos = await axios.get('https://api.github.com/user/repos', {
+	const userRepos = await axios.get(`https://api.github.com/user/repos?page=${req.query.page || 0}`, {
 		headers: {
 			Authorization: `token ${session.accessToken}`,
 		},
 	});
 	if (userRepos.status !== 200) return res.status(userRepos.status).json({ error: userRepos.statusText });
-	return res.status(200).json(userRepos.data);
+
+	const userMoreRepos = async (): Promise<number> => {
+		if (userRepos.data.length < 30) return 0;
+		return (
+			await axios.get(`https://api.github.com/user/repos?page=${Number(req.query.page) + 1 || 1}`, {
+				headers: {
+					Authorization: `token ${session.accessToken}`,
+				},
+			})
+		).data.length;
+	};
+
+	return res.status(200).json({ repositories: userRepos.data, hasMore: (await userMoreRepos()) > 0 });
 };
