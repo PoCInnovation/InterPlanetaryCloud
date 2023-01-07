@@ -77,5 +77,8 @@ export type AggregateType = {
 
 export type GitHubRepository = {
 	name: string;
+	owner: {
+		login: string;
+	};
 	html_url: string;
 };
