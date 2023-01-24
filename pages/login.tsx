@@ -32,8 +32,8 @@ const Login = (): JSX.Element => {
 		if (login.user) {
 			toast({ title: login.message, status: 'success' });
 			setUser(login.user);
-			router.push('/dashboard');
-			await login.user.drive.autoDelete()
+			router.push('/drive');
+			await login.user.drive.autoDelete();
 		} else {
 			toast({ title: login.message, status: 'error' });
 		}
@@ -47,12 +47,12 @@ const Login = (): JSX.Element => {
 		if (login.user) {
 			toast({ title: login.message, status: 'success' });
 			setUser(login.user);
-			router.push('/dashboard');
-			await login.user.drive.autoDelete()
+			router.push('/drive');
+			await login.user.drive.autoDelete();
 		} else {
 			toast({ title: login.message, status: 'error' });
 		}
-	}
+	};
 
 	return (
 		<AuthPage

@@ -53,7 +53,7 @@ const Signup = (): JSX.Element => {
 		toast({ title: signupResult.message, status: 'success' });
 		setUser(signupResult.user);
 		setConfig(signupResult.user?.config);
-		router.push('/dashboard');
+		router.push('/drive');
 	};
 
 	const onClick = () => {

@@ -1,14 +1,37 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Box, HStack, useColorMode, useToast, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	HStack,
+	Popover,
+	useColorMode,
+	useToast,
+	VStack,
+	Button,
+	PopoverHeader,
+	PopoverFooter,
+	PopoverTrigger,
+	Portal,
+	PopoverContent,
+	PopoverArrow,
+	PopoverCloseButton,
+	PopoverBody,
+} from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import DisplayCards from 'components/DisplayCards';
-import { ResponsiveBar } from 'components/navbar/ResponsiveBar';
+import DisplayCards from 'components/cards/DisplayCards';
+import { ResponsiveBar } from 'components/navigation/ResponsiveBar';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
+import {BsFileEarmarkFill, BsPlusLg} from 'react-icons/bs';
+import CreateFolder from 'components/folder/CreateFolder';
+import DeployProgram from 'components/computing/programs/DeployProgram';
+import UploadFile from 'components/file/UploadFile';
+import DeployGithub from 'components/computing/github/DeployGithub';
+import DriveCards from '../../src/components/cards/DriveCards';
+import Navigation from '../../src/components/navigation/Navigation';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -17,7 +40,8 @@ const Dashboard = (): JSX.Element => {
 	const { config, setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { sharedFiles, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
+	const { path, folders, files, sharedFiles, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } =
+		useDriveContext();
 	const [selectedTab, setSelectedTab] = useState(0);
 
 	useEffect(() => {
@@ -57,22 +81,19 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	return (
-		<HStack minH="100vh" minW="100vw" align="start" bg={config?.theme ?? 'white'}>
-			<ResponsiveBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={config?.theme ?? 'white'} />
-			<VStack w="100%" m="32px !important">
+		<Navigation>
+			<VStack m="32px !important">
 				<Box w="100%">
-					<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+					<VStack w="100%" id="test" spacing="16px">
 						{/* TODO: clear DisplayCardsParams */}
-						<DisplayCards
-							sharedFiles={sharedFiles}
-							index={selectedTab}
-							isRedeployLoading={false}
-							onOpenRedeployProgram={() => {}}
+						<DriveCards
+							files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
+							folders={folders.filter((elem) => elem.path === path)}
 						/>
 					</VStack>
 				</Box>
 			</VStack>
-		</HStack>
+		</Navigation>
 	);
 };
 
