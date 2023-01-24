@@ -7,7 +7,7 @@ import ContactCards from 'components/ContactCards';
 import DriveCards from 'components/DriveCards';
 import ProfileCard from 'components/ProfileCard';
 import ProgramCards from 'components/ProgramCards';
-import DeleteBin from "components/file/DeleteBin";
+import DeleteBin from 'components/file/DeleteBin';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
@@ -19,19 +19,14 @@ type CardsProps = {
 	isRedeployLoading: boolean;
 };
 
-const DisplayCards = ({
-	sharedFiles,
-	index,
-	onOpenRedeployProgram,
-	isRedeployLoading,
-}: CardsProps): JSX.Element => {
+const DisplayCards = ({ sharedFiles, index, onOpenRedeployProgram, isRedeployLoading }: CardsProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { path, files, folders } = useDriveContext();
 	const colorText = useColorModeValue('gray.800', 'white');
 
 	if (index === 0)
 		return (
-			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
+			<VStack w="100%" id="test" spacing="16px">
 				<Box w="100%">
 					<Text fontSize="35" textColor={colorText}>
 						My Files
@@ -95,16 +90,13 @@ const DisplayCards = ({
 						</Text>
 					</Box>
 				</HStack>
-				<ProgramCards
-					onOpenRedeployProgram={onOpenRedeployProgram}
-					isRedeployLoading={isRedeployLoading}
-				/>
+				<ProgramCards onOpenRedeployProgram={onOpenRedeployProgram} isRedeployLoading={isRedeployLoading} />
 			</VStack>
 		);
 	if (index === 4) return <ProfileCard profile={user.contact.contacts[0]} />;
 	if (index === 5) {
-		const deletedFiles = files.filter((elem) => elem.path === path && elem.deletedAt !== null)
-		const deletedFolders = folders.filter((elem) => elem.path === path)
+		const deletedFiles = files.filter((elem) => elem.path === path && elem.deletedAt !== null);
+		const deletedFolders = folders.filter((elem) => elem.path === path);
 
 		return (
 			<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
