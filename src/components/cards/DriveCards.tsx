@@ -11,8 +11,8 @@ import {
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { FcFile, FcFolder } from 'react-icons/fc';
 
-import FileCard from 'components/FileCard';
-import FolderCard from 'components/FolderCard';
+import FileCard from 'components/cards/FileCard';
+import FolderCard from 'components/cards/FolderCard';
 
 import type { IPCFile, IPCFolder } from 'types/types';
 
@@ -21,8 +21,8 @@ import { useDriveContext } from 'contexts/drive';
 
 import useToggle from "hooks/useToggle";
 
-import { FileOptionsDrawer, FileOptionsPopover } from './dashboardPage/FileOptions';
-import { FolderOptionsPopover , FolderOptionsDrawer } from './dashboardPage/FolderOptions';
+import { FileOptionsDrawer, FileOptionsPopover } from '../dashboardPage/FileOptions';
+import { FolderOptionsPopover , FolderOptionsDrawer } from '../dashboardPage/FolderOptions';
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();

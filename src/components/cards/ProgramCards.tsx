@@ -2,7 +2,7 @@ import { Box, Button, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 import { FcRules } from 'react-icons/fc';
 
 import { RedeployButton } from 'components/computing/CustomButtons';
-import ProgramCard from 'components/ProgramCard';
+import ProgramCard from 'components/cards/ProgramCard';
 
 import { useDriveContext } from 'contexts/drive';
 

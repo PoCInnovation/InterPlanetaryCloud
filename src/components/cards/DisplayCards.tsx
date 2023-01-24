@@ -3,10 +3,10 @@ import { Box, HStack, Spacer, Text, useColorModeValue, VStack } from '@chakra-ui
 import type { IPCFile } from 'types/types';
 
 import ConfigPage from 'components/ConfigPage';
-import ContactCards from 'components/ContactCards';
-import DriveCards from 'components/DriveCards';
-import ProfileCard from 'components/ProfileCard';
-import ProgramCards from 'components/ProgramCards';
+import ContactCards from 'components/cards/ContactCards';
+import DriveCards from 'components/cards/DriveCards';
+import ProfileCard from 'components/cards/ProfileCard';
+import ProgramCards from 'components/cards/ProgramCards';
 import DeleteBin from 'components/file/DeleteBin';
 
 import { useDriveContext } from 'contexts/drive';
