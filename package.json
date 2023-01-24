@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.10.5",
     "aleph-sdk-ts": "^3.2.0",
     "axios": "^0.27.2",
+    "boring-avatars": "^1.7.0",
     "crypto-js": "^4.1.1",
     "eth-crypto": "^2.4.0",
     "ethers": "^5.7.2",
