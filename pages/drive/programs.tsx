@@ -1,9 +1,20 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 
-const Programs = (): JSX.Element => (
-	<VStack>
-		<Text>Programs Page</Text>
-	</VStack>
-);
+import Navigation from 'components/navigation/Navigation';
+import DriveCards from 'components/cards/DriveCards';
+
+import { useDriveContext } from 'contexts/drive';
+
+const Programs = (): JSX.Element => {
+	const { programs } = useDriveContext();
+
+	return (
+		<Navigation>
+			<VStack w="100%" id="test" spacing="16px">
+				<DriveCards programs={programs} />
+			</VStack>
+		</Navigation>
+	);
+};
 
 export default Programs;
