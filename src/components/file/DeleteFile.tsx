@@ -20,9 +20,10 @@ import type { IPCFile } from 'types/types';
 type DeleteFileProps = {
 	file: IPCFile;
 	concernedFiles: IPCFile[];
+	onClosePopover: () => void;
 };
 
-const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
+const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -80,6 +81,7 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		} else {
 			onOpen();
 		}
+		onClosePopover();
 	}
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
