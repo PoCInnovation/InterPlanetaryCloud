@@ -89,7 +89,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 					isLoading={isDeployLoading}
 					id="ipc-dashboard-deploy-from-github-modal-button"
 				>
-					Deploy program
+					Deploy a program
 				</Button>
 			}
 		>
