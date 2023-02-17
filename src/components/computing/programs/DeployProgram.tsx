@@ -1,9 +1,9 @@
 import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import { AiOutlineCode } from 'react-icons/ai';
+import { IoIosRocket } from 'react-icons/io';
 
 import { IPCProgram } from 'types/types';
 import ProgramModal from './ProgramModal';
-
 
 const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,7 +24,7 @@ const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): J
 			}}
 		>
 			<Icon
-				as={AiOutlineCode}
+				as={selectedProgram ? IoIosRocket : AiOutlineCode}
 				_groupHover={{ color: 'red.800' }}
 				w={isDrawer ? '24px' : '20px'}
 				h={isDrawer ? '24px' : '20px'}
@@ -37,7 +37,7 @@ const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): J
 					fontWeight: '500',
 				}}
 			>
-				Deploy a program
+				{selectedProgram ? 'Redeploy' : 'Deploy a program'}
 			</Text>
 			<ProgramModal isOpen={isOpen} onClose={onClose} selectedProgram={selectedProgram} />
 		</HStack>
