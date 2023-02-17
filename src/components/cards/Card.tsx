@@ -6,7 +6,7 @@ type FolderCardProps = {
 	children: JSX.Element;
 };
 
-const FolderCard = ({ children, ...props }: FolderCardProps & StackProps): JSX.Element => (
+const Card = ({ children, ...props }: FolderCardProps & StackProps): JSX.Element => (
 	<HStack
 		w="100%"
 		borderRadius="8px"
@@ -21,4 +21,4 @@ const FolderCard = ({ children, ...props }: FolderCardProps & StackProps): JSX.E
 	</HStack>
 );
 
-export default FolderCard;
+export default Card;
