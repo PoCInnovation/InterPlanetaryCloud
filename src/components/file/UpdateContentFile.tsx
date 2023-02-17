@@ -13,9 +13,10 @@ import type { IPCFile } from 'types/types';
 
 type UpdateContentFileProps = {
 	file: IPCFile;
+	onClosePopover: () => void;
 };
 
-const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
+const UpdateContentFile = ({ file, onClosePopover }: UpdateContentFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -73,6 +74,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		}
 		setIsLoading(false);
 		onClose();
+		onClosePopover();
 	};
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;

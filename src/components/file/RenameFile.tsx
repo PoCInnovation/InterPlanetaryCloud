@@ -24,9 +24,10 @@ import type { IPCFile } from 'types/types';
 type RenameFileProps = {
 	file: IPCFile;
 	concernedFiles: IPCFile[];
+	onClosePopover: () => void;
 };
 
-const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
+const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -58,6 +59,7 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 		setName('');
 		setIsLoading(false);
 		onClose();
+		onClosePopover();
 	};
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;

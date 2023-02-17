@@ -22,9 +22,10 @@ import type { IPCFile } from 'types/types';
 
 type MoveFileProps = {
 	file: IPCFile;
+	onClosePopover: () => void;
 };
 
-const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
+const MoveFile = ({ file, onClosePopover }: MoveFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles, folders } = useDriveContext();
 
@@ -53,6 +54,7 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 		setNewPath('/');
 		setIsLoading(false);
 		onClose();
+		onClosePopover();
 	};
 
 	if (file.permission !== 'owner') return <></>;
