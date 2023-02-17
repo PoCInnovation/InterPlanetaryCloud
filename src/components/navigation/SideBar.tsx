@@ -82,84 +82,51 @@ const SideBar = (): JSX.Element => {
 	return (
 		<VStack
 			w="300px"
+			h="100vh"
 			p="32px"
 			spacing="64px"
 			bg="white"
 			borderRight={{ base: '', lg: `1px solid ${colors.gray['100']}` }}
 		>
 			<VStack w="100%" px="16px" spacing="32px">
-				{isDrawerNeeded ? (
-					<VStack w="100%">
-						<VStack w="100%" spacing="32px">
-							<Text size="2xl" variant="gradient" id="ipc-sideBar-title">
+				<VStack w="100%" spacing="16px">
+					<VStack w="100%" spacing="32px">
+						{isDrawerNeeded && (
+							<Text size="2xl" variant="gradient" id="ipc-sideBar-title" align="center">
 								Inter Planetary Cloud
 							</Text>
-							<Button
-								variant="special"
-								buttonType="left-icon"
-								icon={BsPlusLg}
-								size="xl"
-								w="100%"
-								className="ipc-new-elem-button"
-								onClick={toggleHandler}
-							>
-								New
-							</Button>
-						</VStack>
-						{toggle && (
-							<VStack
-								w="250px"
-								borderRadius="8px"
-								border="2px solid #E8EBFF"
-								_focus={{
-									boxShadow: 'none',
-								}}
-								spacing="4px"
-								p="8px"
-							>
-								<CreateFolder />
-								<UploadFile />
-								<DeployProgram />
-								<DeployGithub />
-							</VStack>
 						)}
+						<Button
+							variant="special"
+							buttonType="left-icon"
+							icon={BsPlusLg}
+							size="xl"
+							w="100%"
+							className="ipc-new-elem-button"
+							onClick={toggleHandler}
+						>
+							New
+						</Button>
 					</VStack>
-				) : (
-					<Popover placement="bottom-end">
-						<PopoverTrigger>
-							<Button
-								variant="special"
-								buttonType="left-icon"
-								icon={BsPlusLg}
-								size="xl"
-								w="100%"
-								className="ipc-new-elem-button"
-								onClick={toggleHandler}
-							>
-								New
-							</Button>
-						</PopoverTrigger>
-						<Portal>
-							<PopoverContent
-								w="250px"
-								borderRadius="8px"
-								border="2px solid #E8EBFF"
-								_focus={{
-									boxShadow: 'none',
-								}}
-							>
-								<PopoverBody p="8px">
-									<VStack w="100%" spacing="4px">
-										<CreateFolder />
-										<UploadFile />
-										<DeployProgram />
-										<DeployGithub />
-									</VStack>
-								</PopoverBody>
-							</PopoverContent>
-						</Portal>
-					</Popover>
-				)}
+					{toggle && (
+						<VStack
+							w="250px"
+							borderRadius="8px"
+							border="2px solid #E8EBFF"
+							_focus={{
+								boxShadow: 'none',
+							}}
+							spacing="4px"
+							p="8px"
+						>
+							<CreateFolder />
+							<UploadFile />
+							<DeployProgram />
+							<DeployGithub />
+						</VStack>
+					)}
+				</VStack>
+
 				<VStack spacing="16px" w="100%">
 					{tabs.map((item) => (
 						<NavbarItem item={item} key={item.label} />
