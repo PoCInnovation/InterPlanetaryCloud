@@ -25,7 +25,7 @@ import DisplayCards from 'components/cards/DisplayCards';
 import { ResponsiveBar } from 'components/navigation/ResponsiveBar';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
-import {BsFileEarmarkFill, BsPlusLg} from 'react-icons/bs';
+import { BsFileEarmarkFill, BsPlusLg } from 'react-icons/bs';
 import CreateFolder from 'components/folder/CreateFolder';
 import DeployProgram from 'components/computing/programs/DeployProgram';
 import UploadFile from 'components/file/UploadFile';
@@ -37,18 +37,14 @@ const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
 	const { user } = useUserContext();
-	const { config, setConfig } = useConfigContext();
+	const { setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { path, folders, files, sharedFiles, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } =
-		useDriveContext();
-	const [selectedTab, setSelectedTab] = useState(0);
+	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
 
 	useEffect(() => {
 		(async () => {
-			if (!user) {
-				router.push('/');
-			} else {
+			if (user) {
 				await loadContact();
 				await loadUserContents();
 			}
@@ -82,16 +78,11 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<Navigation>
-			<VStack m="32px !important">
-				<Box w="100%">
-					<VStack w="100%" id="test" spacing="16px">
-						{/* TODO: clear DisplayCardsParams */}
-						<DriveCards
-							files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
-							folders={folders.filter((elem) => elem.path === path)}
-						/>
-					</VStack>
-				</Box>
+			<VStack w="100%" id="test" spacing="16px">
+				<DriveCards
+					files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
+					folders={folders.filter((elem) => elem.path === path)}
+				/>
 			</VStack>
 		</Navigation>
 	);
