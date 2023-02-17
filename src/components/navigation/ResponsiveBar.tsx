@@ -9,6 +9,7 @@ import {
 	DrawerOverlay,
 	HStack,
 	Icon,
+	Link,
 	SlideDirection,
 	Text,
 	useBreakpointValue,
@@ -19,29 +20,29 @@ import {
 import Sidebar from 'components/navigation/SideBar';
 
 import colors from 'theme/foundations/colors';
+import { useRouter } from 'next/router';
 import ProfileBadge from '../dashboardPage/ProfileBadge';
 import { useUserContext } from '../../contexts/user';
 
 type BarProps = {
 	isOpen: boolean;
-	onOpen: () => void;
 	onClose: () => void;
 };
 
-export const BarWithDrawer = ({ isOpen, onOpen, onClose }: BarProps): JSX.Element => (
-	<Box position="relative" height="80px" w="100%">
-		<Drawer isOpen={isOpen} placement="left" onClose={onClose} id="ipc-dashboard-drawer-overlay">
-			<DrawerOverlay />
-			<DrawerContent w="75%">
-				<DrawerCloseButton />
-				<Sidebar />
-			</DrawerContent>
-		</Drawer>
-	</Box>
+export const BarWithDrawer = ({ isOpen, onClose }: BarProps): JSX.Element => (
+	<Drawer isOpen={isOpen} placement="left" onClose={onClose} id="ipc-dashboard-drawer-overlay">
+		<DrawerOverlay />
+		<DrawerContent w="75%">
+			<DrawerCloseButton />
+			<Sidebar />
+		</DrawerContent>
+	</Drawer>
 );
 
 export const ResponsiveBar = (): JSX.Element => {
 	const { user } = useUserContext();
+
+	const router = useRouter();
 
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 	const isBadgeDisplayed = useBreakpointValue({ base: false, md: true }) || false;
@@ -63,7 +64,13 @@ export const ResponsiveBar = (): JSX.Element => {
 						</Button>
 					)}
 
-					<Text size="2xl" variant="gradient" id="ipc-sideBar-title">
+					<Text
+						size="2xl"
+						variant="gradient"
+						id="ipc-sideBar-title"
+						cursor="pointer"
+						onClick={() => router.push('/drive')}
+					>
 						Inter Planetary Cloud
 					</Text>
 				</HStack>
@@ -75,7 +82,7 @@ export const ResponsiveBar = (): JSX.Element => {
 					/>
 				)}
 			</HStack>
-			{!isDrawerNeeded ? <Sidebar /> : <BarWithDrawer isOpen={isOpen} onOpen={onOpen} onClose={onClose} />}
+			{!isDrawerNeeded ? <Sidebar /> : <BarWithDrawer isOpen={isOpen} onClose={onClose} />}
 		</Box>
 	);
 };
