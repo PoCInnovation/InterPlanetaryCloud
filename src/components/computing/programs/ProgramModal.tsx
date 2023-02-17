@@ -6,7 +6,6 @@ import Modal from 'components/Modal';
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
 
-
 import { extractFilename } from 'utils/fileManipulation';
 
 import { IPCProgram } from 'types/types';
@@ -44,6 +43,7 @@ const ProgramModal = ({
 					hash: '',
 					createdAt: Date.now(),
 					entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
+					size: fileEvent.target.files[0].size,
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -64,7 +64,7 @@ const ProgramModal = ({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title="Deploy a program"
+			title={selectedProgram ? 'Redeploy a program' : 'Deploy a program'}
 			CTA={
 				<Button
 					variant="inline"
@@ -74,7 +74,7 @@ const ProgramModal = ({
 					isLoading={isDeployLoading}
 					id="ipc-dashboard-deploy-program-modal-button"
 				>
-					Deploy program
+					{selectedProgram ? 'Redeploy the program' : 'Deploy a program'}
 				</Button>
 			}
 		>
