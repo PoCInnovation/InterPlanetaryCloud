@@ -1,31 +1,82 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { useState } from 'react';
+import {BsFileEarmarkCode, BsFileEarmarkCodeFill, BsFileEarmarkFill} from 'react-icons/bs';
 
-import { useConfigContext } from 'contexts/config';
+import { IPCFile, IPCProgram } from 'types/types';
 
-import type { IPCProgram } from 'types/types';
+import useToggle from 'hooks/useToggle';
 
-type ProgramCardProps = {
-	program: IPCProgram;
-	children: JSX.Element;
+import { useDriveContext } from 'contexts/drive';
+
+import Card from './Card';
+import { FileOptionsDrawer, FileOptionsPopover } from '../dashboardPage/FileOptions';
+import formatDate from '../../utils/formatDate';
+import { useUserContext } from '../../contexts/user';
+import formatFileSize from '../../utils/formatFileSize';
+import { ProgramOptionsDrawer, ProgramOptionsPopover } from '../dashboardPage/ProgramOptions';
+
+const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
+	const {
+		user: {
+			contact: { username },
+		},
+	} = useUserContext();
+	const { programs } = useDriveContext();
+
+	const { isOpen: isOpenFile, onOpen: onOpenFile, onClose: onCloseFile } = useDisclosure();
+	const { toggle: popoverOpeningToggleFile, toggleHandler: popoverOpeningHandlerFile } = useToggle();
+
+	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+
+	return (
+		<Card
+			key={program.createdAt}
+			className="ipc-file-popover-button"
+			onContextMenu={(e) => {
+				e.preventDefault();
+				if (!isDrawer) {
+					setClickPosition({ x: e.clientX, y: e.clientY });
+					popoverOpeningHandlerFile();
+				} else onOpenFile();
+			}}
+		>
+			<>
+				<HStack w="100%" justify="space-between">
+					<HStack spacing="16px">
+						<BsFileEarmarkCodeFill size="24px" />
+						<Text size="lg">
+							{program.name} - {program.entrypoint}
+						</Text>
+					</HStack>
+					<HStack spacing="32px">
+						<Text>
+							by{' '}
+							<Box as="span" fontWeight="600">
+								{username}
+							</Box>
+						</Text>
+						<Text>{formatDate(program.createdAt)}</Text>
+						<Text>{formatFileSize(program.size)}</Text>
+					</HStack>
+				</HStack>
+				<Box>
+					{isDrawer ? (
+						<ProgramOptionsDrawer program={program} programs={programs} isOpen={isOpenFile} onClose={onCloseFile} />
+					) : (
+						<ProgramOptionsPopover
+							program={program}
+							programs={programs}
+							clickPosition={clickPosition}
+							popoverOpeningToggle={popoverOpeningToggleFile}
+							popoverOpeningHandler={popoverOpeningHandlerFile}
+						/>
+					)}
+				</Box>
+			</>
+		</Card>
+	);
 };
-
-const ShadowColor = () => {
-	const { config } = useConfigContext();
-	if (config?.theme === 'gray.800') return '1px 2px 4px 12px rgb(66, 66, 66)';
-	return '1px 2px 4px 12px rgb(240, 240, 240)';
-};
-
-const ContextColor = () => {
-	const { config } = useConfigContext();
-	return config?.theme ?? 'white';
-};
-
-const ProgramCard = ({ children }: ProgramCardProps): JSX.Element => (
-	<Box p="16px" bg={ContextColor()} w="100%" boxShadow={ShadowColor()}>
-		<Flex w="100%" justify="space-between" align="center">
-			{children}
-		</Flex>
-	</Box>
-);
 
 export default ProgramCard;

@@ -1,41 +1,79 @@
-import { Box, BoxProps, Flex, HStack } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { useState } from 'react';
+import { BsFileEarmarkFill } from 'react-icons/bs';
 
-import { useConfigContext } from 'contexts/config';
+import { IPCFile } from 'types/types';
 
-type FileCardProps = {
-	children: JSX.Element;
+import useToggle from 'hooks/useToggle';
+
+import { useDriveContext } from 'contexts/drive';
+
+import Card from './Card';
+import { FileOptionsDrawer, FileOptionsPopover } from '../dashboardPage/FileOptions';
+import formatDate from '../../utils/formatDate';
+import { useUserContext } from '../../contexts/user';
+import formatFileSize from '../../utils/formatFileSize';
+
+const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
+	const { files } = useDriveContext();
+	const {
+		user: {
+			contact: { username },
+		},
+	} = useUserContext();
+
+	const { isOpen: isOpenFile, onOpen: onOpenFile, onClose: onCloseFile } = useDisclosure();
+	const { toggle: popoverOpeningToggleFile, toggleHandler: popoverOpeningHandlerFile } = useToggle();
+
+	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+
+	return (
+		<Card
+			key={file.createdAt}
+			className="ipc-file-popover-button"
+			onContextMenu={(e) => {
+				e.preventDefault();
+				if (!isDrawer) {
+					setClickPosition({ x: e.clientX, y: e.clientY });
+					popoverOpeningHandlerFile();
+				} else onOpenFile();
+			}}
+		>
+			<>
+				<HStack w="100%" justify="space-between">
+					<HStack spacing="16px">
+						<BsFileEarmarkFill size="24px" />
+						<Text size="lg">{file.name}</Text>
+					</HStack>
+					<HStack spacing="32px">
+						<Text>
+							by{' '}
+							<Box as="span" fontWeight="600">
+								{username}
+							</Box>
+						</Text>
+						<Text>{formatDate(file.createdAt)}</Text>
+						<Text>{formatFileSize(file.size)}</Text>
+					</HStack>
+				</HStack>
+				<Box>
+					{isDrawer ? (
+						<FileOptionsDrawer file={file} files={files} isOpen={isOpenFile} onClose={onCloseFile} />
+					) : (
+						<FileOptionsPopover
+							file={file}
+							files={files}
+							clickPosition={clickPosition}
+							popoverOpeningToggle={popoverOpeningToggleFile}
+							popoverOpeningHandler={popoverOpeningHandlerFile}
+						/>
+					)}
+				</Box>
+			</>
+		</Card>
+	);
 };
-
-const ShadowColor = () => {
-	const { config } = useConfigContext();
-	if (config?.theme === 'gray.800') return '0px 2px 3px 3px rgb(66, 66, 66)';
-	return '0px 2px 3px 3px rgb(240, 240, 240)';
-};
-
-const ContextColor = () => {
-	const { config } = useConfigContext();
-	return config?.theme ?? 'white';
-};
-
-const FileCard = ({ children, ...props }: FileCardProps & BoxProps): JSX.Element => (
-	<Box
-		p="16px"
-		bg={ContextColor()}
-		w="100%"
-		boxShadow={ShadowColor()}
-		borderRadius="4px"
-		border="0px solid rgb(200, 200, 200)"
-		mb="8px"
-		display="flex"
-		justifyContent="space-between"
-		{...props}
-	>
-		<HStack w="100%">
-			<Flex w="100%" justify="space-between" align="center">
-				{children}
-			</Flex>
-		</HStack>
-	</Box>
-);
 
 export default FileCard;
