@@ -1,16 +1,7 @@
-import {
-	Popover,
-	PopoverBody,
-	PopoverContent,
-	PopoverTrigger,
-	Portal,
-	Tab,
-	TabList,
-	Tabs,
-	Text,
-	useBreakpointValue,
-	VStack,
-} from '@chakra-ui/react';
+import { Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { IoTrashOutline } from 'react-icons/io5';
+import { BsCodeSlash, BsPeople, BsPlusLg, BsShareFill } from 'react-icons/bs';
+import { RiHardDrive2Line } from 'react-icons/ri';
 
 import colors from 'theme/foundations/colors';
 
@@ -18,30 +9,15 @@ import UploadFile from 'components/file/UploadFile';
 import CreateFolder from 'components/folder/CreateFolder';
 import DeployProgram from 'components/computing/programs/DeployProgram';
 import DeployGithub from 'components/computing/github/DeployGithub';
+import Button from 'components/Button';
+
+import { useUserContext } from 'contexts/user';
 
 import useToggle from 'hooks/useToggle';
-import Button from 'components/Button';
-import { BsCodeSlash, BsPeople, BsPlusLg, BsShareFill } from 'react-icons/bs';
-import { RiHardDrive2Line } from 'react-icons/ri';
-import { IconType } from 'react-icons';
-import { IoTrashOutline } from 'react-icons/io5';
-import { NavbarType } from 'types/navbar';
-import NavbarItem from './NavbarItem';
-import ProfileBadge from '../dashboardPage/ProfileBadge';
-import { useUserContext } from '../../contexts/user';
 
-type SideBarPropsType = {
-	contactTab: string;
-	myFilesTab: string;
-	sharedFilesTab: string;
-	myProgramsTab: string;
-	profileTab: string;
-	binTab: string;
-	configTab: string;
-	setSelectedTab: (tab: number) => void;
-	currentTabIndex: number;
-	configTheme: string;
-};
+import { NavbarType } from 'types/navbar';
+import ProfileBadge from '../dashboardPage/ProfileBadge';
+import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {
 	const { user } = useUserContext();

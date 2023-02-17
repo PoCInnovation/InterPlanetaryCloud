@@ -2,27 +2,16 @@ import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui
 import { useState } from 'react';
 import { BsFillFilePersonFill } from 'react-icons/bs';
 
-import { IPCContact, IPCFile } from 'types/types';
+import { IPCContact } from 'types/types';
 
 import useToggle from 'hooks/useToggle';
 
-import { useDriveContext } from 'contexts/drive';
+import formatDate from 'utils/formatDate';
 
-import Card from './Card';
-import { FileOptionsDrawer, FileOptionsPopover } from '../dashboardPage/FileOptions';
-import formatDate from '../../utils/formatDate';
-import { useUserContext } from '../../contexts/user';
-import formatFileSize from '../../utils/formatFileSize';
 import { ContactOptionsDrawer, ContactOptionsPopover } from '../dashboardPage/ContactOptions';
+import Card from './Card';
 
 const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
-	const { files } = useDriveContext();
-	const {
-		user: {
-			contact: { username },
-		},
-	} = useUserContext();
-
 	const { isOpen: isOpenFile, onOpen: onOpenFile, onClose: onCloseFile } = useDisclosure();
 	const { toggle: popoverOpeningToggleFile, toggleHandler: popoverOpeningHandlerFile } = useToggle();
 

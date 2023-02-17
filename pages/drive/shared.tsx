@@ -1,7 +1,9 @@
-import { Text, VStack } from '@chakra-ui/react';
-import DriveCards from '../../src/components/cards/DriveCards';
-import Navigation from '../../src/components/navigation/Navigation';
-import { useDriveContext } from '../../src/contexts/drive';
+import { VStack } from '@chakra-ui/react';
+
+import DriveCards from 'components/cards/DriveCards';
+import Navigation from 'components/navigation/Navigation';
+
+import { useDriveContext } from 'contexts/drive';
 
 const Shared = (): JSX.Element => {
 	const { sharedFiles } = useDriveContext();

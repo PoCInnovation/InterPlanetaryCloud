@@ -1,8 +1,5 @@
-import { useRouter } from 'next/router';
-import { HStack, Icon, Text, useBreakpointValue, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue } from '@chakra-ui/react';
 import { IoEarth } from 'react-icons/io5';
-
-import { useUserContext } from 'contexts/user';
 
 import type { IPCProgram } from 'types/types';
 

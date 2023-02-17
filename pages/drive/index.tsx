@@ -1,41 +1,17 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import {
-	Box,
-	HStack,
-	Popover,
-	useColorMode,
-	useToast,
-	VStack,
-	Button,
-	PopoverHeader,
-	PopoverFooter,
-	PopoverTrigger,
-	Portal,
-	PopoverContent,
-	PopoverArrow,
-	PopoverCloseButton,
-	PopoverBody,
-} from '@chakra-ui/react';
+import { useColorMode, useToast, VStack } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
 
-import DisplayCards from 'components/cards/DisplayCards';
-import { ResponsiveBar } from 'components/navigation/ResponsiveBar';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
-import { BsFileEarmarkFill, BsPlusLg } from 'react-icons/bs';
-import CreateFolder from 'components/folder/CreateFolder';
-import DeployProgram from 'components/computing/programs/DeployProgram';
-import UploadFile from 'components/file/UploadFile';
-import DeployGithub from 'components/computing/github/DeployGithub';
-import DriveCards from '../../src/components/cards/DriveCards';
-import Navigation from '../../src/components/navigation/Navigation';
+
+import DriveCards from 'components/cards/DriveCards';
+import Navigation from 'components/navigation/Navigation';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
-	const router = useRouter();
 	const { user } = useUserContext();
 	const { setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();

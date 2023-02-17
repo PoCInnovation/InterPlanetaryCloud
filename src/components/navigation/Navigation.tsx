@@ -1,11 +1,11 @@
-import { useBreakpointValue, VStack } from '@chakra-ui/react';
-
-import { useConfigContext } from 'contexts/config';
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { VStack } from '@chakra-ui/react';
+
+
+import { useConfigContext } from 'contexts/config';
+import { useUserContext } from 'contexts/user';
 import { ResponsiveBar } from './ResponsiveBar';
-import { useUserContext } from '../../contexts/user';
 
 const Navigation = ({ children }: { children: JSX.Element }): JSX.Element => {
 	const { config } = useConfigContext();

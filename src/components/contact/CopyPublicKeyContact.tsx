@@ -1,9 +1,6 @@
-import { HStack, Icon, Text, useBreakpointValue, useToast } from '@chakra-ui/react';
-import { FiDownload } from 'react-icons/fi';
+import { HStack, Icon, Text, useBreakpointValue } from '@chakra-ui/react';
 
-import { useUserContext } from 'contexts/user';
-
-import type { IPCContact, IPCFile } from 'types/types';
+import type { IPCContact } from 'types/types';
 import { BsClipboard } from 'react-icons/bs';
 
 type DownloadFileProps = {

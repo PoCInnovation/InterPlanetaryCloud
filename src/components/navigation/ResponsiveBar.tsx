@@ -1,28 +1,26 @@
+import { useRouter } from 'next/router';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
-	Divider,
 	Drawer,
 	DrawerCloseButton,
 	DrawerContent,
 	DrawerOverlay,
 	HStack,
 	Icon,
-	Link,
-	SlideDirection,
 	Text,
 	useBreakpointValue,
 	useDisclosure,
-	VStack,
 } from '@chakra-ui/react';
 
 import Sidebar from 'components/navigation/SideBar';
 
 import colors from 'theme/foundations/colors';
-import { useRouter } from 'next/router';
+
+import { useUserContext } from 'contexts/user';
+
 import ProfileBadge from '../dashboardPage/ProfileBadge';
-import { useUserContext } from '../../contexts/user';
 
 type BarProps = {
 	isOpen: boolean;

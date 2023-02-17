@@ -1,12 +1,11 @@
-import { HStack, Text, VStack } from '@chakra-ui/react';
-import Button from 'components/Button';
-import { BsPlusLg } from 'react-icons/bs';
-import colors from 'theme/foundations/colors';
-import { useDriveContext } from '../../src/contexts/drive';
-import Navigation from '../../src/components/navigation/Navigation';
-import DriveCards from '../../src/components/cards/DriveCards';
-import LabelBadge from '../../src/components/LabelBadge';
-import AddContact from "../../src/components/contact/AddContact";
+import { HStack, VStack } from '@chakra-ui/react';
+
+import Navigation from 'components/navigation/Navigation';
+import DriveCards from 'components/cards/DriveCards';
+import LabelBadge from 'components/LabelBadge';
+import AddContact from 'components/contact/AddContact';
+
+import { useDriveContext } from 'contexts/drive';
 
 const Contacts = (): JSX.Element => {
 	const { contacts } = useDriveContext();
