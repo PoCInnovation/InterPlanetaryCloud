@@ -68,7 +68,7 @@ describe('Signup with credentials Button for Signup', () => {
 	});
 
 	it('Good URL redirect for close button', () => {
-		cy.get('#ipc-modal-close-button').click().url().should('eq', `${Cypress.config().baseUrl}/dashboard`);
+		cy.get('#ipc-modal-close-button').click().url().should('eq', `${Cypress.config().baseUrl}/drive`);
 	});
 });
 
