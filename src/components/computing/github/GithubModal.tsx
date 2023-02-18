@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import Modal from 'components/Modal';
 
 import { useUserContext } from 'contexts/user';
-import { useDriveContext } from "contexts/drive";
+import { useDriveContext } from 'contexts/drive';
 
 import { GitHubRepository, IPCProgram } from 'types/types';
 
@@ -16,10 +16,10 @@ import CustomProgram from '../CustomProgram';
 const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }): JSX.Element => {
 	const { user } = useUserContext();
 	const { data: session } = useSession();
-	const { setPrograms } = useDriveContext()
+	const { setPrograms } = useDriveContext();
 
 	const toast = useToast({ duration: 2000, isClosable: true });
-	const router =  useRouter();
+	const router = useRouter();
 
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
@@ -48,6 +48,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 				hash: result.data.item_hash,
 				createdAt: Date.now(),
 				entrypoint: result.data.entrypoint,
+				size: 0,
 			};
 			user.computing.programs.push(newProgram);
 			await user.computing.publishAggregate();
