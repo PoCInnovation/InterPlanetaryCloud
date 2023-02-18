@@ -12,7 +12,7 @@ const Contacts = (): JSX.Element => {
 
 	return (
 		<Navigation>
-			<VStack w="100%" id="test" spacing="48px" align="start">
+			<VStack w="100%" spacing="48px" align="start">
 				<HStack spacing="48px">
 					<LabelBadge label="Contacts" />
 					<AddContact />

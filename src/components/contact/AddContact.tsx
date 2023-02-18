@@ -3,11 +3,11 @@ import EthCrypto from 'eth-crypto';
 import { ChangeEvent, useState } from 'react';
 
 import Modal from 'components/Modal';
+import Button from 'components/Button';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 import { BsPlusLg } from 'react-icons/bs';
-import Button from 'components/Button';
 
 const AddContact = (): JSX.Element => {
 	const { user } = useUserContext();

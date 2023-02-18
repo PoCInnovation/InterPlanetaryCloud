@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
-
 import { useColorMode, useToast, VStack } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
-
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 
 import DriveCards from 'components/cards/DriveCards';
 import Navigation from 'components/navigation/Navigation';
+import LabelBadge from 'components/LabelBadge';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -54,7 +53,8 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<Navigation>
-			<VStack w="100%" id="test" spacing="16px">
+			<VStack w="100%" spacing="48px" align="start">
+				<LabelBadge label="My drive" />
 				<DriveCards
 					files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
 					folders={folders.filter((elem) => elem.path === path)}
