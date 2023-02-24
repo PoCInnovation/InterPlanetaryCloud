@@ -20,7 +20,7 @@ import colors from 'theme/foundations/colors';
 
 import { useUserContext } from 'contexts/user';
 
-import ProfileBadge from '../dashboardPage/ProfileBadge';
+import ProfileBadge from 'components/profile/ProfileBadge';
 
 type BarProps = {
 	isOpen: boolean;
@@ -43,7 +43,6 @@ export const ResponsiveBar = (): JSX.Element => {
 	const router = useRouter();
 
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
-	const isBadgeDisplayed = useBreakpointValue({ base: false, md: true }) || false;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -73,7 +72,7 @@ export const ResponsiveBar = (): JSX.Element => {
 					</Text>
 				</HStack>
 
-				{isBadgeDisplayed && (
+				{!isDrawerNeeded && (
 					<ProfileBadge
 						username={(user ? user.contact.username : 'IPC') || 'IPC'}
 						address={(user ? user.account?.address : 'IPC') || 'IPC'}

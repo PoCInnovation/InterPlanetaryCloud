@@ -1,6 +1,6 @@
 import { Text, useBreakpointValue, VStack } from '@chakra-ui/react';
 import { IoTrashOutline } from 'react-icons/io5';
-import { BsCodeSlash, BsPeople, BsPlusLg, BsShareFill } from 'react-icons/bs';
+import { BsCodeSlash, BsPeople, BsPerson, BsPlusLg, BsShareFill } from 'react-icons/bs';
 import { RiHardDrive2Line } from 'react-icons/ri';
 
 import colors from 'theme/foundations/colors';
@@ -16,14 +16,13 @@ import { useUserContext } from 'contexts/user';
 import useToggle from 'hooks/useToggle';
 
 import { NavbarType } from 'types/navbar';
-import ProfileBadge from '../dashboardPage/ProfileBadge';
+import ProfileBadge from 'components/profile/ProfileBadge';
 import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {
 	const { user } = useUserContext();
 
-	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, xs: true, lg: false }) || false;
-	const isBadgeDisplayed = useBreakpointValue({ base: true, md: false }) || false;
+	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 
 	const { toggle, toggleHandler } = useToggle();
 
@@ -52,6 +51,11 @@ const SideBar = (): JSX.Element => {
 			label: 'Trash',
 			url: '/drive/trash',
 			icon: IoTrashOutline,
+		},
+		{
+			label: 'Account',
+			url: '/drive/account',
+			icon: BsPerson,
 		},
 	];
 
@@ -108,7 +112,7 @@ const SideBar = (): JSX.Element => {
 						<NavbarItem item={item} key={item.label} />
 					))}
 				</VStack>
-				{isBadgeDisplayed && (
+				{isDrawerNeeded && (
 					<ProfileBadge
 						username={user ? user.contact.username : 'IPC'}
 						address={(user ? user.account?.address : 'IPC') || 'IPC'}

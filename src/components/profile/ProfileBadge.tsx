@@ -1,12 +1,9 @@
-import { Box, HStack, Icon, Text, useBreakpointValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
 import Avatar from 'boring-avatars';
+import { BiCopy } from 'react-icons/bi';
 
 import colors from 'theme/foundations/colors';
-import { FileOptionsDrawer, FileOptionsPopover } from 'components/dashboardPage/FileOptions';
-import { ProfileOptionsDrawer, ProfileOptionsPopover } from 'components/dashboardPage/ProfileOptions';
-import { useState } from 'react';
-import useToggle from 'hooks/useToggle';
-import { BiCopy } from 'react-icons/bi';
+
 
 type ProfileBadgeProps = {
 	username: string;
@@ -14,8 +11,6 @@ type ProfileBadgeProps = {
 };
 
 const ProfileBadge = ({ username, address }: ProfileBadgeProps): JSX.Element => {
-	const { isOpen: isOpenProfile, onOpen: onOpenProfile, onClose: onCloseProfile } = useDisclosure();
-
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 
 	const ProfileBadgeCard = (): JSX.Element => (
@@ -26,7 +21,6 @@ const ProfileBadge = ({ username, address }: ProfileBadgeProps): JSX.Element => 
 			p="8px 16px"
 			border={`1px solid ${colors.blue['100']}`}
 			cursor="pointer"
-			onClick={onOpenProfile}
 			role="group"
 			w={isDrawerNeeded ? '100%' : 'auto'}
 		>
