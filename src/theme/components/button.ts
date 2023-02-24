@@ -156,7 +156,7 @@ const Button = {
 	},
 	defaultProps: {
 		size: 'oldMd',
-		variant: 'gray',
+		variant: 'primary',
 	},
 };
 
