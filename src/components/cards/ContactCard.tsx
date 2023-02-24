@@ -20,18 +20,18 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	return (
-		<Card
-			key={contact.address}
-			className="ipc-file-popover-button"
-			onContextMenu={(e) => {
-				e.preventDefault();
-				if (!isDrawer) {
-					setClickPosition({ x: e.clientX, y: e.clientY });
-					popoverOpeningHandlerFile();
-				} else onOpenFile();
-			}}
-		>
-			<>
+		<>
+			<Card
+				key={contact.address}
+				className="ipc-file-popover-button"
+				onContextMenu={(e) => {
+					e.preventDefault();
+					if (!isDrawer) {
+						setClickPosition({ x: e.clientX, y: e.clientY });
+						popoverOpeningHandlerFile();
+					} else onOpenFile();
+				}}
+			>
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFillFilePersonFill size="24px" />
@@ -43,20 +43,20 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 						<Text>{formatDate(contact.createdAt)}</Text>
 					</HStack>
 				</HStack>
-				<Box>
-					{isDrawer ? (
-						<ContactOptionsDrawer contact={contact} isOpen={isOpenFile} onClose={onCloseFile} />
-					) : (
-						<ContactOptionsPopover
-							contact={contact}
-							clickPosition={clickPosition}
-							popoverOpeningToggle={popoverOpeningToggleFile}
-							popoverOpeningHandler={popoverOpeningHandlerFile}
-						/>
-					)}
-				</Box>
-			</>
-		</Card>
+			</Card>
+			<Box>
+				{isDrawer ? (
+					<ContactOptionsDrawer contact={contact} isOpen={isOpenFile} onClose={onCloseFile} />
+				) : (
+					<ContactOptionsPopover
+						contact={contact}
+						clickPosition={clickPosition}
+						popoverOpeningToggle={popoverOpeningToggleFile}
+						popoverOpeningHandler={popoverOpeningHandlerFile}
+					/>
+				)}
+			</Box>
+		</>
 	);
 };
 

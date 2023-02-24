@@ -25,23 +25,23 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	return (
-		<Card
-			key={folder.createdAt}
-			onContextMenu={(e) => {
-				e.preventDefault();
-				if (!isDrawer) {
-					setClickPosition({ x: e.clientX, y: e.clientY });
-					popoverOpeningHandlerFolder();
-				} else onOpenFolder();
-			}}
-			onClick={() => {
-				setPath(`${path + folder.name}/`);
-			}}
-			className="ipc-folder-popover-button"
-			w="100%"
-			cursor="pointer"
-		>
-			<>
+		<>
+			<Card
+				key={folder.createdAt}
+				onContextMenu={(e) => {
+					e.preventDefault();
+					if (!isDrawer) {
+						setClickPosition({ x: e.clientX, y: e.clientY });
+						popoverOpeningHandlerFolder();
+					} else onOpenFolder();
+				}}
+				onClick={() => {
+					setPath(`${path + folder.name}/`);
+				}}
+				className="ipc-folder-popover-button"
+				w="100%"
+				cursor="pointer"
+			>
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<FaFolder size="24px" />
@@ -57,20 +57,20 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 						<Text>{formatDate(folder.createdAt)}</Text>
 					</HStack>
 				</HStack>
-				<Box>
-					{isDrawer ? (
-						<FolderOptionsDrawer folder={folder} isOpen={isOpenFolder} onClose={onCloseFolder} />
-					) : (
-						<FolderOptionsPopover
-							folder={folder}
-							clickPosition={clickPosition}
-							popoverOpeningToggle={popoverOpeningToggleFolder}
-							popoverOpeningHandler={popoverOpeningHandlerFolder}
-						/>
-					)}
-				</Box>
-			</>
-		</Card>
+			</Card>
+			<Box>
+				{isDrawer ? (
+					<FolderOptionsDrawer folder={folder} isOpen={isOpenFolder} onClose={onCloseFolder} />
+				) : (
+					<FolderOptionsPopover
+						folder={folder}
+						clickPosition={clickPosition}
+						popoverOpeningToggle={popoverOpeningToggleFolder}
+						popoverOpeningHandler={popoverOpeningHandlerFolder}
+					/>
+				)}
+			</Box>
+		</>
 	);
 };
 

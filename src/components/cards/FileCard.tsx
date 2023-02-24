@@ -30,18 +30,18 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	return (
-		<Card
-			key={file.createdAt}
-			className="ipc-file-popover-button"
-			onContextMenu={(e) => {
-				e.preventDefault();
-				if (!isDrawer) {
-					setClickPosition({ x: e.clientX, y: e.clientY });
-					popoverOpeningHandlerFile();
-				} else onOpenFile();
-			}}
-		>
-			<>
+		<>
+			<Card
+				key={file.createdAt}
+				className="ipc-file-popover-button"
+				onContextMenu={(e) => {
+					e.preventDefault();
+					if (!isDrawer) {
+						setClickPosition({ x: e.clientX, y: e.clientY });
+						popoverOpeningHandlerFile();
+					} else onOpenFile();
+				}}
+			>
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFileEarmarkFill size="24px" />
@@ -58,21 +58,21 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 						<Text>{formatFileSize(file.size)}</Text>
 					</HStack>
 				</HStack>
-				<Box>
-					{isDrawer ? (
-						<FileOptionsDrawer file={file} files={files} isOpen={isOpenFile} onClose={onCloseFile} />
-					) : (
-						<FileOptionsPopover
-							file={file}
-							files={files}
-							clickPosition={clickPosition}
-							popoverOpeningToggle={popoverOpeningToggleFile}
-							popoverOpeningHandler={popoverOpeningHandlerFile}
-						/>
-					)}
-				</Box>
-			</>
-		</Card>
+			</Card>
+			<Box>
+				{isDrawer ? (
+					<FileOptionsDrawer file={file} files={files} isOpen={isOpenFile} onClose={onCloseFile} />
+				) : (
+					<FileOptionsPopover
+						file={file}
+						files={files}
+						clickPosition={clickPosition}
+						popoverOpeningToggle={popoverOpeningToggleFile}
+						popoverOpeningHandler={popoverOpeningHandlerFile}
+					/>
+				)}
+			</Box>
+		</>
 	);
 };
 
