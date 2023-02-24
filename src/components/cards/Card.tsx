@@ -4,13 +4,14 @@ import colors from 'theme/foundations/colors';
 
 type FolderCardProps = {
 	children: JSX.Element;
+	size?: 'sm' | 'md';
 };
 
-const Card = ({ children, ...props }: FolderCardProps & StackProps): JSX.Element => (
+const Card = ({ children, size = 'sm', ...props }: FolderCardProps & StackProps): JSX.Element => (
 	<HStack
 		w="100%"
 		borderRadius="8px"
-		border={`1px solid ${colors.blue['300']}`}
+		border={`${size === 'sm' ? '1px' : '2px'} solid ${colors.blue['300']}`}
 		p="16px 20px"
 		justify="space-between"
 		{...props}
