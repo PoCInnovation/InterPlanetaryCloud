@@ -1,9 +1,16 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 
-const Settings = (): JSX.Element => (
-	<VStack>
-		<Text>Settings page</Text>
-	</VStack>
+import Navigation from 'components/navigation/Navigation';
+import LabelBadge from "components/LabelBadge";
+import AccountCard from 'components/account/AccountCard';
+
+const Account = (): JSX.Element => (
+	<Navigation>
+		<VStack w="100%" spacing="48px" align="start">
+			<LabelBadge label="Account" />
+			<AccountCard />
+		</VStack>
+	</Navigation>
 );
 
-export default Settings;
+export default Account;
