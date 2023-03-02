@@ -1,16 +1,16 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Button, Select, useToast, VStack } from '@chakra-ui/react';
+import { Select, useToast, Text, VStack, HStack } from '@chakra-ui/react';
 import axios from 'axios';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 import Modal from 'components/Modal';
+import Button from 'components/Button';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
 
 import { GitHubRepository, IPCProgram } from 'types/types';
-
 import CustomProgram from '../CustomProgram';
 
 const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }): JSX.Element => {
@@ -80,25 +80,47 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 			onClose={onClose}
 			title="Deploy from Github"
 			CTA={
-				<Button
-					variant="inline"
-					w="100%"
-					mb="16px"
-					onClick={() => {
-						cloneToBackend(selectedRepository);
-					}}
-					isLoading={isDeployLoading}
-					id="ipc-dashboard-deploy-from-github-modal-button"
-				>
-					Deploy a program
-				</Button>
+				<HStack w="100%" justify="space-between">
+					<Button
+						variant="primary"
+						w="100%"
+						size="lg"
+						onClick={() => {
+							cloneToBackend(selectedRepository);
+						}}
+						isLoading={isDeployLoading}
+						disabled={!session}
+						id="ipc-dashboard-deploy-from-github-modal-button"
+					>
+						Deploy a program
+					</Button>
+					{!session ? (
+						<Button
+							variant="special"
+							size="lg"
+							onClick={() => signIn('github')}
+							id="ipc-dashboard-github-signin-button"
+						>
+							Sign in with Github
+						</Button>
+					) : (
+						<Button
+							variant="secondary"
+							size="lg"
+							onClick={async () => signOut()}
+							id="ipc-dashboard-github-signout-button"
+						>
+							Sign out from Github
+						</Button>
+					)}
+				</HStack>
 			}
 		>
 			<>
 				{!session && (
-					<Button variant="inline" w="100%" onClick={() => signIn('github')} id="ipc-dashboard-github-signin-button">
-						Sign in with Github
-					</Button>
+					<VStack spacing="12px">
+						<Text size="xl">You're not connected to your Github account</Text>
+					</VStack>
 				)}
 				{session && (
 					<>
@@ -119,14 +141,6 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 									</option>
 								))}
 							</Select>
-							<Button
-								variant="inline"
-								w="100%"
-								onClick={async () => signOut()}
-								id="ipc-dashboard-github-signout-button"
-							>
-								Sign out
-							</Button>
 						</VStack>
 					</>
 				)}

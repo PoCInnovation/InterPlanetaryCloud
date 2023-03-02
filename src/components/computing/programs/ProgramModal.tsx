@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, Input, useToast } from '@chakra-ui/react';
+import { Input, useToast } from '@chakra-ui/react';
 
 import Modal from 'components/Modal';
 
@@ -10,6 +10,7 @@ import { extractFilename } from 'utils/fileManipulation';
 
 import { IPCProgram } from 'types/types';
 
+import Button from 'components/Button';
 import CustomProgram from '../CustomProgram';
 
 const ProgramModal = ({
@@ -67,9 +68,8 @@ const ProgramModal = ({
 			title={selectedProgram ? 'Redeploy a program' : 'Deploy a program'}
 			CTA={
 				<Button
-					variant="inline"
-					w="100%"
-					mb="16px"
+					variant="primary"
+					size="lg"
 					onClick={() => uploadProgram(selectedProgram)}
 					isLoading={isDeployLoading}
 					id="ipc-dashboard-deploy-program-modal-button"

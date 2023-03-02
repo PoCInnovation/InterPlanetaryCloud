@@ -1,5 +1,5 @@
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Button, Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
@@ -10,6 +10,7 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFolder } from 'types/types';
+import Button from 'components/Button';
 
 type MoveFolderProps = {
 	folder: IPCFolder;
@@ -107,9 +108,8 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 				title="Move folder"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={moveFolder}
 						isLoading={isLoading}
 						id="ipc-dashboard-move-folder-confirm"

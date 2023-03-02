@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import { HStack, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
 import { useUserContext } from 'contexts/user';
@@ -15,6 +15,7 @@ import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
 
 import colors from 'theme/foundations/colors';
+import Button from 'components/Button';
 
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();
@@ -89,9 +90,15 @@ const Signup = (): JSX.Element => {
 						onClose={closeModal}
 						title="Your Mnemonics"
 						CTA={
-							<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signup-copy-mnemonics-button">
-								Copy my mnemonics
-							</Button>
+							<HStack w="100%" justify="space-between">
+								<Button variant="primary" size="lg" onClick={onClick} id="ipc-signup-copy-mnemonics-button">
+									Copy my mnemonics
+								</Button>
+
+								<Button variant="secondary" size="lg" onClick={closeModal} id="ipc-signup-go-to-dashboard-button">
+									Go to my dashboard
+								</Button>
+							</HStack>
 						}
 					>
 						<Textarea

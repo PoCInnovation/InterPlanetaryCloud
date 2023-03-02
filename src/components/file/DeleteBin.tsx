@@ -68,12 +68,12 @@ const DeleteBin = ({ files, folders, concernedFiles }: DeleteBinProps): JSX.Elem
 				onClose={onClose}
 				title="Delete the bin"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={deleteAllFiles} id="ipc-dashboard-delete-bin-button">
+					<Button variant="primary" size="lg" onClick={deleteAllFiles} id="ipc-dashboard-delete-bin-button">
 						Delete the bin
 					</Button>
 				}
 			>
-				<Text>Are you sure you want to delete all the files in your bin?</Text>
+				<Text size="lg">Are you sure you want to delete all the files in your bin?</Text>
 			</Modal>
 		</>
 	);

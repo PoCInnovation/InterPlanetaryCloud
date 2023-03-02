@@ -53,10 +53,10 @@ const AddContact = (): JSX.Element => {
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Add the contact"
+				title="Add a contact"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={addContact} id="ipc-dashboard-add-contact-button">
-						Add the contact
+					<Button variant="primary" size="lg" onClick={addContact} id="ipc-dashboard-add-contact-button">
+						Add a contact
 					</Button>
 				}
 			>

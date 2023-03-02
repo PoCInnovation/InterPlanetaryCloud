@@ -91,9 +91,8 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 				CTA={
 					contact ? (
 						<Button
-							variant="inline"
-							w="100%"
-							mb="16px"
+							variant="primary"
+							size="lg"
 							id="ipc-dashboard-confirm-share-file-button"
 							onClick={shareFile}
 							isLoading={isLoading}
