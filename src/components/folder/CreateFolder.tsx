@@ -14,10 +14,10 @@ import { ChangeEvent, useState } from 'react';
 import Modal from 'components/Modal';
 import type { IPCFolder } from 'types/types';
 
+import Button from 'components/Button';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
-import Button from 'components/Button';
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();

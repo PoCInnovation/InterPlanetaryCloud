@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { HStack, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
-import { useUserContext } from 'contexts/user';
 import { useConfigContext } from 'contexts/config';
+import { useUserContext } from 'contexts/user';
 
 import { AuthReturnType } from 'lib/auth';
 
@@ -14,8 +14,8 @@ import AuthPage from 'components/AuthPage';
 import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
 
-import colors from 'theme/foundations/colors';
 import Button from 'components/Button';
+import colors from 'theme/foundations/colors';
 
 const Signup = (): JSX.Element => {
 	const auth = useAuthContext();

@@ -2,18 +2,20 @@ import {
 	Box,
 	Button,
 	HStack,
-	Image, Stack,
+	Image,
+	Stack,
 	Text,
-	useColorMode, useToast,
+	useColorMode,
+	useToast,
 	VStack,
 	Wrap,
-	WrapItem
+	WrapItem,
 } from '@chakra-ui/react';
 import Card from 'components/cards/Card';
+import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
-import {useState} from "react";
-import colors from "../../theme/foundations/colors";
-import {useConfigContext} from "../../contexts/config";
+import { useState } from 'react';
+import colors from 'theme/foundations/colors';
 
 const ConfigCard = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -26,7 +28,7 @@ const ConfigCard = (): JSX.Element => {
 
 	const switchTheme = async () => {
 		setIsLoading(true);
-		setColorTheme(colorTheme === "light" ? "dark" : "light");
+		setColorTheme(colorTheme === 'light' ? 'dark' : 'light');
 		try {
 			const config1 = await user.contact.configFile(colorTheme);
 			setConfig({ ...user.config!, theme: colorTheme });
@@ -39,7 +41,7 @@ const ConfigCard = (): JSX.Element => {
 		setIsLoading(false);
 	};
 
-	const isLight = colorTheme === "light";
+	const isLight = colorTheme === 'light';
 
 	return (
 		<Wrap>
@@ -51,10 +53,22 @@ const ConfigCard = (): JSX.Element => {
 								<Text size="xl">Configuration</Text>
 							</HStack>
 							<HStack spacing="16px">
-								<Button variant={isLight ? "primary" : "secondary"} disabled={isLight} isLoading={isLoading} onClick={switchTheme} size="md">
+								<Button
+									variant={isLight ? 'primary' : 'secondary'}
+									disabled={isLight}
+									isLoading={isLoading}
+									onClick={switchTheme}
+									size="md"
+								>
 									Light theme
 								</Button>
-								<Button variant={!isLight ? "primary" : "secondary"} disabled={!isLight} isLoading={isLoading} onClick={switchTheme} size="md">
+								<Button
+									variant={!isLight ? 'primary' : 'secondary'}
+									disabled={!isLight}
+									isLoading={isLoading}
+									onClick={switchTheme}
+									size="md"
+								>
 									Dark theme
 								</Button>
 							</HStack>

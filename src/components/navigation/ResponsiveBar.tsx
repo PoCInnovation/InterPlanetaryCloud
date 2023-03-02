@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import {
 	Box,
@@ -13,6 +12,7 @@ import {
 	useBreakpointValue,
 	useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 import Sidebar from 'components/navigation/SideBar';
 

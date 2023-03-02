@@ -2,8 +2,8 @@ import { HStack, VStack } from '@chakra-ui/react';
 
 import DriveCards from 'components/cards/DriveCards';
 import DeleteBin from 'components/file/DeleteBin';
-import Navigation from 'components/navigation/Navigation';
 import LabelBadge from 'components/LabelBadge';
+import Navigation from 'components/navigation/Navigation';
 
 import { useDriveContext } from 'contexts/drive';
 

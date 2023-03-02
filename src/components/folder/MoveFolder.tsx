@@ -9,8 +9,8 @@ import Modal from 'components/Modal';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFolder } from 'types/types';
 import Button from 'components/Button';
+import type { IPCFolder } from 'types/types';
 
 type MoveFolderProps = {
 	folder: IPCFolder;
@@ -45,14 +45,18 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 		setFiles(
 			files.map((f) => {
-				if (f.path.startsWith(fullPath)) return {
-					...f,
-					path: f.path.replace(folder.path, newPath),
-					logs: [...f.logs, {
-						action: `Moved folder to ${fullPath}`,
-						date: Date.now()
-					}]
-				};
+				if (f.path.startsWith(fullPath))
+					return {
+						...f,
+						path: f.path.replace(folder.path, newPath),
+						logs: [
+							...f.logs,
+							{
+								action: `Moved folder to ${fullPath}`,
+								date: Date.now(),
+							},
+						],
+					};
 				return f;
 			}),
 		);
