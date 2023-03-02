@@ -13,22 +13,12 @@ import {
 
 import colors from 'theme/foundations/colors';
 
-import OutlineButton from 'components/OutlineButton';
-
-import { useConfigContext } from 'contexts/config';
-
 type ModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	title: string;
 	children: JSX.Element;
 	CTA?: JSX.Element;
-};
-
-const ContextColor = () => {
-	const { config } = useConfigContext();
-	if (config?.theme === 'gray.800') return 'gray.700';
-	return 'white';
 };
 
 const Modal = ({ isOpen, onClose, title, children, CTA }: ModalProps): JSX.Element => (
@@ -51,7 +41,9 @@ const Modal = ({ isOpen, onClose, title, children, CTA }: ModalProps): JSX.Eleme
 				{children}
 			</ModalBody>
 			<ModalFooter p="0px">
-				<VStack w="100%" align="start">{CTA}</VStack>
+				<VStack w="100%" align="start">
+					{CTA}
+				</VStack>
 			</ModalFooter>
 		</ModalContent>
 	</UIModal>
