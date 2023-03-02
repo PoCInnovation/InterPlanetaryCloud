@@ -17,10 +17,11 @@ import { useUserContext } from 'contexts/user';
 
 import { IPCContact, IPCFile } from 'types/types';
 
+import getFileType from 'utils/getFileType';
+import formatDate from 'utils/formatDate';
+import formatFileSize from 'utils/formatFileSize';
+
 import colors from 'theme/foundations/colors';
-import getFileType from '../../../utils/getFileType';
-import formatDate from '../../../utils/formatDate';
-import formatFileSize from '../../../utils/formatFileSize';
 
 const DrawerDetailsFile = ({
 	file,
