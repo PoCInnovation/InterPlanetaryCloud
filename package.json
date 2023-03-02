@@ -21,7 +21,7 @@
     "joi": "^17.8.3",
     "js-file-download": "^0.4.12",
     "next": "^12.3.4",
-    "next-auth": "^4.20.1",
+    "next-auth": "4.10.3",
     "next-connect": "^1.0.0-next.3",
     "next-joi": "^2.2.1",
     "react": "^17.0.2",
