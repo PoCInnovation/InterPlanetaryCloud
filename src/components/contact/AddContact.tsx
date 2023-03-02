@@ -1,11 +1,13 @@
-import { Button, Input, useDisclosure, useToast } from '@chakra-ui/react';
+import { Input, useDisclosure, useToast } from '@chakra-ui/react';
 import EthCrypto from 'eth-crypto';
 import { ChangeEvent, useState } from 'react';
 
 import Modal from 'components/Modal';
+import Button from 'components/Button';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+import { BsPlusLg } from 'react-icons/bs';
 
 const AddContact = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -24,6 +26,7 @@ const AddContact = (): JSX.Element => {
 					name,
 					address,
 					publicKey: contactPublicKey,
+					createdAt: new Date().getTime(),
 					files: [],
 					folders: [],
 					config: undefined,
@@ -44,16 +47,16 @@ const AddContact = (): JSX.Element => {
 
 	return (
 		<>
-			<Button variant="inline" onClick={onOpen}>
+			<Button buttonType="left-icon" icon={BsPlusLg} size="lg" variant="primary" onClick={onOpen}>
 				Add a contact
 			</Button>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Add the contact"
+				title="Add a contact"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={addContact} id="ipc-dashboard-add-contact-button">
-						Add the contact
+					<Button variant="primary" size="lg" onClick={addContact} id="ipc-dashboard-add-contact-button">
+						Add a contact
 					</Button>
 				}
 			>

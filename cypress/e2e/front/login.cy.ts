@@ -41,7 +41,7 @@ describe('Login with credentials Button for Login', () => {
 	});
 
 	it('Good URL redirect for login button', () => {
-		cy.get('#ipc-login-credentials-button').click().url().should('eq', `${Cypress.config().baseUrl}/dashboard`);
+		cy.get('#ipc-login-credentials-button').click().url().should('eq', `${Cypress.config().baseUrl}/drive`);
 	});
 });
 

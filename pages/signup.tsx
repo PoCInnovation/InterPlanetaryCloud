@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Button, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import { HStack, Text, Textarea, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
-import { useUserContext } from 'contexts/user';
 import { useConfigContext } from 'contexts/config';
+import { useUserContext } from 'contexts/user';
 
 import { AuthReturnType } from 'lib/auth';
 
@@ -14,6 +14,7 @@ import AuthPage from 'components/AuthPage';
 import Modal from 'components/Modal';
 import OutlineButton from 'components/OutlineButton';
 
+import Button from 'components/Button';
 import colors from 'theme/foundations/colors';
 
 const Signup = (): JSX.Element => {
@@ -53,7 +54,7 @@ const Signup = (): JSX.Element => {
 		toast({ title: signupResult.message, status: 'success' });
 		setUser(signupResult.user);
 		setConfig(signupResult.user?.config);
-		router.push('/dashboard');
+		router.push('/drive');
 	};
 
 	const onClick = () => {
@@ -89,9 +90,15 @@ const Signup = (): JSX.Element => {
 						onClose={closeModal}
 						title="Your Mnemonics"
 						CTA={
-							<Button variant="inline" onClick={onClick} w="100%" mb="16px" id="ipc-signup-copy-mnemonics-button">
-								Copy my mnemonics
-							</Button>
+							<HStack w="100%" justify="space-between">
+								<Button variant="primary" size="lg" onClick={onClick} id="ipc-signup-copy-mnemonics-button">
+									Copy my mnemonics
+								</Button>
+
+								<Button variant="secondary" size="lg" onClick={closeModal} id="ipc-signup-go-to-dashboard-button">
+									Go to my dashboard
+								</Button>
+							</HStack>
 						}
 					>
 						<Textarea

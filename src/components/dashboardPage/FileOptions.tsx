@@ -21,27 +21,35 @@ import RenameFile from 'components/file/RenameFile';
 import UpdateContentFile from 'components/file/UpdateContentFile';
 import DeleteFile from 'components/file/DeleteFile';
 import DetailsFile from 'components/file/detailsFile/DetailsFile';
-import RestoreFile from "components/file/RestoreFile";
+import RestoreFile from 'components/file/RestoreFile';
 
 import { IPCFile } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 
-const FileOptionsContent = ({ file, files }: { file: IPCFile; files: IPCFile[] }): JSX.Element => (
+const FileOptionsContent = ({
+	file,
+	files,
+	onClose,
+}: {
+	file: IPCFile;
+	files: IPCFile[];
+	onClose: () => void;
+}): JSX.Element => (
 	<>
 		{file.deletedAt ? (
-			<RestoreFile file={file} concernedFiles={files} />
+			<RestoreFile file={file} concernedFiles={files} onClose={onClose} />
 		) : (
 			<>
-				<DownloadFile file={file} />
-				<ShareFile file={file} />
-				<MoveFile file={file} />
-				<RenameFile file={file} concernedFiles={files} />
-				<UpdateContentFile file={file} />
+				<DownloadFile file={file} onClose={onClose} />
+				<ShareFile file={file} onClosePopover={onClose} />
+				<MoveFile file={file} onClosePopover={onClose} />
+				<RenameFile file={file} concernedFiles={files} onClosePopover={onClose} />
+				<UpdateContentFile file={file} onClosePopover={onClose} />
 			</>
 		)}
-		<DetailsFile file={file} />
-		<DeleteFile file={file} concernedFiles={files} />
+		<DetailsFile file={file} onClosePopover={onClose} />
+		<DeleteFile file={file} concernedFiles={files} onClosePopover={onClose} />
 	</>
 );
 
@@ -50,7 +58,7 @@ const FileOptionsPopover = ({
 	files,
 	clickPosition,
 	popoverOpeningToggle,
-	popoverOpeningHandler
+	popoverOpeningHandler,
 }: {
 	file: IPCFile;
 	files: IPCFile[];
@@ -71,7 +79,7 @@ const FileOptionsPopover = ({
 	return (
 		<Popover placement="right-start" isOpen={isOpen} onClose={() => onClose()}>
 			<PopoverTrigger>
-				<Box position="absolute" w="1px" h="1px" bg="transparent" top={clickPosition.y} left={clickPosition.x} />
+				<Box position="fixed" w="1px" h="1px" bg="transparent" top={clickPosition.y} left={clickPosition.x} />
 			</PopoverTrigger>
 			<Portal>
 				<PopoverContent
@@ -85,7 +93,7 @@ const FileOptionsPopover = ({
 				>
 					<PopoverBody p="8px">
 						<VStack w="100%" spacing="4px">
-							<FileOptionsContent file={file} files={files} />
+							<FileOptionsContent file={file} files={files} onClose={onClose} />
 						</VStack>
 					</PopoverBody>
 				</PopoverContent>
@@ -110,7 +118,7 @@ const FileOptionsDrawer = ({
 		<DrawerContent borderRadius="16px 16px 0px 0px">
 			<DrawerBody px="16px" py="32px">
 				<VStack w="100%" spacing="12px">
-					<FileOptionsContent file={file} files={files} />
+					<FileOptionsContent file={file} files={files} onClose={onClose} />
 				</VStack>
 			</DrawerBody>
 		</DrawerContent>

@@ -18,11 +18,14 @@ import { ALEPH_CHANNEL } from 'config/constants';
 class Contact {
 	public contacts: IPCContact[];
 
-	private readonly account: accounts.ethereum.ETHAccount | undefined;
+	public username: string
+
+	private readonly account: accounts.ethereum.ETHAccount;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
 		this.account = importedAccount;
+		this.username = "";
 	}
 
 	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
@@ -72,6 +75,7 @@ class Contact {
 				});
 
 				this.contacts = aggr.InterPlanetaryCloud.contacts;
+				this.username = this.contacts.find((c) => c.address === this.account.address)?.name || "";
 
 				await this.loadUpdates();
 

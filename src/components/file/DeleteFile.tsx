@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-	Button,
-	HStack,
-	Icon,
-	Text,
-	useBreakpointValue,
-	useDisclosure,
-	useToast,
-} from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
@@ -16,13 +8,15 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFile } from 'types/types';
+import Button from 'components/Button';
 
 type DeleteFileProps = {
 	file: IPCFile;
 	concernedFiles: IPCFile[];
+	onClosePopover: () => void;
 };
 
-const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
+const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -56,16 +50,16 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 	const moveToBin = async (deletedAt: number) => {
 		setIsLoading(true);
 		if (user.account) {
-			const moved = await user.contact.moveFileToBin(file, deletedAt, concernedFiles)
+			const moved = await user.contact.moveFileToBin(file, deletedAt, concernedFiles);
 			toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 			const index = files.indexOf(file);
 			if (index !== -1) {
 				files[index].deletedAt = deletedAt;
 				files[index].logs.push({
-					action: "Moved file to bin",
-					date: Date.now()
-				})
+					action: 'Moved file to bin',
+					date: Date.now(),
+				});
 				setFiles([...files]);
 			}
 		} else {
@@ -80,7 +74,8 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 		} else {
 			onOpen();
 		}
-	}
+		onClosePopover();
+	};
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
@@ -120,9 +115,8 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 				title="Delete the file"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={async () => deleteFile()}
 						isLoading={isLoading}
 						id="ipc-dashboard-delete-file-button"

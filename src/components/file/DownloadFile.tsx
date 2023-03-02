@@ -7,9 +7,10 @@ import type { IPCFile } from 'types/types';
 
 type DownloadFileProps = {
 	file: IPCFile;
+	onClose: () => void;
 };
 
-const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
+const DownloadFile = ({ file, onClose }: DownloadFileProps): JSX.Element => {
 	const { user } = useUserContext();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
@@ -19,6 +20,7 @@ const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
 		try {
 			const download = await user.drive.download(file);
 			toast({ title: download.message, status: download.success ? 'success' : 'error' });
+			onClose();
 		} catch (error) {
 			console.error(error);
 			toast({ title: 'Unable to download file', status: 'error' });

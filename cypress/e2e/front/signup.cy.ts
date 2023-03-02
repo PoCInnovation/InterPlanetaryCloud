@@ -35,7 +35,7 @@ describe('Good Modal front for Signup', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 4);
+		cy.get('button').should('have.length', 5);
 	});
 
 	it('Good number of text-area', () => {
@@ -47,7 +47,7 @@ describe('Good Modal front for Signup', () => {
 	});
 
 	it('Good name for close button', () => {
-		cy.get('#ipc-modal-close-button').should('contain', 'Close');
+		cy.get('#ipc-modal-close-button').should('have.length', 1);
 	});
 });
 
@@ -68,7 +68,7 @@ describe('Signup with credentials Button for Signup', () => {
 	});
 
 	it('Good URL redirect for close button', () => {
-		cy.get('#ipc-modal-close-button').click().url().should('eq', `${Cypress.config().baseUrl}/dashboard`);
+		cy.get('#ipc-modal-close-button').click().url().should('eq', `${Cypress.config().baseUrl}/drive`);
 	});
 });
 

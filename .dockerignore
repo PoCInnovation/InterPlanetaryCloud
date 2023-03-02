@@ -4,6 +4,7 @@
 .gitignore
 LICENSE
 README.md
+CONTRIBUTING.md
 
 # Node
 node_modules/
@@ -21,3 +22,8 @@ build/
 # Infra
 *Dockerfile*
 *docker-compose*
+.env.example
+
+# IDEs
+.idea/
+.vscode/

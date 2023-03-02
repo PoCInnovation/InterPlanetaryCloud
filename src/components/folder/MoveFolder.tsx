@@ -1,5 +1,5 @@
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Button, Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
@@ -9,6 +9,7 @@ import Modal from 'components/Modal';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
+import Button from 'components/Button';
 import type { IPCFolder } from 'types/types';
 
 type MoveFolderProps = {
@@ -44,14 +45,18 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 		setFiles(
 			files.map((f) => {
-				if (f.path.startsWith(fullPath)) return {
-					...f,
-					path: f.path.replace(folder.path, newPath),
-					logs: [...f.logs, {
-						action: `Moved folder to ${fullPath}`,
-						date: Date.now()
-					}]
-				};
+				if (f.path.startsWith(fullPath))
+					return {
+						...f,
+						path: f.path.replace(folder.path, newPath),
+						logs: [
+							...f.logs,
+							{
+								action: `Moved folder to ${fullPath}`,
+								date: Date.now(),
+							},
+						],
+					};
 				return f;
 			}),
 		);
@@ -107,9 +112,8 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 				title="Move folder"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={moveFolder}
 						isLoading={isLoading}
 						id="ipc-dashboard-move-folder-confirm"

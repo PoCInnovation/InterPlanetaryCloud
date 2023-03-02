@@ -1,16 +1,16 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, Input, useToast } from '@chakra-ui/react';
+import { Input, useToast } from '@chakra-ui/react';
 
 import Modal from 'components/Modal';
 
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
 
-
 import { extractFilename } from 'utils/fileManipulation';
 
 import { IPCProgram } from 'types/types';
 
+import Button from 'components/Button';
 import CustomProgram from '../CustomProgram';
 
 const ProgramModal = ({
@@ -44,6 +44,7 @@ const ProgramModal = ({
 					hash: '',
 					createdAt: Date.now(),
 					entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
+					size: fileEvent.target.files[0].size,
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
@@ -64,17 +65,16 @@ const ProgramModal = ({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title="Deploy a program"
+			title={selectedProgram ? 'Redeploy a program' : 'Deploy a program'}
 			CTA={
 				<Button
-					variant="inline"
-					w="100%"
-					mb="16px"
+					variant="primary"
+					size="lg"
 					onClick={() => uploadProgram(selectedProgram)}
 					isLoading={isDeployLoading}
 					id="ipc-dashboard-deploy-program-modal-button"
 				>
-					Deploy program
+					{selectedProgram ? 'Redeploy the program' : 'Deploy a program'}
 				</Button>
 			}
 		>

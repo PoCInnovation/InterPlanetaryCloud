@@ -1,12 +1,13 @@
-import { Button, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
+import Button from 'components/Button';
 import type { IPCFolder } from 'types/types';
 
 type DeleteFolderProps = {
@@ -95,7 +96,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 				onClose={onClose}
 				title="Delete the folder"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={deleteFolder} id="ipc-dashboard-delete-folder-button">
+					<Button variant="primary" size="lg" onClick={deleteFolder} id="ipc-dashboard-delete-folder-button">
 						Delete
 					</Button>
 				}

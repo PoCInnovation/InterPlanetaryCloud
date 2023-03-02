@@ -22,9 +22,10 @@ import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
 
 type ShareFileProps = {
 	file: IPCFile;
+	onClosePopover: () => void;
 };
 
-const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
+const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 	const { user } = useUserContext();
 
 	const [contact, setContact] = useState<IPCContact | null>(null);
@@ -41,6 +42,7 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 
 		toast({ title: share.message, status: share.success ? 'success' : 'error' });
 		onUnmount();
+		onClosePopover();
 	};
 
 	const onUnmount = () => {
@@ -89,9 +91,8 @@ const ShareFile = ({ file }: ShareFileProps): JSX.Element => {
 				CTA={
 					contact ? (
 						<Button
-							variant="inline"
-							w="100%"
-							mb="16px"
+							variant="primary"
+							size="lg"
 							id="ipc-dashboard-confirm-share-file-button"
 							onClick={shareFile}
 							isLoading={isLoading}

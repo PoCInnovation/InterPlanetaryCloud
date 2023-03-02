@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { Button, HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 
 import Modal from 'components/Modal';
@@ -10,6 +10,7 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFile } from 'types/types';
+import Button from 'components/Button';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -116,9 +117,8 @@ const UploadFile = (): JSX.Element => {
 				title="Upload a file"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={uploadFile}
 						isLoading={isLoading}
 						id="ipc-dashboard-upload-file-modal-button"

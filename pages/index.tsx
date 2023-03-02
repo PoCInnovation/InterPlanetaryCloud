@@ -1,11 +1,11 @@
 import { VStack } from '@chakra-ui/react';
 
-import NavBar from 'components/landingPage/NavBar';
-import HeadingSection from 'components/landingPage/HeadingSection';
-import PartnersSection from 'components/landingPage/PartnersSection';
-import ServicesSection from 'components/landingPage/ServicesSection';
 import FeaturesSection from 'components/landingPage/FeaturesSection';
 import Footer from 'components/landingPage/Footer';
+import HeadingSection from 'components/landingPage/HeadingSection';
+import NavBar from 'components/landingPage/NavBar';
+import PartnersSection from 'components/landingPage/PartnersSection';
+import ServicesSection from 'components/landingPage/ServicesSection';
 
 const Home = (): JSX.Element => (
 	<VStack w="100%" spacing={{ base: '128px', lg: '256px' }} pt="64px" overflowY="hidden">
