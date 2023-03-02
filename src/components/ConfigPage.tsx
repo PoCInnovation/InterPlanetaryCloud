@@ -158,10 +158,10 @@ const ConfigPage = (): JSX.Element => {
 			</VStack>
 		</HStack>
 
-			{/* <Text fontSize="3xl" color={colorText}>
+			<Text fontSize="3xl" color={colorText}>
 				InterPlanetaryCloud Configuration
-			</Text> */}
-			{/* <Box borderWidth="2px" w="90%" h="750px">
+			</Text>
+			<Box borderWidth="2px" w="90%" h="750px">
 				<BsCode size="25" color={colorText}></BsCode>
 				<HStack>
 					<Text marginLeft="30" textColor={colorText}>
@@ -180,7 +180,7 @@ const ConfigPage = (): JSX.Element => {
 				isLoading={isLoading}
 			>
 				Save
-			</Button> */}
+			</Button>
 		</>
 	);
 };
