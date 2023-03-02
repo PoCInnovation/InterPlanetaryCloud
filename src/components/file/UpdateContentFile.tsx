@@ -1,4 +1,4 @@
-import { Button, HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { GoSync } from 'react-icons/go';
 
@@ -10,12 +10,14 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFile } from 'types/types';
+import Button from 'components/Button';
 
 type UpdateContentFileProps = {
 	file: IPCFile;
+	onClosePopover: () => void;
 };
 
-const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
+const UpdateContentFile = ({ file, onClosePopover }: UpdateContentFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -73,6 +75,7 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 		}
 		setIsLoading(false);
 		onClose();
+		onClosePopover();
 	};
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
@@ -113,9 +116,8 @@ const UpdateContentFile = ({ file }: UpdateContentFileProps): JSX.Element => {
 				title="Update file content from a file"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={updateContent}
 						isLoading={isLoading}
 						id="ipc-dashboard-update-file-content-button"

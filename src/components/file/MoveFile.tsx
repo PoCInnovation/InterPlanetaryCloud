@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-	Button,
-	Divider,
-	HStack,
-	Icon,
-	Text,
-	useBreakpointValue,
-	useDisclosure,
-	useToast,
-} from '@chakra-ui/react';
+import { Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
 import { FcFolder } from 'react-icons/fc';
@@ -19,12 +10,14 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFile } from 'types/types';
+import Button from 'components/Button';
 
 type MoveFileProps = {
 	file: IPCFile;
+	onClosePopover: () => void;
 };
 
-const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
+const MoveFile = ({ file, onClosePopover }: MoveFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles, folders } = useDriveContext();
 
@@ -46,13 +39,14 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 			files[index].path = newPath;
 			files[index].logs.push({
 				action: `Moved file to ${newPath}`,
-				date: Date.now()
-			})
+				date: Date.now(),
+			});
 			setFiles([...files]);
 		}
 		setNewPath('/');
 		setIsLoading(false);
 		onClose();
+		onClosePopover();
 	};
 
 	if (file.permission !== 'owner') return <></>;
@@ -93,9 +87,8 @@ const MoveFile = ({ file }: MoveFileProps): JSX.Element => {
 				title="Move file"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={moveFile}
 						isLoading={isLoading}
 						id="ipc-dashboard-move-file-button"

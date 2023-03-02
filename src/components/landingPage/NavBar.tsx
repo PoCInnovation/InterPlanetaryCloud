@@ -13,7 +13,7 @@ const NavBar = (): JSX.Element => {
 		<>
 			{buttonDisplayable ? (
 				<HStack justify="space-between" w={{ base: '300px', lg: '750px', '2xl': '1000px' }}>
-					<Text size="2xl" variant="gradient" id="ipc-landing-navbar-name">
+					<Text size="2xl" variant="gradient" id="ipc-landing-navigation-name">
 						Inter Planetary Cloud
 					</Text>
 					<Button
@@ -31,7 +31,7 @@ const NavBar = (): JSX.Element => {
 				</HStack>
 			) : (
 				<VStack w={{ base: '300px', md: '650px', lg: '750px', '2xl': '1000px' }}>
-					<Text size="4xl" variant="gradient" textAlign="center" id="ipc-landing-navbar-name">
+					<Text size="4xl" variant="gradient" textAlign="center" id="ipc-landing-navigation-name">
 						Inter Planetary Cloud
 					</Text>
 				</VStack>

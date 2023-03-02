@@ -28,6 +28,7 @@ export type IPCProgram = {
 	name: string;
 	createdAt: number;
 	entrypoint: string;
+	size: number;
 };
 
 export type IPCConfig = {
@@ -40,6 +41,7 @@ export type IPCContact = {
 	name: string;
 	address: string;
 	publicKey: string;
+	createdAt: number;
 	files: IPCFile[];
 	folders: IPCFolder[];
 	config: IPCConfig | undefined;

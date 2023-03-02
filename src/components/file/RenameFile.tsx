@@ -1,5 +1,4 @@
 import {
-	Button,
 	FormControl,
 	FormLabel,
 	HStack,
@@ -20,13 +19,15 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFile } from 'types/types';
+import Button from 'components/Button';
 
 type RenameFileProps = {
 	file: IPCFile;
 	concernedFiles: IPCFile[];
+	onClosePopover: () => void;
 };
 
-const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
+const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -49,8 +50,8 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 					files[index].name = name;
 					files[index].logs.push({
 						action: `Renamed file to ${name}`,
-						date: Date.now()
-					})
+						date: Date.now(),
+					});
 				}
 				setFiles([...files]);
 			}
@@ -58,6 +59,7 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 		setName('');
 		setIsLoading(false);
 		onClose();
+		onClosePopover();
 	};
 
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
@@ -98,9 +100,8 @@ const RenameFile = ({ file, concernedFiles }: RenameFileProps): JSX.Element => {
 				title="Rename the file"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={renameFile}
 						isLoading={isLoading}
 						id="ipc-dashboard-update-filename-button"

@@ -1,30 +1,25 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-
-import { Box, HStack, useColorMode, useToast, VStack } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useColorMode, useToast, VStack } from '@chakra-ui/react';
 
 import { useUserContext } from 'contexts/user';
-
-import DisplayCards from 'components/DisplayCards';
-import { ResponsiveBar } from 'components/navbar/ResponsiveBar';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 
+import DriveCards from 'components/cards/DriveCards';
+import Navigation from 'components/navigation/Navigation';
+import LabelBadge from 'components/LabelBadge';
+
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
-	const router = useRouter();
 	const { user } = useUserContext();
-	const { config, setConfig } = useConfigContext();
+	const { setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { sharedFiles, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
-	const [selectedTab, setSelectedTab] = useState(0);
+	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
 
 	useEffect(() => {
 		(async () => {
-			if (!user) {
-				router.push('/');
-			} else {
+			if (user) {
 				await loadContact();
 				await loadUserContents();
 			}
@@ -57,22 +52,15 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	return (
-		<HStack minH="100vh" minW="100vw" align="start" bg={config?.theme ?? 'white'}>
-			<ResponsiveBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} configTheme={config?.theme ?? 'white'} />
-			<VStack w="100%" m="32px !important">
-				<Box w="100%">
-					<VStack w="100%" id="test" spacing="16px" mt={{ base: '64px', lg: '0px' }}>
-						{/* TODO: clear DisplayCardsParams */}
-						<DisplayCards
-							sharedFiles={sharedFiles}
-							index={selectedTab}
-							isRedeployLoading={false}
-							onOpenRedeployProgram={() => {}}
-						/>
-					</VStack>
-				</Box>
+		<Navigation>
+			<VStack w="100%" spacing="48px" align="start">
+				<LabelBadge label="My drive" />
+				<DriveCards
+					files={files.filter((elem) => elem.path === path && !elem.deletedAt)}
+					folders={folders.filter((elem) => elem.path === path)}
+				/>
 			</VStack>
-		</HStack>
+		</Navigation>
 	);
 };
 

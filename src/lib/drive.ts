@@ -30,6 +30,7 @@ class Drive {
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
+				this.sharedFiles = [];
 				await Promise.all(
 					contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({

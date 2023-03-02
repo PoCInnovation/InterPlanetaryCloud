@@ -12,7 +12,7 @@ import { IPCFile} from 'types/types';
 
 import DrawerDetailsFile from "./DrawerDetailsFile";
 
-const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
+const DetailsFile = ({ file, onClosePopover }: { file: IPCFile, onClosePopover: () => void }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
@@ -22,7 +22,10 @@ const DetailsFile = ({ file }: { file: IPCFile }): JSX.Element => {
 			p="8px 12px"
 			borderRadius="8px"
 			role="group"
-			onClick={onOpen}
+			onClick={() => {
+				onOpen();
+				onClosePopover();
+			}}
 			w="100%"
 			cursor="pointer"
 			id="ipc-dashboard-details-button"

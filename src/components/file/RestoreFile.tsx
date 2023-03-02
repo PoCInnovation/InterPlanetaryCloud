@@ -9,9 +9,10 @@ import type { IPCFile } from 'types/types';
 type DeleteFileProps = {
 	file: IPCFile;
 	concernedFiles: IPCFile[];
+	onClose: () => void;
 };
 
-const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
+const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { files, setFiles } = useDriveContext();
 
@@ -31,6 +32,7 @@ const DeleteFile = ({ file, concernedFiles }: DeleteFileProps): JSX.Element => {
 					date: Date.now()
 				})
 				setFiles([...files]);
+				onClose();
 			}
 		} else {
 			toast({ title: 'Failed to load account', status: 'error' });

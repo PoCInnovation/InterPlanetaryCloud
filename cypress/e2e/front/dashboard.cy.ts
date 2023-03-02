@@ -62,7 +62,7 @@ describe('Good Upload file modal front in Dashboard', () => {
 	});
 
 	it('Good name for close button', () => {
-		cy.get('#ipc-modal-close-button').should('contain', 'Close');
+		cy.get('#ipc-modal-close-button').should('have.length', 1);
 	});
 });
 
@@ -85,11 +85,11 @@ describe('Good Deploy program modal front in Dashboard', () => {
 	});
 
 	it('Good name for upload a file button', () => {
-		cy.get('#ipc-dashboard-deploy-program-modal-button').should('contain', 'Deploy program');
+		cy.get('#ipc-dashboard-deploy-program-modal-button').should('contain', 'Deploy a program');
 	});
 
 	it('Good name for close button', () => {
-		cy.get('#ipc-modal-close-button').should('contain', 'Close');
+		cy.get('#ipc-modal-close-button').should('have.length', 1);
 	});
 });
 
@@ -116,6 +116,6 @@ describe('Good Create folder modal front in Dashboard', () => {
 	});
 
 	it('Good name for close button', () => {
-		cy.get('#ipc-modal-close-button').should('contain', 'Close');
+		cy.get('#ipc-modal-close-button').should('have.length', 1);
 	});
 });

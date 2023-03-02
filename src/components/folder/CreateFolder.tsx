@@ -1,5 +1,4 @@
 import {
-	Button,
 	FormControl,
 	FormLabel,
 	HStack,
@@ -18,6 +17,7 @@ import type { IPCFolder } from 'types/types';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
+import Button from 'components/Button';
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -41,10 +41,12 @@ const CreateFolder = (): JSX.Element => {
 			name,
 			path,
 			createdAt: Date.now(),
-			logs: [{
-				action: "Folder created",
-				date: Date.now()
-			}]
+			logs: [
+				{
+					action: 'Folder created',
+					date: Date.now(),
+				},
+			],
 		};
 
 		const created = await user.contact.createFolder(folder);
@@ -94,9 +96,8 @@ const CreateFolder = (): JSX.Element => {
 				title="Create a folder"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={createFolder}
 						isLoading={isLoading}
 						id="ipc-dashboard-create-folder-modal-button"
