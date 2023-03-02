@@ -1,4 +1,16 @@
-import { Box, Button, Stack, VStack, Image, Input, Text, useColorMode, useColorModeValue, useToast, HStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Stack,
+	VStack,
+	Image,
+	Input,
+	Text,
+	useColorMode,
+	useColorModeValue,
+	useToast,
+	HStack,
+} from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { BsCode, BsCodeSlash } from 'react-icons/bs';
 
@@ -42,123 +54,217 @@ const ConfigPage = (): JSX.Element => {
 
 	return (
 		<>
-		<Stack spacing="16px">
-			<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
-				<Text>
-					<Box
-						as="span"
-						bgClip="text"
-						bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
-						fontWeight="700"
-					>
-						Settings
-					</Box>
-				</Text>
+			<Stack spacing="16px">
+				<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
+					<Text>
+						<Box
+							as="span"
+							bgClip="text"
+							bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
+							fontWeight="700"
+						>
+							Settings
+						</Box>
+					</Text>
+				</Stack>
 			</Stack>
-		</Stack>
 
-		<HStack>
-			<VStack
-				w="600px"
-				h="350px"
-				backgroundColor="white"
-				borderRadius="8px"
-				border="2px solid #E8EBFF"
-				_focus={{
-					boxShadow: 'none',
-				}}
-				spacing="4px"
-				p="8px"
-			>
+			<HStack gridGap={5}>
+				<VStack
+					w="600px"
+					h="350px"
+					backgroundColor="white"
+					borderRadius="8px"
+					border="2px solid #E8EBFF"
+					_focus={{
+						boxShadow: 'none',
+					}}
+					spacing="4px"
+					p="8px"
+				>
+					<HStack gridGap={5} paddingBottom="30px">
+						<Image borderRadius="full" boxSize="100px" src="https://bit.ly/dan-abramov" alt="Dan Abramov" />
+						<Text size="2xl"> EXTRA BIG BIG BIG NAME </Text>
+					</HStack>
 
-			<HStack gridGap={5} paddingBottom="30px">
-				<Image
-				  borderRadius='full'
-				  boxSize='100px'
-				  src='https://bit.ly/dan-abramov'
-				  alt='Dan Abramov'
-				/>
-				<Text size='2xl'> EXTRA BIG BIG BIG NAME </Text>
-			</HStack>
+					<HStack gridGap={5} paddingBottom="50px">
+						<Stack spacing="16px">
+							<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
+								<Text>
+									<Box
+										as="span"
+										bgClip="text"
+										bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+										fontWeight="700"
+									>
+										Change my name
+									</Box>
+								</Text>
+							</Stack>
+						</Stack>
 
-			<HStack gridGap={5} paddingBottom="50px">
-				<Stack spacing="16px">
-					<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
-						<Text>
-							<Box
-								as="span"
-								bgClip="text"
-								bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
-								fontWeight="700"
-							>
-								Change my name
-							</Box>
-						</Text>
-					</Stack>
-				</Stack>
+						<Stack spacing="16px">
+							<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
+								<Text>
+									<Box
+										as="span"
+										bgClip="text"
+										bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+										fontWeight="700"
+									>
+										Change my avatar
+									</Box>
+								</Text>
+							</Stack>
+						</Stack>
+					</HStack>
 
-				<Stack spacing="16px">
-					<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
-						<Text>
-							<Box
-								as="span"
-								bgClip="text"
-								bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
-								fontWeight="700"
-							>
-								Change my avatar
-							</Box>
-						</Text>
-					</Stack>
-				</Stack>
-			</HStack>
-
-				<VStack rowGap={3}>
-					<Text size='l'> My address: 0xf4745149595169419541949C4949419F1148</Text>
-					<Text size='l'> My public key: 0xf4745149595169419541949C4949419F1148</Text>
+					<VStack rowGap={3}>
+						<Text size="l"> My address: 0xf4745149595169419541949C4949419F1148</Text>
+						<Text size="l"> My public key: 0xf4745149595169419541949C4949419F1148</Text>
+					</VStack>
 				</VStack>
-			</VStack>
 
-			<VStack
-				w="500px"
-				h="150px"
-				backgroundColor="white"
-				borderRadius="8px"
-				border="2px solid #E8EBFF"
-				_focus={{
-					boxShadow: 'none',
-				}}
-				spacing="4px"
-				p="8px"
-			>
-				<HStack gridGap={5} paddingBottom="30px">
-					<Image
-					  borderRadius='full'
-					  boxSize='50px'
-					  src='https://bit.ly/dan-abramov'
-					  alt='Dan Abramov'
-					/>
-					<Text size='xl'> Github connection </Text>
-				</HStack>
+				<VStack
+					w="500px"
+					h="150px"
+					backgroundColor="white"
+					borderRadius="8px"
+					border="2px solid #E8EBFF"
+					_focus={{
+						boxShadow: 'none',
+					}}
+					spacing="4px"
+					p="8px"
+				>
+					<HStack gridGap={5} paddingBottom="30px">
+						<Image borderRadius="full" boxSize="50px" src="https://bit.ly/dan-abramov" alt="Dan Abramov" />
+						<Text size="xl"> Github connection </Text>
+					</HStack>
 
-				<Stack spacing="16px">
-					<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
-						<Text>
-							<Box
-								as="span"
-								bgClip="text"
-								bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
-								fontWeight="700"
-							>
-								Sign off of github
-							</Box>
-						</Text>
+					<Stack spacing="16px">
+						<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
+							<Text>
+								<Box
+									as="span"
+									bgClip="text"
+									bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
+									fontWeight="700"
+								>
+									Sign off of github
+								</Box>
+							</Text>
+						</Stack>
 					</Stack>
-				</Stack>
-			</VStack>
-		</HStack>
+				</VStack>
+			</HStack>
 
-			<Text fontSize="3xl" color={colorText}>
+			<HStack gridGap={5}>
+				<VStack
+					w="375px"
+					h="100px"
+					backgroundColor="white"
+					borderRadius="8px"
+					border="2px solid #E8EBFF"
+					_focus={{
+						boxShadow: 'none',
+					}}
+					spacing="4px"
+					p="8px"
+				>
+					<Text size="xl">Theme</Text>
+					<HStack>
+						<Stack spacing="16px">
+							<Stack bg="blue.50" p="8px 30px" w="100%" borderRadius="8px">
+								<Text>
+									<Box
+										as="span"
+										bgClip="text"
+										bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+										fontWeight="700"
+									>
+										Light theme
+									</Box>
+								</Text>
+							</Stack>
+						</Stack>
+
+						<Stack spacing="16px">
+							<Stack bg="blue.50" p="8px 30px" w="100%" borderRadius="8px">
+								<Text>
+									<Box
+										as="span"
+										bgClip="text"
+										bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+										fontWeight="700"
+									>
+										Dark theme
+									</Box>
+								</Text>
+							</Stack>
+						</Stack>
+					</HStack>
+				</VStack>
+
+				<VStack
+					w="375px"
+					h="100px"
+					backgroundColor="white"
+					borderRadius="8px"
+					border="2px solid #E8EBFF"
+					_focus={{
+						boxShadow: 'none',
+					}}
+					spacing="4px"
+					p="8px"
+				>
+					<Text size="xl">Default Entrypoint</Text>
+					<Stack spacing="16px">
+						<Stack bg="blue.50" p="8px 30px" w="100%" borderRadius="8px">
+							<Text>
+								<Box
+									as="span"
+									bgClip="text"
+									bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+									fontWeight="700"
+								>
+									main:app
+								</Box>
+							</Text>
+						</Stack>
+					</Stack>
+				</VStack>
+				<VStack
+					w="375px"
+					h="100px"
+					backgroundColor="white"
+					borderRadius="8px"
+					border="2px solid #E8EBFF"
+					_focus={{
+						boxShadow: 'none',
+					}}
+					spacing="4px"
+					p="8px"
+				>
+					<Text size="xl">Default Name</Text>
+					<Stack spacing="16px">
+						<Stack bg="blue.50" p="8px 30px" w="100%" borderRadius="8px">
+							<Text>
+								<Box
+									as="span"
+									bgClip="text"
+									bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+									fontWeight="700"
+								>
+									[userName]@[repositoryName]
+								</Box>
+							</Text>
+						</Stack>
+					</Stack>
+				</VStack>
+			</HStack>
+
+			{/* <Text fontSize="3xl" color={colorText}>
 				InterPlanetaryCloud Configuration
 			</Text>
 			<Box borderWidth="2px" w="90%" h="750px">
@@ -180,7 +286,7 @@ const ConfigPage = (): JSX.Element => {
 				isLoading={isLoading}
 			>
 				Save
-			</Button>
+			</Button> */}
 		</>
 	);
 };
