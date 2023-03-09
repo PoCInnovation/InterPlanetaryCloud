@@ -12,7 +12,7 @@ type ProfileBadgeProps = {
 const ProfileBadge = ({ username, address }: ProfileBadgeProps): JSX.Element => {
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 
-	const ProfileBadgeCard = (): JSX.Element => (
+	return (
 		<HStack
 			bg="blue.50"
 			borderRadius="12px"
@@ -63,8 +63,6 @@ const ProfileBadge = ({ username, address }: ProfileBadgeProps): JSX.Element => 
 			</VStack>
 		</HStack>
 	);
-
-	return <ProfileBadgeCard />;
 };
 
 export default ProfileBadge;
