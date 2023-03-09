@@ -1,16 +1,15 @@
-import { useState } from 'react';
-import { Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { MdOutlineDriveFileMove } from 'react-icons/md';
+import { Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
-
-import Modal from 'components/Modal';
+import { MdOutlineDriveFileMove } from 'react-icons/md';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile } from 'types/types';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
+import type { IPCFile } from 'types/types';
 
 type MoveFileProps = {
 	file: IPCFile;

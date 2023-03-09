@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
 	Box,
 	Drawer,
@@ -13,15 +12,16 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
-import DownloadFile from 'components/file/DownloadFile';
-import ShareFile from 'components/file/ShareFile';
-import MoveFile from 'components/file/MoveFile';
-import RenameFile from 'components/file/RenameFile';
-import UpdateContentFile from 'components/file/UpdateContentFile';
 import DeleteFile from 'components/file/DeleteFile';
 import DetailsFile from 'components/file/detailsFile/DetailsFile';
+import DownloadFile from 'components/file/DownloadFile';
+import MoveFile from 'components/file/MoveFile';
+import RenameFile from 'components/file/RenameFile';
 import RestoreFile from 'components/file/RestoreFile';
+import ShareFile from 'components/file/ShareFile';
+import UpdateContentFile from 'components/file/UpdateContentFile';
 
 import { IPCFile } from 'types/types';
 

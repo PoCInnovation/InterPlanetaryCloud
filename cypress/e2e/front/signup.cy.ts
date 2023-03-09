@@ -12,50 +12,31 @@ describe('Good front for Signup', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 2);
+		cy.get('button').should('have.length', 3);
 	});
 
 	it('Good name for signup credentials button', () => {
-		cy.get('#ipc-signup-credentials-signup-button').should('contain', 'Signup');
+		cy.get('#ipc-signup-create-copy-mnemonics-button').should('contain', 'Create my account');
 	});
 
 	it('Good name for login button', () => {
-		cy.get('#ipc-signup-login-button').should('contain', 'Login');
-	});
-});
-
-describe('Good Modal front for Signup', () => {
-	it('Go to signup', () => {
-		cy.visit('/signup');
-		cy.get('#ipc-signup-credentials-signup-button').click();
+		cy.get('#ipc-signup-login-button').should('contain', 'Login with my account');
 	});
 
-	it('Good header', () => {
-		cy.get('header').should('contain', 'Your Mnemonics');
+	it('Good name for copy clipboard button', () => {
+		cy.get('#ipc-signup-create-copy-mnemonics-button').click().should('contain', 'Copy my mnemonics');
 	});
 
-	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 5);
-	});
-
-	it('Good number of text-area', () => {
-		cy.get('textarea').should('have.length', 1);
-	});
-
-	it('Good name for copy mnemonics button', () => {
-		cy.get('#ipc-signup-copy-mnemonics-button').should('contain', 'Copy my mnemonics');
-	});
-
-	it('Good name for close button', () => {
-		cy.get('#ipc-modal-close-button').should('have.length', 1);
-	});
+	it('Good name for go to dashboard button', () => {
+		cy.get('#ipc-signup-go-to-dashboard-button').should('contain', 'Go to my dashboard');
+	})
 });
 
 describe('Signup with credentials Button for Signup', () => {
 	it('Go to signup', () => {
 		cy.visit('/signup');
-		cy.get('#ipc-signup-credentials-signup-button').click();
-		cy.get('#ipc-signup-copy-mnemonics-button').click();
+		cy.get('#ipc-signup-create-copy-mnemonics-button').click();
+		cy.get('#ipc-signup-create-copy-mnemonics-button').click();
 	});
 
 	it('Good copied clipboard', () => {
@@ -68,7 +49,7 @@ describe('Signup with credentials Button for Signup', () => {
 	});
 
 	it('Good URL redirect for close button', () => {
-		cy.get('#ipc-modal-close-button').click().url().should('eq', `${Cypress.config().baseUrl}/drive`);
+		cy.get('#ipc-signup-go-to-dashboard-button').click().url().should('eq', `${Cypress.config().baseUrl}/drive`);
 	});
 });
 

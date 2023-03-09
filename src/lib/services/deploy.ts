@@ -1,11 +1,10 @@
-import { program } from 'aleph-sdk-ts/dist/messages';
 import { ethereum } from 'aleph-sdk-ts/dist/accounts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { program } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import fs from 'node:fs';
 
 import child_process from 'child_process';
-
-import fs from 'fs';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 

@@ -2,7 +2,6 @@ import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui
 import { useState } from 'react';
 import { BsFileEarmarkCodeFill } from 'react-icons/bs';
 
-import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import useToggle from 'hooks/useToggle';
@@ -10,9 +9,9 @@ import useToggle from 'hooks/useToggle';
 import formatDate from 'utils/formatDate';
 import formatFileSize from 'utils/formatFileSize';
 
+import { ProgramOptionsDrawer, ProgramOptionsPopover } from 'components/dashboardPage/ProgramOptions';
 import { IPCProgram } from 'types/types';
 import Card from './Card';
-import { ProgramOptionsDrawer, ProgramOptionsPopover } from '../dashboardPage/ProgramOptions';
 
 const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 	const {
@@ -20,8 +19,6 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 			contact: { username },
 		},
 	} = useUserContext();
-	const { programs } = useDriveContext();
-
 	const { isOpen: isOpenFile, onOpen: onOpenFile, onClose: onCloseFile } = useDisclosure();
 	const { toggle: popoverOpeningToggleFile, toggleHandler: popoverOpeningHandlerFile } = useToggle();
 
@@ -63,11 +60,10 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 			</Card>
 			<Box>
 				{isDrawer ? (
-					<ProgramOptionsDrawer program={program} programs={programs} isOpen={isOpenFile} onClose={onCloseFile} />
+					<ProgramOptionsDrawer program={program} isOpen={isOpenFile} onClose={onCloseFile} />
 				) : (
 					<ProgramOptionsPopover
 						program={program}
-						programs={programs}
 						clickPosition={clickPosition}
 						popoverOpeningToggle={popoverOpeningToggleFile}
 						popoverOpeningHandler={popoverOpeningHandlerFile}

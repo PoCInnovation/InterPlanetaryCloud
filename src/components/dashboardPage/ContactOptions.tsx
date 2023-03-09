@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
 	Box,
 	Drawer,
@@ -13,13 +12,14 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 import { IPCContact } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 
-import CopyAddressContact from '../contact/CopyAddressContact';
-import CopyPublicKeyContact from '../contact/CopyPublicKeyContact';
+import CopyAddressContact from 'components/contact/CopyAddressContact';
+import CopyPublicKeyContact from 'components/contact/CopyPublicKeyContact';
 
 const ContactOptionsContent = ({ contact, onClose }: { contact: IPCContact; onClose: () => void }): JSX.Element => (
 	<>

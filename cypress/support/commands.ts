@@ -18,9 +18,9 @@ import 'cypress-file-upload';
 
 Cypress.Commands.add('signup', () => {
 	cy.visit('/signup');
-	cy.get('#ipc-signup-credentials-signup-button').click();
+	cy.get('#ipc-signup-create-copy-mnemonics-button').click();
 	cy.get('#ipc-signup-text-area');
-	cy.get('#ipc-modal-close-button').click();
+	cy.get('#ipc-signup-go-to-dashboard-button').click();
 });
 
 Cypress.Commands.add('uploadFile', (file, params = null) => {

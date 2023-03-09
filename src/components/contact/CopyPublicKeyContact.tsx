@@ -1,7 +1,7 @@
 import { HStack, Icon, Text, useBreakpointValue } from '@chakra-ui/react';
+import { BsClipboard } from 'react-icons/bs';
 
 import type { IPCContact } from 'types/types';
-import { BsClipboard } from 'react-icons/bs';
 
 type DownloadFileProps = {
 	contact: IPCContact;

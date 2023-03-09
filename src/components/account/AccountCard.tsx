@@ -1,9 +1,12 @@
 import { Box, Button, HStack, Icon, Text, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import Card from 'components/cards/Card';
-import colors from 'theme/foundations/colors';
 import Avatar from 'boring-avatars';
-import { useUserContext } from 'contexts/user';
 import { BsClipboard } from 'react-icons/bs';
+
+import Card from 'components/cards/Card';
+
+import { useUserContext } from 'contexts/user';
+
+import colors from 'theme/foundations/colors';
 
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();

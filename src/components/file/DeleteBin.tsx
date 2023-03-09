@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { useState } from 'react';
 import { BsPlusLg } from 'react-icons/bs';
 
-import Modal from 'components/Modal';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCFolder } from 'types/types';
 

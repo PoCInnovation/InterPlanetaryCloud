@@ -1,16 +1,17 @@
+import { Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Button, FormControl, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
-
 import { useAuthContext } from 'contexts/auth';
+import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
 
 import AuthPage from 'components/AuthPage';
-import OutlineButton from 'components/OutlineButton';
+import Button from 'components/Button';
 
-import { useConfigContext } from 'contexts/config';
+import { ResponseType } from 'types/types';
+
 import colors from 'theme/foundations/colors';
 
 const Login = (): JSX.Element => {
@@ -24,41 +25,35 @@ const Login = (): JSX.Element => {
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 
-	const loginWithCredentials = async (): Promise<void> => {
+	const loginWithCredentials = async (): Promise<ResponseType> => {
 		setIsLoadingCredentials(true);
 		const login = await auth.loginWithCredentials(mnemonics, config);
 		setIsLoadingCredentials(false);
 
-		if (login.user) {
-			toast({ title: login.message, status: 'success' });
-			setUser(login.user);
-			router.push('/drive');
-			await login.user.drive.autoDelete();
-		} else {
-			toast({ title: login.message, status: 'error' });
-		}
+		if (!login.user) return { success: false, message: login.message };
+		setUser(login.user);
+		await router.push('/drive');
+		await login.user.drive.autoDelete();
+		return { success: true, message: login.message };
 	};
 
-	const loginWithAProvider = async (): Promise<void> => {
+	const loginWithAProvider = async (): Promise<ResponseType> => {
 		setIsLoadingCredentials(true);
 		const login = await auth.loginWithProvider(config);
 		setIsLoadingCredentials(false);
 
-		if (login.user) {
-			toast({ title: login.message, status: 'success' });
-			setUser(login.user);
-			router.push('/drive');
-			await login.user.drive.autoDelete();
-		} else {
-			toast({ title: login.message, status: 'error' });
-		}
+		if (!login.user) return { success: false, message: login.message };
+		setUser(login.user);
+		await router.push('/drive');
+		await login.user.drive.autoDelete();
+		return { success: true, message: login.message };
 	};
 
 	return (
-		<AuthPage
-			children={
-				<VStack spacing={{ base: '48px', md: '56px', lg: '64px' }} w="100%">
-					<FormControl>
+		<AuthPage>
+			<VStack w="100%" spacing="64px">
+				<VStack w="100%" spacing="32px">
+					<VStack spacing="16px" w="100%">
 						<Textarea
 							_focus={{ boxShadow: `0px 0px 0px 2px ${colors.red[300]}` }}
 							cursor="text"
@@ -66,42 +61,51 @@ const Login = (): JSX.Element => {
 							id="ipc-login-text-area"
 						/>
 						<Button
-							variant="inline"
-							mt="16px"
+							variant="primary"
+							size="lg"
 							w="100%"
-							type="submit"
-							onClick={() => loginWithCredentials()}
+							onClick={() =>
+								loginWithCredentials().then((res) =>
+									toast({ status: res.success ? 'success' : 'error', title: res.message }),
+								)
+							}
 							isLoading={isLoadingCredentials}
 							id="ipc-login-credentials-button"
 						>
 							Login with credentials
 						</Button>
-					</FormControl>
-					{/* <VStack>
-						<Text>or</Text>
+					</VStack>
+					<VStack w="100%">
 						<Button
-							variant="inline"
-							mt="16px"
+							variant="primary"
+							size="lg"
 							w="100%"
-							type="submit"
+							disabled={true}
 							onClick={() => loginWithAProvider()}
 							isLoading={isLoadingCredentials}
-							id="ipc-login-credentials-button"
+							id="ipc-login-provider-button"
 						>
 							Login with a provider
 						</Button>
-					</VStack> */}
-					<VStack w="100%">
-						<Text fontSize="14px">Create an account</Text>
-						<Link href="/signup">
-							<div style={{ width: '100%' }}>
-								<OutlineButton configTheme={config?.theme} w="100%" text="Signup" id="ipc-login-signup-button" />
-							</div>
-						</Link>
+						<Text size="boldMd">Coming soon...</Text>
 					</VStack>
 				</VStack>
-			}
-		/>
+				<VStack w="100%">
+					<Text size="lg">You don't have an account?</Text>
+					<Link href="/signup">
+						<Button
+							variant="secondary"
+							size="lg"
+							w="100%"
+							onClick={() => router.push('/signup')}
+							id="ipc-login-signup-button"
+						>
+							Create an account
+						</Button>
+					</Link>
+				</VStack>
+			</VStack>
+		</AuthPage>
 	);
 };
 
