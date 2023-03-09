@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { Input, useToast } from '@chakra-ui/react';
+import { Input, Text, useToast, VStack } from '@chakra-ui/react';
 
 import Modal from 'components/Modal';
 
@@ -78,22 +78,25 @@ const ProgramModal = ({
 				</Button>
 			}
 		>
-			<>
+			<VStack spacing="16px" w="100%" align="start">
 				<CustomProgram
 					customName={customName}
 					setCustomName={setCustomName}
 					customEntrypoint={customEntrypoint}
 					setCustomEntrypoint={setCustomEntrypoint}
 				/>
-				<Input
-					type="file"
-					h="100%"
-					w="100%"
-					p="10px"
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
-					id="ipc-dashboard-deploy-program-modal"
-				/>
-			</>
+				<VStack spacing="8px" align="start" w="100%">
+					<Text size="boldLg">The file of the program</Text>
+					<Input
+						type="file"
+						h="100%"
+						w="100%"
+						p="10px"
+						onChange={(e: ChangeEvent<HTMLInputElement>) => setFileEvent(e)}
+						id="ipc-dashboard-deploy-program-modal"
+					/>
+				</VStack>
+			</VStack>
 		</Modal>
 	);
 };
