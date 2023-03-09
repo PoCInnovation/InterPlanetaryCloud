@@ -21,7 +21,7 @@ import { useConfigContext } from 'contexts/config';
 import DeployProgram from 'components/computing/programs/DeployProgram';
 import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
 
-const ProgramOptionsContent = ({ program, programs }: { program: IPCProgram; programs: IPCProgram[] }): JSX.Element => (
+const ProgramOptionsContent = ({ program }: { program: IPCProgram }): JSX.Element => (
 	<>
 		<GoToWebsiteProgram program={program} />
 		<DeployProgram selectedProgram={program} />
@@ -30,13 +30,11 @@ const ProgramOptionsContent = ({ program, programs }: { program: IPCProgram; pro
 
 const ProgramOptionsPopover = ({
 	program,
-	programs,
 	clickPosition,
 	popoverOpeningToggle,
 	popoverOpeningHandler,
 }: {
 	program: IPCProgram;
-	programs: IPCProgram[];
 	clickPosition: { x: number; y: number };
 	popoverOpeningToggle: boolean;
 	popoverOpeningHandler: () => void;
@@ -68,7 +66,7 @@ const ProgramOptionsPopover = ({
 				>
 					<PopoverBody p="8px">
 						<VStack w="100%" spacing="4px">
-							<ProgramOptionsContent program={program} programs={programs} />
+							<ProgramOptionsContent program={program} />
 						</VStack>
 					</PopoverBody>
 				</PopoverContent>
@@ -79,12 +77,10 @@ const ProgramOptionsPopover = ({
 
 const ProgramOptionsDrawer = ({
 	program,
-	programs,
 	isOpen,
 	onClose,
 }: {
 	program: IPCProgram;
-	programs: IPCProgram[];
 	isOpen: boolean;
 	onClose: () => void;
 }): JSX.Element => (
@@ -93,7 +89,7 @@ const ProgramOptionsDrawer = ({
 		<DrawerContent borderRadius="16px 16px 0px 0px">
 			<DrawerBody px="16px" py="32px">
 				<VStack w="100%" spacing="12px">
-					<ProgramOptionsContent program={program} programs={programs} />
+					<ProgramOptionsContent program={program} />
 				</VStack>
 			</DrawerBody>
 		</DrawerContent>
