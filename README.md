@@ -24,7 +24,7 @@ A distributed personal cloud computing plateform for HTTP servers.
 
 #### Install Docker
 
-Follow this [official guide](https://docs.docker.com/get-docker/) to install Docker.\
+Follow this [official guide](https://docs.docker.com/get-docker/) to install Docker, and this [one](https://docs.docker.com/compose/install/) to install Docker compose.\
 If you want to play a little bit with Docker, you can follow this [tutorial](https://docker-curriculum.com) or even our [workshop](https://github.com/PoCInnovation/Workshops/tree/master/software/04.Docker) !
 
 #### Install IPC
@@ -35,7 +35,7 @@ git clone git@github.com:PoCInnovation/InterPlanetaryCloud.git
 cd InterPlanetaryCloud
 
 # Build IPC docker image
-docker build . -t ipc:latest
+docker-compose up
 ```
 
 ### Quickstart
@@ -115,6 +115,15 @@ If you're interested in how the project is organized at a higher level, please c
 
 ## Our PoC team :ok_hand:
 
+### September 2022 - April 2023
+Developers:
+| [<img src="https://github.com/EdenComp.png?size=85" width=85><br><sub>Florian Lauch</sub>](https://github.com/EdenComp) | [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/SloWayyy.png?size=85" width=85><br><sub>Mehdi Djendar</sub>](https://github.com/SloWayyy)
+| :---: | :---: | :---:|
+
+Project Managers:
+| [<img src="https://github.com/RezaRahemtola.png?size=85" width=85><br><sub>Reza Rahemtola</sub>](https://github.com/RezaRahemtola)
+| :---: |
+
 ### April 2022 - September 2022
 Developers - Team Storage:
 
@@ -149,7 +158,7 @@ Developers:
 | :---: | :---: | :---: |
 
 Project Managers:
-| [<img src="https://github.com/NaadiQmmr.png?size=85" width=85><br><sub>Adina Cazalens</sub>](https://github.com/NaadiQmmr) | [<img src="https://github.com/0xpanoramix.png?size=85" width=85><br><sub>Luca Georges Francois</sub>](https://github.com/0xpanoramix)
+| [<img src="https://github.com/lambdina.png?size=85" width=85><br><sub>Adina Cazalens</sub>](https://github.com/lambdina) | [<img src="https://github.com/0xpanoramix.png?size=85" width=85><br><sub>Luca Georges Francois</sub>](https://github.com/0xpanoramix)
 | :---: | :---: |
 
 Reviewers :
