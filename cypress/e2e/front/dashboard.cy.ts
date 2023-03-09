@@ -8,7 +8,6 @@ describe('Create account for Dashboard tests', () => {
 		cy.get('#ipc-signup-text-area')
 			.invoke('val')
 			.then((input) => {
-				console.log(input);
 				dashboardSpecMnemonic = input as string;
 			});
 		cy.get('#ipc-signup-go-to-dashboard-button').click();

@@ -22,7 +22,6 @@ const PathCard = (): JSX.Element => {
 				mx="4px"
 				boxShadow={colorShadow}
 				onClick={() => {
-					console.log('eher');
 					setPath(path.replace(/([^/]+)\/$/, ''));
 				}}
 				id="ipc-dashboard-back-path-button"
