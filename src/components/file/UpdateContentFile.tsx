@@ -2,15 +2,14 @@ import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast 
 import { ChangeEvent, useState } from 'react';
 import { GoSync } from 'react-icons/go';
 
-import Modal from 'components/Modal';
-
 import { getFileContent } from 'utils/fileManipulation';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile } from 'types/types';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
+import type { IPCFile } from 'types/types';
 
 type UpdateContentFileProps = {
 	file: IPCFile;

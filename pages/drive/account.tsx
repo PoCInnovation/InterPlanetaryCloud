@@ -1,8 +1,8 @@
 import { VStack } from '@chakra-ui/react';
 
-import Navigation from 'components/navigation/Navigation';
-import LabelBadge from "components/LabelBadge";
 import AccountCard from 'components/account/AccountCard';
+import LabelBadge from 'components/LabelBadge';
+import Navigation from 'components/navigation/Navigation';
 
 const Account = (): JSX.Element => (
 	<Navigation>

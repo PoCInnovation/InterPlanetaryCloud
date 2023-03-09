@@ -1,8 +1,8 @@
 import { VStack } from '@chakra-ui/react';
 
 import DriveCards from 'components/cards/DriveCards';
-import Navigation from 'components/navigation/Navigation';
 import LabelBadge from 'components/LabelBadge';
+import Navigation from 'components/navigation/Navigation';
 
 import { useDriveContext } from 'contexts/drive';
 

@@ -1,22 +1,22 @@
 import { Text, useBreakpointValue, VStack } from '@chakra-ui/react';
-import { IoTrashOutline } from 'react-icons/io5';
 import { BsCodeSlash, BsPeople, BsPerson, BsPlusLg, BsShareFill } from 'react-icons/bs';
+import { IoTrashOutline } from 'react-icons/io5';
 import { RiHardDrive2Line } from 'react-icons/ri';
 
 import colors from 'theme/foundations/colors';
 
+import Button from 'components/Button';
+import DeployGithub from 'components/computing/github/DeployGithub';
+import DeployProgram from 'components/computing/programs/DeployProgram';
 import UploadFile from 'components/file/UploadFile';
 import CreateFolder from 'components/folder/CreateFolder';
-import DeployProgram from 'components/computing/programs/DeployProgram';
-import DeployGithub from 'components/computing/github/DeployGithub';
-import Button from 'components/Button';
 
 import { useUserContext } from 'contexts/user';
 
 import useToggle from 'hooks/useToggle';
 
-import { NavbarType } from 'types/navbar';
 import ProfileBadge from 'components/profile/ProfileBadge';
+import { NavbarType } from 'types/navbar';
 import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {

@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
 import { useColorMode, useToast, VStack } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
-import { useUserContext } from 'contexts/user';
 import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 import DriveCards from 'components/cards/DriveCards';
-import Navigation from 'components/navigation/Navigation';
 import LabelBadge from 'components/LabelBadge';
+import Navigation from 'components/navigation/Navigation';
 
 const Dashboard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });

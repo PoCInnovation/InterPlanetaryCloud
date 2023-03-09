@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { VStack } from '@chakra-ui/react';
-
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';

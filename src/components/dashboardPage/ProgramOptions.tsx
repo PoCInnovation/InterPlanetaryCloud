@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
 	Box,
 	Drawer,
@@ -13,13 +12,14 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 import { IPCProgram } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 
-import GoToWebsiteProgram from '../programs/GoToWebsiteProgram';
-import DeployProgram from '../computing/programs/DeployProgram';
+import DeployProgram from 'components/computing/programs/DeployProgram';
+import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
 
 const ProgramOptionsContent = ({ program, programs }: { program: IPCProgram; programs: IPCProgram[] }): JSX.Element => (
 	<>

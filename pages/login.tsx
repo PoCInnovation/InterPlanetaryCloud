@@ -1,11 +1,11 @@
+import { Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
-import { useUserContext } from 'contexts/user';
 import { useConfigContext } from 'contexts/config';
+import { useUserContext } from 'contexts/user';
 
 import AuthPage from 'components/AuthPage';
 import Button from 'components/Button';

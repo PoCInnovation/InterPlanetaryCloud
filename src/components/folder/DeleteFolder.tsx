@@ -4,11 +4,11 @@ import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
-import type { IPCFolder } from 'types/types';
 import Button from 'components/Button';
+import type { IPCFolder } from 'types/types';
 
 type DeleteFolderProps = {
 	folder: IPCFolder;

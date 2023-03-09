@@ -1,8 +1,8 @@
-import { Button, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Button, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 
-import { useDriveContext } from 'contexts/drive';
 import { useConfigContext } from 'contexts/config';
+import { useDriveContext } from 'contexts/drive';
 
 const PathCard = (): JSX.Element => {
 	const { path, setPath } = useDriveContext();

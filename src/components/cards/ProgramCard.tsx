@@ -10,9 +10,9 @@ import useToggle from 'hooks/useToggle';
 import formatDate from 'utils/formatDate';
 import formatFileSize from 'utils/formatFileSize';
 
+import { ProgramOptionsDrawer, ProgramOptionsPopover } from 'components/dashboardPage/ProgramOptions';
 import { IPCProgram } from 'types/types';
 import Card from './Card';
-import { ProgramOptionsDrawer, ProgramOptionsPopover } from '../dashboardPage/ProgramOptions';
 
 const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 	const {

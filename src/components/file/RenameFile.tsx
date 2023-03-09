@@ -13,13 +13,12 @@ import {
 import { ChangeEvent, useState } from 'react';
 import { BsPencil } from 'react-icons/bs';
 
-import Modal from 'components/Modal';
-
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile } from 'types/types';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
+import type { IPCFile } from 'types/types';
 
 type RenameFileProps = {
 	file: IPCFile;

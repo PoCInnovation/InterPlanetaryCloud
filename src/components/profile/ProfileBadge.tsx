@@ -4,7 +4,6 @@ import { BiCopy } from 'react-icons/bi';
 
 import colors from 'theme/foundations/colors';
 
-
 type ProfileBadgeProps = {
 	username: string;
 	address: string;
