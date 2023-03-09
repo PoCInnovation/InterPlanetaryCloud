@@ -101,7 +101,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 			onClose={onClose}
 			title="Deploy from Github"
 			CTA={
-				<HStack w="100%" justify="space-between">
+				<HStack w="100%" spacing="32px">
 					<Button
 						variant="primary"
 						w="100%"
@@ -119,6 +119,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 						<Button
 							variant="special"
 							size="lg"
+							w="100%"
 							onClick={() => signIn('github')}
 							id="ipc-dashboard-github-signin-button"
 						>
@@ -128,6 +129,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 						<Button
 							variant="secondary"
 							size="lg"
+							w="100%"
 							onClick={async () => signOut()}
 							id="ipc-dashboard-github-signout-button"
 						>
