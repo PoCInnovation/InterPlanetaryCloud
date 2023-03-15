@@ -559,7 +559,7 @@ class Contact {
 		}
 	}
 
-	public async configFile(newTheme: string): Promise<ResponseType> {
+	public async configTheme(newTheme: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const contact = this.contacts.find((c) => c.address === this.account?.address);
@@ -574,6 +574,23 @@ class Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to change theme' };
+		}
+	}
+
+	public async configName(newName: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				if (contact) {
+					contact.config!.defaultName = newName;
+					await this.publishAggregate();
+					return { success: true, message: 'Name changed' };
+				}
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to change name' };
 		}
 	}
 }

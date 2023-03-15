@@ -30,7 +30,7 @@ const ConfigCard = (): JSX.Element => {
 
 		setIsLoading(true);
 		try {
-			const config1 = await user.contact.configFile(colorTheme);
+			const config1 = await user.contact.configTheme(colorTheme);
 			setConfig({ ...user.config!, theme: colorTheme });
 			toggleColorMode();
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
