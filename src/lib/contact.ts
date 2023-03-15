@@ -566,7 +566,7 @@ class Contact {
 				if (contact) {
 					contact.config!.theme = newTheme;
 					await this.publishAggregate();
-					return { success: true, message: 'Theme change' };
+					return { success: true, message: 'Theme changed' };
 				}
 				return { success: false, message: 'Theme does not exist' };
 			}

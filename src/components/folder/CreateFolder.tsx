@@ -1,16 +1,12 @@
 import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { AiOutlineFolderAdd } from 'react-icons/ai';
-
-import Modal from 'components/Modal';
-import Button from 'components/Button';
-
-import type { IPCFolder } from 'types/types';
 
 import Button from 'components/Button';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
+import {IPCFolder} from "../../types/types";
+import Modal from "../Modal";
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();
