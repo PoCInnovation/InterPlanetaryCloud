@@ -18,7 +18,7 @@ describe('Good front for Login', () => {
 	});
 
 	it('Good number of buttons', () => {
-		cy.get('button').should('have.length', 2);
+		cy.get('button').should('have.length', 3);
 	});
 
 	it('Good name for login with credentials button', () => {
@@ -26,7 +26,7 @@ describe('Good front for Login', () => {
 	});
 
 	it('Good name for signup button', () => {
-		cy.get('#ipc-login-signup-button').should('contain', 'Signup');
+		cy.get('#ipc-login-signup-button').should('contain', 'Create an account');
 	});
 });
 

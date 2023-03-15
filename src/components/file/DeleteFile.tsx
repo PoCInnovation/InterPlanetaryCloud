@@ -1,14 +1,13 @@
-import { useState } from 'react';
 import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { useState } from 'react';
 import { IoTrashSharp } from 'react-icons/io5';
-
-import Modal from 'components/Modal';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile } from 'types/types';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
+import type { IPCFile } from 'types/types';
 
 type DeleteFileProps = {
 	file: IPCFile;

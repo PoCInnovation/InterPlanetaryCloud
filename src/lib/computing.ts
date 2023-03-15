@@ -1,7 +1,7 @@
 import { accounts } from 'aleph-sdk-ts';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
-import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
 

@@ -22,6 +22,7 @@ const LeftIconButton = ({ children, icon, ...props }: ButtonProps & { icon: Icon
 				webkitTransition: 'all .6s ease-in-out',
 				transition: 'all .6s ease-in-out',
 			}}
+			w={props.w}
 		>
 			<ChakraButton {...props} role="group">
 				<Icon
@@ -53,6 +54,7 @@ const RightIconButton = ({ children, icon, ...props }: ButtonProps & { icon: Ico
 				webkitTransition: 'all .6s ease-in-out',
 				transition: 'all .6s ease-in-out',
 			}}
+			w={props.w}
 		>
 			<ChakraButton {...props} role="group">
 				{children}
@@ -87,6 +89,7 @@ const NoIconButton = ({ children, ...props }: ButtonProps): JSX.Element =>
 				webkitTransition: 'all .6s ease-in-out',
 				transition: 'all .6s ease-in-out',
 			}}
+			w={props.w}
 		>
 			<ChakraButton {...props}>{children}</ChakraButton>
 		</VStack>

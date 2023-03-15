@@ -2,11 +2,11 @@ import { VStack } from '@chakra-ui/react';
 
 import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
-import FolderCard from './FolderCard';
+import ContactCard from './ContactCard';
 import FileCard from './FileCard';
+import FolderCard from './FolderCard';
 import PathCard from './PathCard';
 import ProgramCard from './ProgramCard';
-import ContactCard from './ContactCard';
 
 type DriveCardsProps = {
 	files?: IPCFile[];

@@ -1,17 +1,10 @@
-import {
-	FormControl,
-	FormLabel,
-	HStack,
-	Icon,
-	Input,
-	Text,
-	useBreakpointValue,
-	useDisclosure,
-	useToast,
-} from '@chakra-ui/react';
+import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
+import { AiOutlineFolderAdd } from 'react-icons/ai';
 
 import Modal from 'components/Modal';
+import Button from 'components/Button';
+
 import type { IPCFolder } from 'types/types';
 
 import Button from 'components/Button';
@@ -106,8 +99,8 @@ const CreateFolder = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<FormControl>
-					<FormLabel>Name</FormLabel>
+				<VStack spacing="8px" align="start" w="100%">
+					<Text size="boldLg">The name of the folder</Text>
 					<Input
 						type="text"
 						w="100%"
@@ -116,7 +109,7 @@ const CreateFolder = (): JSX.Element => {
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
 						id="ipc-dashboard-input-folder-name"
 					/>
-				</FormControl>
+				</VStack>
 			</Modal>
 		</HStack>
 	);

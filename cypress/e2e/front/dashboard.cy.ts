@@ -3,13 +3,14 @@ let dashboardSpecMnemonic = '';
 describe('Create account for Dashboard tests', () => {
 	it('Connect', () => {
 		cy.visit('/signup');
-		cy.get('#ipc-signup-credentials-signup-button').click();
+		cy.get('#ipc-signup-create-copy-mnemonics-button').click();
+		cy.wait(1000);
 		cy.get('#ipc-signup-text-area')
 			.invoke('val')
 			.then((input) => {
 				dashboardSpecMnemonic = input as string;
 			});
-		cy.get('#ipc-modal-close-button').click();
+		cy.get('#ipc-signup-go-to-dashboard-button').click();
 	});
 });
 

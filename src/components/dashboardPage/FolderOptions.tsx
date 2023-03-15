@@ -4,19 +4,19 @@ import {
 	DrawerBody,
 	DrawerContent,
 	DrawerOverlay,
-	PopoverTrigger,
 	Popover,
+	PopoverBody,
+	PopoverContent,
+	PopoverTrigger,
+	Portal,
 	useDisclosure,
 	VStack,
-	PopoverContent,
-	Portal,
-	PopoverBody,
 } from '@chakra-ui/react';
+import DeleteFolder from 'components/folder/DeleteFolder';
+import MoveFolder from 'components/folder/MoveFolder';
+import { useConfigContext } from 'contexts/config';
 import { useEffect } from 'react';
-import { IPCFolder } from '../../types/types';
-import MoveFolder from '../folder/MoveFolder';
-import DeleteFolder from '../folder/DeleteFolder';
-import { useConfigContext } from '../../contexts/config';
+import { IPCFolder } from 'types/types';
 
 const FolderOptionsContent = ({ folder }: { folder: IPCFolder }): JSX.Element => (
 	<>
