@@ -2,7 +2,7 @@
 
 InterPlanetaryCloud (IPC) is a distributed cloud built on top of [Aleph](https://aleph.im/#/), the next generation network of distributed big data applications.
 
-<div style="text-align: center;">
+<div>
   <img src=".github/assets/landing-page.png" style="width: 80%;" alt="ipc-landing-page" />
 </div>
 
@@ -80,7 +80,7 @@ You are now ready to access to your decentralized cloud at [`http://localhost:80
 <details>
   <summary>Delete your files</summary>
     <ul>
-        <li>Files can be put in the trash, and then deleted permanently :trash:</li>
+        <li>Files can be put in the trash, and then deleted permanently :wastebasket:</li>
     </ul>
 </details>
 
@@ -197,11 +197,11 @@ Reviewers:
 | [<img src="https://github.com/TomChv.png?size=85" width=85><br><sub>Tom Chauveau</sub>](https://github.com/TomChv) |
 |:------------------------------------------------------------------------------------------------------------------:|
 
-<h2 style="text-align: center;">
+<h2 align=center>
 Organization
 </h2>
 
-<p style="text-align: center;">
+<p align=center>
     <a href="https://www.linkedin.com/company/pocinnovation/mycompany/">
         <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="poc-linkedin-badge">
     </a>
@@ -215,7 +215,7 @@ Organization
         <img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" alt="poc-discord-badge">
     </a>
 </p>
-<p style="text-align: center;">
+<p align=center>
     <a href="https://www.poc-innovation.fr/">
         <img src="https://img.shields.io/badge/WebSite-1a2b6d?style=for-the-badge&logo=GitHub Sponsors&logoColor=white" alt="poc-website-badge">
     </a>
