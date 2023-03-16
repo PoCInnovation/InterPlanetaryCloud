@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useColorMode } from '@chakra-ui/react';
 import { IoEarth } from 'react-icons/io5';
 
 import type { IPCProgram } from 'types/types';
@@ -9,6 +9,7 @@ type DownloadFileProps = {
 
 const GoToWebsiteProgram = ({ program }: DownloadFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const {colorMode} = useColorMode();
 
 	return (
 		<HStack
@@ -37,6 +38,7 @@ const GoToWebsiteProgram = ({ program }: DownloadFileProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Go to website
 			</Text>
