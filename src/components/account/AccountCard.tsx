@@ -19,7 +19,7 @@ import Card from 'components/cards/Card';
 import { useUserContext } from 'contexts/user';
 
 import colors from 'theme/foundations/colors';
-import React, {useMemo, useState} from "react";
+import React, { useState } from "react";
 import ConfigModal from "./ConfigModal";
 import {useConfigContext} from "../../contexts/config";
 

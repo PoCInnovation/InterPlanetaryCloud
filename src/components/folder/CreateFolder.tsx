@@ -1,6 +1,4 @@
 import {
-	FormControl,
-	FormLabel,
 	HStack,
 	VStack,
 	Icon,

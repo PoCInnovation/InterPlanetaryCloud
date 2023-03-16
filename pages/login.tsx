@@ -1,9 +1,12 @@
-import { Text, Textarea, useToast, VStack } from '@chakra-ui/react';
+import {
+	Text,
+	Textarea,
+	useToast,
+	VStack
+} from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-
-import { Button, FormControl, Text, Textarea, useToast, VStack, useColorMode } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
 import { useConfigContext } from 'contexts/config';
@@ -27,9 +30,7 @@ const Login = (): JSX.Element => {
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 
-	const {colorMode} = useColorMode();
-
-	const loginWithCredentials = async (): Promise<void> => {
+	const loginWithCredentials = async (): Promise<ResponseType> => {
 		setIsLoadingCredentials(true);
 		const login = await auth.loginWithCredentials(mnemonics, config);
 		setIsLoadingCredentials(false);
@@ -91,14 +92,6 @@ const Login = (): JSX.Element => {
 						>
 							Login with a provider
 						</Button>
-					</VStack>
-					<VStack w="100%">
-						<Text color={colorMode} fontSize="14px">Create an account</Text>
-						<Link href="/signup">
-							<div style={{ width: '100%' }}>
-								<OutlineButton configTheme={config?.theme} w="100%" text="Signup" id="ipc-login-signup-button" />
-							</div>
-						</Link>
 					</VStack>
 				</VStack>
 				<VStack w="100%">
