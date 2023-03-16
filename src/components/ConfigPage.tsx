@@ -159,6 +159,7 @@
 // 				</VStack>
 // 			</HStack>
 
+<<<<<<< Updated upstream
 // 			<HStack gridGap={5}>
 // 				<VStack
 // 					w="375px"
@@ -205,6 +206,25 @@
 // 						</Stack>
 // 					</HStack>
 // 				</VStack>
+=======
+						<Stack spacing="16px">
+							<Stack bg="blue.50" p="8px 30px" w="100%" borderRadius="8px">
+								<Text>
+									<Box
+										as="span"
+										bgClip="text"
+										bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.blue[900]} 100%)`}
+										fontWeight="700"
+									>
+										Dark theme
+									</Box>
+								</Text>
+							</Stack>
+						</Stack>
+					</HStack>
+				</VStack>
+			</HStack>
+>>>>>>> Stashed changes
 
 // 				<VStack
 // 					w="375px"
