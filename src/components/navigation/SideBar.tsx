@@ -1,6 +1,6 @@
-import { Text, useBreakpointValue, VStack } from '@chakra-ui/react';
-import { BsCodeSlash, BsPeople, BsPerson, BsPlusLg, BsShareFill } from 'react-icons/bs';
+import { Text, useBreakpointValue, VStack, useColorMode } from '@chakra-ui/react';
 import { IoTrashOutline } from 'react-icons/io5';
+import { BsCodeSlash, BsPeople, BsPerson, BsPlusLg, BsShareFill } from 'react-icons/bs';
 import { RiHardDrive2Line } from 'react-icons/ri';
 
 import colors from 'theme/foundations/colors';
@@ -21,14 +21,13 @@ import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {
 	const { user } = useUserContext();
-
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
-
 	const { toggle, toggleHandler } = useToggle();
+	const {colorMode} = useColorMode();
 
 	const tabs: NavbarType[] = [
 		{
-			label: 'My Drive',
+			label : 'My Drive',
 			url: '/drive',
 			icon: RiHardDrive2Line,
 		},
@@ -65,7 +64,7 @@ const SideBar = (): JSX.Element => {
 			h="100vh"
 			p="32px"
 			spacing="64px"
-			bg="white"
+			bg={colorMode}
 			borderRight={{ base: '', lg: `1px solid ${colors.gray['100']}` }}
 		>
 			<VStack w="100%" px="16px" spacing="32px">

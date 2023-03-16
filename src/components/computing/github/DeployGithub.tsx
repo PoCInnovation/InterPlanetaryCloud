@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
 import { AiOutlineGithub } from 'react-icons/ai';
 
 import GithubModal from './GithubModal';
@@ -6,6 +6,7 @@ import GithubModal from './GithubModal';
 const DeployGithub = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const {colorMode} = useColorMode();
 
 	return (
 		<HStack
@@ -34,6 +35,7 @@ const DeployGithub = (): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Deploy from Github
 			</Text>

@@ -50,7 +50,7 @@ const ConfigCard = (): JSX.Element => {
 					<VStack align="start" spacing="64px">
 						<VStack spacing="32px" align="start">
 							<HStack spacing="16px">
-								<Text size="xl">Configuration</Text>
+								<Text color={colorMode} size="xl">Configuration</Text>
 							</HStack>
 							<HStack spacing="16px">
 								<Button

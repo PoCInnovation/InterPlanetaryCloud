@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import { Button, FormControl, Text, Textarea, useToast, VStack, useColorMode } from '@chakra-ui/react';
+
 import { useAuthContext } from 'contexts/auth';
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
@@ -25,7 +27,9 @@ const Login = (): JSX.Element => {
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 
-	const loginWithCredentials = async (): Promise<ResponseType> => {
+	const {colorMode} = useColorMode();
+
+	const loginWithCredentials = async (): Promise<void> => {
 		setIsLoadingCredentials(true);
 		const login = await auth.loginWithCredentials(mnemonics, config);
 		setIsLoadingCredentials(false);
@@ -87,7 +91,18 @@ const Login = (): JSX.Element => {
 						>
 							Login with a provider
 						</Button>
+<<<<<<< Updated upstream
 						<Text size="boldMd">Coming soon...</Text>
+=======
+					</VStack> */}
+					<VStack w="100%">
+						<Text color={colorMode} fontSize="14px">Create an account</Text>
+						<Link href="/signup">
+							<div style={{ width: '100%' }}>
+								<OutlineButton configTheme={config?.theme} w="100%" text="Signup" id="ipc-login-signup-button" />
+							</div>
+						</Link>
+>>>>>>> Stashed changes
 					</VStack>
 				</VStack>
 				<VStack w="100%">

@@ -11,6 +11,7 @@ import {
 	Text,
 	useBreakpointValue,
 	useDisclosure,
+	useColorMode
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
@@ -41,12 +42,12 @@ export const ResponsiveBar = (): JSX.Element => {
 	const { user } = useUserContext();
 
 	const router = useRouter();
-
+	const {colorMode} = useColorMode();
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
-		<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0" zIndex={10} bg="white">
+		<Box as="nav" w="100vw" h="80px" position="fixed" left="0" top="0" zIndex={10} bg={colorMode}>
 			<HStack
 				w="100%"
 				h="100%"

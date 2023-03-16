@@ -1,4 +1,16 @@
-import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import {
+	FormControl,
+	FormLabel,
+	HStack,
+	VStack,
+	Icon,
+	Input,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+	useColorMode,
+} from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 
 import Button from 'components/Button';
@@ -49,6 +61,8 @@ const CreateFolder = (): JSX.Element => {
 		onClose();
 	};
 
+	const { colorMode } = useColorMode();
+
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
@@ -76,6 +90,7 @@ const CreateFolder = (): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Create a folder
 			</Text>

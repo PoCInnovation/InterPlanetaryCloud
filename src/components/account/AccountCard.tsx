@@ -8,7 +8,8 @@ import {
 	useToast,
 	VStack,
 	Wrap,
-	WrapItem
+	WrapItem,
+	useColorMode
 } from '@chakra-ui/react';
 import Avatar from 'boring-avatars';
 import { BsClipboard } from 'react-icons/bs';
@@ -44,6 +45,8 @@ const AccountCard = (): JSX.Element => {
 		setIsLoading(false);
 	};
 
+	const {colorMode} = useColorMode();
+
 	return (
 		<>
 			<ConfigModal
@@ -71,7 +74,7 @@ const AccountCard = (): JSX.Element => {
 											colors.blue['500'],
 										]}
 									/>
-									<Text size="xl">{user?.contact.username}</Text>
+									<Text color={colorMode} size="xl">{user?.contact.username}</Text>
 								</HStack>
 								<HStack spacing="16px">
 									<Button variant="secondary" size="md" cursor="pointer" onClick={() => setIsOpen(true)}>
@@ -86,7 +89,7 @@ const AccountCard = (): JSX.Element => {
 							</VStack>
 							<VStack spacing="16px" align="start">
 								<HStack>
-									<Text>
+									<Text color={colorMode}>
 										<Box as="span" fontWeight="500">
 											My address:
 										</Box>{' '}
@@ -101,7 +104,7 @@ const AccountCard = (): JSX.Element => {
 									/>
 								</HStack>
 								<HStack>
-									<Text maxW="450px" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+									<Text color={colorMode} maxW="450px" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
 										<Box as="span" fontWeight="500">
 											My public key:
 										</Box>{' '}

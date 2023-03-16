@@ -1,5 +1,5 @@
-import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
+import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast, useColorMode } from '@chakra-ui/react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
@@ -80,6 +80,8 @@ const UploadFile = (): JSX.Element => {
 		}
 	};
 
+	const {colorMode} = useColorMode();
+
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
@@ -107,6 +109,7 @@ const UploadFile = (): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Upload a file
 			</Text>

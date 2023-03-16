@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
 import { AiOutlineCode } from 'react-icons/ai';
 import { IoIosRocket } from 'react-icons/io';
 
@@ -8,6 +8,7 @@ import ProgramModal from './ProgramModal';
 const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const {colorMode} = useColorMode();
 
 	return (
 		<HStack
@@ -36,6 +37,7 @@ const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): J
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				{selectedProgram ? 'Redeploy' : 'Deploy a program'}
 			</Text>
