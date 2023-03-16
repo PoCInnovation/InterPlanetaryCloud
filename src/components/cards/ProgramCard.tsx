@@ -25,7 +25,7 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<>

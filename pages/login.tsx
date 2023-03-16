@@ -91,10 +91,7 @@ const Login = (): JSX.Element => {
 						>
 							Login with a provider
 						</Button>
-<<<<<<< Updated upstream
-						<Text size="boldMd">Coming soon...</Text>
-=======
-					</VStack> */}
+					</VStack>
 					<VStack w="100%">
 						<Text color={colorMode} fontSize="14px">Create an account</Text>
 						<Link href="/signup">
@@ -102,7 +99,6 @@ const Login = (): JSX.Element => {
 								<OutlineButton configTheme={config?.theme} w="100%" text="Signup" id="ipc-login-signup-button" />
 							</div>
 						</Link>
->>>>>>> Stashed changes
 					</VStack>
 				</VStack>
 				<VStack w="100%">
