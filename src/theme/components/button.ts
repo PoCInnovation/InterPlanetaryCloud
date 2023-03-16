@@ -9,12 +9,6 @@ const Button = {
 		lineHeight: '24px',
 	},
 	sizes: {
-		// TODO: clean needed
-		oldMd: {
-			padding: '16px 32px',
-			height: '56px',
-			fontSize: '16px',
-		},
 		sm: {
 			padding: '4px 16px',
 			height: 'auto',
@@ -138,25 +132,10 @@ const Button = {
 				transition: 'all .6s ease-in-out',
 			},
 		},
-		// TODO: clean needed
-		gray: {
-			background: `${colors.gray[300]}`,
-			color: `${colors.gray[700]}`,
-		},
-		// TODO: clean needed
-		inline: {
-			bgGradient: `linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`,
-			color: 'white',
-		},
-		// TODO: clean needed
-		reverseInline: {
-			bgGradient: `linear-gradient(90deg, ${colors.red[700]} 0%, ${colors.blue[700]} 100%)`,
-			color: 'white',
-		},
 	},
 	defaultProps: {
-		size: 'oldMd',
-		variant: 'primary',
+		size: 'md',
+		variant: 'secondary',
 	},
 };
 

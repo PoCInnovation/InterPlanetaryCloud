@@ -64,24 +64,25 @@ class Auth {
 
 			await this.createAggregate(account);
 
-			return { user, mnemonic, message: 'Successful signup' };
+			return { user, mnemonic, message: 'Your account has been created successfully.' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, mnemonic: undefined, message: 'Failed to signup' };
+			return { user: undefined, mnemonic: undefined, message: 'An error occurred while creating your account.' };
 		}
 	}
 
 	public async loginWithCredentials(mnemonic: string, importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
+			if (!mnemonic) return { user: undefined, message: 'Your mnemonic is required to login.' };
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
 			const user = new User(importedAccount, importedConfig);
 
 			await this.createAggregate(importedAccount);
 
-			return { user, message: 'Successful login' };
+			return { user, message: 'You have been logged in successfully.' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Failed to login' };
+			return { user: undefined, message: 'An error occurred while logging to your account.' };
 		}
 	}
 
@@ -92,10 +93,10 @@ class Auth {
 
 			await this.createAggregate(account);
 
-			return { user, message: 'Successful login' };
+			return { user, message: 'You have been logged in successfully.' };
 		} catch (err) {
 			console.error(err);
-			return { user: undefined, message: 'Failed to login' };
+			return { user: undefined, message: 'An error occurred while logging to your account.' };
 		}
 	}
 }

@@ -1,13 +1,15 @@
 import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
-import { FaFolder } from 'react-icons/fa';
 import { useState } from 'react';
-import { FolderOptionsDrawer, FolderOptionsPopover } from '../dashboardPage/FolderOptions';
+import { FaFolder } from 'react-icons/fa';
+
+import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
+import useToggle from 'hooks/useToggle';
+
+import { FolderOptionsDrawer, FolderOptionsPopover } from 'components/dashboardPage/FolderOptions';
+import { IPCFolder } from 'types/types';
+import formatDate from 'utils/formatDate';
 import Card from './Card';
-import { IPCFolder } from '../../types/types';
-import useToggle from '../../hooks/useToggle';
-import { useDriveContext } from '../../contexts/drive';
-import { useUserContext } from '../../contexts/user';
-import formatDate from '../../utils/formatDate';
 
 const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 	const { path, setPath } = useDriveContext();

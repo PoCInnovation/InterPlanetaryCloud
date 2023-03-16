@@ -1,13 +1,13 @@
 import {
 	Box,
-	DrawerContent,
 	Drawer,
-	DrawerOverlay,
-	DrawerCloseButton,
 	DrawerBody,
-	Text,
-	Stack,
+	DrawerCloseButton,
+	DrawerContent,
+	DrawerOverlay,
 	HStack,
+	Stack,
+	Text,
 	useBreakpointValue,
 } from '@chakra-ui/react';
 
@@ -17,9 +17,9 @@ import { useUserContext } from 'contexts/user';
 
 import { IPCContact, IPCFile } from 'types/types';
 
-import getFileType from 'utils/getFileType';
 import formatDate from 'utils/formatDate';
 import formatFileSize from 'utils/formatFileSize';
+import getFileType from 'utils/getFileType';
 
 import colors from 'theme/foundations/colors';
 

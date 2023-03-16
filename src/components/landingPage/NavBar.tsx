@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { HStack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 import { IoRocketSharp } from 'react-icons/io5';
 

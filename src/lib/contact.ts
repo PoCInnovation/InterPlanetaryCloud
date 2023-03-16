@@ -18,14 +18,14 @@ import { ALEPH_CHANNEL } from 'config/constants';
 class Contact {
 	public contacts: IPCContact[];
 
-	public username: string
+	public username: string;
 
 	private readonly account: accounts.ethereum.ETHAccount;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
 		this.account = importedAccount;
-		this.username = "";
+		this.username = '';
 	}
 
 	private async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
@@ -75,7 +75,7 @@ class Contact {
 				});
 
 				this.contacts = aggr.InterPlanetaryCloud.contacts;
-				this.username = this.contacts.find((c) => c.address === this.account.address)?.name || "";
+				this.username = this.contacts.find((c) => c.address === this.account.address)?.name || '';
 
 				await this.loadUpdates();
 
@@ -559,14 +559,14 @@ class Contact {
 		}
 	}
 
-	public async configFile(newTheme: string): Promise<ResponseType> {
+	public async configTheme(newTheme: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const contact = this.contacts.find((c) => c.address === this.account?.address);
 				if (contact) {
 					contact.config!.theme = newTheme;
 					await this.publishAggregate();
-					return { success: true, message: 'Theme change' };
+					return { success: true, message: 'Theme changed' };
 				}
 				return { success: false, message: 'Theme does not exist' };
 			}
@@ -574,6 +574,23 @@ class Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to change theme' };
+		}
+	}
+
+	public async configName(newName: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				if (contact) {
+					contact.config!.defaultName = newName;
+					await this.publishAggregate();
+					return { success: true, message: 'Name changed' };
+				}
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to change name' };
 		}
 	}
 }

@@ -21,16 +21,16 @@ const ConfigCard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const { setConfig } = useConfigContext();
 	const toast = useToast();
-	const { toggleColorMode } = useColorMode();
+	const { colorMode, toggleColorMode } = useColorMode();
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [colorTheme, setColorTheme] = useState(user.config!.theme);
 
 	const switchTheme = async () => {
+		const colorTheme = colorMode === 'light' ? "dark" : "light";
+
 		setIsLoading(true);
-		setColorTheme(colorTheme === 'light' ? 'dark' : 'light');
 		try {
-			const config1 = await user.contact.configFile(colorTheme);
+			const config1 = await user.contact.configTheme(colorTheme);
 			setConfig({ ...user.config!, theme: colorTheme });
 			toggleColorMode();
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
@@ -41,7 +41,7 @@ const ConfigCard = (): JSX.Element => {
 		setIsLoading(false);
 	};
 
-	const isLight = colorTheme === 'light';
+	const isLight = colorMode === 'light';
 
 	return (
 		<Wrap>

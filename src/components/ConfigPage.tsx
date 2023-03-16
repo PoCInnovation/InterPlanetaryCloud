@@ -24,15 +24,7 @@ const ConfigPage = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const [ColorTheme, setColorTheme] = useState('');
 	const { toggleColorMode } = useColorMode();
-	const color = useColorModeValue('white', 'gray.800');
-	const colorText = useColorModeValue('gray.800', 'white');
 	const [isLoading, setIsLoading] = useState(false);
-
-	const Theme = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.value.toLowerCase() === 'dark') setColorTheme('gray.800');
-		else if (e.target.value.toLowerCase() === 'light') setColorTheme('white');
-		else setColorTheme('undefined');
-	};
 
 	const configUser = async () => {
 		setIsLoading(true);
@@ -41,7 +33,7 @@ const ConfigPage = (): JSX.Element => {
 				toast({ title: "This color doesn't exist", status: 'error' });
 				return;
 			}
-			const config1 = await user.contact.configFile(ColorTheme);
+			const config1 = await user.contact.configTheme(ColorTheme);
 			setConfig({ ...user.config!, theme: ColorTheme });
 			toggleColorMode();
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });

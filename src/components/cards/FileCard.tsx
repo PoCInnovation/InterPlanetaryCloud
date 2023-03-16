@@ -7,12 +7,13 @@ import { IPCFile } from 'types/types';
 import useToggle from 'hooks/useToggle';
 
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
+import formatDate from 'utils/formatDate';
+import formatFileSize from 'utils/formatFileSize';
+
+import { FileOptionsDrawer, FileOptionsPopover } from 'components/dashboardPage/FileOptions';
 import Card from './Card';
-import { FileOptionsDrawer, FileOptionsPopover } from '../dashboardPage/FileOptions';
-import formatDate from '../../utils/formatDate';
-import { useUserContext } from '../../contexts/user';
-import formatFileSize from '../../utils/formatFileSize';
 
 const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const { files } = useDriveContext();

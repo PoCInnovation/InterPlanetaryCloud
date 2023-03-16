@@ -167,16 +167,6 @@ class Drive {
 					),
 					Buffer.from(storeFile),
 				);
-				// const decryptedFile = await this.account.decrypt(Buffer.from(storeFile), keyFile);
-
-				// const keyFile = await decryptWithPrivateKey(this.private_key.slice(2), file.key);
-				// const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
-				// 	CryptoJS.enc.Utf8,
-				// );
-				//
-				// const newFile = new File([decryptedContentFile], file.name, {
-				// 	type: 'plain/text',
-				// });
 				fileDownload(decryptedFile, file.name);
 				return { success: true, message: 'File downloaded' };
 			}

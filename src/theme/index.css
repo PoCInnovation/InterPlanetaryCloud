@@ -12,3 +12,21 @@ html {
 a {
   text-decoration: none !important;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E8EBFF;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ADBAFF;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7388FF;
+}

@@ -1,13 +1,13 @@
 import { Input, useDisclosure, useToast } from '@chakra-ui/react';
 import EthCrypto from 'eth-crypto';
 import { ChangeEvent, useState } from 'react';
+import { BsPlusLg } from 'react-icons/bs';
 
-import Modal from 'components/Modal';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
-import { BsPlusLg } from 'react-icons/bs';
 
 const AddContact = (): JSX.Element => {
 	const { user } = useUserContext();

@@ -8,7 +8,7 @@ import useToggle from 'hooks/useToggle';
 
 import formatDate from 'utils/formatDate';
 
-import { ContactOptionsDrawer, ContactOptionsPopover } from '../dashboardPage/ContactOptions';
+import { ContactOptionsDrawer, ContactOptionsPopover } from 'components/dashboardPage/ContactOptions';
 import Card from './Card';
 
 const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
