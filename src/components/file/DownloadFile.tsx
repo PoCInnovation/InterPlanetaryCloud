@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useToast,useColorMode } from '@chakra-ui/react';
 import { FiDownload } from 'react-icons/fi';
 
 import { useUserContext } from 'contexts/user';
@@ -26,7 +26,7 @@ const DownloadFile = ({ file, onClose }: DownloadFileProps): JSX.Element => {
 			toast({ title: 'Unable to download file', status: 'error' });
 		}
 	};
-
+	const { colorMode } = useColorMode();
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
@@ -54,6 +54,7 @@ const DownloadFile = ({ file, onClose }: DownloadFileProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Download
 			</Text>

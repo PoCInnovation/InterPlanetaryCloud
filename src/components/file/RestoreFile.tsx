@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useToast, useColorMode } from '@chakra-ui/react';
 import { BiUndo } from 'react-icons/bi';
 
 import { useDriveContext } from 'contexts/drive';
@@ -18,6 +18,8 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
+
+	const {colorMode} = useColorMode();
 
 	const restoreFile = async () => {
 		if (user.account) {
@@ -68,6 +70,7 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Restore the file
 			</Text>

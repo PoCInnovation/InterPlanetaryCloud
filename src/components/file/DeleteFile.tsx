@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast, useColorMode } from '@chakra-ui/react';
 import { useState } from 'react';
 import { IoTrashSharp } from 'react-icons/io5';
 
@@ -24,7 +24,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
-
+	const {colorMode} = useColorMode();
 	const deleteFile = async () => {
 		setIsLoading(true);
 		if (user.account) {
@@ -105,6 +105,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				{file.deletedAt ? 'Delete' : 'Move to bin'}
 			</Text>
@@ -124,7 +125,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 					</Button>
 				}
 			>
-				<Text>Are you sure you want to delete this file?</Text>
+				<Text color={colorMode}>Are you sure you want to delete this file?</Text>
 			</Modal>
 		</HStack>
 	);

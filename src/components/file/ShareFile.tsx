@@ -10,6 +10,7 @@ import {
 	useDisclosure,
 	useToast,
 	VStack,
+	useColorMode,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { BsShareFill } from 'react-icons/bs';
@@ -52,6 +53,8 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 		onClose();
 	};
 
+	const { colorMode } = useColorMode();
+
 	if (file.permission !== 'owner') return <></>;
 
 	return (
@@ -81,6 +84,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Share
 			</Text>

@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useColorMode } from '@chakra-ui/react';
 import { BsClipboard } from 'react-icons/bs';
 
 import type { IPCContact } from 'types/types';
@@ -10,6 +10,7 @@ type DownloadFileProps = {
 
 const CopyAddressContact = ({ contact, onClose }: DownloadFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const {colorMode} = useColorMode();
 
 	return (
 		<HStack
@@ -41,6 +42,7 @@ const CopyAddressContact = ({ contact, onClose }: DownloadFileProps): JSX.Elemen
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Copy the address
 			</Text>

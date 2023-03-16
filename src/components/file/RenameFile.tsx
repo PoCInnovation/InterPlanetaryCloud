@@ -8,6 +8,7 @@ import {
 	useBreakpointValue,
 	useDisclosure,
 	useToast,
+	useColorMode,
 } from '@chakra-ui/react';
 
 import { ChangeEvent, useState } from 'react';
@@ -61,6 +62,8 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 		onClosePopover();
 	};
 
+	const { colorMode } = useColorMode();
+
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
@@ -90,6 +93,7 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={colorMode}
 			>
 				Rename
 			</Text>
