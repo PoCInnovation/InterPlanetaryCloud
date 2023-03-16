@@ -1,9 +1,7 @@
 import {
 	Box,
 	Button,
-	HStack,
-	Image,
-	Stack,
+	HStack, Icon,
 	Text,
 	useColorMode,
 	useToast,
@@ -14,8 +12,8 @@ import {
 import Card from 'components/cards/Card';
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
-import { useState } from 'react';
-import colors from 'theme/foundations/colors';
+import React, { useState } from 'react';
+import { BsClipboard } from "react-icons/bs";
 
 const ConfigCard = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -73,8 +71,9 @@ const ConfigCard = (): JSX.Element => {
 								</Button>
 							</HStack>
 						</VStack>
+
 						<VStack
-							w="400px"
+							w="500px"
 							h="150px"
 							backgroundColor="white"
 							borderRadius="8px"
@@ -85,25 +84,44 @@ const ConfigCard = (): JSX.Element => {
 							spacing="4px"
 							p="8px"
 						>
-							<HStack gridGap={5} paddingBottom="30px">
-								<Image borderRadius="full" boxSize="50px" src="https://bit.ly/dan-abramov" alt="Dan Abramov" />
-								<Text size="xl"> Github connection </Text>
+							<HStack paddingBottom="30px">
+								<Text size="xl"> Programs </Text>
 							</HStack>
 
-							<Stack spacing="16px">
-								<Stack bg="blue.50" p="8px 50px" w="100%" borderRadius="8px">
-									<Text>
-										<Box
-											as="span"
-											bgClip="text"
-											bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
-											fontWeight="700"
-										>
-											Sign off of github
-										</Box>
-									</Text>
-								</Stack>
-							</Stack>
+							<VStack align="start" spacing="64px">
+								<VStack spacing="16px" align="start">
+									<HStack>
+										<Text>
+											<Box as="span" fontWeight="500">
+												Default name:
+											</Box>{' '}
+											{user?.config?.defaultName}
+										</Text>
+										<Icon
+											as={BsClipboard}
+											w="16px"
+											h="16px"
+											cursor="pointer"
+											onClick={() => navigator.clipboard.writeText(user?.config?.defaultName || '')}
+										/>
+									</HStack>
+									<HStack>
+										<Text maxW="450px" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+											<Box as="span" fontWeight="500">
+												Default entrypoint:
+											</Box>{' '}
+											{user?.config?.defaultEntrypoint}
+										</Text>
+										<Icon
+											as={BsClipboard}
+											w="16px"
+											h="16px"
+											cursor="pointer"
+											onClick={() => navigator.clipboard.writeText(user?.config?.defaultEntrypoint || '')}
+										/>
+									</HStack>
+								</VStack>
+							</VStack>
 						</VStack>
 					</VStack>
 				</Card>
