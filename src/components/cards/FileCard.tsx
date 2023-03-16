@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BsFileEarmarkFill } from 'react-icons/bs';
 
@@ -29,6 +29,7 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const {colorMode} = useColorMode();
 
 	return (
 		<>
@@ -46,17 +47,17 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFileEarmarkFill size="24px" />
-						<Text size="lg">{file.name}</Text>
+						<Text color={colorMode} size="lg">{file.name}</Text>
 					</HStack>
 					<HStack spacing="32px">
-						<Text>
+						<Text color={colorMode}>
 							by{' '}
 							<Box as="span" fontWeight="600">
 								{username}
 							</Box>
 						</Text>
-						<Text>{formatDate(file.createdAt)}</Text>
-						<Text>{formatFileSize(file.size)}</Text>
+						<Text color={colorMode}>{formatDate(file.createdAt)}</Text>
+						<Text color={colorMode}>{formatFileSize(file.size)}</Text>
 					</HStack>
 				</HStack>
 			</Card>

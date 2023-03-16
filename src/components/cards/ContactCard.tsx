@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BsFillFilePersonFill } from 'react-icons/bs';
 
@@ -18,6 +18,7 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const {colorMode} = useColorMode();
 
 	return (
 		<>
@@ -35,12 +36,12 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFillFilePersonFill size="24px" />
-						<Text size="lg">
+						<Text color={colorMode} size="lg">
 							{contact.name} - {contact.address}
 						</Text>
 					</HStack>
 					<HStack spacing="32px">
-						<Text>{formatDate(contact.createdAt)}</Text>
+						<Text color={colorMode}>{formatDate(contact.createdAt)}</Text>
 					</HStack>
 				</HStack>
 			</Card>
