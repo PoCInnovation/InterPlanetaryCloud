@@ -18,38 +18,38 @@ A distributed personal file storage and management system platform, protecting y
 
 A distributed personal cloud computing platform for HTTP servers.
 
-## Getting started :wrench:
+## Getting started 🔧
 
 ### Installation
 
 #### Install Docker
 
-Follow this [official guide](https://docs.docker.com/get-docker/) to install Docker, and this [one](https://docs.docker.com/compose/install/) to install Docker compose.\
+Follow this [official guide](https://docs.docker.com/get-docker/) to install Docker, and [this one](https://docs.docker.com/compose/install/) to install Docker compose.\
 If you want to play a little bit with Docker, you can follow this [tutorial](https://docker-curriculum.com) or even our [workshop](https://github.com/PoCInnovation/Workshops/tree/master/software/04.Docker)!
 
 #### Install IPC
 
-```
+```sh
 # Get the project
 git clone git@github.com:PoCInnovation/InterPlanetaryCloud.git
 cd InterPlanetaryCloud
 
 # Build IPC docker image
-docker-compose build
+docker compose build
 ```
 
 ### Quickstart
 
-#### Run IPC :rocket:
+#### Run IPC 🚀
 
-```
+```sh
 # Run IPC docker image
-docker-compose up
+docker compose up
 ```
 
-You are now ready to access to your decentralized cloud at [`http://localhost:8080`](http://localhost:8080) :boom:
+You are now ready to access to your decentralized cloud at [`http://localhost:8080`](http://localhost:8080) 💥
 
-## Features :dizzy:
+## Features 💫
 
 ### Cloud Storage
 
@@ -66,7 +66,7 @@ You are now ready to access to your decentralized cloud at [`http://localhost:80
 <details>
   <summary>Create folders to organize your drive</summary>
     <ul>
-        <li>Files are great, but virtual folders are also available on IPC to let you organize your files the way you want :star_struck:</li>
+        <li>Files are great, but virtual folders are also available on IPC to let you organize your files the way you want 🤩</li>
     </ul>
 </details>
 
@@ -92,7 +92,7 @@ You are now ready to access to your decentralized cloud at [`http://localhost:80
     <ul>
         <li>
             Using Aleph VMs, programs listening on port <code>8080</code> can be executed if their source code has a size under 1 MB.<br>
-            Large files should be attached in a secondary volume, which is not a feature implemented on our side... yet :wink:
+            Large files should be attached in a secondary volume, which is not a feature implemented on our side... yet 😉
         </li>
         <li>
             The VMs support binary executables, shell scrips, NodeJS and Python ASGI programs.<br>
@@ -107,13 +107,13 @@ You are now ready to access to your decentralized cloud at [`http://localhost:80
         <li>Uploading programs compressed in an archive is great, but importing it directly from GitHub is way better 🚀</li>
         <li>
             GitHub OAuth was implemented in IPC to import public and private repositories.<br>
-            :warning: This feature is only available when running IPC locally as it's using the filesystem to clone and zip the repository content :warning:
+            ⚠️ This feature is only available when running IPC locally as it's using the filesystem to clone and zip the repository content ⚠️
         </li>
     </ul>
 </details>
   
 
-## How does it work? :thinking:
+## How does it work? 🤔
 
 ### Technologies 🧑‍💻
 
@@ -125,7 +125,7 @@ You are now ready to access to your decentralized cloud at [`http://localhost:80
 
 Every file that you upload will be encrypted thanks to [crypto-js](https://www.npmjs.com/package/crypto-js) and the encryption method of aleph from [eciesjs](https://www.npmjs.com/package/eciesjs).
 
-### Database :file_folder:
+### Database 📁
 
 We use [Aleph SDK TS](https://github.com/aleph-im/aleph-sdk-ts#readme).
 
@@ -136,66 +136,66 @@ You're invited to join this project! Check out the [contributing guide](./CONTRI
 If you're interested in how the project is organized at a higher level, please contact the current project manager.
 
 
-## Our PoC team :ok_hand:
+## Our PoC team 👌
 
 ### September 2022 - April 2023
 Developers:
 
 | [<img src="https://github.com/EdenComp.png?size=85" width=85><br><sub>Florian Lauch</sub>](https://github.com/EdenComp) | [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/SloWayyy.png?size=85" width=85><br><sub>Mehdi Djendar</sub>](https://github.com/SloWayyy) |
-|:-----------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|
+|:---:|:---:|:---:|
 
-Project Managers:
+Project Manager:
 
 | [<img src="https://github.com/RezaRahemtola.png?size=85" width=85><br><sub>Reza Rahemtola</sub>](https://github.com/RezaRahemtola) |
-|:----------------------------------------------------------------------------------------------------------------------------------:|
+|:---:|
 
 ### April 2022 - September 2022
 Developers - Team Storage:
 
 | [<img src="https://github.com/RezaRahemtola.png?size=85" width=85><br><sub>Reza Rahemtola</sub>](https://github.com/RezaRahemtola) | [<img src="https://github.com/TristanMasselot.png?size=85" width=85><br><sub>Tristan Masselot</sub>](https://github.com/TristanMasselot) | [<img src="https://github.com/Samoten777.png?size=85" width=85><br><sub>Laure Gagner</sub>](https://github.com/Samoten777) |
-|:----------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------:|
+|:---:|:---:|:---:|
 
 Developers - Team Computing:
 
 | [<img src="https://github.com/AmozPay.png?size=85" width=85><br><sub>Amoz Pay</sub>](https://github.com/AmozPay) | [<img src="https://github.com/ZerLock.png?size=85" width=85><br><sub>Léo Dubosclard</sub>](https://github.com/ZerLock) | [<img src="https://github.com/Alex-Prevot.png?size=85" width=85><br><sub>Alex Prevot</sub>](https://github.com/Alex-Prevot) |
-|:----------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|
+|:---:|:---:|:---:|
 
 Project Manager:
 
 | [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort) |
-|:-------------------------------------------------------------------------------------------------------------------------:|
+|:---:|
 
 Reviewers:
 
 | [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) |
-|:---------------------------------------------------------------------------------------------------------------------------:|
+|:---:|
 
 ### September 2021 - April 2022
 Developers:
 
 | [<img src="https://github.com/lucas-louis.png?size=85" width=85><br><sub>Lucas Louis</sub>](https://github.com/lucas-louis) | [<img src="https://github.com/0xtekgrinder.png?size=85" width=85><br><sub>Matéo Viel</sub>](https://github.com/0xtekgrinder) |
-|:---------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|
+|:---:|:---:|
 
 Project Managers:
 
 | [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort) |
-|:-------------------------------------------------------------------------------------------------------------------------:|
+|:---:|
 
 ### March 2021 - September 2021
 Developers:
 
 | [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>Adrien Fort</sub>](https://github.com/adrienfort) | [<img src="https://github.com/rojas-diego.png?size=85" width=85><br><sub>Diego Rojas</sub>](https://github.com/rojas-diego) | [<img src="https://github.com/MrZalTy.png?size=85" width=85><br><sub>Lorenzo Carneli</sub>](https://github.com/MrZalTy) |
-|:-------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|
+|:---:|:---:|:---:|
 
 Project Managers:
 
 | [<img src="https://github.com/lambdina.png?size=85" width=85><br><sub>Adina Cazalens</sub>](https://github.com/lambdina) | [<img src="https://github.com/0xpanoramix.png?size=85" width=85><br><sub>Luca Georges Francois</sub>](https://github.com/0xpanoramix) |
-|:------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
+|:---:|:---:|
 
 Reviewers:
 
 | [<img src="https://github.com/TomChv.png?size=85" width=85><br><sub>Tom Chauveau</sub>](https://github.com/TomChv) |
-|:------------------------------------------------------------------------------------------------------------------:|
+|:---:|
 
 <h2 align=center>
 Organization
@@ -221,4 +221,4 @@ Organization
     </a>
 </p>
 
-> :rocket: Don't hesitate to follow us on our different networks, and put a star 🌟 on `PoC's` repositories
+> 🚀 Don't hesitate to follow us on our different networks, and put a star 🌟 on `PoC's` repositories
