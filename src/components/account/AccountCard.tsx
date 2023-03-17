@@ -5,23 +5,23 @@ import {
 	Icon,
 	Text,
 	Tooltip,
+	useColorMode,
 	useToast,
 	VStack,
 	Wrap,
 	WrapItem,
-	useColorMode
 } from '@chakra-ui/react';
 import Avatar from 'boring-avatars';
 import { BsClipboard } from 'react-icons/bs';
 
 import Card from 'components/cards/Card';
 
+import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
 
+import { useState } from 'react';
 import colors from 'theme/foundations/colors';
-import React, { useState } from "react";
-import ConfigModal from "./ConfigModal";
-import {useConfigContext} from "../../contexts/config";
+import ConfigModal from './ConfigModal';
 
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -31,7 +31,6 @@ const AccountCard = (): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const changeName = async (name: string, setIsLoading: (isLoading: boolean) => void) => {
-
 		setIsLoading(true);
 		try {
 			const config1 = await user.contact.update(user.account!.address, name);
@@ -45,7 +44,7 @@ const AccountCard = (): JSX.Element => {
 		setIsLoading(false);
 	};
 
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<>
@@ -74,7 +73,9 @@ const AccountCard = (): JSX.Element => {
 											colors.blue['500'],
 										]}
 									/>
-									<Text color={colorMode} size="xl">{user?.contact.username}</Text>
+									<Text color={colorMode} size="xl">
+										{user?.contact.username}
+									</Text>
 								</HStack>
 								<HStack spacing="16px">
 									<Button variant="secondary" size="md" cursor="pointer" onClick={() => setIsOpen(true)}>
