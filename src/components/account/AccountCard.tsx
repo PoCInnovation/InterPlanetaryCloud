@@ -5,12 +5,13 @@ import {
 	Icon,
 	Text,
 	Tooltip,
-	useColorMode,
+	useColorModeValue,
 	useToast,
 	VStack,
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import Avatar from 'boring-avatars';
 import { BsClipboard } from 'react-icons/bs';
 
@@ -19,8 +20,10 @@ import Card from 'components/cards/Card';
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
 
-import { useState } from 'react';
+import { textColorMode } from 'config/colorMode';
+
 import colors from 'theme/foundations/colors';
+
 import ConfigModal from './ConfigModal';
 
 const AccountCard = (): JSX.Element => {
@@ -44,7 +47,7 @@ const AccountCard = (): JSX.Element => {
 		setIsLoading(false);
 	};
 
-	const { colorMode } = useColorMode();
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	return (
 		<>
@@ -73,7 +76,7 @@ const AccountCard = (): JSX.Element => {
 											colors.blue['500'],
 										]}
 									/>
-									<Text color={colorMode} size="xl">
+									<Text color={textColor} size="xl">
 										{user?.contact.username}
 									</Text>
 								</HStack>
@@ -90,7 +93,7 @@ const AccountCard = (): JSX.Element => {
 							</VStack>
 							<VStack spacing="16px" align="start">
 								<HStack>
-									<Text color={colorMode}>
+									<Text color={textColor}>
 										<Box as="span" fontWeight="500">
 											My address:
 										</Box>{' '}
@@ -105,7 +108,7 @@ const AccountCard = (): JSX.Element => {
 									/>
 								</HStack>
 								<HStack>
-									<Text color={colorMode} maxW="450px" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+									<Text color={textColor} maxW="450px" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
 										<Box as="span" fontWeight="500">
 											My public key:
 										</Box>{' '}

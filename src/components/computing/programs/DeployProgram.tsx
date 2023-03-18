@@ -1,13 +1,25 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
+import {
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { AiOutlineCode } from 'react-icons/ai';
 import { IoIosRocket } from 'react-icons/io';
 
 import { IPCProgram } from 'types/types';
+
+import { textColorMode } from 'config/colorMode';
+
 import ProgramModal from './ProgramModal';
 
 const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	return (
@@ -21,7 +33,7 @@ const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): J
 			cursor="pointer"
 			id="ipc-dashboard-deploy-program-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -37,7 +49,7 @@ const DeployProgram = ({ selectedProgram }: { selectedProgram?: IPCProgram }): J
 					color: 'red.800',
 					fontWeight: '500',
 				}}
-				color={colorMode}
+				color={textColor}
 			>
 				{selectedProgram ? 'Redeploy' : 'Deploy a program'}
 			</Text>

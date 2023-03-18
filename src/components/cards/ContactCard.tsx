@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BsFillFilePersonFill } from 'react-icons/bs';
 
@@ -9,6 +9,9 @@ import useToggle from 'hooks/useToggle';
 import formatDate from 'utils/formatDate';
 
 import { ContactOptionsDrawer, ContactOptionsPopover } from 'components/dashboardPage/ContactOptions';
+
+import { textColorMode } from 'config/colorMode';
+
 import Card from './Card';
 
 const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
@@ -18,7 +21,7 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const { colorMode } = useColorMode();
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	return (
 		<>
@@ -36,12 +39,12 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFillFilePersonFill size="24px" />
-						<Text color={colorMode} size="lg">
+						<Text color={textColor} size="lg">
 							{contact.name} - {contact.address}
 						</Text>
 					</HStack>
 					<HStack spacing="32px">
-						<Text color={colorMode}>{formatDate(contact.createdAt)}</Text>
+						<Text color={textColor}>{formatDate(contact.createdAt)}</Text>
 					</HStack>
 				</HStack>
 			</Card>

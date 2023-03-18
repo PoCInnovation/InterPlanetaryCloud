@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorMode } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BsFileEarmarkFill } from 'react-icons/bs';
 
@@ -13,6 +13,9 @@ import formatDate from 'utils/formatDate';
 import formatFileSize from 'utils/formatFileSize';
 
 import { FileOptionsDrawer, FileOptionsPopover } from 'components/dashboardPage/FileOptions';
+
+import { textColorMode } from 'config/colorMode';
+
 import Card from './Card';
 
 const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
@@ -29,7 +32,7 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const { colorMode } = useColorMode();
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	return (
 		<>
@@ -47,19 +50,19 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFileEarmarkFill size="24px" />
-						<Text color={colorMode} size="lg">
+						<Text color={textColor} size="lg">
 							{file.name}
 						</Text>
 					</HStack>
 					<HStack spacing="32px">
-						<Text color={colorMode}>
+						<Text color={textColor}>
 							by{' '}
 							<Box as="span" fontWeight="600">
 								{username}
 							</Box>
 						</Text>
-						<Text color={colorMode}>{formatDate(file.createdAt)}</Text>
-						<Text color={colorMode}>{formatFileSize(file.size)}</Text>
+						<Text color={textColor}>{formatDate(file.createdAt)}</Text>
+						<Text color={textColor}>{formatFileSize(file.size)}</Text>
 					</HStack>
 				</HStack>
 			</Card>

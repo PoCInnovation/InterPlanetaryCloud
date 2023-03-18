@@ -1,4 +1,4 @@
-import { Text, useBreakpointValue, VStack, useColorMode } from '@chakra-ui/react';
+import { Text, useBreakpointValue, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { BsCodeSlash, BsPeople, BsPerson, BsPlusLg, BsShareFill } from 'react-icons/bs';
 import { RiHardDrive2Line } from 'react-icons/ri';
@@ -17,12 +17,14 @@ import useToggle from 'hooks/useToggle';
 
 import ProfileBadge from 'components/profile/ProfileBadge';
 import { NavbarType } from 'types/navbar';
+import { bgColorMode } from 'config/colorMode';
 import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {
 	const { user } = useUserContext();
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 	const { toggle, toggleHandler } = useToggle();
+	const bgColor = useColorModeValue(bgColorMode.light, bgColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	const tabs: NavbarType[] = [
@@ -64,8 +66,8 @@ const SideBar = (): JSX.Element => {
 			h="100vh"
 			p="32px"
 			spacing="64px"
-			bg={colorMode}
-			borderRight={{ base: '', lg: `1px solid ${colors.gray['100']}` }}
+			bg={bgColor}
+			borderRight={{ base: '', lg: `1px solid ${colorMode === 'light' ? colors.gray['100'] : colors.gray['100']}` }}
 		>
 			<VStack w="100%" px="16px" spacing="32px">
 				<VStack w="100%" spacing="16px">
@@ -91,12 +93,13 @@ const SideBar = (): JSX.Element => {
 						<VStack
 							w="250px"
 							borderRadius="8px"
-							border="2px solid #E8EBFF"
+							border={`2px solid ${colorMode === 'light' ? colors.blue['100'] : '#595959'}`}
 							_focus={{
 								boxShadow: 'none',
 							}}
 							spacing="4px"
 							p="8px"
+							bg={colorMode === 'light' ? 'white' : 'gray.700'}
 						>
 							<CreateFolder />
 							<UploadFile />

@@ -1,7 +1,5 @@
 import {
-	Button,
 	Divider,
-	Flex,
 	HStack,
 	Icon,
 	Select,
@@ -10,6 +8,7 @@ import {
 	useDisclosure,
 	useToast,
 	VStack,
+	useColorModeValue,
 	useColorMode,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
@@ -20,6 +19,11 @@ import Modal from 'components/Modal';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
+import { hoverColorMode, textColorMode } from 'config/colorMode';
+import Card from 'components/cards/Card';
+import colors from 'theme/foundations/colors';
+import Avatar from 'boring-avatars';
+import Button from 'components/Button';
 
 type ShareFileProps = {
 	file: IPCFile;
@@ -53,6 +57,8 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 		onClose();
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const hoverColor = useColorModeValue(hoverColorMode.light, hoverColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	if (file.permission !== 'owner') return <></>;
@@ -68,7 +74,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-share-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -84,7 +90,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
-				color={colorMode}
+				color={textColor}
 			>
 				Share
 			</Text>
@@ -113,12 +119,36 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 						user.contact.contacts.map((c) => {
 							if (c.address !== user.account?.address)
 								return (
-									<Flex key={c.address} w="100%" justifyContent="center" onClick={() => setContact(c)}>
-										<VStack key={c.address}>
-											<Text fontWeight="600">{c.name}</Text>
-											<Text fontSize="12px">{c.address}</Text>
-										</VStack>
-									</Flex>
+									<Card
+										key={c.address}
+										w="100%"
+										onClick={() => setContact(c)}
+										cursor="pointer"
+										_hover={{ bg: hoverColor }}
+									>
+										<HStack spacing="32px">
+											<Avatar
+												size="48"
+												name={user?.account?.address}
+												variant="marble"
+												colors={[
+													colors.red['1000'],
+													colors.blue['1100'],
+													colors.red['500'],
+													colors.gray['100'],
+													colors.blue['500'],
+												]}
+											/>
+											<VStack key={c.address} w="100%" align="start">
+												<Text fontWeight="600" color={textColor}>
+													{c.name}
+												</Text>
+												<Text fontSize="12px" color={textColor}>
+													{c.address}
+												</Text>
+											</VStack>
+										</HStack>
+									</Card>
 								);
 							return <Divider key={c.address} />;
 						})}

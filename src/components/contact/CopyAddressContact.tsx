@@ -1,7 +1,8 @@
-import { HStack, Icon, Text, useBreakpointValue, useColorMode } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { BsClipboard } from 'react-icons/bs';
 
 import type { IPCContact } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DownloadFileProps = {
 	contact: IPCContact;
@@ -10,6 +11,7 @@ type DownloadFileProps = {
 
 const CopyAddressContact = ({ contact, onClose }: DownloadFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	return (
@@ -26,7 +28,7 @@ const CopyAddressContact = ({ contact, onClose }: DownloadFileProps): JSX.Elemen
 			cursor="pointer"
 			id="ipc-dashboard-download-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -42,7 +44,7 @@ const CopyAddressContact = ({ contact, onClose }: DownloadFileProps): JSX.Elemen
 					color: 'red.800',
 					fontWeight: '500',
 				}}
-				color={colorMode}
+				color={textColor}
 			>
 				Copy the address
 			</Text>

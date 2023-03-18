@@ -1,7 +1,8 @@
-import { HStack, Icon, Text, useBreakpointValue, useColorMode } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { IoEarth } from 'react-icons/io5';
 
 import type { IPCProgram } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DownloadFileProps = {
 	program: IPCProgram;
@@ -9,6 +10,7 @@ type DownloadFileProps = {
 
 const GoToWebsiteProgram = ({ program }: DownloadFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	return (
@@ -22,7 +24,7 @@ const GoToWebsiteProgram = ({ program }: DownloadFileProps): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-download-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -38,7 +40,7 @@ const GoToWebsiteProgram = ({ program }: DownloadFileProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
-				color={colorMode}
+				color={textColor}
 			>
 				Go to website
 			</Text>

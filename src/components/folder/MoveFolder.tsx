@@ -8,6 +8,7 @@ import {
 	useDisclosure,
 	useToast,
 	useColorMode,
+	useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
@@ -20,6 +21,7 @@ import { useUserContext } from 'contexts/user';
 
 import Button from 'components/Button';
 import type { IPCFolder } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type MoveFolderProps = {
 	folder: IPCFolder;
@@ -83,6 +85,7 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		onClose();
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	if (!hasPermission) return <></>;
@@ -98,7 +101,7 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-move-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -114,7 +117,7 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
-				color={colorMode}
+				color={textColor}
 			>
 				Move to...
 			</Text>
@@ -136,12 +139,8 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 			>
 				<>
 					<Button
-						backgroundColor={'white'}
+						variant="secondary"
 						size="sm"
-						w="10%"
-						p="0px"
-						mx="4px"
-						boxShadow="1px 2px 3px 3px rgb(240, 240, 240)"
 						disabled={newPath === '/'}
 						onClick={() => setNewPath(newPath.replace(/([^/]+)\/$/, ''))}
 						id="ipc-move-folder-back-path-button"

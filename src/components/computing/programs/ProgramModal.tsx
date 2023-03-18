@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { Input, Text, useToast, VStack } from '@chakra-ui/react';
+import { Input, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 
 import Modal from 'components/Modal';
 
@@ -11,6 +11,9 @@ import { extractFilename } from 'utils/fileManipulation';
 import { IPCProgram } from 'types/types';
 
 import Button from 'components/Button';
+
+import { textColorMode } from 'config/colorMode';
+
 import CustomProgram from '../CustomProgram';
 
 const ProgramModal = ({
@@ -24,6 +27,7 @@ const ProgramModal = ({
 }): JSX.Element => {
 	const { user } = useUserContext();
 	const { setPrograms } = useDriveContext();
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const [fileEvent, setFileEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
@@ -86,7 +90,9 @@ const ProgramModal = ({
 					setCustomEntrypoint={setCustomEntrypoint}
 				/>
 				<VStack spacing="8px" align="start" w="100%">
-					<Text size="boldLg">The file of the program</Text>
+					<Text size="boldLg" color={textColor}>
+						The file of the program
+					</Text>
 					<Input
 						type="file"
 						h="100%"

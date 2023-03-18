@@ -5,6 +5,7 @@ import {
 	Text,
 	useBreakpointValue,
 	useColorMode,
+	useColorModeValue,
 	useDisclosure,
 	useToast,
 	VStack,
@@ -17,6 +18,9 @@ import { useUserContext } from 'contexts/user';
 import { IPCFolder } from 'types/types';
 
 import Button from 'components/Button';
+
+import { textColorMode } from 'config/colorMode';
+
 import Modal from '../Modal';
 
 const CreateFolder = (): JSX.Element => {
@@ -60,6 +64,7 @@ const CreateFolder = (): JSX.Element => {
 		onClose();
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
 	return (
@@ -73,7 +78,7 @@ const CreateFolder = (): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-create-folder-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -89,7 +94,7 @@ const CreateFolder = (): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
-				color={colorMode}
+				color={textColor}
 			>
 				Create a folder
 			</Text>
@@ -110,7 +115,9 @@ const CreateFolder = (): JSX.Element => {
 				}
 			>
 				<VStack spacing="8px" align="start" w="100%">
-					<Text size="boldLg">The name of the folder</Text>
+					<Text size="boldLg" color={textColor}>
+						The name of the folder
+					</Text>
 					<Input
 						type="text"
 						w="100%"
