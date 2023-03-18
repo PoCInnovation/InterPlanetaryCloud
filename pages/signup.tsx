@@ -64,7 +64,7 @@ const Signup = (): JSX.Element => {
 					<VStack w="100%" spacing="64px">
 						<VStack w="100%" spacing="32px">
 							<Button
-								variant={mnemonics ? "primary" : "special"}
+								variant={mnemonics ? 'primary' : 'special'}
 								size="lg"
 								w="100%"
 								onClick={onClick}
