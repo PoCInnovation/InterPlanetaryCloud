@@ -89,6 +89,9 @@ const Login = (): JSX.Element => {
 						>
 							Login with a provider
 						</Button>
+						<Text size="boldMd" color={textColor}>
+							Coming soon...
+						</Text>
 					</VStack>
 				</VStack>
 				<VStack w="100%">
