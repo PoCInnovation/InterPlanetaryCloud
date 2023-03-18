@@ -6,7 +6,7 @@ import GithubModal from './GithubModal';
 const DeployGithub = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack

@@ -19,7 +19,7 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
 
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	const restoreFile = async () => {
 		if (user.account) {

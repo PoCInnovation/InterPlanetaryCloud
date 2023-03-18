@@ -23,11 +23,11 @@ const SideBar = (): JSX.Element => {
 	const { user } = useUserContext();
 	const isDrawerNeeded: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 	const { toggle, toggleHandler } = useToggle();
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	const tabs: NavbarType[] = [
 		{
-			label : 'My Drive',
+			label: 'My Drive',
 			url: '/drive',
 			icon: RiHardDrive2Line,
 		},

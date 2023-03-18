@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, useBreakpointValue, useToast,useColorMode } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useToast, useColorMode } from '@chakra-ui/react';
 import { FiDownload } from 'react-icons/fi';
 
 import { useUserContext } from 'contexts/user';

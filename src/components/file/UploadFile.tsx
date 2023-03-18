@@ -80,7 +80,7 @@ const UploadFile = (): JSX.Element => {
 		}
 	};
 
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack

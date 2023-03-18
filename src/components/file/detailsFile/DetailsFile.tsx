@@ -8,7 +8,7 @@ import DrawerDetailsFile from './DrawerDetailsFile';
 const DetailsFile = ({ file, onClosePopover }: { file: IPCFile; onClosePopover: () => void }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack

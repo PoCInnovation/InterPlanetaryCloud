@@ -24,7 +24,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 	const deleteFile = async () => {
 		setIsLoading(true);
 		if (user.account) {

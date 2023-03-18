@@ -1,19 +1,9 @@
-import {
-	Box,
-	Button,
-	HStack, Icon,
-	Text,
-	useColorMode,
-	useToast,
-	VStack,
-	Wrap,
-	WrapItem,
-} from '@chakra-ui/react';
+import { Box, Button, HStack, Icon, Text, useColorMode, useToast, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import Card from 'components/cards/Card';
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
 import React, { useState } from 'react';
-import { BsClipboard } from "react-icons/bs";
+import { BsClipboard } from 'react-icons/bs';
 
 const ConfigCard = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -24,7 +14,7 @@ const ConfigCard = (): JSX.Element => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const switchTheme = async () => {
-		const colorTheme = colorMode === 'light' ? "dark" : "light";
+		const colorTheme = colorMode === 'light' ? 'dark' : 'light';
 
 		setIsLoading(true);
 		try {
@@ -48,7 +38,9 @@ const ConfigCard = (): JSX.Element => {
 					<VStack align="start" spacing="64px">
 						<VStack spacing="32px" align="start">
 							<HStack spacing="16px">
-								<Text color={colorMode} size="xl">Configuration</Text>
+								<Text color={colorMode} size="xl">
+									Configuration
+								</Text>
 							</HStack>
 							<HStack spacing="16px">
 								<Button

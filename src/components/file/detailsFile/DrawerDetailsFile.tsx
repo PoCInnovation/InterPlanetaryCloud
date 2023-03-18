@@ -46,7 +46,7 @@ const DrawerDetailsFile = ({
 		});
 	});
 
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<Drawer onClose={onClose} isOpen={isOpen} size={'sm'} placement={isDrawer ? 'bottom' : 'right'}>
@@ -60,7 +60,10 @@ const DrawerDetailsFile = ({
 				<DrawerBody p={isDrawer ? '32px 16px 64px 16px' : '32px 16px 16px 16px'}>
 					<Stack spacing="32px">
 						<Stack px="16px">
-							<Text color={colorMode} size="lg"> {file.name} </Text>
+							<Text color={colorMode} size="lg">
+								{' '}
+								{file.name}{' '}
+							</Text>
 							<Box
 								w="100%"
 								h="3px"
@@ -128,7 +131,9 @@ const DrawerDetailsFile = ({
 								bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 40%)`}
 								borderRadius="16px"
 							/>
-							<Text color={colorMode} size="lg">History: </Text>
+							<Text color={colorMode} size="lg">
+								History:{' '}
+							</Text>
 							{file.logs.map((log) => (
 								<HStack w="100%" justify="space-between" key={log.date}>
 									<Text color={colorMode}>{log.action}</Text>

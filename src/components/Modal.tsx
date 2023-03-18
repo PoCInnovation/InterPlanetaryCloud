@@ -21,7 +21,6 @@ type ModalProps = {
 	CTA?: JSX.Element;
 };
 
-
 const Modal = ({ isOpen, onClose, title, children, CTA }: ModalProps): JSX.Element => (
 	<UIModal isOpen={isOpen} onClose={onClose} size="2xl">
 		<ModalOverlay />

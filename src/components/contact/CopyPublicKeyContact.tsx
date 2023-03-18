@@ -10,7 +10,7 @@ type DownloadFileProps = {
 
 const CopyPublicKeyContact = ({ contact, onClose }: DownloadFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack

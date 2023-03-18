@@ -9,7 +9,7 @@ type DownloadFileProps = {
 
 const GoToWebsiteProgram = ({ program }: DownloadFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack

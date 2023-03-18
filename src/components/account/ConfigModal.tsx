@@ -7,15 +7,15 @@ import Button from 'components/Button';
 
 const ConfigModal = ({
 	isOpen,
-    onClose,
+	onClose,
 	type,
 	defaultValue,
-	validate
+	validate,
 }: {
 	isOpen: boolean;
 	onClose: () => void;
-	type: string
-	defaultValue?: string
+	type: string;
+	defaultValue?: string;
 	validate: (name: string, setIsLoading: (loading: boolean) => void) => Promise<void>;
 }): JSX.Element => {
 	const [input, setInput] = React.useState<string>(defaultValue ?? '');
@@ -35,7 +35,7 @@ const ConfigModal = ({
 					onClick={() => validate(input, setIsLoading)}
 					isLoading={isLoading}
 					disabled={isIdentical}
-					cursor={isIdentical ? "not-allowed" : "pointer"}
+					cursor={isIdentical ? 'not-allowed' : 'pointer'}
 					id="ipc-dashboard-deploy-program-modal-button"
 				>
 					{`Change my ${type}`}

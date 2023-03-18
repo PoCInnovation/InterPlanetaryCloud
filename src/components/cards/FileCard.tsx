@@ -29,7 +29,7 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<>
@@ -47,7 +47,9 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFileEarmarkFill size="24px" />
-						<Text color={colorMode} size="lg">{file.name}</Text>
+						<Text color={colorMode} size="lg">
+							{file.name}
+						</Text>
 					</HStack>
 					<HStack spacing="32px">
 						<Text color={colorMode}>

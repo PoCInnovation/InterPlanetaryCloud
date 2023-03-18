@@ -25,7 +25,7 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 	const { isOpen: isOpenFolder, onOpen: onOpenFolder, onClose: onCloseFolder } = useDisclosure();
 
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	return (
 		<>
@@ -48,7 +48,9 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<FaFolder size="24px" />
-						<Text color={colorMode} size="lg">{folder.name}</Text>
+						<Text color={colorMode} size="lg">
+							{folder.name}
+						</Text>
 					</HStack>
 					<HStack spacing="32px">
 						<Text color={colorMode}>

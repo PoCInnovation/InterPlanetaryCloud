@@ -1,5 +1,14 @@
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Divider, HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast, useColorMode } from '@chakra-ui/react';
+import {
+	Divider,
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+	useColorMode,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
@@ -48,7 +57,7 @@ const MoveFile = ({ file, onClosePopover }: MoveFileProps): JSX.Element => {
 		onClosePopover();
 	};
 
-	const {colorMode} = useColorMode();
+	const { colorMode } = useColorMode();
 
 	if (file.permission !== 'owner') return <></>;
 
