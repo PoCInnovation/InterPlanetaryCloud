@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import {
 	Box,
-	Button,
 	HStack,
 	Icon,
 	Text,
@@ -11,11 +11,14 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
+import { BsClipboard } from 'react-icons/bs';
+
 import Card from 'components/cards/Card';
+import Button from 'components/Button';
+
 import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
-import React, { useState } from 'react';
-import { BsClipboard } from 'react-icons/bs';
+
 import { textColorMode } from 'config/colorMode';
 
 const ConfigCard = (): JSX.Element => {
