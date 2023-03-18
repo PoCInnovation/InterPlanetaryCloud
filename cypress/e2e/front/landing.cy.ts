@@ -33,7 +33,8 @@ describe('Good front for Landing', () => {
 
 	it('Good number of elements', () => {
 		cy.get("button").should('have.length', 2);
-		cy.get('img').should('have.length', 13);
+		cy.get('img').should('have.length', 7);
+		cy.get('svg').should('have.length', 14);
 		cy.get('#ipc-landing-services-cloud-storage').should('have.length', 1);
 		cy.get('#ipc-landing-services-cloud-computing').should('have.length', 1);
 	})
