@@ -23,8 +23,8 @@ describe('Good front for Signup', () => {
 		cy.get('#ipc-signup-login-button').should('contain', 'Login with my account');
 	});
 
-	it('Good name for copy clipboard button', () => {
-		cy.get('#ipc-signup-create-copy-mnemonics-button').click().should('contain', 'Copy my mnemonics');
+	it('Good name for create account button', () => {
+		cy.get('#ipc-signup-create-copy-mnemonics-button').click().should('contain', 'Create my account');
 	});
 
 	it('Good name for go to dashboard button', () => {
@@ -36,6 +36,7 @@ describe('Signup with credentials Button for Signup', () => {
 	it('Go to signup', () => {
 		cy.visit('/signup');
 		cy.get('#ipc-signup-create-copy-mnemonics-button').click();
+		cy.wait(1000);
 		cy.get('#ipc-signup-create-copy-mnemonics-button').click();
 	});
 
