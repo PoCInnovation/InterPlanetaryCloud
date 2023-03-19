@@ -1,5 +1,4 @@
 import { accounts } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
@@ -45,10 +44,9 @@ class Auth {
 				keys: ['InterPlanetaryCloud'],
 			});
 		} catch (error) {
+			console.error(error);
 			aggregate.Publish({
-				APIServer: DEFAULT_API_V2,
 				channel: ALEPH_CHANNEL,
-				inlineRequested: true,
 				storageEngine: ItemType.ipfs,
 				account,
 				key: 'InterPlanetaryCloud',

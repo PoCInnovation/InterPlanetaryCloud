@@ -1,5 +1,4 @@
 import { ethereum } from 'aleph-sdk-ts/dist/accounts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { program } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 import fs from 'node:fs';
@@ -18,8 +17,6 @@ async function programPublish(path: string, entrypoint: string): Promise<string>
 		channel: ALEPH_CHANNEL,
 		account: ethereum.NewAccount().account,
 		storageEngine: ItemType.storage,
-		inlineRequested: true,
-		APIServer: DEFAULT_API_V2,
 		file: fs.readFileSync(path),
 		entrypoint,
 	});

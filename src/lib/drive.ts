@@ -18,7 +18,7 @@ class Drive {
 
 	public sharedFiles: IPCFile[];
 
-	private readonly account: accounts.ethereum.ETHAccount | undefined;
+	private readonly account: accounts.ethereum.ETHAccount;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.files = [];
@@ -38,9 +38,9 @@ class Drive {
 							keys: ['InterPlanetaryCloud'],
 						});
 
-						const found = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account!.address);
+						const found = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account.address);
 						if (found) {
-							if (contact.address === this.account!.address) {
+							if (contact.address === this.account.address) {
 								this.files = found.files;
 								this.folders = found.folders;
 							} else {
@@ -64,7 +64,7 @@ class Drive {
 		infos: { key: ArrayBuffer; iv: Uint8Array },
 	): Promise<UploadResponse> {
 		try {
-			if (this.account && content) {
+			if (content) {
 				const fileHashPublishStore = await store.Publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
@@ -101,7 +101,7 @@ class Drive {
 				};
 				return { success: true, message: 'File uploaded', file: newFile };
 			}
-			return { success: false, message: 'Failed to load account', file: undefined };
+			return { success: false, message: 'Content is empty', file: undefined };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to upload the file', file: undefined };
@@ -121,21 +121,17 @@ class Drive {
 
 	public async delete(fileHashes: string[]): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				await forget.Publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					hashes: fileHashes,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-				});
+			await forget.Publish({
+				APIServer: DEFAULT_API_V2,
+				channel: ALEPH_CHANNEL,
+				hashes: fileHashes,
+				storageEngine: ItemType.ipfs,
+				account: this.account,
+			});
 
-				this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
+			this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
 
-				return { success: true, message: 'File deleted' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			return { success: true, message: 'File deleted' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to delete the file' };
@@ -144,33 +140,30 @@ class Drive {
 
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				const storeFile = await store.Get({ fileHash: file.hash });
+			const storeFile = await store.Get({ fileHash: file.hash });
 
-				const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
-				const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
+			const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
+			const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
 
-				const decryptedFile = await crypto.subtle.decrypt(
+			const decryptedFile = await crypto.subtle.decrypt(
+				{
+					name: 'AES-GCM',
+					iv: decryptedIv,
+				},
+				await crypto.subtle.importKey(
+					'raw',
+					decryptedKey,
 					{
 						name: 'AES-GCM',
-						iv: decryptedIv,
+						length: 256,
 					},
-					await crypto.subtle.importKey(
-						'raw',
-						decryptedKey,
-						{
-							name: 'AES-GCM',
-							length: 256,
-						},
-						true,
-						['encrypt', 'decrypt'],
-					),
-					Buffer.from(storeFile),
-				);
-				fileDownload(decryptedFile, file.name);
-				return { success: true, message: 'File downloaded' };
-			}
-			return { success: false, message: 'Failed to load account' };
+					true,
+					['encrypt', 'decrypt'],
+				),
+				Buffer.from(storeFile),
+			);
+			fileDownload(decryptedFile, file.name);
+			return { success: true, message: 'File downloaded' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to download the file' };
