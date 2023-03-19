@@ -27,7 +27,7 @@ const ConfigModal = ({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title={'Deploy a program'}
+			title={'Configuration modfication'}
 			CTA={
 				<Button
 					variant="primary"

@@ -584,13 +584,30 @@ class Contact {
 				if (contact) {
 					contact.config!.defaultName = newName;
 					await this.publishAggregate();
-					return { success: true, message: 'Name changed' };
+					return { success: true, message: 'Programs default name changed' };
 				}
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to change name' };
+		}
+	}
+
+	public async configEntrypoint(newEntrypoint: string): Promise<ResponseType> {
+		try {
+			if (this.account) {
+				const contact = this.contacts.find((c) => c.address === this.account?.address);
+				if (contact) {
+					contact.config!.defaultEntrypoint = newEntrypoint;
+					await this.publishAggregate();
+					return { success: true, message: 'Programs default entrypoint changed' };
+				}
+			}
+			return { success: false, message: 'Failed to load account' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to change entrypoint' };
 		}
 	}
 }

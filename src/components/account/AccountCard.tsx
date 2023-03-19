@@ -17,7 +17,6 @@ import { BsClipboard } from 'react-icons/bs';
 
 import Card from 'components/cards/Card';
 
-import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
 
 import { textColorMode } from 'config/colorMode';
@@ -28,7 +27,6 @@ import ConfigModal from './ConfigModal';
 
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
-	const { setConfig } = useConfigContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -37,7 +35,6 @@ const AccountCard = (): JSX.Element => {
 		setIsLoading(true);
 		try {
 			const config1 = await user.contact.update(user.account!.address, name);
-			setConfig({ ...user.config!, defaultName: name });
 			setIsOpen(false);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
