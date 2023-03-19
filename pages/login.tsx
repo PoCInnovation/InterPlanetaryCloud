@@ -1,4 +1,4 @@
-import { Text, Textarea, useToast, VStack } from '@chakra-ui/react';
+import { Text, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ import Button from 'components/Button';
 
 import { ResponseType } from 'types/types';
 
+import { textColorMode } from 'config/colorMode';
 import colors from 'theme/foundations/colors';
 
 const Login = (): JSX.Element => {
@@ -24,6 +25,7 @@ const Login = (): JSX.Element => {
 	const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const loginWithCredentials = async (): Promise<ResponseType> => {
 		setIsLoadingCredentials(true);
@@ -87,11 +89,15 @@ const Login = (): JSX.Element => {
 						>
 							Login with a provider
 						</Button>
-						<Text size="boldMd">Coming soon...</Text>
+						<Text size="boldMd" color={textColor}>
+							Coming soon...
+						</Text>
 					</VStack>
 				</VStack>
 				<VStack w="100%">
-					<Text size="lg">You don't have an account?</Text>
+					<Text size="lg" color={textColor}>
+						You don't have an account?
+					</Text>
 					<Link href="/signup">
 						<Button
 							variant="secondary"

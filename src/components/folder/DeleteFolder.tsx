@@ -1,4 +1,13 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useColorMode,
+	useColorModeValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { IoTrashSharp } from 'react-icons/io5';
 
@@ -9,6 +18,7 @@ import { useUserContext } from 'contexts/user';
 
 import Button from 'components/Button';
 import type { IPCFolder } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DeleteFolderProps = {
 	folder: IPCFolder;
@@ -20,6 +30,8 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
 	const [hasPermission, setHasPermission] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,7 +84,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-delete-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -88,6 +100,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				Delete
 			</Text>
@@ -101,7 +114,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 					</Button>
 				}
 			>
-				<Text>Are you sure you want to delete this folder and all it's content ?</Text>
+				<Text color={textColor}>Are you sure you want to delete this folder and all it's content ?</Text>
 			</Modal>
 		</HStack>
 	);

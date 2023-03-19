@@ -559,21 +559,23 @@ class Contact {
 		}
 	}
 
-	public async configFile(newTheme: string): Promise<ResponseType> {
+	public async updateConfig(key: string, value: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const contact = this.contacts.find((c) => c.address === this.account?.address);
 				if (contact) {
-					contact.config!.theme = newTheme;
+					if (!contact.config![key]) {
+						return { success: false, message: 'Invalid config key' };
+					}
+					contact.config![key].value = value;
 					await this.publishAggregate();
-					return { success: true, message: 'Theme change' };
+					return { success: true, message: `${contact.config![key].name} changed` };
 				}
-				return { success: false, message: 'Theme does not exist' };
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
 			console.error(err);
-			return { success: false, message: 'Failed to change theme' };
+			return { success: false, message: 'Failed to change name' };
 		}
 	}
 }

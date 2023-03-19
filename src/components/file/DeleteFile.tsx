@@ -1,4 +1,13 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { IoTrashSharp } from 'react-icons/io5';
 
@@ -8,6 +17,7 @@ import { useUserContext } from 'contexts/user';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DeleteFileProps = {
 	file: IPCFile;
@@ -24,6 +34,8 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
 	const deleteFile = async () => {
 		setIsLoading(true);
@@ -89,7 +101,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 			cursor="pointer"
 			id="ipc-dashboard-delete-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -105,6 +117,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				{file.deletedAt ? 'Delete' : 'Move to bin'}
 			</Text>
@@ -124,7 +137,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 					</Button>
 				}
 			>
-				<Text>Are you sure you want to delete this file?</Text>
+				<Text color={textColor}>Are you sure you want to delete this file?</Text>
 			</Modal>
 		</HStack>
 	);

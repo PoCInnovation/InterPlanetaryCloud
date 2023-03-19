@@ -1,4 +1,4 @@
-import { Box, HStack, Img, Stack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { Box, HStack, Img, Stack, Text, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { IoRocketSharp } from 'react-icons/io5';
@@ -6,6 +6,7 @@ import { IoRocketSharp } from 'react-icons/io5';
 import Button from 'components/Button';
 
 import colors from 'theme/foundations/colors';
+import { textColorMode } from 'config/colorMode';
 
 const FeatureCard = ({ title, icon, id }: { title: string; icon: string; id: string }): JSX.Element => {
 	const isMobile: boolean = useBreakpointValue({ base: true, sm: false }) || false;
@@ -21,6 +22,8 @@ const FeatureCard = ({ title, icon, id }: { title: string; icon: string; id: str
 const FeaturesSection = (): JSX.Element => {
 	const router = useRouter();
 	const isMobile: boolean = useBreakpointValue({ base: true, lg: false }) || false;
+
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const features: { icon: string; title: string; id: string }[] = [
 		{
@@ -53,7 +56,7 @@ const FeaturesSection = (): JSX.Element => {
 	return (
 		<VStack spacing={{ base: '128px', lg: '256px' }} w="100%" position="relative">
 			<Stack spacing="32px" mr={{ base: '0px', lg: '400px' }} px="32px">
-				<Text size={isMobile ? '3xl' : '4xl'} id="ipc-landing-features-title">
+				<Text size={isMobile ? '3xl' : '4xl'} id="ipc-landing-features-title" color={textColor}>
 					Our{' '}
 					<Box
 						as="span"
@@ -74,7 +77,9 @@ const FeaturesSection = (): JSX.Element => {
 					bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
 					borderRadius="16px"
 				/>
-				<Text size={isMobile ? '2xl' : '4xl'}>Are you ready?</Text>
+				<Text size={isMobile ? '2xl' : '4xl'} color={textColor}>
+					Are you ready?
+				</Text>
 				<Button
 					variant="special"
 					size={isMobile ? 'xl' : '2xl'}

@@ -1,18 +1,20 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { HStack, useToast, Text, VStack, Input, Skeleton } from '@chakra-ui/react';
+import { HStack, Input, Skeleton, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import Modal from 'components/Modal';
 import Button from 'components/Button';
-import Tooltip from 'components/Tooltip';
 import Card from 'components/cards/Card';
+import Modal from 'components/Modal';
+import Tooltip from 'components/Tooltip';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 import { GitHubRepository, IPCProgram } from 'types/types';
+
+import { textColorMode } from 'config/colorMode';
 
 import CustomProgram from '../CustomProgram';
 
@@ -23,6 +25,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const router = useRouter();
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [selectedRepository, setSelectedRepository] = useState<string>('');
@@ -51,7 +54,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 			setIsDeployLoading(true);
 			const result = await axios.post('/api/program/create', {
 				repository: `${repository}.git`,
-				entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
+				entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
 			});
 			if (result.status !== 200) throw new Error('Unable to clone repository from github');
 			const newProgram: IPCProgram = {
@@ -142,7 +145,9 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 			<>
 				{!session && (
 					<VStack spacing="12px">
-						<Text size="xl">You're not connected to your Github account</Text>
+						<Text size="xl" color={textColor}>
+							You're not connected to your Github account
+						</Text>
 					</VStack>
 				)}
 				{session && (
@@ -157,7 +162,9 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 							<VStack spacing="8px" align="start" w="100%">
 								<VStack spacing="8px" align="start" w="100%">
 									<HStack>
-										<Text size="boldLg">The name of the repository</Text>
+										<Text size="boldLg" color={textColor}>
+											The name of the repository
+										</Text>
 										<Tooltip text="You need to select a repository from the list below, to deploy your program." />
 									</HStack>
 									<Input
@@ -179,9 +186,11 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 														p="4px 8px"
 														borderRadius="8px"
 														w="100%"
+														color={textColor}
 														_hover={{
 															bg: 'blue.100',
 														}}
+														key={repository.html_url}
 														onClick={() => setSelectedRepository(repository.html_url)}
 													>
 														{repository.owner.login} - {repository.name}

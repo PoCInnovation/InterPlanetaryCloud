@@ -1,13 +1,24 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import {
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 import { IPCFile } from 'types/types';
 
+import { textColorMode } from 'config/colorMode';
 import DrawerDetailsFile from './DrawerDetailsFile';
 
 const DetailsFile = ({ file, onClosePopover }: { file: IPCFile; onClosePopover: () => void }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack
@@ -23,7 +34,7 @@ const DetailsFile = ({ file, onClosePopover }: { file: IPCFile; onClosePopover: 
 			cursor="pointer"
 			id="ipc-dashboard-details-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -39,6 +50,7 @@ const DetailsFile = ({ file, onClosePopover }: { file: IPCFile; onClosePopover: 
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				Details
 			</Text>

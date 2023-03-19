@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaFolder } from 'react-icons/fa';
 
@@ -7,8 +7,13 @@ import { useUserContext } from 'contexts/user';
 import useToggle from 'hooks/useToggle';
 
 import { FolderOptionsDrawer, FolderOptionsPopover } from 'components/dashboardPage/FolderOptions';
+
+import { textColorMode } from 'config/colorMode';
+
 import { IPCFolder } from 'types/types';
+
 import formatDate from 'utils/formatDate';
+
 import Card from './Card';
 
 const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
@@ -25,6 +30,7 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 	const { isOpen: isOpenFolder, onOpen: onOpenFolder, onClose: onCloseFolder } = useDisclosure();
 
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	return (
 		<>
@@ -47,16 +53,18 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<FaFolder size="24px" />
-						<Text size="lg">{folder.name}</Text>
+						<Text color={textColor} size="lg">
+							{folder.name}
+						</Text>
 					</HStack>
 					<HStack spacing="32px">
-						<Text>
+						<Text color={textColor}>
 							by{' '}
 							<Box as="span" fontWeight="600">
 								{username}
 							</Box>
 						</Text>
-						<Text>{formatDate(folder.createdAt)}</Text>
+						<Text color={textColor}>{formatDate(folder.createdAt)}</Text>
 					</HStack>
 				</HStack>
 			</Card>

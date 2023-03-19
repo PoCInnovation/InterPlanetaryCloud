@@ -1,19 +1,23 @@
 import { IconType } from 'react-icons';
 
-import { Button as ChakraButton, ButtonProps, Icon, VStack } from '@chakra-ui/react';
-
-import radius from 'theme/foundations/borderRadius';
+import { Button as ChakraButton, ButtonProps, Icon, useTheme, VStack } from '@chakra-ui/react';
 
 type CustomButtonProps = {
 	buttonType?: 'no-icon' | 'left-icon' | 'right-icon';
 	icon?: IconType;
 };
 
-const LeftIconButton = ({ children, icon, ...props }: ButtonProps & { icon: IconType }): JSX.Element =>
-	props.variant === 'primary' ? (
+const LeftIconButton = ({ children, icon, ...props }: ButtonProps & { icon: IconType }): JSX.Element => {
+	const theme = useTheme();
+
+	return props.variant === 'primary' ? (
 		<VStack
 			bg="blue.100"
-			borderRadius={`${radius.base}`}
+			_hover={{
+				/* eslint-disable-next-line no-underscore-dangle */
+				bg: theme.components.Button.variants[props.variant || 'secondary']._hover.background,
+			}}
+			borderRadius={theme.components.Button.sizes[props.size || 'md'].borderRadius}
 			cursor="pointer"
 			justify="space-between"
 			sx={{
@@ -42,12 +46,19 @@ const LeftIconButton = ({ children, icon, ...props }: ButtonProps & { icon: Icon
 			{children}
 		</ChakraButton>
 	);
+};
 
-const RightIconButton = ({ children, icon, ...props }: ButtonProps & { icon: IconType }): JSX.Element =>
-	props.variant === 'primary' ? (
+const RightIconButton = ({ children, icon, ...props }: ButtonProps & { icon: IconType }): JSX.Element => {
+	const theme = useTheme();
+
+	return props.variant === 'primary' ? (
 		<VStack
 			bg="blue.100"
-			borderRadius={`${radius.base}`}
+			_hover={{
+				/* eslint-disable-next-line no-underscore-dangle */
+				bg: theme.components.Button.variants[props.variant || 'secondary']._hover.background,
+			}}
+			borderRadius={theme.components.Button.sizes[props.size || 'md'].borderRadius}
 			sx={{
 				mozTransition: 'all .6s ease-in-out',
 				oTransition: 'all .6s ease-in-out',
@@ -77,12 +88,19 @@ const RightIconButton = ({ children, icon, ...props }: ButtonProps & { icon: Ico
 			<Icon as={icon} ml="8px" color={props.color} />
 		</ChakraButton>
 	);
+};
 
-const NoIconButton = ({ children, ...props }: ButtonProps): JSX.Element =>
-	props.variant === 'primary' ? (
+const NoIconButton = ({ children, ...props }: ButtonProps): JSX.Element => {
+	const theme = useTheme();
+
+	return props.variant === 'primary' ? (
 		<VStack
 			bg="blue.100"
-			borderRadius={`${radius.base}`}
+			_hover={{
+				/* eslint-disable-next-line no-underscore-dangle */
+				bg: theme.components.Button.variants[props.variant || 'secondary']._hover.background,
+			}}
+			borderRadius={theme.components.Button.sizes[props.size || 'md'].borderRadius}
 			sx={{
 				mozTransition: 'all .6s ease-in-out',
 				oTransition: 'all .6s ease-in-out',
@@ -96,6 +114,7 @@ const NoIconButton = ({ children, ...props }: ButtonProps): JSX.Element =>
 	) : (
 		<ChakraButton {...props}>{children}</ChakraButton>
 	);
+};
 
 const Button = ({ children, buttonType = 'no-icon', icon, ...props }: CustomButtonProps & ButtonProps): JSX.Element => {
 	if (buttonType === 'no-icon' || !icon) {

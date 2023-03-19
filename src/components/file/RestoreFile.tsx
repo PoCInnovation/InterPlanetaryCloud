@@ -1,10 +1,11 @@
-import { HStack, Icon, Text, useBreakpointValue, useToast } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useToast, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { BiUndo } from 'react-icons/bi';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import type { IPCFile } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DeleteFileProps = {
 	file: IPCFile;
@@ -18,6 +19,9 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
+
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
 	const restoreFile = async () => {
 		if (user.account) {
@@ -52,7 +56,7 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 			cursor="pointer"
 			id="ipc-dashboard-download-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -68,6 +72,7 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				Restore the file
 			</Text>

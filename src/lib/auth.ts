@@ -16,9 +16,22 @@ type AuthReturnType = {
 
 class Auth {
 	private defaultConfig: IPCConfig = {
-		theme: 'light',
-		defaultEntrypoint: 'main:app',
-		defaultName: '[userName]@[repositoryName]',
+		theme: {
+			name: 'theme',
+			type: 'select',
+			options: ['light', 'dark'],
+			value: 'light',
+		},
+		defaultName: {
+			name: 'default name',
+			type: 'input',
+			value: '[userName]@[repositoryName]',
+		},
+		defaultEntrypoint: {
+			name: 'default entrypoint',
+			type: 'input',
+			value: 'main:app',
+		},
 	};
 
 	public async logout(): Promise<void> {
@@ -56,7 +69,7 @@ class Auth {
 		}
 	}
 
-	public async signup(): Promise<AuthReturnType & { mnemonic: string | undefined }> {
+	public async signup(): Promise<AuthReturnType & { mnemonic?: string }> {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
 

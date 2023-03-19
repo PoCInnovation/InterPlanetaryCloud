@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Text, Textarea, useToast, VStack } from '@chakra-ui/react';
+import { Text, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 
 import { useAuthContext } from 'contexts/auth';
 import { useConfigContext } from 'contexts/config';
@@ -12,6 +12,7 @@ import Button from 'components/Button';
 
 import { ResponseType } from 'types/types';
 
+import { textColorMode } from 'config/colorMode';
 import colors from 'theme/foundations/colors';
 
 const Signup = (): JSX.Element => {
@@ -24,6 +25,7 @@ const Signup = (): JSX.Element => {
 	const [mnemonics, setMnemonics] = useState('');
 
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const signupWithMnemonics = async (): Promise<ResponseType> => {
 		setIsLoadingCredentials(true);
@@ -62,7 +64,7 @@ const Signup = (): JSX.Element => {
 					<VStack w="100%" spacing="64px">
 						<VStack w="100%" spacing="32px">
 							<Button
-								variant="primary"
+								variant={mnemonics ? 'primary' : 'special'}
 								size="lg"
 								w="100%"
 								onClick={onClick}
@@ -84,7 +86,9 @@ const Signup = (): JSX.Element => {
 							</Button>
 						</VStack>
 						<VStack w="100%">
-							<Text size="lg">Already got an account?</Text>
+							<Text size="lg" color={textColor}>
+								Already got an account?
+							</Text>
 							<Button
 								variant="secondary"
 								size="lg"

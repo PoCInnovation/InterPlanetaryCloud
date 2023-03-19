@@ -9,6 +9,7 @@ import {
 	Stack,
 	Text,
 	useBreakpointValue,
+	useColorModeValue,
 } from '@chakra-ui/react';
 
 import useToggle from 'hooks/useToggle';
@@ -22,6 +23,7 @@ import formatFileSize from 'utils/formatFileSize';
 import getFileType from 'utils/getFileType';
 
 import colors from 'theme/foundations/colors';
+import { textColorMode } from 'config/colorMode';
 
 const DrawerDetailsFile = ({
 	file,
@@ -45,6 +47,8 @@ const DrawerDetailsFile = ({
 		});
 	});
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+
 	return (
 		<Drawer onClose={onClose} isOpen={isOpen} size={'sm'} placement={isDrawer ? 'bottom' : 'right'}>
 			<DrawerOverlay />
@@ -57,7 +61,10 @@ const DrawerDetailsFile = ({
 				<DrawerBody p={isDrawer ? '32px 16px 64px 16px' : '32px 16px 16px 16px'}>
 					<Stack spacing="32px">
 						<Stack px="16px">
-							<Text size="lg"> {file.name} </Text>
+							<Text color={textColor} size="lg">
+								{' '}
+								{file.name}{' '}
+							</Text>
 							<Box
 								w="100%"
 								h="3px"
@@ -66,25 +73,25 @@ const DrawerDetailsFile = ({
 							/>
 						</Stack>
 						<Stack px="16px">
-							<Text>
+							<Text color={textColor}>
 								<Box as="span" fontWeight="500">
 									Created at{' '}
 								</Box>
 								{formatDate(file.createdAt)}
 							</Text>
-							<Text>
+							<Text color={textColor}>
 								<Box as="span" fontWeight="500">
 									Size of:
 								</Box>{' '}
 								{formatFileSize(file.size)}
 							</Text>
-							<Text>
+							<Text color={textColor}>
 								<Box as="span" fontWeight="500">
 									IPFS hash:
 								</Box>{' '}
 								{file.hash}
 							</Text>
-							<Text>
+							<Text color={textColor}>
 								<Box as="span" fontWeight="500">
 									Type:
 								</Box>{' '}
@@ -125,11 +132,13 @@ const DrawerDetailsFile = ({
 								bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 40%)`}
 								borderRadius="16px"
 							/>
-							<Text size="lg">History: </Text>
+							<Text color={textColor} size="lg">
+								History:{' '}
+							</Text>
 							{file.logs.map((log) => (
 								<HStack w="100%" justify="space-between" key={log.date}>
-									<Text>{log.action}</Text>
-									<Text>{formatDate(log.date)}</Text>
+									<Text color={textColor}>{log.action}</Text>
+									<Text color={textColor}>{formatDate(log.date)}</Text>
 								</HStack>
 							))}
 						</Stack>

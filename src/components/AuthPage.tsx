@@ -1,4 +1,5 @@
-import { Link, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { Link, Text, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react';
+import { textColorMode } from 'config/colorMode';
 
 type AuthPageProps = {
 	children: JSX.Element;
@@ -6,6 +7,7 @@ type AuthPageProps = {
 
 const AuthPage = ({ children }: AuthPageProps): JSX.Element => {
 	const isMobile: boolean = useBreakpointValue({ base: true, md: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	return (
 		<VStack spacing="56px" p={{ base: '96px 32px', md: '128px 64px' }}>
@@ -15,7 +17,7 @@ const AuthPage = ({ children }: AuthPageProps): JSX.Element => {
 						Inter Planetary Cloud
 					</Text>
 				</Link>
-				<Text size={isMobile ? 'lg' : 'xl'} id="ipc-sub-title" textAlign="center">
+				<Text size={isMobile ? 'lg' : 'xl'} id="ipc-sub-title" textAlign="center" color={textColor}>
 					The first cloud unsealing your data
 				</Text>
 			</VStack>

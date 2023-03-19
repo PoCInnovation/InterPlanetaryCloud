@@ -9,6 +9,7 @@ import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import { IPCFile, IPCFolder } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DeleteBinProps = {
 	files: IPCFile[];
@@ -17,8 +18,8 @@ type DeleteBinProps = {
 };
 
 const DeleteBin = ({ files, folders, concernedFiles }: DeleteBinProps): JSX.Element => {
-	const colorText = useColorModeValue('gray.800', 'white');
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const { user } = useUserContext();
 	const { setFiles } = useDriveContext();
@@ -52,7 +53,7 @@ const DeleteBin = ({ files, folders, concernedFiles }: DeleteBinProps): JSX.Elem
 
 	if (files.length === 0 && folders.length === 0) {
 		return (
-			<Text fontSize="24" textColor={colorText}>
+			<Text fontSize="24" textColor={textColor}>
 				Your bin is empty
 			</Text>
 		);
@@ -73,7 +74,9 @@ const DeleteBin = ({ files, folders, concernedFiles }: DeleteBinProps): JSX.Elem
 					</Button>
 				}
 			>
-				<Text size="lg">Are you sure you want to delete all the files in your bin?</Text>
+				<Text size="lg" color={textColor}>
+					Are you sure you want to delete all the files in your bin?
+				</Text>
 			</Modal>
 		</>
 	);

@@ -32,9 +32,18 @@ export type IPCProgram = {
 };
 
 export type IPCConfig = {
-	theme: string;
-	defaultEntrypoint: string;
-	defaultName: string;
+	[key: string]: {
+		name: string;
+		value: string;
+	} & (
+		| {
+				type: 'input';
+		  }
+		| {
+				type: 'select';
+				options: string[];
+		  }
+	);
 };
 
 export type IPCContact = {
@@ -44,7 +53,7 @@ export type IPCContact = {
 	createdAt: number;
 	files: IPCFile[];
 	folders: IPCFolder[];
-	config: IPCConfig | undefined;
+	config?: IPCConfig;
 };
 
 export type IPCPermission = 'owner' | 'viewer' | 'editor';

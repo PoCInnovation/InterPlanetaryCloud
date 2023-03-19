@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BsFileEarmarkCodeFill } from 'react-icons/bs';
 
@@ -10,7 +10,10 @@ import formatDate from 'utils/formatDate';
 import formatFileSize from 'utils/formatFileSize';
 
 import { ProgramOptionsDrawer, ProgramOptionsPopover } from 'components/dashboardPage/ProgramOptions';
+import { textColorMode } from 'config/colorMode';
+
 import { IPCProgram } from 'types/types';
+
 import Card from './Card';
 
 const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
@@ -25,6 +28,7 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 	const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	return (
 		<>
@@ -42,19 +46,19 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 				<HStack w="100%" justify="space-between">
 					<HStack spacing="16px">
 						<BsFileEarmarkCodeFill size="24px" />
-						<Text size="lg">
+						<Text color={textColor} size="lg">
 							{program.name} - {program.entrypoint}
 						</Text>
 					</HStack>
 					<HStack spacing="32px">
-						<Text>
+						<Text color={textColor}>
 							by{' '}
 							<Box as="span" fontWeight="600">
 								{username}
 							</Box>
 						</Text>
-						<Text>{formatDate(program.createdAt)}</Text>
-						<Text>{formatFileSize(program.size)}</Text>
+						<Text color={textColor}>{formatDate(program.createdAt)}</Text>
+						<Text color={textColor}>{formatFileSize(program.size)}</Text>
 					</HStack>
 				</HStack>
 			</Card>

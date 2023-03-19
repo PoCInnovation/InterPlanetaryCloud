@@ -1,5 +1,15 @@
-import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
+import {
+	HStack,
+	Icon,
+	Input,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
@@ -10,6 +20,7 @@ import { useUserContext } from 'contexts/user';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -80,6 +91,9 @@ const UploadFile = (): JSX.Element => {
 		}
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
+
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
@@ -91,7 +105,7 @@ const UploadFile = (): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-upload-file-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -107,6 +121,7 @@ const UploadFile = (): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				Upload a file
 			</Text>

@@ -1,11 +1,23 @@
-import { HStack, Icon, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import {
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { AiOutlineGithub } from 'react-icons/ai';
+
+import { textColorMode } from 'config/colorMode';
 
 import GithubModal from './GithubModal';
 
 const DeployGithub = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
 	return (
 		<HStack
@@ -18,7 +30,7 @@ const DeployGithub = (): JSX.Element => {
 			cursor="pointer"
 			id="ipc-dashboard-deploy-github-program-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -34,6 +46,7 @@ const DeployGithub = (): JSX.Element => {
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				Deploy from Github
 			</Text>

@@ -1,4 +1,14 @@
-import { HStack, Icon, Input, Text, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	HStack,
+	Icon,
+	Input,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { GoSync } from 'react-icons/go';
 
@@ -10,6 +20,7 @@ import { useUserContext } from 'contexts/user';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import type { IPCFile } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type UpdateContentFileProps = {
 	file: IPCFile;
@@ -77,6 +88,9 @@ const UpdateContentFile = ({ file, onClosePopover }: UpdateContentFileProps): JS
 		onClosePopover();
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
+
 	if (!['owner', 'editor'].includes(file.permission)) return <></>;
 
 	return (
@@ -90,7 +104,7 @@ const UpdateContentFile = ({ file, onClosePopover }: UpdateContentFileProps): JS
 			cursor="pointer"
 			id="ipc-dashboard-update-button"
 			_hover={{
-				bg: 'blue.100',
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
@@ -106,6 +120,7 @@ const UpdateContentFile = ({ file, onClosePopover }: UpdateContentFileProps): JS
 					color: 'red.800',
 					fontWeight: '500',
 				}}
+				color={textColor}
 			>
 				Update the content
 			</Text>
