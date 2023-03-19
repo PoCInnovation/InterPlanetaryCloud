@@ -1,5 +1,4 @@
 import { accounts } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
@@ -19,7 +18,6 @@ class Computing {
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
-			APIServer: DEFAULT_API_V2,
 			address: this.account!.address,
 			keys: ['InterPlanetaryCloud'],
 		});
@@ -28,9 +26,7 @@ class Computing {
 		content.programs = this.programs;
 
 		return aggregate.Publish({
-			APIServer: DEFAULT_API_V2,
 			channel: ALEPH_CHANNEL,
-			inlineRequested: true,
 			storageEngine: ItemType.ipfs,
 			account: this.account!,
 			key: 'InterPlanetaryCloud',
@@ -61,10 +57,8 @@ class Computing {
 		try {
 			if (this.account) {
 				await forget.Publish({
-					APIServer: DEFAULT_API_V2,
 					channel: ALEPH_CHANNEL,
 					hashes: [programHash],
-					inlineRequested: true,
 					storageEngine: ItemType.ipfs,
 					account: this.account,
 				});
@@ -98,8 +92,6 @@ class Computing {
 					channel: ALEPH_CHANNEL,
 					account: this.account,
 					storageEngine: ItemType.storage,
-					inlineRequested: true,
-					APIServer: DEFAULT_API_V2,
 					file: uploadFile,
 					entrypoint: myProgram.entrypoint,
 				});
