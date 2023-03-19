@@ -54,7 +54,7 @@ const FolderOptionsPopover = ({
 			<Portal>
 				<PopoverContent
 					w="250px"
-					backgroundColor={config?.theme ?? 'white'}
+					backgroundColor={config?.theme.value ?? 'white'}
 					borderRadius="8px"
 					border="2px solid #E8EBFF"
 					_focus={{

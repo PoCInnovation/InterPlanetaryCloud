@@ -54,7 +54,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 			setIsDeployLoading(true);
 			const result = await axios.post('/api/program/create', {
 				repository: `${repository}.git`,
-				entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
+				entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
 			});
 			if (result.status !== 200) throw new Error('Unable to clone repository from github');
 			const newProgram: IPCProgram = {

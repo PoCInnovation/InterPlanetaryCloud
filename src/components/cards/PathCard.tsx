@@ -15,7 +15,7 @@ const PathCard = (): JSX.Element => {
 	return (
 		<HStack w="100%">
 			<Button
-				backgroundColor={config?.theme}
+				backgroundColor={config?.theme.value}
 				size="sm"
 				w="10%"
 				p="0px"

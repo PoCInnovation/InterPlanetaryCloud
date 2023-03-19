@@ -47,7 +47,7 @@ const ProgramModal = ({
 					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
-					entrypoint: customEntrypoint || user.config?.defaultEntrypoint || 'main:app',
+					entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
 					size: fileEvent.target.files[0].size,
 				},
 				fileEvent.target.files[0],

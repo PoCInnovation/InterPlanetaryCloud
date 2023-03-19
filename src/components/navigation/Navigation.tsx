@@ -20,7 +20,7 @@ const Navigation = ({ children }: { children: JSX.Element }): JSX.Element => {
 	return (
 		<VStack
 			align="start"
-			bg={config?.theme ?? 'white'}
+			bg={config?.theme.value ?? 'white'}
 			m={{ base: '128px 64px 32px 64px', lg: '128px 64px 32px 364px' }}
 		>
 			<ResponsiveBar />
