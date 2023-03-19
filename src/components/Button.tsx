@@ -17,7 +17,7 @@ const LeftIconButton = ({ children, icon, ...props }: ButtonProps & { icon: Icon
 				/* eslint-disable-next-line no-underscore-dangle */
 				bg: theme.components.Button.variants[props.variant || 'secondary']._hover.background,
 			}}
-			borderRadius={theme.components.Button.sizes[props.size || 'md'].borderRadius}
+			borderRadius={theme.components.Button.sizes[(props.size as string) || 'md'].borderRadius}
 			cursor="pointer"
 			justify="space-between"
 			sx={{
@@ -58,7 +58,7 @@ const RightIconButton = ({ children, icon, ...props }: ButtonProps & { icon: Ico
 				/* eslint-disable-next-line no-underscore-dangle */
 				bg: theme.components.Button.variants[props.variant || 'secondary']._hover.background,
 			}}
-			borderRadius={theme.components.Button.sizes[props.size || 'md'].borderRadius}
+			borderRadius={theme.components.Button.sizes[(props.size as string) || 'md'].borderRadius}
 			sx={{
 				mozTransition: 'all .6s ease-in-out',
 				oTransition: 'all .6s ease-in-out',
@@ -100,7 +100,7 @@ const NoIconButton = ({ children, ...props }: ButtonProps): JSX.Element => {
 				/* eslint-disable-next-line no-underscore-dangle */
 				bg: theme.components.Button.variants[props.variant || 'secondary']._hover.background,
 			}}
-			borderRadius={theme.components.Button.sizes[props.size || 'md'].borderRadius}
+			borderRadius={theme.components.Button.sizes[(props.size as string) || 'md'].borderRadius}
 			sx={{
 				mozTransition: 'all .6s ease-in-out',
 				oTransition: 'all .6s ease-in-out',
