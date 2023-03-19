@@ -2,7 +2,7 @@ import {
 	Box,
 	Button,
 	HStack,
-	Icon,
+	Icon, Input,
 	Text,
 	Tooltip,
 	useColorModeValue,
@@ -11,7 +11,7 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Avatar from 'boring-avatars';
 import { BsClipboard } from 'react-icons/bs';
 
@@ -23,18 +23,20 @@ import { textColorMode } from 'config/colorMode';
 
 import colors from 'theme/foundations/colors';
 
-import ConfigModal from './ConfigModal';
+import Modal from "../Modal";
 
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [input, setInput] = useState<string>(user.contact.username);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 
-	const changeName = async (name: string, setIsLoading: (isLoading: boolean) => void) => {
+	const changeName = async () => {
 		setIsLoading(true);
 		try {
-			const config1 = await user.contact.update(user.account!.address, name);
+			const config1 = await user.contact.update(user.account!.address, input);
 			setIsOpen(false);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
@@ -48,13 +50,28 @@ const AccountCard = (): JSX.Element => {
 
 	return (
 		<>
-			<ConfigModal
+			<Modal
 				isOpen={isOpen}
 				onClose={() => setIsOpen(false)}
-				type="name"
-				defaultValue={user?.contact.username}
-				validate={changeName}
-			/>
+				title={'Configuration modfication'}
+				CTA={
+					<Button
+						variant="secondary"
+						size="lg"
+						onClick={changeName}
+						isLoading={isLoading}
+						disabled={input === ""}
+						cursor={input === "" ? 'not-allowed' : 'pointer'}
+						id="ipc-config-modal-button"
+					>
+						Change my name
+					</Button>
+				}
+			>
+				<VStack spacing="16px" w="100%" align="start">
+					<Input value={input} onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value)} />
+				</VStack>
+			</Modal>
 			<Wrap>
 				<WrapItem>
 					<Card size="md">

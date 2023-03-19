@@ -559,55 +559,23 @@ class Contact {
 		}
 	}
 
-	public async configTheme(newTheme: string): Promise<ResponseType> {
+	public async updateConfig(key: string, value: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				const contact = this.contacts.find((c) => c.address === this.account?.address);
 				if (contact) {
-					contact.config!.theme = newTheme;
+					if (!contact.config![key]) {
+						return { success: false, message: 'Invalid config key' };
+					}
+					contact.config![key].value = value;
 					await this.publishAggregate();
-					return { success: true, message: 'Theme changed' };
-				}
-				return { success: false, message: 'Theme does not exist' };
-			}
-			return { success: false, message: 'Failed to load account' };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to change theme' };
-		}
-	}
-
-	public async configName(newName: string): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				const contact = this.contacts.find((c) => c.address === this.account?.address);
-				if (contact) {
-					contact.config!.defaultName = newName;
-					await this.publishAggregate();
-					return { success: true, message: 'Programs default name changed' };
+					return { success: true, message: `${contact.config![key].name} changed` };
 				}
 			}
 			return { success: false, message: 'Failed to load account' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to change name' };
-		}
-	}
-
-	public async configEntrypoint(newEntrypoint: string): Promise<ResponseType> {
-		try {
-			if (this.account) {
-				const contact = this.contacts.find((c) => c.address === this.account?.address);
-				if (contact) {
-					contact.config!.defaultEntrypoint = newEntrypoint;
-					await this.publishAggregate();
-					return { success: true, message: 'Programs default entrypoint changed' };
-				}
-			}
-			return { success: false, message: 'Failed to load account' };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to change entrypoint' };
 		}
 	}
 }

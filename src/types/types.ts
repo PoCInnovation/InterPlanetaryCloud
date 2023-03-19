@@ -32,9 +32,15 @@ export type IPCProgram = {
 };
 
 export type IPCConfig = {
-	theme: string;
-	defaultEntrypoint: string;
-	defaultName: string;
+	[key: string]: {
+		name: string;
+		value: string;
+	} & ({
+		type: "input"
+	} | {
+		type: "select";
+		options: string[];
+	});
 };
 
 export type IPCContact = {
