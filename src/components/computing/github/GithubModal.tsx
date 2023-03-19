@@ -1,16 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { HStack, useToast, Text, VStack, Input, Skeleton, useColorModeValue } from '@chakra-ui/react';
+import { HStack, Input, Skeleton, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import Modal from 'components/Modal';
 import Button from 'components/Button';
-import Tooltip from 'components/Tooltip';
 import Card from 'components/cards/Card';
+import Modal from 'components/Modal';
+import Tooltip from 'components/Tooltip';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 import { GitHubRepository, IPCProgram } from 'types/types';
 
@@ -190,6 +190,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 														_hover={{
 															bg: 'blue.100',
 														}}
+														key={repository.html_url}
 														onClick={() => setSelectedRepository(repository.html_url)}
 													>
 														{repository.owner.login} - {repository.name}

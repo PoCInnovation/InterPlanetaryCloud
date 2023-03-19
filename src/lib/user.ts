@@ -8,7 +8,7 @@ import Drive from 'lib/drive';
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
 
 class User {
-	public account: accounts.ethereum.ETHAccount | undefined;
+	public account?: accounts.ethereum.ETHAccount;
 
 	public drive: Drive;
 
@@ -16,7 +16,7 @@ class User {
 
 	public contact: Contact;
 
-	public config: IPCConfig | undefined;
+	public config?: IPCConfig;
 
 	public async loadConfig() {
 		try {

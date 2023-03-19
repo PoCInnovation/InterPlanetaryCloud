@@ -1,17 +1,17 @@
-import React, { ChangeEvent, useState } from 'react';
 import { Input, VStack } from '@chakra-ui/react';
+import { ChangeEvent, useState } from 'react';
 
 import Modal from 'components/Modal';
 
 import Button from 'components/Button';
-import {useUserContext} from "../../contexts/user";
+import { useUserContext } from '../../contexts/user';
 
 const ConfigInputModal = ({
 	isOpen,
 	type,
 	isLoading,
-  	onClose,
-  	onClick,
+	onClose,
+	onClick,
 }: {
 	isOpen: boolean;
 	type: string;
@@ -21,7 +21,7 @@ const ConfigInputModal = ({
 }): JSX.Element => {
 	const { user } = useUserContext();
 	const optionConfig = user?.config![type];
-	const [input, setInput] = useState<string>("");
+	const [input, setInput] = useState('');
 
 	if (!optionConfig) {
 		return <></>;
@@ -37,12 +37,12 @@ const ConfigInputModal = ({
 					variant="primary"
 					size="lg"
 					onClick={() => {
-						setInput("")
-						onClick(type, input)
+						setInput('');
+						onClick(type, input);
 					}}
 					isLoading={isLoading}
-					disabled={input === ""}
-					cursor={input === "" ? 'not-allowed' : 'pointer'}
+					disabled={input === ''}
+					cursor={input === '' ? 'not-allowed' : 'pointer'}
 					id="ipc-config-modal-button"
 				>
 					{`Change my ${optionConfig.name}`}

@@ -12,8 +12,8 @@ import Button from 'components/Button';
 
 import { ResponseType } from 'types/types';
 
-import colors from 'theme/foundations/colors';
 import { textColorMode } from 'config/colorMode';
+import colors from 'theme/foundations/colors';
 
 const Login = (): JSX.Element => {
 	const auth = useAuthContext();

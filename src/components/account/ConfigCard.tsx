@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import {
-	Box, Button,
+	Box,
+	Button,
 	HStack,
 	Text,
 	useColorMode,
@@ -10,6 +10,7 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 import Card from 'components/cards/Card';
 
@@ -17,8 +18,8 @@ import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
 
 import { textColorMode } from 'config/colorMode';
-import ConfigSelect from "./ConfigSelect";
-import ConfigInputModal from "./ConfigInputModal";
+import ConfigInputModal from './ConfigInputModal';
+import ConfigSelect from './ConfigSelect';
 
 const ConfigCard = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -39,12 +40,12 @@ const ConfigCard = (): JSX.Element => {
 				[key]: {
 					...user.config![key],
 					value,
-				}
-			})
-			if (key === "theme") {
+				},
+			});
+			if (key === 'theme') {
 				toggleColorMode();
 			}
-			setModalType(undefined)
+			setModalType(undefined);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
 			toast({ title: `Failed to change ${key}`, status: 'error' });
@@ -57,7 +58,7 @@ const ConfigCard = (): JSX.Element => {
 		<>
 			<ConfigInputModal
 				isOpen={modalType !== undefined}
-				type={modalType ?? ""}
+				type={modalType ?? ''}
 				isLoading={isLoading}
 				onClose={() => setModalType(undefined)}
 				onClick={changeConfig}
@@ -73,24 +74,29 @@ const ConfigCard = (): JSX.Element => {
 									</Text>
 								</HStack>
 
-								{Object.keys((user?.config) ?? []).map((key) => {
-									if (user.config![key].type === "select")
-										return <ConfigSelect option={key} isLoading={isLoading} onClick={changeConfig} />
+								{Object.keys(user?.config ?? []).map((key) => {
+									if (user.config![key].type === 'select')
+										return <ConfigSelect option={key} isLoading={isLoading} onClick={changeConfig} />;
 									return (
 										<HStack key={`${key}-input`} spacing="32px">
 											<Text color={textColor}>
 												<Box as="span" fontWeight="500">
 													{`${user.config![key].name}:`}
 												</Box>{' '}
-												{user?.config![key].value ?? ""}
+												{user?.config![key].value ?? ''}
 											</Text>
-											<Button variant="secondary" size="md" cursor="pointer" onClick={() => {
-												setModalType(key);
-											}}>
+											<Button
+												variant="secondary"
+												size="md"
+												cursor="pointer"
+												onClick={() => {
+													setModalType(key);
+												}}
+											>
 												Edit
 											</Button>
 										</HStack>
-									)
+									);
 								})}
 							</VStack>
 						</VStack>

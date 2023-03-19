@@ -18,7 +18,7 @@ type DriveContextProps = {
 	setPath: Dispatch<string>;
 };
 
-type DriveContextType = undefined | DriveContextProps;
+type DriveContextType = DriveContextProps | undefined;
 
 const DriveContext = createContext<DriveContextType>(undefined);
 
