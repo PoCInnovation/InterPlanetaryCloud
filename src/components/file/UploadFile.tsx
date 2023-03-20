@@ -1,15 +1,15 @@
-import { ChangeEvent, useState } from 'react';
 import {
 	HStack,
 	Icon,
 	Input,
 	Text,
 	useBreakpointValue,
-	useDisclosure,
-	useToast,
 	useColorMode,
 	useColorModeValue,
+	useDisclosure,
+	useToast,
 } from '@chakra-ui/react';
+import { ChangeEvent, useState } from 'react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
@@ -19,8 +19,8 @@ import { useUserContext } from 'contexts/user';
 
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import type { IPCFile } from 'types/types';
 import { textColorMode } from 'config/colorMode';
+import type { IPCFile } from 'types/types';
 
 const UploadFile = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -31,7 +31,7 @@ const UploadFile = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const toast = useToast({ duration: 2000, isClosable: true });
+	const toast = useToast({ duration: 2000, isClosable: true, id: 'ipc-upload-file' });
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;

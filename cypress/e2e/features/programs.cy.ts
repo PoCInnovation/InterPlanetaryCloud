@@ -1,7 +1,7 @@
 describe('Programs', () => {
 	const fixtureFile = 'upload_test_program.zip';
 
-	it("Signup for program tests", () => {
+	it('Signup for program tests', () => {
 		cy.signup();
 	});
 

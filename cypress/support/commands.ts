@@ -21,6 +21,14 @@ Cypress.Commands.add('signup', () => {
 	cy.get('#ipc-signup-create-copy-mnemonics-button').click();
 	cy.get('#ipc-signup-text-area');
 	cy.get('#ipc-signup-go-to-dashboard-button').click();
+	cy.url({ timeout: 5000 }).should('eq', `${Cypress.config().baseUrl}/drive`);
+});
+
+Cypress.Commands.add('login', (mnemonics: string) => {
+	cy.visit('/login');
+	cy.get('#ipc-login-text-area').click().type(mnemonics);
+	cy.get('#ipc-login-credentials-button').click();
+	cy.url({ timeout: 5000 }).should('eq', `${Cypress.config().baseUrl}/drive`);
 });
 
 Cypress.Commands.add('uploadFile', (file, params = null) => {
