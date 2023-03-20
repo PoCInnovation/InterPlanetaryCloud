@@ -42,9 +42,7 @@ describe('Good front for Dashboard', () => {
 
 describe('Good Upload file modal front in Dashboard', () => {
 	it('Go to upload modal into dashboard', () => {
-		cy.visit('/login');
-		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-login-credentials-button').click();
+		cy.login(dashboardSpecMnemonic);
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
 		cy.get('#ipc-dashboard-upload-file-button').click({ force: true });
@@ -69,9 +67,7 @@ describe('Good Upload file modal front in Dashboard', () => {
 
 describe('Good Deploy program modal front in Dashboard', () => {
 	it('Go to upload modal into dashboard', () => {
-		cy.visit('/login');
-		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-login-credentials-button').click();
+		cy.login(dashboardSpecMnemonic);
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
 		cy.get('#ipc-dashboard-deploy-program-button').click({ force: true });
@@ -96,9 +92,7 @@ describe('Good Deploy program modal front in Dashboard', () => {
 
 describe('Good Create folder modal front in Dashboard', () => {
 	it('Go to create folder modal into dashboard', () => {
-		cy.visit('/login');
-		cy.get('#ipc-login-text-area').click().type(dashboardSpecMnemonic);
-		cy.get('#ipc-login-credentials-button').click();
+		cy.login(dashboardSpecMnemonic);
 		cy.get('#ipc-dashboard-drawer-button').click({ force: true });
 		cy.get('.ipc-new-elem-button').click();
 		cy.get('#ipc-dashboard-create-folder-button').click({ force: true });

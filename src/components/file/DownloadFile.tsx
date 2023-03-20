@@ -1,10 +1,10 @@
-import { HStack, Icon, Text, useBreakpointValue, useToast, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { HStack, Icon, Text, useBreakpointValue, useColorMode, useColorModeValue, useToast } from '@chakra-ui/react';
 import { FiDownload } from 'react-icons/fi';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCFile } from 'types/types';
 import { textColorMode } from 'config/colorMode';
+import type { IPCFile } from 'types/types';
 
 type DownloadFileProps = {
 	file: IPCFile;
@@ -17,7 +17,7 @@ const DownloadFile = ({ file, onClose }: DownloadFileProps): JSX.Element => {
 	const { colorMode } = useColorMode();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const toast = useToast({ duration: 2000, isClosable: true });
+	const toast = useToast({ duration: 2000, isClosable: true, id: 'ipc-download-file' });
 
 	const downloadFile = async () => {
 		try {

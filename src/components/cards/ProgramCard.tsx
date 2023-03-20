@@ -1,4 +1,4 @@
-import { Box, HStack, Text, useBreakpointValue, useDisclosure, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Text, useBreakpointValue, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BsFileEarmarkCodeFill } from 'react-icons/bs';
 
@@ -34,7 +34,6 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 		<>
 			<Card
 				key={program.createdAt}
-				className="ipc-file-popover-button"
 				onContextMenu={(e) => {
 					e.preventDefault();
 					if (!isDrawer) {

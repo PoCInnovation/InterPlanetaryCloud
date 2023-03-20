@@ -27,7 +27,6 @@ const ContactCard = ({ contact }: { contact: IPCContact }): JSX.Element => {
 		<>
 			<Card
 				key={contact.address}
-				className="ipc-file-popover-button"
 				onContextMenu={(e) => {
 					e.preventDefault();
 					if (!isDrawer) {
