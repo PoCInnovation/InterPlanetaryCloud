@@ -2,7 +2,8 @@ import {
 	Box,
 	Button,
 	HStack,
-	Icon, Input,
+	Icon,
+	Input,
 	Text,
 	Tooltip,
 	useColorModeValue,
@@ -11,7 +12,7 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
-import React, {ChangeEvent, useState} from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Avatar from 'boring-avatars';
 import { BsClipboard } from 'react-icons/bs';
 
@@ -23,12 +24,12 @@ import { textColorMode } from 'config/colorMode';
 
 import colors from 'theme/foundations/colors';
 
-import Modal from "../Modal";
+import Modal from '../Modal';
 
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [input, setInput] = useState<string>(user.contact.username);
+	const [input, setInput] = useState<string>(user?.contact?.username || '');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -60,8 +61,8 @@ const AccountCard = (): JSX.Element => {
 						size="lg"
 						onClick={changeName}
 						isLoading={isLoading}
-						disabled={input === ""}
-						cursor={input === "" ? 'not-allowed' : 'pointer'}
+						disabled={input === ''}
+						cursor={input === '' ? 'not-allowed' : 'pointer'}
 						id="ipc-config-modal-button"
 					>
 						Change my name
