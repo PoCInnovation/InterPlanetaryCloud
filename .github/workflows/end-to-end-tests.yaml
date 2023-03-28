@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -14,24 +14,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: yarn
 
-      - name: Create env file
-        run: |
-          touch .env
-          echo NEXT_PUBLIC_ALEPH_CHANNEL=${{ secrets.NEXT_PUBLIC_ALEPH_CHANNEL }} >> .env
-          echo NEXT_PUBLIC_GITCLONE_DIR=${{ secrets.NEXT_PUBLIC_GITCLONE_DIR }} >> .env
-          echo NEXT_PUBLIC_GITHUB_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_ID }} >> .env
-          echo NEXT_PUBLIC_GITHUB_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_SECRET }} >> .env
-          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
-          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
+      - uses: actions/cache@v3
+        with:
+         path: ${{ github.workspace }}/.next/cache
+         key: nextjs-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
+         restore-keys: |
+          nextjs-${{ hashFiles('yarn.lock') }}-
 
       - name: Run cypress
         uses: cypress-io/github-action@v4
         with:
-          start: docker compose up
-          wait-on: "http://localhost:8080"
+          build: yarn build
+          start: yarn start
+          wait-on: ${{ secrets.APP_URL }}
           wait-on-timeout: 300
+        env:
+          NEXT_PUBLIC_ALEPH_CHANNEL: ${{ secrets.NEXT_PUBLIC_ALEPH_CHANNEL }}
+          NEXT_PUBLIC_GITCLONE_DIR: ${{ secrets.NEXT_PUBLIC_GITCLONE_DIR }}
+          NEXT_PUBLIC_GITHUB_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_ID }}
+          NEXT_PUBLIC_GITHUB_CLIENT_SECRET: ${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.APP_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
 
       - name: Get screenshots
         uses: actions/upload-artifact@v1

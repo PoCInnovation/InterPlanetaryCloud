@@ -31,7 +31,7 @@
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "cypress:open": "cypress open",
