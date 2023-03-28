@@ -47,7 +47,7 @@ docker compose build
 docker compose up
 ```
 
-You are now ready to access to your decentralized cloud at [`http://localhost:8080`](http://localhost:8080) 💥
+You are now ready to access to your decentralized cloud at [`http://localhost:3000`](http://localhost:3000) 💥
 
 ## Features 💫
 

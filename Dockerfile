@@ -16,12 +16,9 @@ COPY . .
 RUN yarn build
 
 
-
 FROM node:16.19.0-alpine3.17 AS runner
 
 WORKDIR /app
-
-ENV PORT 8080
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
