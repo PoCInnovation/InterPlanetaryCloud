@@ -1,21 +1,26 @@
-import { Encrypted } from 'eth-crypto';
-
 export type IPCFile = {
 	id: string;
 	hash: string;
-	key: Encrypted;
+	encryptInfos: { key: string; iv: string };
 	name: string;
 	size: number;
 	createdAt: number;
 	path: string;
 	permission: IPCPermission;
 	deletedAt: number | null;
+	logs: FileLog[];
 };
 
 export type IPCFolder = {
 	name: string;
 	createdAt: number;
 	path: string;
+	logs: FileLog[];
+};
+
+export type FileLog = {
+	action: string;
+	date: number;
 };
 
 export type IPCProgram = {
@@ -23,21 +28,32 @@ export type IPCProgram = {
 	name: string;
 	createdAt: number;
 	entrypoint: string;
+	size: number;
 };
 
 export type IPCConfig = {
-	theme: string;
-	defaultEntrypoint: string;
-	defaultName: string;
+	[key: string]: {
+		name: string;
+		value: string;
+	} & (
+		| {
+				type: 'input';
+		  }
+		| {
+				type: 'select';
+				options: string[];
+		  }
+	);
 };
 
 export type IPCContact = {
 	name: string;
 	address: string;
 	publicKey: string;
+	createdAt: number;
 	files: IPCFile[];
 	folders: IPCFolder[];
-	config: IPCConfig | undefined;
+	config?: IPCConfig;
 };
 
 export type IPCPermission = 'owner' | 'viewer' | 'editor';
@@ -50,6 +66,11 @@ export type IPCUpdateContent = {
 export type ResponseType = {
 	success: boolean;
 	message: string;
+};
+
+export type ToastResponse = {
+	title: string;
+	status: 'success' | 'error';
 };
 
 export type UploadResponse = ResponseType & {
@@ -67,5 +88,8 @@ export type AggregateType = {
 
 export type GitHubRepository = {
 	name: string;
+	owner: {
+		login: string;
+	};
 	html_url: string;
 };

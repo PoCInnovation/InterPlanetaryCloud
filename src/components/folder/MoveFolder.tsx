@@ -1,13 +1,27 @@
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Button, Divider, HStack, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+	Divider,
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useDisclosure,
+	useToast,
+	useColorMode,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FcAdvance, FcFolder } from 'react-icons/fc';
+import { FcFolder } from 'react-icons/fc';
+import { MdOutlineDriveFileMove } from 'react-icons/md';
 
 import Modal from 'components/Modal';
-import type { IPCFolder } from 'types/types';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+
+import Button from 'components/Button';
+import type { IPCFolder } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type MoveFolderProps = {
 	folder: IPCFolder;
@@ -18,6 +32,8 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 	const { files, setFiles, folders, setFolders } = useDriveContext();
 	const [hasPermission, setHasPermission] = useState(false);
 	const toast = useToast({ duration: 2000, isClosable: true });
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	const [newPath, setNewPath] = useState('/');
 	const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +56,18 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 		setFiles(
 			files.map((f) => {
-				if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
+				if (f.path.startsWith(fullPath))
+					return {
+						...f,
+						path: f.path.replace(folder.path, newPath),
+						logs: [
+							...f.logs,
+							{
+								action: `Moved folder to ${fullPath}`,
+								date: Date.now(),
+							},
+						],
+					};
 				return f;
 			}),
 		);
@@ -58,32 +85,50 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		onClose();
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
+
 	if (!hasPermission) return <></>;
 
 	return (
-		<HStack>
-			<FcAdvance size="30"></FcAdvance>
-			<Button
-				backgroundColor={'white'}
-				justifyContent="flex-start"
-				w="100%"
-				p="0px"
-				mx="4px"
-				onClick={onOpen}
-				isLoading={isLoading}
-				id="ipc-dashboard-move-folder-option"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-move-button"
+			_hover={{
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
+			}}
+		>
+			<Icon
+				as={MdOutlineDriveFileMove}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+				color={textColor}
 			>
-				Move
-			</Button>
+				Move to...
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
 				title="Move folder"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={moveFolder}
 						isLoading={isLoading}
 						id="ipc-dashboard-move-folder-confirm"
@@ -94,12 +139,8 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 			>
 				<>
 					<Button
-						backgroundColor={'white'}
+						variant="secondary"
 						size="sm"
-						w="10%"
-						p="0px"
-						mx="4px"
-						boxShadow="1px 2px 3px 3px rgb(240, 240, 240)"
 						disabled={newPath === '/'}
 						onClick={() => setNewPath(newPath.replace(/([^/]+)\/$/, ''))}
 						id="ipc-move-folder-back-path-button"

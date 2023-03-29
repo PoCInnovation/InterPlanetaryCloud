@@ -3,10 +3,12 @@ export const extractFilename = (filepath: string): string => {
 	return result?.length ? result[0] : '';
 };
 
-export const getFileContent = async (file: unknown): Promise<string> => {
+export const getFileContent = async (file: File | never[]): Promise<ArrayBuffer> => {
 	try {
-		return await (file as Blob).text();
+		if (file instanceof File) return await file.arrayBuffer();
+		return new ArrayBuffer(0);
 	} catch (error) {
-		return '';
+		console.error(error);
+		return new ArrayBuffer(0);
 	}
 };

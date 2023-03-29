@@ -1,5 +1,5 @@
 import { EditIcon } from '@chakra-ui/icons';
-import { Button, FormControl, FormLabel, Input, useDisclosure, useToast } from '@chakra-ui/react';
+import { FormControl, FormLabel, Input, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 
 import Modal from 'components/Modal';
@@ -8,6 +8,8 @@ import type { IPCContact } from 'types/types';
 
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+import Button from 'components/Button';
+import { textColorMode } from 'config/colorMode';
 
 type UpdateContactProps = {
 	contact: IPCContact;
@@ -17,6 +19,7 @@ const UpdateContact = ({ contact }: UpdateContactProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { setContacts } = useDriveContext();
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 
 	const [name, setName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -47,9 +50,8 @@ const UpdateContact = ({ contact }: UpdateContactProps): JSX.Element => {
 				title="Update the contact"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={updateContact}
 						isLoading={isLoading}
 						id="ipc-dashboard-update-contact-button"
@@ -59,7 +61,7 @@ const UpdateContact = ({ contact }: UpdateContactProps): JSX.Element => {
 				}
 			>
 				<FormControl>
-					<FormLabel>New name</FormLabel>
+					<FormLabel color={textColor}>New name</FormLabel>
 					<Input
 						type="text"
 						w="100%"

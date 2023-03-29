@@ -20,7 +20,7 @@ const Text = {
 		},
 		boldMd: {
 			fontSize: '14px',
-			fontWeight: 700,
+			fontWeight: 600,
 		},
 		lg: {
 			fontSize: '16px',

@@ -1,34 +1,38 @@
 import {
-	Button,
-	FormControl,
-	FormLabel,
 	HStack,
+	Icon,
 	Input,
+	Text,
+	useBreakpointValue,
+	useColorMode,
 	useColorModeValue,
 	useDisclosure,
 	useToast,
+	VStack,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
+import { AiOutlineFolderAdd } from 'react-icons/ai';
 
-import { FcFolder } from 'react-icons/fc';
-
-import Modal from 'components/Modal';
-import type { IPCFolder } from 'types/types';
-
-import { useConfigContext } from 'contexts/config';
 import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+import { IPCFolder } from 'types/types';
+
+import Button from 'components/Button';
+
+import { textColorMode } from 'config/colorMode';
+
+import Modal from '../Modal';
 
 const CreateFolder = (): JSX.Element => {
 	const { user } = useUserContext();
-	const { config } = useConfigContext();
 	const { folders, setFolders, path } = useDriveContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const [name, setName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const colorText = useColorModeValue('gray.800', 'white');
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const createFolder = async () => {
 		if (!name || name.includes('/')) {
@@ -41,6 +45,12 @@ const CreateFolder = (): JSX.Element => {
 			name,
 			path,
 			createdAt: Date.now(),
+			logs: [
+				{
+					action: 'Folder created',
+					date: Date.now(),
+				},
+			],
 		};
 
 		const created = await user.contact.createFolder(folder);
@@ -54,29 +64,48 @@ const CreateFolder = (): JSX.Element => {
 		onClose();
 	};
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
+
 	return (
-		<HStack>
-			<FcFolder display="flex" size="40"></FcFolder>
-			<Button
-				w="100%"
-				backgroundColor={config?.theme}
-				textColor={colorText}
-				justifyContent="flex-start"
-				onClick={onOpen}
-				isLoading={isLoading}
-				id="ipc-create-folder-button"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-create-folder-button"
+			_hover={{
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
+			}}
+		>
+			<Icon
+				as={AiOutlineFolderAdd}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+				color={textColor}
 			>
 				Create a folder
-			</Button>
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
 				title="Create a folder"
 				CTA={
 					<Button
-						variant="inline"
-						w="100%"
-						mb="16px"
+						variant="primary"
+						size="lg"
 						onClick={createFolder}
 						isLoading={isLoading}
 						id="ipc-dashboard-create-folder-modal-button"
@@ -85,8 +114,10 @@ const CreateFolder = (): JSX.Element => {
 					</Button>
 				}
 			>
-				<FormControl>
-					<FormLabel>Name</FormLabel>
+				<VStack spacing="8px" align="start" w="100%">
+					<Text size="boldLg" color={textColor}>
+						The name of the folder
+					</Text>
 					<Input
 						type="text"
 						w="100%"
@@ -95,7 +126,7 @@ const CreateFolder = (): JSX.Element => {
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
 						id="ipc-dashboard-input-folder-name"
 					/>
-				</FormControl>
+				</VStack>
 			</Modal>
 		</HStack>
 	);

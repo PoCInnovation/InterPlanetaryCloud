@@ -9,49 +9,43 @@ const Button = {
 		lineHeight: '24px',
 	},
 	sizes: {
-		// TODO: clean needed
-		oldMd: {
-			padding: '16px 32px',
-			height: '56px',
-			fontSize: '16px',
-		},
 		sm: {
-			padding: '2px 12px',
+			padding: '4px 16px',
 			height: 'auto',
 			fontSize: '12px',
 			fontWeight: 700,
 			borderRadius: '8px',
 		},
 		md: {
-			padding: '4px 16px',
+			padding: '6px 20px',
 			height: 'auto',
 			fontSize: '16px',
 			fontWeight: 700,
 			borderRadius: '8px',
 		},
 		lg: {
-			padding: '4px 16px',
+			padding: '8px 20px',
 			height: 'auto',
 			fontSize: '20px',
 			fontWeight: 700,
 			borderRadius: '8px',
 		},
 		xl: {
-			padding: '6px 16px',
+			padding: '8px 24px',
 			height: 'auto',
 			fontSize: '24px',
 			fontWeight: 700,
 			borderRadius: '12px',
 		},
 		'2xl': {
-			padding: '8px 20px',
+			padding: '12px 24px',
 			height: 'auto',
 			fontSize: '28px',
 			fontWeight: 700,
 			borderRadius: '12px',
 		},
 		'3xl': {
-			padding: '8px 24px',
+			padding: '16px 42px',
 			height: 'auto',
 			fontSize: '32px',
 			fontWeight: 700,
@@ -138,25 +132,10 @@ const Button = {
 				transition: 'all .6s ease-in-out',
 			},
 		},
-		// TODO: clean needed
-		gray: {
-			background: `${colors.gray[300]}`,
-			color: `${colors.gray[700]}`,
-		},
-		// TODO: clean needed
-		inline: {
-			bgGradient: `linear-gradient(90deg, ${colors.blue[700]} 0%, ${colors.red[700]} 100%)`,
-			color: 'white',
-		},
-		// TODO: clean needed
-		reverseInline: {
-			bgGradient: `linear-gradient(90deg, ${colors.red[700]} 0%, ${colors.blue[700]} 100%)`,
-			color: 'white',
-		},
 	},
 	defaultProps: {
-		size: 'oldMd',
-		variant: 'gray',
+		size: 'md',
+		variant: 'secondary',
 	},
 };
 

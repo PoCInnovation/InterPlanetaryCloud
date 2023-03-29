@@ -4,7 +4,7 @@ describe('Good front for Landing', () => {
 	});
 
 	it ('Good text', () => {
-		cy.get('#ipc-landing-navbar-name').should('contain', 'Inter Planetary Cloud');
+		cy.get('#ipc-landing-navigation-name').should('contain', 'Inter Planetary Cloud');
 		cy.get("#ipc-landing-headline").should('contain', 'The first distributed cloud unsealing your data.');
 		cy.get("#ipc-landing-subHeadline").should('contain', 'Build on top of Aleph, the next generation network of distributed big data applications.');
 		cy.get("#ipc-landing-services-title").should('contain', 'Inter Planetary Cloud offers two services');
@@ -33,7 +33,8 @@ describe('Good front for Landing', () => {
 
 	it('Good number of elements', () => {
 		cy.get("button").should('have.length', 2);
-		cy.get('img').should('have.length', 13);
+		cy.get('img').should('have.length', 7);
+		cy.get('svg').should('have.length', 14);
 		cy.get('#ipc-landing-services-cloud-storage').should('have.length', 1);
 		cy.get('#ipc-landing-services-cloud-computing').should('have.length', 1);
 	})

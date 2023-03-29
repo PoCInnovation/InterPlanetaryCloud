@@ -1,12 +1,24 @@
-import { Button, HStack, Text, useDisclosure, useToast } from '@chakra-ui/react';
-import { useDriveContext } from 'contexts/drive';
+import {
+	HStack,
+	Icon,
+	Text,
+	useBreakpointValue,
+	useColorMode,
+	useColorModeValue,
+	useDisclosure,
+	useToast,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FcFullTrash } from 'react-icons/fc';
+import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
-import type { IPCFolder } from 'types/types';
 
+import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
+
+import Button from 'components/Button';
+import type { IPCFolder } from 'types/types';
+import { textColorMode } from 'config/colorMode';
 
 type DeleteFolderProps = {
 	folder: IPCFolder;
@@ -15,7 +27,11 @@ type DeleteFolderProps = {
 const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 	const { user } = useUserContext();
 	const { folders, setFolders, setFiles } = useDriveContext();
+
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
 	const [hasPermission, setHasPermission] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,30 +74,47 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 	if (!hasPermission) return <></>;
 
 	return (
-		<HStack>
-			<FcFullTrash size="30"></FcFullTrash>
-			<Button
-				backgroundColor={'white'}
-				justifyContent="flex-start"
-				w="100%"
-				p="0px"
-				mx="4px"
-				onClick={() => onOpen()}
-				id="ipc-dashboard-delete-folderbutton"
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={onOpen}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-delete-button"
+			_hover={{
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
+			}}
+		>
+			<Icon
+				as={IoTrashSharp}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+				color={textColor}
 			>
 				Delete
-			</Button>
+			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
 				title="Delete the folder"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={deleteFolder} id="ipc-dashboard-delete-folder-button">
+					<Button variant="primary" size="lg" onClick={deleteFolder} id="ipc-dashboard-delete-folder-button">
 						Delete
 					</Button>
 				}
 			>
-				<Text>Are you sure you want to delete this folder and all it's content ?</Text>
+				<Text color={textColor}>Are you sure you want to delete this folder and all it's content ?</Text>
 			</Modal>
 		</HStack>
 	);

@@ -1,19 +1,24 @@
 import { createContext, Dispatch, useContext } from 'react';
 
-import type { IPCContact, IPCFile, IPCFolder } from 'types/types';
+import type { IPCContact, IPCFile, IPCFolder, IPCProgram } from 'types/types';
 
+// TODO: use templating
 type DriveContextProps = {
 	files: IPCFile[];
 	setFiles: Dispatch<IPCFile[]>;
+	sharedFiles: IPCFile[];
+	setSharedFiles: Dispatch<IPCFile[]>;
 	folders: IPCFolder[];
 	setFolders: Dispatch<IPCFolder[]>;
+	programs: IPCProgram[];
+	setPrograms: Dispatch<IPCProgram[]>;
 	contacts: IPCContact[];
 	setContacts: Dispatch<IPCContact[]>;
 	path: string;
 	setPath: Dispatch<string>;
 };
 
-type DriveContextType = undefined | DriveContextProps;
+type DriveContextType = DriveContextProps | undefined;
 
 const DriveContext = createContext<DriveContextType>(undefined);
 

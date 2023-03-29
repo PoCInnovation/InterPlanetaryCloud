@@ -1,6 +1,7 @@
-import { Box, Img, Stack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
+import { Box, Img, Stack, Text, useBreakpointValue, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
 
 import colors from 'theme/foundations/colors';
+import { textColorMode } from 'config/colorMode';
 
 const ServicesCard = ({
 	title,
@@ -43,15 +44,18 @@ const ServicesCard = ({
 const ServicesSection = (): JSX.Element => {
 	const isMobile: boolean = useBreakpointValue({ base: true, '2xl': false }) || false;
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
+
 	return (
 		<VStack
 			spacing="72px"
-			bg="blue.50"
+			bg={colorMode === 'light' ? 'blue.50' : 'gray.750'}
 			w="100%"
 			py={{ base: '128px', '2xl': '222px' }}
 			pl={{ base: '0px', '2xl': '400px', '4xl': '0px' }}
 			position="relative"
-			boxShadow={`0px 0px 128px ${colors.blue[100]}`}
+			boxShadow={`0px 0px 128px ${colorMode === 'light' ? colors.blue[100] : colors.gray[700]}`}
 		>
 			<Text
 				size="4xl"
@@ -59,6 +63,7 @@ const ServicesSection = (): JSX.Element => {
 				textAlign="center"
 				w={{ base: '300px', md: '500px', lg: '100%' }}
 				id="ipc-landing-services-title"
+				color={textColor}
 			>
 				Inter Planetary Cloud offers{' '}
 				<Box

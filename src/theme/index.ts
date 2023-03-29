@@ -1,5 +1,4 @@
 import { extendTheme } from '@chakra-ui/react';
-import { createBreakpoints } from '@chakra-ui/theme-tools';
 
 // Foundation overrides
 import radius from 'theme/foundations/borderRadius';
@@ -11,7 +10,7 @@ import Button from 'theme/components/button';
 import Link from 'theme/components/link';
 import Text from 'theme/components/text';
 
-const breakpoints = createBreakpoints({
+const breakpoints = {
 	xs: '320px',
 	sm: '576px',
 	md: '768px',
@@ -21,7 +20,7 @@ const breakpoints = createBreakpoints({
 	'3xl': '1600px',
 	'4xl': '1920px',
 	'5xl': '2560px',
-});
+};
 
 const overrides = {
 	shadows,
@@ -36,4 +35,4 @@ const overrides = {
 	},
 };
 
-export default extendTheme(overrides);
+export default extendTheme(overrides, breakpoints);

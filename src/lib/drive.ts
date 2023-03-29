@@ -1,17 +1,15 @@
-import { accounts, aggregate, forget, store } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { ItemType } from 'aleph-sdk-ts/messages/message';
-import CryptoJS from 'crypto-js';
-import { decryptWithPrivateKey, encryptWithPublicKey } from 'eth-crypto';
+import { accounts } from 'aleph-sdk-ts';
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
+import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
+
 import fileDownload from 'js-file-download';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
 import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
 
-import ArraybufferToString from 'utils/arraybufferToString';
-
-export const MONTH_MILLIS = 86400 * 30 * 1000
+export const MONTH_MILLIS = 86400 * 30 * 1000;
 
 class Drive {
 	public files: IPCFile[];
@@ -20,32 +18,29 @@ class Drive {
 
 	public sharedFiles: IPCFile[];
 
-	private readonly account: accounts.ethereum.ETHAccount | undefined;
+	private readonly account: accounts.ethereum.ETHAccount;
 
-	private private_key: string;
-
-	constructor(importedAccount: accounts.ethereum.ETHAccount, private_key: string) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.files = [];
 		this.folders = [];
 		this.sharedFiles = [];
 		this.account = importedAccount;
-		this.private_key = private_key;
 	}
 
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
+				this.sharedFiles = [];
 				await Promise.all(
 					contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({
-							APIServer: DEFAULT_API_V2,
 							address: contact.address,
 							keys: ['InterPlanetaryCloud'],
 						});
 
-						const found = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account!.address);
+						const found = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account.address);
 						if (found) {
-							if (contact.address === this.account!.address) {
+							if (contact.address === this.account.address) {
 								this.files = found.files;
 								this.folders = found.folders;
 							} else {
@@ -63,19 +58,35 @@ class Drive {
 		}
 	}
 
-	public async upload(file: IPCFile, key: string): Promise<UploadResponse> {
+	public async upload(
+		file: IPCFile,
+		content: ArrayBuffer,
+		infos: { key: ArrayBuffer; iv: Uint8Array },
+	): Promise<UploadResponse> {
 		try {
-			if (this.account) {
-				const encryptedContentFile = CryptoJS.AES.encrypt(file.hash, key).toString();
-
-				const newStoreFile = new File([encryptedContentFile], file.name, {
-					type: 'text/plain',
-				});
-
+			if (content) {
 				const fileHashPublishStore = await store.Publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
-					fileObject: newStoreFile,
+					fileObject: Buffer.from(
+						await crypto.subtle.encrypt(
+							{
+								name: 'AES-GCM',
+								iv: infos.iv,
+							},
+							await crypto.subtle.importKey(
+								'raw',
+								infos.key,
+								{
+									name: 'AES-GCM',
+									length: 256,
+								},
+								true,
+								['encrypt', 'decrypt'],
+							),
+							Buffer.from(content),
+						),
+					),
 					storageEngine: ItemType.ipfs,
 					APIServer: DEFAULT_API_V2,
 				});
@@ -83,12 +94,14 @@ class Drive {
 				const newFile: IPCFile = {
 					...file,
 					hash: fileHashPublishStore.content.item_hash,
-					key: await encryptWithPublicKey(this.account.publicKey.slice(2), key),
+					encryptInfos: {
+						key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
+						iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
+					},
 				};
-
 				return { success: true, message: 'File uploaded', file: newFile };
 			}
-			return { success: false, message: 'Failed to load account', file: undefined };
+			return { success: false, message: 'Content is empty', file: undefined };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to upload the file', file: undefined };
@@ -97,30 +110,28 @@ class Drive {
 
 	public async autoDelete() {
 		try {
-			const filesToDelete = this.files.filter((file) => file.deletedAt !== null && Date.now() - file.deletedAt >= MONTH_MILLIS)
-			await this.delete(filesToDelete.map((file) => file.hash))
+			const filesToDelete = this.files.filter(
+				(file) => file.deletedAt !== null && Date.now() - file.deletedAt >= MONTH_MILLIS,
+			);
+			await this.delete(filesToDelete.map((file) => file.hash));
 		} catch (err) {
-			console.error(err)
+			console.error(err);
 		}
 	}
 
 	public async delete(fileHashes: string[]): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				await forget.publish({
-					APIServer: DEFAULT_API_V2,
-					channel: ALEPH_CHANNEL,
-					hashes: fileHashes,
-					inlineRequested: true,
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-				});
+			await forget.Publish({
+				APIServer: DEFAULT_API_V2,
+				channel: ALEPH_CHANNEL,
+				hashes: fileHashes,
+				storageEngine: ItemType.ipfs,
+				account: this.account,
+			});
 
-				this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
+			this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
 
-				return { success: true, message: 'File deleted' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			return { success: true, message: 'File deleted' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to delete the file' };
@@ -129,24 +140,30 @@ class Drive {
 
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				const storeFile = await store.Get({
-					APIServer: DEFAULT_API_V2,
-					fileHash: file.hash,
-				});
+			const storeFile = await store.Get({ fileHash: file.hash });
 
-				const keyFile = await decryptWithPrivateKey(this.private_key.slice(2), file.key);
-				const decryptedContentFile = CryptoJS.AES.decrypt(ArraybufferToString(storeFile), keyFile).toString(
-					CryptoJS.enc.Utf8,
-				);
+			const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
+			const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
 
-				const newFile = new File([decryptedContentFile], file.name, {
-					type: 'plain/text',
-				});
-				fileDownload(newFile, file.name);
-				return { success: true, message: 'File downloaded' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			const decryptedFile = await crypto.subtle.decrypt(
+				{
+					name: 'AES-GCM',
+					iv: decryptedIv,
+				},
+				await crypto.subtle.importKey(
+					'raw',
+					decryptedKey,
+					{
+						name: 'AES-GCM',
+						length: 256,
+					},
+					true,
+					['encrypt', 'decrypt'],
+				),
+				Buffer.from(storeFile),
+			);
+			fileDownload(decryptedFile, file.name);
+			return { success: true, message: 'File downloaded' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to download the file' };

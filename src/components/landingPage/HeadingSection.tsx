@@ -1,20 +1,23 @@
+import { Box, Img, Text, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { Box, Img, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
 
 import { IoRocketSharp } from 'react-icons/io5';
 
 import Button from 'components/Button';
 
 import colors from 'theme/foundations/colors';
+import { textColorMode } from 'config/colorMode';
 
 const HeadingSection = (): JSX.Element => {
 	const router = useRouter();
 	const isMobile: boolean = useBreakpointValue({ base: true, lg: false }) || false;
 
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+
 	return (
 		<VStack w="100%" spacing="64px" textAlign="center">
 			<VStack spacing="32px" w={{ base: '300px', sm: '550px', md: '600px', lg: '1000px' }}>
-				<Text size={isMobile ? '4xl' : '7xl'} id="ipc-landing-headline">
+				<Text size={isMobile ? '4xl' : '7xl'} id="ipc-landing-headline" color={textColor}>
 					The first distributed cloud{' '}
 					<Box
 						as="span"
@@ -25,7 +28,7 @@ const HeadingSection = (): JSX.Element => {
 					</Box>{' '}
 					your data.
 				</Text>
-				<Text size="xl" maxW="512px" id="ipc-landing-subHeadline">
+				<Text size="xl" maxW="512px" id="ipc-landing-subHeadline" color={textColor}>
 					Build on top of Aleph, the next generation network of{' '}
 					<Box as="span" fontWeight="700">
 						distributed

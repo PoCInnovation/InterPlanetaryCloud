@@ -1,54 +1,67 @@
-import { Button, HStack, PopoverHeader, useColorModeValue, useToast } from '@chakra-ui/react';
-import { useState } from 'react';
-import { FcDownload } from 'react-icons/fc';
+import { HStack, Icon, Text, useBreakpointValue, useColorMode, useColorModeValue, useToast } from '@chakra-ui/react';
+import { FiDownload } from 'react-icons/fi';
 
-import type { IPCFile } from 'types/types';
-
-import { useConfigContext } from 'contexts/config';
 import { useUserContext } from 'contexts/user';
+
+import { textColorMode } from 'config/colorMode';
+import type { IPCFile } from 'types/types';
 
 type DownloadFileProps = {
 	file: IPCFile;
+	onClose: () => void;
 };
 
-const DownloadFile = ({ file }: DownloadFileProps): JSX.Element => {
+const DownloadFile = ({ file, onClose }: DownloadFileProps): JSX.Element => {
 	const { user } = useUserContext();
-	const toast = useToast({ duration: 2000, isClosable: true });
-	const { config } = useConfigContext();
-	const colorText = useColorModeValue('gray.800', 'white');
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
-	const [isLoading, setIsLoading] = useState(false);
+	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true, id: 'ipc-download-file' });
 
 	const downloadFile = async () => {
-		setIsLoading(true);
 		try {
 			const download = await user.drive.download(file);
 			toast({ title: download.message, status: download.success ? 'success' : 'error' });
+			onClose();
 		} catch (error) {
 			console.error(error);
 			toast({ title: 'Unable to download file', status: 'error' });
 		}
-		setIsLoading(false);
 	};
 
 	return (
-		<PopoverHeader>
-			<HStack>
-				<FcDownload size="30"></FcDownload>
-				<Button
-					backgroundColor={config?.theme ?? 'white'}
-					textColor={colorText}
-					w="100%"
-					p="0px"
-					mx="4px"
-					onClick={downloadFile}
-					isLoading={isLoading}
-					id="ipc-dashboard-download-button"
-				>
-					Download
-				</Button>
-			</HStack>
-		</PopoverHeader>
+		<HStack
+			spacing={isDrawer ? '24px' : '12px'}
+			p="8px 12px"
+			borderRadius="8px"
+			role="group"
+			onClick={downloadFile}
+			w="100%"
+			cursor="pointer"
+			id="ipc-dashboard-download-button"
+			_hover={{
+				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
+			}}
+		>
+			<Icon
+				as={FiDownload}
+				_groupHover={{ color: 'red.800' }}
+				w={isDrawer ? '24px' : '20px'}
+				h={isDrawer ? '24px' : '20px'}
+			/>
+			<Text
+				fontSize="16px"
+				fontWeight="400"
+				_groupHover={{
+					color: 'red.800',
+					fontWeight: '500',
+				}}
+				color={textColor}
+			>
+				Download
+			</Text>
+		</HStack>
 	);
 };
 

@@ -1,7 +1,9 @@
-import { Button, Input, useDisclosure, useToast } from '@chakra-ui/react';
+import { Input, useDisclosure, useToast } from '@chakra-ui/react';
 import EthCrypto from 'eth-crypto';
 import { ChangeEvent, useState } from 'react';
+import { BsPlusLg } from 'react-icons/bs';
 
+import Button from 'components/Button';
 import Modal from 'components/Modal';
 
 import { useDriveContext } from 'contexts/drive';
@@ -17,37 +19,44 @@ const AddContact = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const addContact = async () => {
-		if (name && contactPublicKey) {
-			const add = await user.contact.add({
-				name,
-				address: EthCrypto.publicKey.toAddress(contactPublicKey.slice(2)),
-				publicKey: contactPublicKey,
-				files: [],
-				folders: [],
-				config: undefined,
-			});
+		try {
+			if (name && contactPublicKey) {
+				const address = EthCrypto.publicKey.toAddress(contactPublicKey.slice(2));
+				const add = await user.contact.add({
+					name,
+					address,
+					publicKey: contactPublicKey,
+					createdAt: new Date().getTime(),
+					files: [],
+					folders: [],
+					config: undefined,
+				});
 
-			toast({ title: add.message, status: add.success ? 'success' : 'error' });
-			setContacts(user.contact.contacts);
-		} else {
-			toast({ title: 'Bad contact infos', status: 'error' });
+				toast({ title: add.message, status: add.success ? 'success' : 'error' });
+				setContacts(user.contact.contacts);
+			} else {
+				toast({ title: 'Bad contact infos', status: 'error' });
+			}
+			setName('');
+			onClose();
+		} catch (error) {
+			console.error(error);
+			toast({ title: 'Bad public key given', status: 'error' });
 		}
-		setName('');
-		onClose();
 	};
 
 	return (
 		<>
-			<Button variant="inline" onClick={onOpen}>
+			<Button buttonType="left-icon" icon={BsPlusLg} size="lg" variant="primary" onClick={onOpen}>
 				Add a contact
 			</Button>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Add the contact"
+				title="Add a contact"
 				CTA={
-					<Button variant="inline" w="100%" mb="16px" onClick={addContact} id="ipc-dashboard-add-contact-button">
-						Add the contact
+					<Button variant="primary" size="lg" onClick={addContact} id="ipc-dashboard-add-contact-button">
+						Add a contact
 					</Button>
 				}
 			>

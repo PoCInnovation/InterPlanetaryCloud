@@ -1,6 +1,6 @@
-import { accounts, aggregate, forget, program } from 'aleph-sdk-ts';
-import { DEFAULT_API_V2 } from 'aleph-sdk-ts/global';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/messages/message';
+import { accounts } from 'aleph-sdk-ts';
+import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
 
@@ -18,7 +18,6 @@ class Computing {
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
-			APIServer: DEFAULT_API_V2,
 			address: this.account!.address,
 			keys: ['InterPlanetaryCloud'],
 		});
@@ -27,9 +26,7 @@ class Computing {
 		content.programs = this.programs;
 
 		return aggregate.Publish({
-			APIServer: DEFAULT_API_V2,
 			channel: ALEPH_CHANNEL,
-			inlineRequested: true,
 			storageEngine: ItemType.ipfs,
 			account: this.account!,
 			key: 'InterPlanetaryCloud',
@@ -41,7 +38,6 @@ class Computing {
 		try {
 			if (this.account) {
 				const aggr = await aggregate.Get<AggregateType>({
-					APIServer: DEFAULT_API_V2,
 					address: this.account.address,
 					keys: ['InterPlanetaryCloud'],
 				});
@@ -60,11 +56,9 @@ class Computing {
 	public async deleteProgram(programHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await forget.publish({
-					APIServer: DEFAULT_API_V2,
+				await forget.Publish({
 					channel: ALEPH_CHANNEL,
 					hashes: [programHash],
-					inlineRequested: true,
 					storageEngine: ItemType.ipfs,
 					account: this.account,
 				});
@@ -98,8 +92,6 @@ class Computing {
 					channel: ALEPH_CHANNEL,
 					account: this.account,
 					storageEngine: ItemType.storage,
-					inlineRequested: true,
-					APIServer: DEFAULT_API_V2,
 					file: uploadFile,
 					entrypoint: myProgram.entrypoint,
 				});
