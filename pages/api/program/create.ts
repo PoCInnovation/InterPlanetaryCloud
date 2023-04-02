@@ -4,7 +4,7 @@ import { createRouter } from 'next-connect';
 
 import validate from 'lib/middlewares/validation';
 import { compress, programPublish } from 'lib/services/deploy';
-import { clone, getProgramName } from 'lib/services/git';
+import { cleanup, clone, getProgramName } from 'lib/services/git';
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
@@ -20,7 +20,7 @@ router.post(validate({ body: postSchema }), async (req, res) => {
 	await clone(repository).then(async (path: string) => {
 		const fileName: string = await compress(path);
 		itemHash = await programPublish(fileName, entrypoint);
-		// await cleanup(GITCLONE_DIR);
+		await cleanup(path);
 	});
 	return res.status(200).json({ name: getProgramName(repository), item_hash: itemHash, entrypoint });
 });

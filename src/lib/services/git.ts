@@ -1,9 +1,9 @@
-import _clone from 'git-clone';
+import _clone from 'git-clone/promise';
 import node_path from 'path';
 
 import { GITCLONE_DIR } from 'config/constants';
 
-import { createDir, fileExists, rmdir } from 'utils/fsPromise';
+import { createDir, fileExists, rm } from 'utils/fsPromise';
 
 function getRepoName(repoUrl: string): string {
 	const path = repoUrl.replace('.git', '');
@@ -28,7 +28,7 @@ function getPath(repoUrl: string): string {
 }
 
 function cleanup(path: string): Promise<void> {
-	return rmdir(path, { recursive: true });
+	return rm(path, { recursive: true });
 }
 
 async function clone(repoUrl: string): Promise<string> {

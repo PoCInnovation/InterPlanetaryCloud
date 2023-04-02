@@ -12,8 +12,8 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
-import React, { ChangeEvent, useState } from 'react';
 import Avatar from 'boring-avatars';
+import { ChangeEvent, useState } from 'react';
 import { BsClipboard } from 'react-icons/bs';
 
 import Card from 'components/cards/Card';
@@ -29,7 +29,7 @@ import Modal from '../Modal';
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [input, setInput] = useState<string>(user?.contact?.username || '');
+	const [input, setInput] = useState<string>(user.contact.username || '');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -37,7 +37,7 @@ const AccountCard = (): JSX.Element => {
 	const changeName = async () => {
 		setIsLoading(true);
 		try {
-			const config1 = await user.contact.update(user.account!.address, input);
+			const config1 = await user.contact.update(user.account.address, input);
 			setIsOpen(false);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
@@ -81,7 +81,7 @@ const AccountCard = (): JSX.Element => {
 								<HStack spacing="16px">
 									<Avatar
 										size="32"
-										name={user?.account?.address}
+										name={user.account.address}
 										variant="marble"
 										colors={[
 											colors.red['1000'],
@@ -92,7 +92,7 @@ const AccountCard = (): JSX.Element => {
 										]}
 									/>
 									<Text color={textColor} size="xl">
-										{user?.contact.username}
+										{user.contact.username}
 									</Text>
 								</HStack>
 								<HStack spacing="16px">
@@ -112,14 +112,14 @@ const AccountCard = (): JSX.Element => {
 										<Box as="span" fontWeight="500">
 											My address:
 										</Box>{' '}
-										{user?.account?.address}
+										{user.account.address}
 									</Text>
 									<Icon
 										as={BsClipboard}
 										w="16px"
 										h="16px"
 										cursor="pointer"
-										onClick={() => navigator.clipboard.writeText(user?.account?.address || '')}
+										onClick={() => navigator.clipboard.writeText(user.account.address || '')}
 									/>
 								</HStack>
 								<HStack>
@@ -127,14 +127,14 @@ const AccountCard = (): JSX.Element => {
 										<Box as="span" fontWeight="500">
 											My public key:
 										</Box>{' '}
-										{user?.account?.publicKey}
+										{user.account.publicKey}
 									</Text>
 									<Icon
 										as={BsClipboard}
 										w="16px"
 										h="16px"
 										cursor="pointer"
-										onClick={() => navigator.clipboard.writeText(user?.account?.publicKey || '')}
+										onClick={() => navigator.clipboard.writeText(user.account.publicKey || '')}
 									/>
 								</HStack>
 							</VStack>
