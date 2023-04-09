@@ -138,6 +138,16 @@ If you're interested in how the project is organized at a higher level, please c
 
 ## Our PoC team 👌
 
+### April 2023 - September 2023
+Developers:
+| [<img src="https://github.com/charlesmadjeri.png?size=85" width=85><br><sub>Charles Madjeri</sub>](https://github.com/charlesmadjeri) | [<img src="https://github.com/abdlastreet.png?size=85" width=85><br><sub>Abdallah Hammad</sub>](https://github.com/abdlastreet) | [<img src="https://github.com/molaryy.png?size=85" width=85><br><sub>Mohammed Jbilou</sub>](https://github.com/molaryy) | [<img src="https://github.com/sephorah.png?size=85" width=85><br><sub>Séphorah Aniambossou</sub>](https://github.com/sephorah)
+|:---:|:---:|:---:|:---:|
+
+Project Manager:
+
+| [<img src="https://github.com/RezaRahemtola.png?size=85" width=85><br><sub>Reza Rahemtola</sub>](https://github.com/RezaRahemtola) |
+|:---:|
+
 ### September 2022 - April 2023
 Developers:
 
