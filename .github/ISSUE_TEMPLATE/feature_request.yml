@@ -3,9 +3,10 @@ description: File a feature request
 title: "[Feature]: "
 labels: ["feature", "triage"]
 assignees:
-  - EdenComp
-  - lucas-louis
-  - SloWayyy
+  - sephorah
+  - charlesmadjeri
+  - Molaryy
+  - Abdlastreet
 body:
   - type: markdown
     attributes:
