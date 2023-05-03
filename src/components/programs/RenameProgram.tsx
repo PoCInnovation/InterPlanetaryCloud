@@ -23,25 +23,26 @@ import Button from 'components/Button';
 
 import { ChangeEvent, useState } from 'react';
 
+/*
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
-
+*/
 
 
 type RenameProgramProps = {
 	program: IPCProgram;
-	concernedPrograms: IPCProgram[];
-	onClosePopover: () => void;
 };
 
-const RenameProgram =  ({ program , concernedPrograms, onClosePopover}: RenameProgramProps): JSX.Element =>  {
+const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [isLoading, setIsLoading] = useState(false);
-	const { colorMode } = useColorMode();
-	const { user } = useUserContext();
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const [name, setName] = useState('');
+	const { colorMode } = useColorMode();
+	const [isLoading, setIsLoading] = useState(false);
+
+	/*
+	const { user } = useUserContext();1
 	const {programs, setPrograms} = useDriveContext();
 
 	const updateProgramName = async () => {
@@ -66,7 +67,11 @@ const RenameProgram =  ({ program , concernedPrograms, onClosePopover}: RenamePr
 		onClose();
 		onClosePopover();
 	};
-
+	*/
+	setIsLoading(false);
+	if (!name)
+		setName("test");
+		
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
@@ -106,7 +111,9 @@ const RenameProgram =  ({ program , concernedPrograms, onClosePopover}: RenamePr
 					<Button
 						variant="primary"
 						size="lg"
+						/*
 						onClick={updateProgramName}
+						*/
 						isLoading={isLoading}
 						id="ipc-dashboard-update-programName-button"
 					>

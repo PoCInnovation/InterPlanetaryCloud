@@ -30,6 +30,7 @@ const AddContact = (): JSX.Element => {
 					files: [],
 					folders: [],
 					config: undefined,
+					programs: []
 				});
 
 				toast({ title: add.message, status: add.success ? 'success' : 'error' });

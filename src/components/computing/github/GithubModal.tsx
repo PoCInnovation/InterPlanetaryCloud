@@ -58,11 +58,19 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 			});
 			if (result.status !== 200) throw new Error('Unable to clone repository from github');
 			const newProgram: IPCProgram = {
+				id: crypto.randomUUID(),
 				name: customName || result.data.name,
 				hash: result.data.item_hash,
 				createdAt: Date.now(),
+				encryptInfos: {key: '', iv: ''},
 				entrypoint: result.data.entrypoint,
 				size: 0,
+				logs: [
+					{
+						action: 'Program created',
+						date: Date.now(),
+					},
+				],
 			};
 			user.computing.programs.push(newProgram);
 			await user.computing.publishAggregate();
