@@ -24,11 +24,14 @@ export type FileLog = {
 };
 
 export type IPCProgram = {
+	id: string;
 	hash: string;
+	encryptInfos: { key: string; iv: string };
 	name: string;
 	createdAt: number;
 	entrypoint: string;
 	size: number;
+	logs: FileLog[];
 };
 
 export type IPCConfig = {
@@ -54,6 +57,7 @@ export type IPCContact = {
 	files: IPCFile[];
 	folders: IPCFolder[];
 	config?: IPCConfig;
+	programs: IPCProgram[];
 };
 
 export type IPCPermission = 'owner' | 'viewer' | 'editor';
