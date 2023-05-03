@@ -14,17 +14,23 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
+
 import { IPCProgram } from 'types/types';
 
 import { useConfigContext } from 'contexts/config';
 
+
 import DeployProgram from 'components/computing/programs/DeployProgram';
 import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
+import RenameProgram from 'components/programs/RenameProgram';
 
-const ProgramOptionsContent = ({ program }: { program: IPCProgram }): JSX.Element => (
+
+const ProgramOptionsContent = ({ program }: { program: IPCProgram}): JSX.Element => (
 	<>
 		<GoToWebsiteProgram program={program} />
 		<DeployProgram selectedProgram={program} />
+		<RenameProgram program={program}/>
+
 	</>
 );
 
