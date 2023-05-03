@@ -7,11 +7,13 @@ import fileDownload from 'js-file-download';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
+import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse , IPCProgram} from 'types/types';
 
 export const MONTH_MILLIS = 86400 * 30 * 1000;
 
 class Drive {
+	public programs: IPCProgram[];
+
 	public files: IPCFile[];
 
 	public folders: IPCFolder[];
@@ -25,6 +27,7 @@ class Drive {
 		this.folders = [];
 		this.sharedFiles = [];
 		this.account = importedAccount;
+		this.programs = [];
 	}
 
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
