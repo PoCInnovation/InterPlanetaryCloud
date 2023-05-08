@@ -18,6 +18,11 @@ export type IPCFolder = {
 	logs: FileLog[];
 };
 
+export type ProgramLog = {
+	action: string;
+	date: number;
+};
+
 export type FileLog = {
 	action: string;
 	date: number;
@@ -26,12 +31,11 @@ export type FileLog = {
 export type IPCProgram = {
 	id: string;
 	hash: string;
-	encryptInfos: { key: string; iv: string };
 	name: string;
 	createdAt: number;
 	entrypoint: string;
 	size: number;
-	logs: FileLog[];
+	log: ProgramLog[];
 };
 
 export type IPCConfig = {
