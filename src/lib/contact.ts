@@ -10,7 +10,6 @@ import type {
 	IPCFolder,
 	IPCUpdateContent,
 	ResponseType,
-	IPCProgram
 } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
@@ -45,47 +44,6 @@ class Contact {
 			content,
 		});
 	}
-
-	public async updateProgramName(
-		concernedPrograms: IPCProgram,
-		newName: string,
-		sharedPrograms: IPCProgram[]
-	  ): Promise<ResponseType> {
-		try {
-		  let programFound = false;
-		  await Promise.all(
-			this.contacts.map(async (contact) => {
-			  const program = contact.programs.find((f) => f.id === concernedPrograms.id);
-			  if (program) {
-				program.name = newName;
-				program.logs.push({
-				  action: `Renamed program to ${newName}`,
-				  date: Date.now(),
-				});
-				programFound = true;
-				await this.publishAggregate();
-			  }
-			})
-		  );
-		  if (!programFound) {
-			const program = sharedPrograms.find((f) => f.id === concernedPrograms.id);
-			if (!program) {
-			  return { success: false, message: 'Program not found' };
-			}
-			await post.Publish({
-			  account: this.account,
-			  postType: 'InterPlanetaryCloud',
-			  content: { program: { ...concernedPrograms, name: newName }, tags: ['yolo', concernedPrograms.id] },
-			  channel: 'TEST',
-			  storageEngine: ItemType.ipfs,
-			});
-		  }
-		  return { success: true, message: 'Program name updated' };
-		} catch (err) {
-		  console.error(err);
-		  return { success: false, message: 'Failed to update program name' };
-		}
-	  }
 
 	private async getFileOwner(fileId: string): Promise<string | undefined> {
 		let owner;
@@ -285,7 +243,6 @@ class Contact {
 						await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')), owner)
 					).toString('hex'),
 				};
-
 				await post.Publish({
 					account: this.account,
 					postType: 'InterPlanetaryCloud',
@@ -307,7 +264,6 @@ class Contact {
 			await Promise.all(
 				this.contacts.map(async (contact) => {
 					const file = contact.files.find((f) => f.id === concernedFile.id);
-
 					if (file) {
 						file.name = newName;
 						file.logs.push({
@@ -348,7 +304,6 @@ class Contact {
 			let fileFound = false;
 			this.contacts.forEach(async (contact) => {
 				const file = contact.files.find((f) => f.id === concernedFile.id);
-
 				if (file) {
 					file.deletedAt = deletedAt;
 					file.logs.push({
