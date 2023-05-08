@@ -17,16 +17,14 @@ import type { IPCProgram } from 'types/types';
 
 import { textColorMode } from 'config/colorMode';
 
-
 import Modal from 'components/Modal';
 import Button from 'components/Button';
 
 import { ChangeEvent, useState } from 'react';
 
-/*
+
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
-*/
 
 
 type RenameProgramProps = {
@@ -41,20 +39,18 @@ const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
 	const { colorMode } = useColorMode();
 	const [isLoading, setIsLoading] = useState(false);
 
-	/*
-	const { user } = useUserContext();1
+	const { user } = useUserContext();
 	const {programs, setPrograms} = useDriveContext();
 
 	const updateProgramName = async () => {
 		setIsLoading(true);
 		if (name) {
-			const update = await user.contact.updateProgramName(program, name, concernedPrograms);
+			const update = await user.computing.updateProgramName(program, name);
 			if (update.success) {
 				const index = programs.indexOf(program);
-
 				if (index !== -1) {
 					programs[index].name = name;
-					programs[index].logs.push({
+					programs[index].log.push({
 						action: `Renamed file to ${name}`,
 						date: Date.now(),
 					});
@@ -65,13 +61,8 @@ const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
 		setName('');
 		setIsLoading(false);
 		onClose();
-		onClosePopover();
 	};
-	*/
-	setIsLoading(false);
-	if (!name)
-		setName("test");
-		
+
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
@@ -81,7 +72,7 @@ const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
-			id="ipc-dashboard-download-button"
+			id="ipc-dashboard-rename-button"
 			_hover={{
 				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
@@ -111,9 +102,7 @@ const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
 					<Button
 						variant="primary"
 						size="lg"
-						/*
 						onClick={updateProgramName}
-						*/
 						isLoading={isLoading}
 						id="ipc-dashboard-update-programName-button"
 					>
