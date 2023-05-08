@@ -34,6 +34,7 @@ class Computing {
 		});
 	}
 
+
 	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
@@ -72,6 +73,29 @@ class Computing {
 		}
 	}
 
+	public async updateProgramName(
+		concernedProgram: IPCProgram,
+		newName: string,
+	): Promise<ResponseType> {
+		try {
+			const copy = concernedProgram;
+			await Promise.all(
+				this.programs.map(async () => {
+					copy.name = newName;
+					copy.log.push({
+						action: `Renamed program to ${newName}`,
+						date: Date.now(),
+					});
+					await this.publishAggregate();
+				}),
+			);
+			return { success: true, message: 'Program name updated' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to update program name' };
+		}
+	}
+
 	public async uploadProgram(
 		myProgram: IPCProgram,
 		uploadFile: File,
@@ -82,12 +106,11 @@ class Computing {
 			if (this.account) {
 				// remove old program from user's programs array
 				if (isRedeploy && oldProgramHash) {
-					const newProgramsArray: IPCProgram[] = this.programs.filter(
+					const newProgramsArray: IPCProgram[] = this.programs.filter (
 						(oldProgram: IPCProgram) => oldProgram !== oldProgramHash,
 					);
 					this.programs = newProgramsArray;
 				}
-
 				const programHashPublishProgram = await program.publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
@@ -95,7 +118,6 @@ class Computing {
 					file: uploadFile,
 					entrypoint: myProgram.entrypoint,
 				});
-
 				const newProgram: IPCProgram = {
 					...myProgram,
 					hash: programHashPublishProgram.item_hash,
