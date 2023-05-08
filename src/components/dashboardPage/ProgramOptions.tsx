@@ -30,7 +30,6 @@ const ProgramOptionsContent = ({ program }: { program: IPCProgram}): JSX.Element
 		<GoToWebsiteProgram program={program} />
 		<DeployProgram selectedProgram={program} />
 		<RenameProgram program={program}/>
-
 	</>
 );
 
