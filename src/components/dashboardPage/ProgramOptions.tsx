@@ -23,13 +23,14 @@ import { useConfigContext } from 'contexts/config';
 import DeployProgram from 'components/computing/programs/DeployProgram';
 import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
 import RenameProgram from 'components/programs/RenameProgram';
-
+import DeleteProgram from 'components/programs/DeleteProgram';
 
 const ProgramOptionsContent = ({ program }: { program: IPCProgram}): JSX.Element => (
 	<>
 		<GoToWebsiteProgram program={program} />
 		<DeployProgram selectedProgram={program} />
 		<RenameProgram program={program}/>
+		<DeleteProgram program={program}/>
 	</>
 );
 
