@@ -54,7 +54,7 @@ class Computing {
 		}
 	}
 
-	public async deleteProgram(programHash: string): Promise<ResponseType> {
+	public async UpdateDeleteProgram(programHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				await forget.Publish({
