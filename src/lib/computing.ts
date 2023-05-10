@@ -57,13 +57,12 @@ class Computing {
 	public async UpdateDeleteProgram(programHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				await forget.Publish({
+				const test = await forget.Publish({
 					channel: ALEPH_CHANNEL,
 					hashes: [programHash],
-					storageEngine: ItemType.ipfs,
+					storageEngine: ItemType.storage,
 					account: this.account,
 				});
-
 				return { success: true, message: 'program deleted' };
 			}
 			return { success: false, message: 'Failed to load account' };
