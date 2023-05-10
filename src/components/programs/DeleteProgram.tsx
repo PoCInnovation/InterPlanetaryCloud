@@ -35,7 +35,9 @@ const DeleteProgram = ({ program }: DeleteProgramProps): JSX.Element => {
 
     const DeleteActualProgram = async () => {
 		setIsLoading(true);
+		console.log(`hash = ${program.hash}`);
         const update = await user.computing.UpdateDeleteProgram(program.hash);
+		console.log(`message = ${update.message}`);
         if (update.success)
 			setPrograms([...programs]);
 		setIsLoading(false);
