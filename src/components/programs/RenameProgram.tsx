@@ -26,12 +26,11 @@ import { ChangeEvent, useState } from 'react';
 import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
 
-
 type RenameProgramProps = {
 	program: IPCProgram;
 };
 
-const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
+const RenameProgram =  ({ program }: RenameProgramProps): JSX.Element =>  {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
@@ -51,7 +50,7 @@ const RenameProgram =  ({ program}: RenameProgramProps): JSX.Element =>  {
 				if (index !== -1) {
 					programs[index].name = name;
 					programs[index].log.push({
-						action: `Renamed file to ${name}`,
+						action: `Renamed program to ${name}`,
 						date: Date.now(),
 					});
 				}
