@@ -34,7 +34,6 @@ class Computing {
 		});
 	}
 
-
 	public async load(): Promise<ResponseType> {
 		try {
 			if (this.account) {
@@ -54,15 +53,17 @@ class Computing {
 		}
 	}
 
-	public async UpdateDeleteProgram(programHash: string): Promise<ResponseType> {
+	public async deleteProgram(programHash: string): Promise<ResponseType> {
 		try {
 			if (this.account) {
-				const test = await forget.Publish({
+				await forget.Publish({
 					channel: ALEPH_CHANNEL,
 					hashes: [programHash],
 					storageEngine: ItemType.storage,
 					account: this.account,
 				});
+				this.programs = this.programs.filter((f) => f.hash !== programHash);
+				await this.publishAggregate();
 				return { success: true, message: 'program deleted' };
 			}
 			return { success: false, message: 'Failed to load account' };
@@ -78,16 +79,16 @@ class Computing {
 	): Promise<ResponseType> {
 		try {
 			const copy = concernedProgram;
-			await Promise.all(
-				this.programs.map(async () => {
+			await Promise.all(this.programs.map(async (prog) => {
+				if (prog.id === concernedProgram.id) {
 					copy.name = newName;
-					copy.log.push({
+					copy.logs.push({
 						action: `Renamed program to ${newName}`,
 						date: Date.now(),
 					});
 					await this.publishAggregate();
-				}),
-			);
+				}
+			}));
 			return { success: true, message: 'Program name updated' };
 		} catch (err) {
 			console.error(err);
@@ -105,7 +106,7 @@ class Computing {
 			if (this.account) {
 				// remove old program from user's programs array
 				if (isRedeploy && oldProgramHash) {
-					const newProgramsArray: IPCProgram[] = this.programs.filter (
+					const newProgramsArray: IPCProgram[] = this.programs.filter(
 						(oldProgram: IPCProgram) => oldProgram !== oldProgramHash,
 					);
 					this.programs = newProgramsArray;
@@ -113,7 +114,7 @@ class Computing {
 				const programHashPublishProgram = await program.publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
-					storageEngine: ItemType.storage,
+					storageEngine: ItemType.ipfs,
 					file: uploadFile,
 					entrypoint: myProgram.entrypoint,
 				});
