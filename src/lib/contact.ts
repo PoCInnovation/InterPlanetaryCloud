@@ -390,7 +390,7 @@ class Contact {
 	public async deleteFiles(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			ids.forEach(async (id) => {
-				const me = this.contacts.find((c) => c.address === this.account?.address)!;
+				const me = this.contacts.find((c) => c.address === this.account.address)!;
 				const file = me.files.find((f) => f.id === id);
 
 				if (file) {
