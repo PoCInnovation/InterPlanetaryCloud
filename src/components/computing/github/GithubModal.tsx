@@ -64,7 +64,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 				createdAt: Date.now(),
 				entrypoint: result.data.entrypoint,
 				size: 0,
-				log: [
+				logs: [
 					{
 						action: 'Program created',
 						date: Date.now(),
