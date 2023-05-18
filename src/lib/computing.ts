@@ -59,7 +59,7 @@ class Computing {
 				await forget.Publish({
 					channel: ALEPH_CHANNEL,
 					hashes: [programHash],
-					storageEngine: ItemType.storage,
+					storageEngine: ItemType.ipfs,
 					account: this.account,
 				});
 				this.programs = this.programs.filter((f) => f.hash !== programHash);
@@ -78,17 +78,18 @@ class Computing {
 		newName: string,
 	): Promise<ResponseType> {
 		try {
-			const copy = concernedProgram;
-			await Promise.all(this.programs.map(async (prog) => {
+			this.programs = this.programs.map((prog) => {
 				if (prog.id === concernedProgram.id) {
-					copy.name = newName;
-					copy.logs.push({
-						action: `Renamed program to ${newName}`,
-						date: Date.now(),
-					});
-					await this.publishAggregate();
+				    return {...prog, name: newName, logs: [...prog.logs, 
+				            {
+				                action: `Renamed program to ${newName}`,
+				                date: Date.now(),
+				             }
+				        ]};
 				}
-			}));
+				return prog;
+			});
+			await this.publishAggregate();
 			return { success: true, message: 'Program name updated' };
 		} catch (err) {
 			console.error(err);
@@ -114,7 +115,7 @@ class Computing {
 				const programHashPublishProgram = await program.publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
-					storageEngine: ItemType.ipfs,
+					storageEngine: ItemType.storage,
 					file: uploadFile,
 					entrypoint: myProgram.entrypoint,
 				});
