@@ -50,7 +50,7 @@ const ProgramModal = ({
 					createdAt: Date.now(),
 					entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
 					size: fileEvent.target.files[0].size,
-					log: [
+					logs: [
 						{
 							action: 'Program created',
 							date: Date.now(),
