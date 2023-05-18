@@ -7,7 +7,7 @@ import fileDownload from 'js-file-download';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse} from 'types/types';
+import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
 
 export const MONTH_MILLIS = 86400 * 30 * 1000;
 

@@ -8,22 +8,17 @@ export type IPCFile = {
 	path: string;
 	permission: IPCPermission;
 	deletedAt: number | null;
-	logs: FileLog[];
+	logs: Log[];
 };
 
 export type IPCFolder = {
 	name: string;
 	createdAt: number;
 	path: string;
-	logs: FileLog[];
+	logs: Log[];
 };
 
-export type ProgramLog = {
-	action: string;
-	date: number;
-};
-
-export type FileLog = {
+export type Log = {
 	action: string;
 	date: number;
 };
@@ -35,7 +30,7 @@ export type IPCProgram = {
 	createdAt: number;
 	entrypoint: string;
 	size: number;
-	log: ProgramLog[];
+	logs: Log[];
 };
 
 export type IPCConfig = {
