@@ -49,7 +49,7 @@ const RenameProgram =  ({ program }: RenameProgramProps): JSX.Element =>  {
 				const index = programs.indexOf(program);
 				if (index !== -1) {
 					programs[index].name = name;
-					programs[index].log.push({
+					programs[index].logs.push({
 						action: `Renamed program to ${name}`,
 						date: Date.now(),
 					});
