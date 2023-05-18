@@ -33,15 +33,13 @@ const DeleteProgram = ({ program }: DeleteProgramProps): JSX.Element => {
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
-    const DeleteActualProgram = async () => {
-		setIsLoading(true);
-		console.log(`hash = ${program.hash}`);
-        const update = await user.computing.UpdateDeleteProgram(program.hash);
-		console.log(`message = ${update.message}`);
-        if (update.success)
-			setPrograms([...programs]);
-		setIsLoading(false);
-		onClose();
+    const deleteActualProgram = async () => {
+			setIsLoading(true);
+			const update = await user.computing.deleteProgram(program.hash);
+			if (update.success)
+				setPrograms(programs.filter((f) => f.hash !== program.hash));
+			setIsLoading(false);
+			onClose();
     }
 
 	return (
@@ -83,7 +81,7 @@ const DeleteProgram = ({ program }: DeleteProgramProps): JSX.Element => {
 					<Button
 						variant="primary"
 						size="lg"
-						onClick={DeleteActualProgram}
+						onClick={deleteActualProgram}
 						isLoading={isLoading}
 						id="ipc-dashboard-delete-program-button"
 					>
