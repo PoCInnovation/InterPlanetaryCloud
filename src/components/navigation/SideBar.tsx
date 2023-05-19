@@ -1,6 +1,6 @@
-import { Text, useBreakpointValue, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
-import { IoTrashOutline } from 'react-icons/io5';
+import { Text, useBreakpointValue, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
 import { BsCodeSlash, BsPeople, BsPerson, BsPlusLg, BsShareFill } from 'react-icons/bs';
+import { IoTrashOutline } from 'react-icons/io5';
 import { RiHardDrive2Line } from 'react-icons/ri';
 
 import colors from 'theme/foundations/colors';
@@ -16,8 +16,8 @@ import { useUserContext } from 'contexts/user';
 import useToggle from 'hooks/useToggle';
 
 import ProfileBadge from 'components/profile/ProfileBadge';
-import { NavbarType } from 'types/navbar';
 import { bgColorMode } from 'config/colorMode';
+import { NavbarType } from 'types/navbar';
 import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {
@@ -117,7 +117,7 @@ const SideBar = (): JSX.Element => {
 				{isDrawerNeeded && (
 					<ProfileBadge
 						username={user ? user.contact.username : 'IPC'}
-						address={(user ? user.account?.address : 'IPC') || 'IPC'}
+						address={(user ? user.account.address : 'IPC') || 'IPC'}
 					/>
 				)}
 			</VStack>

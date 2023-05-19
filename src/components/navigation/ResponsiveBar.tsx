@@ -10,9 +10,9 @@ import {
 	Icon,
 	Text,
 	useBreakpointValue,
-	useDisclosure,
 	useColorMode,
 	useColorModeValue,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
@@ -84,7 +84,7 @@ export const ResponsiveBar = (): JSX.Element => {
 				{!isDrawerNeeded && (
 					<ProfileBadge
 						username={(user ? user.contact.username : 'IPC') || 'IPC'}
-						address={(user ? user.account?.address : 'IPC') || 'IPC'}
+						address={(user ? user.account.address : 'IPC') || 'IPC'}
 					/>
 				)}
 			</HStack>

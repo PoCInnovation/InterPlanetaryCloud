@@ -89,14 +89,16 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 		try {
 			const repositoryList: GitHubRepository[] = [];
 			let hasMore = true;
+			let i = 1;
 
 			setRepositoriesLoading(true);
-			for (let i = 1; hasMore; i += 1) {
+			while (hasMore) {
 				// eslint-disable-next-line no-await-in-loop
 				const result = await axios.get(`/api/computing/github/repositories?page=${i}`);
 				if (result.status !== 200) throw new Error("Unable to load repositories from github's API");
 				hasMore = result.data.hasMore;
 				repositoryList.push(...result.data.repositories);
+				i += 1;
 			}
 			setRepositories(repositoryList);
 			setRepositoriesLoading(false);
