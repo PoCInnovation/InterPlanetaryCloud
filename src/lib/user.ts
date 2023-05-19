@@ -16,7 +16,7 @@ class User {
 
 	public contact: Contact;
 
-	public config?: IPCConfig;
+	public config: IPCConfig;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount, importedConfig: IPCConfig) {
 		this.account = importedAccount;
@@ -36,7 +36,7 @@ class User {
 					});
 
 					const found = aggr.InterPlanetaryCloud.contacts.find((c: IPCContact) => c.address === this.account.address);
-					if (found) this.config = found.config;
+					if (found?.config) this.config = found.config;
 				}),
 			);
 

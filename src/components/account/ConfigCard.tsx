@@ -36,9 +36,9 @@ const ConfigCard = (): JSX.Element => {
 		try {
 			const config1 = await user.contact.updateConfig(key, value);
 			setConfig({
-				...user.config!,
+				...user.config,
 				[key]: {
-					...user.config![key],
+					...user.config[key],
 					value,
 				},
 			});
@@ -74,8 +74,8 @@ const ConfigCard = (): JSX.Element => {
 									</Text>
 								</HStack>
 
-								{Object.keys(user?.config ?? []).map((key) => {
-									if (user.config![key].type === 'select')
+								{Object.keys(user.config).map((key) => {
+									if (user.config[key].type === 'select')
 										return (
 											<ConfigSelect key={`${key}-select`} option={key} isLoading={isLoading} onClick={changeConfig} />
 										);
@@ -83,9 +83,9 @@ const ConfigCard = (): JSX.Element => {
 										<HStack key={`${key}-input`} spacing="32px">
 											<Text color={textColor}>
 												<Box as="span" fontWeight="500">
-													{`${user.config![key].name}:`}
+													{`${user.config[key].name}:`}
 												</Box>{' '}
-												{user?.config![key].value ?? ''}
+												{user.config[key].value}
 											</Text>
 											<Button
 												variant="secondary"

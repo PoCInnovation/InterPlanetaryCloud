@@ -20,16 +20,16 @@ import { IPCProgram } from 'types/types';
 import { useConfigContext } from 'contexts/config';
 
 import DeployProgram from 'components/computing/programs/DeployProgram';
+import DeleteProgram from 'components/programs/DeleteProgram';
 import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
 import RenameProgram from 'components/programs/RenameProgram';
-import DeleteProgram from 'components/programs/DeleteProgram';
 
-const ProgramOptionsContent = ({ program }: { program: IPCProgram }): JSX.Element => (
+const ProgramOptionsContent = ({ program }: { program: IPCProgram }) => (
 	<>
 		<GoToWebsiteProgram program={program} />
 		<DeployProgram selectedProgram={program} />
-		<RenameProgram program={program}/>
-		<DeleteProgram program={program}/>
+		<RenameProgram program={program} />
+		<DeleteProgram program={program} />
 	</>
 );
 
@@ -43,7 +43,7 @@ const ProgramOptionsPopover = ({
 	clickPosition: { x: number; y: number };
 	popoverOpeningToggle: boolean;
 	popoverOpeningHandler: () => void;
-}): JSX.Element => {
+}) => {
 	const { config } = useConfigContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -88,7 +88,7 @@ const ProgramOptionsDrawer = ({
 	program: IPCProgram;
 	isOpen: boolean;
 	onClose: () => void;
-}): JSX.Element => (
+}) => (
 	<Drawer isOpen={isOpen} onClose={onClose} placement="bottom">
 		<DrawerOverlay />
 		<DrawerContent borderRadius="16px 16px 0px 0px">

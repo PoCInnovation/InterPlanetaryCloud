@@ -1,14 +1,14 @@
 import {
-	HStack,
 	FormControl,
 	FormLabel,
-	Input,
-	useDisclosure,
+	HStack,
 	Icon,
+	Input,
 	Text,
 	useBreakpointValue,
 	useColorMode,
-	useColorModeValue
+	useColorModeValue,
+	useDisclosure,
 } from '@chakra-ui/react';
 
 import { BsPencil } from 'react-icons/bs';
@@ -17,20 +17,19 @@ import type { IPCProgram } from 'types/types';
 
 import { textColorMode } from 'config/colorMode';
 
-import Modal from 'components/Modal';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
 
 import { ChangeEvent, useState } from 'react';
 
-
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 type RenameProgramProps = {
 	program: IPCProgram;
 };
 
-const RenameProgram =  ({ program }: RenameProgramProps): JSX.Element =>  {
+const RenameProgram = ({ program }: RenameProgramProps) => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
@@ -39,7 +38,7 @@ const RenameProgram =  ({ program }: RenameProgramProps): JSX.Element =>  {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { user } = useUserContext();
-	const {programs, setPrograms} = useDriveContext();
+	const { programs, setPrograms } = useDriveContext();
 
 	const updateProgramName = async () => {
 		setIsLoading(true);
@@ -124,6 +123,6 @@ const RenameProgram =  ({ program }: RenameProgramProps): JSX.Element =>  {
 			</Modal>
 		</HStack>
 	);
-}
+};
 
 export default RenameProgram;

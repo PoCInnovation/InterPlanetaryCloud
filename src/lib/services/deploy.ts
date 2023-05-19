@@ -6,13 +6,14 @@ import fs from 'node:fs';
 import child_process from 'child_process';
 
 import { ALEPH_CHANNEL } from 'config/constants';
+import { cleanup } from './git';
 
-async function compress(path: string): Promise<string> {
+const compress = (path: string) => {
 	child_process.execSync(`zip -r ${path} *`, { cwd: path });
 	return `${path}.zip`;
-}
+};
 
-async function programPublish(path: string, entrypoint: string): Promise<string> {
+const programPublish = async (path: string, entrypoint: string) => {
 	const programHashPublishProgram = await program.publish({
 		channel: ALEPH_CHANNEL,
 		account: ethereum.NewAccount().account,
@@ -21,6 +22,13 @@ async function programPublish(path: string, entrypoint: string): Promise<string>
 		entrypoint,
 	});
 	return programHashPublishProgram.item_hash;
-}
+};
 
-export { compress, programPublish };
+const deploy = async (path: string, entrypoint: string) => {
+	const fileName: string = compress(path);
+	const itemHash = await programPublish(fileName, entrypoint);
+	await cleanup(path);
+	return itemHash;
+};
+
+export default deploy;
