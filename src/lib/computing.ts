@@ -9,7 +9,7 @@ import { ALEPH_CHANNEL } from 'config/constants';
 class Computing {
 	public programs: IPCProgram[];
 
-	private readonly account: accounts.ethereum.ETHAccount | undefined;
+	private readonly account: accounts.ethereum.ETHAccount;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.programs = [];
@@ -18,7 +18,7 @@ class Computing {
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
 		const aggr = await aggregate.Get<AggregateType>({
-			address: this.account!.address,
+			address: this.account.address,
 			keys: ['InterPlanetaryCloud'],
 		});
 
@@ -28,7 +28,7 @@ class Computing {
 		return aggregate.Publish({
 			channel: ALEPH_CHANNEL,
 			storageEngine: ItemType.ipfs,
-			account: this.account!,
+			account: this.account,
 			key: 'InterPlanetaryCloud',
 			content,
 		});
@@ -36,17 +36,14 @@ class Computing {
 
 	public async load(): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				const aggr = await aggregate.Get<AggregateType>({
-					address: this.account.address,
-					keys: ['InterPlanetaryCloud'],
-				});
+			const aggr = await aggregate.Get<AggregateType>({
+				address: this.account.address,
+				keys: ['InterPlanetaryCloud'],
+			});
 
-				this.programs = aggr.InterPlanetaryCloud.programs;
+			this.programs = aggr.InterPlanetaryCloud.programs;
 
-				return { success: true, message: 'Programs loaded' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			return { success: true, message: 'Programs loaded' };
 		} catch (error) {
 			console.error(error);
 			return { success: false, message: 'Failed to load programs' };
@@ -55,37 +52,36 @@ class Computing {
 
 	public async deleteProgram(programHash: string): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				await forget.Publish({
-					channel: ALEPH_CHANNEL,
-					hashes: [programHash],
-					storageEngine: ItemType.ipfs,
-					account: this.account,
-				});
-				this.programs = this.programs.filter((f) => f.hash !== programHash);
-				await this.publishAggregate();
-				return { success: true, message: 'program deleted' };
-			}
-			return { success: false, message: 'Failed to load account' };
+			await forget.Publish({
+				channel: ALEPH_CHANNEL,
+				hashes: [programHash],
+				storageEngine: ItemType.ipfs,
+				account: this.account,
+			});
+			this.programs = this.programs.filter((f) => f.hash !== programHash);
+			await this.publishAggregate();
+			return { success: true, message: 'program deleted' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to delete program' };
 		}
 	}
 
-	public async updateProgramName(
-		concernedProgram: IPCProgram,
-		newName: string,
-	): Promise<ResponseType> {
+	public async updateProgramName(concernedProgram: IPCProgram, newName: string): Promise<ResponseType> {
 		try {
 			this.programs = this.programs.map((prog) => {
 				if (prog.id === concernedProgram.id) {
-				    return {...prog, name: newName, logs: [...prog.logs, 
-				            {
-				                action: `Renamed program to ${newName}`,
-				                date: Date.now(),
-				             }
-				        ]};
+					return {
+						...prog,
+						name: newName,
+						logs: [
+							...prog.logs,
+							{
+								action: `Renamed program to ${newName}`,
+								date: Date.now(),
+							},
+						],
+					};
 				}
 				return prog;
 			});
@@ -104,33 +100,30 @@ class Computing {
 		oldProgramHash: IPCProgram | undefined,
 	): Promise<ResponseType> {
 		try {
-			if (this.account) {
-				// remove old program from user's programs array
-				if (isRedeploy && oldProgramHash) {
-					const newProgramsArray: IPCProgram[] = this.programs.filter(
-						(oldProgram: IPCProgram) => oldProgram !== oldProgramHash,
-					);
-					this.programs = newProgramsArray;
-				}
-				const programHashPublishProgram = await program.publish({
-					channel: ALEPH_CHANNEL,
-					account: this.account,
-					storageEngine: ItemType.storage,
-					file: uploadFile,
-					entrypoint: myProgram.entrypoint,
-				});
-				const newProgram: IPCProgram = {
-					...myProgram,
-					hash: programHashPublishProgram.item_hash,
-				};
-
-				this.programs.push(newProgram);
-
-				await this.publishAggregate();
-
-				return { success: true, message: 'Program uploaded' };
+			// remove old program from user's programs array
+			if (isRedeploy && oldProgramHash) {
+				const newProgramsArray: IPCProgram[] = this.programs.filter(
+					(oldProgram: IPCProgram) => oldProgram !== oldProgramHash,
+				);
+				this.programs = newProgramsArray;
 			}
-			return { success: false, message: 'Failed to load account' };
+			const programHashPublishProgram = await program.publish({
+				channel: ALEPH_CHANNEL,
+				account: this.account,
+				storageEngine: ItemType.storage,
+				file: uploadFile,
+				entrypoint: myProgram.entrypoint,
+			});
+			const newProgram: IPCProgram = {
+				...myProgram,
+				hash: programHashPublishProgram.item_hash,
+			};
+
+			this.programs.push(newProgram);
+
+			await this.publishAggregate();
+
+			return { success: true, message: 'Program uploaded' };
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to upload program' };

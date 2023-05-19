@@ -418,7 +418,7 @@ class Contact {
 
 	public async createFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
-			const contact = this.contacts.find((c) => c.address === this.account?.address);
+			const contact = this.contacts.find((c) => c.address === this.account.address);
 
 			if (contact) {
 				contact.folders.push(folder);
@@ -434,7 +434,7 @@ class Contact {
 
 	public async moveFolder(folder: IPCFolder, newPath: string): Promise<ResponseType> {
 		try {
-			const contact = this.contacts.find((c) => c.address === this.account?.address);
+			const contact = this.contacts.find((c) => c.address === this.account.address);
 			const fullPath = `${folder.path}${folder.name}/`;
 
 			if (contact) {
@@ -471,7 +471,7 @@ class Contact {
 
 	public async deleteFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
-			const contact = this.contacts.find((c) => c.address === this.account?.address);
+			const contact = this.contacts.find((c) => c.address === this.account.address);
 
 			if (contact) {
 				const fullPath = `${folder.path}${folder.name}/`;
@@ -492,7 +492,7 @@ class Contact {
 
 	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
 		try {
-			const contact = this.contacts.find((c) => c.address === this.account?.address);
+			const contact = this.contacts.find((c) => c.address === this.account.address);
 
 			if (contact) {
 				const currentFile = contact.files.find((f) => f.id === file.id);
@@ -516,7 +516,7 @@ class Contact {
 
 	public async updateConfig(key: string, value: string): Promise<ResponseType> {
 		try {
-			const contact = this.contacts.find((c) => c.address === this.account?.address);
+			const contact = this.contacts.find((c) => c.address === this.account.address);
 			if (contact) {
 				if (!contact.config![key]) {
 					return { success: false, message: 'Invalid config key' };

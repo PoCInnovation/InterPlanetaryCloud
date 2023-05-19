@@ -52,6 +52,7 @@ const UploadFile = (): JSX.Element => {
 				true,
 				['encrypt', 'decrypt'],
 			);
+
 			const keyString = await crypto.subtle.exportKey('raw', cryptoKey);
 			const iv = crypto.getRandomValues(new Uint8Array(128));
 

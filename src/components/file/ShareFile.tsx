@@ -5,11 +5,11 @@ import {
 	Select,
 	Text,
 	useBreakpointValue,
+	useColorMode,
+	useColorModeValue,
 	useDisclosure,
 	useToast,
 	VStack,
-	useColorModeValue,
-	useColorMode,
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { BsShareFill } from 'react-icons/bs';
@@ -18,12 +18,12 @@ import Modal from 'components/Modal';
 
 import { useUserContext } from 'contexts/user';
 
-import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
-import { hoverColorMode, textColorMode } from 'config/colorMode';
-import Card from 'components/cards/Card';
-import colors from 'theme/foundations/colors';
 import Avatar from 'boring-avatars';
 import Button from 'components/Button';
+import Card from 'components/cards/Card';
+import { hoverColorMode, textColorMode } from 'config/colorMode';
+import colors from 'theme/foundations/colors';
+import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
 
 type ShareFileProps = {
 	file: IPCFile;
@@ -117,7 +117,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 				<VStack spacing="16px" overflowY="auto">
 					{!contact &&
 						user.contact.contacts.map((c) => {
-							if (c.address !== user.account?.address)
+							if (c.address !== user.account.address)
 								return (
 									<Card
 										key={c.address}
@@ -129,7 +129,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 										<HStack spacing="32px">
 											<Avatar
 												size="48"
-												name={user?.account?.address}
+												name={user.account.address}
 												variant="marble"
 												colors={[
 													colors.red['1000'],
