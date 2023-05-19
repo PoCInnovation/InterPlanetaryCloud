@@ -1,24 +1,24 @@
-import Joi from 'joi';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
+import z from 'zod';
 
-import validate from 'lib/middlewares/validation';
 import deploy from 'lib/services/deploy';
 import { clone, getProgramName } from 'lib/services/git';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
-
-const postSchema = Joi.object({
+const postSchema = z.object({
 	// eslint-disable-next-line no-useless-escape
-	repository: Joi.string().pattern(/((git|http(s)?)|(git@[\w\.]+))(:(\/\/)?)([\w\.@\:\/\-~]+)(\.git)(\/)?/),
-	entrypoint: Joi.string(),
+	repository: z.string().regex(/((git|http(s)?)|(git@[\w\.]+))(:(\/\/)?)([\w\.@\:\/\-~]+)(\.git)(\/)?/),
+	entrypoint: z.string(),
 });
 
-router.post(validate({ body: postSchema }), async (req, res) => {
-	const { repository, entrypoint } = req.body;
-	const path = await clone(repository);
-	const itemHash = await deploy(path, entrypoint);
-	return res.status(200).json({ name: getProgramName(repository), item_hash: itemHash, entrypoint });
-});
-
-export default router.handler();
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+	try {
+		if (req.method !== 'POST') throw new Error('Method not allowed');
+		const body = postSchema.parse(req.body);
+		const { repository, entrypoint } = body;
+		const path = await clone(repository);
+		const itemHash = await deploy(path, entrypoint);
+		return res.status(200).json({ name: getProgramName(repository), item_hash: itemHash, entrypoint });
+	} catch (error) {
+		return res.status(400).end('Bad request');
+	}
+}

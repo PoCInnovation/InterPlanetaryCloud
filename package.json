@@ -19,16 +19,14 @@
     "ethers": "^5.7.2",
     "framer-motion": "^10.12.12",
     "git-clone": "^0.2.0",
-    "joi": "^17.9.2",
     "js-file-download": "^0.4.12",
     "next": "^12.3.4",
     "next-auth": "4.10.3",
-    "next-connect": "^1.0.0-next.3",
-    "next-joi": "^2.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
   },
   "scripts": {
     "dev": "next dev",
