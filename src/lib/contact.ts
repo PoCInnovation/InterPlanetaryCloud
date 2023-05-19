@@ -517,13 +517,13 @@ class Contact {
 	public async updateConfig(key: string, value: string): Promise<ResponseType> {
 		try {
 			const contact = this.contacts.find((c) => c.address === this.account.address);
-			if (contact) {
-				if (!contact.config![key]) {
+			if (contact?.config) {
+				if (!contact.config[key]) {
 					return { success: false, message: 'Invalid config key' };
 				}
-				contact.config![key].value = value;
+				contact.config[key].value = value;
 				await this.publishAggregate();
-				return { success: true, message: `${contact.config![key].name} changed` };
+				return { success: true, message: `${contact.config[key].name} changed` };
 			}
 			return { success: false, message: 'Failed to find account' };
 		} catch (err) {

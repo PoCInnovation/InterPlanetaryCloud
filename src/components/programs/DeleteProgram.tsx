@@ -33,14 +33,13 @@ const DeleteProgram = ({ program }: DeleteProgramProps): JSX.Element => {
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
 
-    const deleteActualProgram = async () => {
-			setIsLoading(true);
-			const update = await user.computing.deleteProgram(program.hash);
-			if (update.success)
-				setPrograms(programs.filter((f) => f.hash !== program.hash));
-			setIsLoading(false);
-			onClose();
-    }
+	const deleteActualProgram = async () => {
+		setIsLoading(true);
+		const update = await user.computing.deleteProgram(program.hash);
+		if (update.success) setPrograms(programs.filter((f) => f.hash !== program.hash));
+		setIsLoading(false);
+		onClose();
+	};
 
 	return (
 		<HStack

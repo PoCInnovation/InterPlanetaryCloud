@@ -27,8 +27,8 @@ function getPath(repoUrl: string): string {
 	return node_path.join(GITCLONE_DIR, `${getProgramName(repoUrl)}`);
 }
 
-function cleanup(path: string): Promise<void> {
-	return rm(path, { recursive: true });
+async function cleanup(path: string) {
+	await rm(path, { recursive: true });
 }
 
 async function clone(repoUrl: string): Promise<string> {
