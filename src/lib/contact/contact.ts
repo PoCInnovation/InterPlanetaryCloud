@@ -22,7 +22,7 @@ class Contact {
 
 	public account: accounts.ethereum.ETHAccount;
 
-	public files: ContactFile;
+	// public files: ContactFile;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
