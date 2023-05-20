@@ -1,23 +1,18 @@
 import { aggregate, post } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
-import type {
-	AggregateType,
-	IPCFile,
-	ResponseType,
-} from 'types/types';
+import type { AggregateType, IPCFile, ResponseType } from 'types/types';
 
 import Contact from '../contact';
 
 class ContactFile {
-
 	public contact: Contact;
 
 	constructor(contactClass: Contact) {
 		this.contact = contactClass;
 	}
 
-    public async updateFileName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
+	public async updateName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			let fileFound = false;
 			await Promise.all(
@@ -54,7 +49,7 @@ class ContactFile {
 		}
 	}
 
-    public async getFileOwner(fileId: string): Promise<string | undefined> {
+	public async getOwner(fileId: string): Promise<string | undefined> {
 		let owner;
 		await Promise.all(
 			this.contact.contacts.map(async (contact) => {
@@ -71,7 +66,7 @@ class ContactFile {
 		return owner;
 	}
 
-    public async updateFileContent(newFile: IPCFile): Promise<ResponseType> {
+	public async updateContent(newFile: IPCFile): Promise<ResponseType> {
 		try {
 			let fileFound = false;
 			await Promise.all(
@@ -101,7 +96,7 @@ class ContactFile {
 			);
 
 			if (!fileFound && this.contact.account) {
-				const owner = await this.getFileOwner(newFile.id);
+				const owner = await this.getOwner(newFile.id);
 
 				if (!owner) {
 					return { success: false, message: 'File not found' };
@@ -112,10 +107,16 @@ class ContactFile {
 
 				const encryptInfos = {
 					key: (
-						await this.contact.account.encrypt(await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')), owner)
+						await this.contact.account.encrypt(
+							await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
+							owner,
+						)
 					).toString('hex'),
 					iv: (
-						await this.contact.account.encrypt(await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')), owner)
+						await this.contact.account.encrypt(
+							await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
+							owner,
+						)
 					).toString('hex'),
 				};
 				await post.Publish({
@@ -133,7 +134,7 @@ class ContactFile {
 		}
 	}
 
-	public async deleteFiles(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
+	public async delete(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			ids.forEach(async (id) => {
 				const me = this.contact.contacts.find((c) => c.address === this.contact.account.address)!;
@@ -162,7 +163,7 @@ class ContactFile {
 		}
 	}
 
-	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
+	public async move(file: IPCFile, newPath: string): Promise<ResponseType> {
 		try {
 			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
 
@@ -186,7 +187,7 @@ class ContactFile {
 		}
 	}
 
-	public async moveFileToBin(
+	public async moveToBin(
 		concernedFile: IPCFile,
 		deletedAt: number | null,
 		sharedFiles: IPCFile[],
@@ -228,7 +229,7 @@ class ContactFile {
 		}
 	}
 
-	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
+	public async addToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			const index = this.contact.contacts.findIndex((contact) => contact.address === contactAddress);
 
@@ -277,7 +278,6 @@ class ContactFile {
 			return { success: false, message: 'Failed to share the file with the contact' };
 		}
 	}
-
 }
 
 export default ContactFile;

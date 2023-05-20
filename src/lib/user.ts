@@ -22,8 +22,8 @@ class User {
 		this.account = importedAccount;
 		this.config = importedConfig;
 		this.drive = new Drive(this.account);
-		this.computing = new Computing(this.account);
 		this.fullContact = new FullContact(this.account);
+		this.computing = new Computing(this.account, this.fullContact.contact);
 	}
 
 	public async loadConfig() {
