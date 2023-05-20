@@ -6,6 +6,7 @@ import Contact from 'lib/contact/contact';
 import Drive from 'lib/drive';
 
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
+import ContactFile from './contact/contactClasses/fileContact';
 
 class User {
 	public account: accounts.ethereum.ETHAccount;
@@ -18,12 +19,15 @@ class User {
 
 	public config: IPCConfig;
 
+	public files: ContactFile;
+
 	constructor(importedAccount: accounts.ethereum.ETHAccount, importedConfig: IPCConfig) {
 		this.account = importedAccount;
 		this.config = importedConfig;
 		this.drive = new Drive(this.account);
 		this.computing = new Computing(this.account);
 		this.contact = new Contact(this.account);
+		this.files = new ContactFile(this.account);
 	}
 
 	public async loadConfig() {
