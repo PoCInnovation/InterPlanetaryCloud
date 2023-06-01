@@ -22,10 +22,13 @@ class Contact {
 
 	public account: accounts.ethereum.ETHAccount;
 
+	public files: ContactFile;
+
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
 		this.account = importedAccount;
 		this.username = '';
+		this.files = new ContactFile(this.account);
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
@@ -45,8 +48,6 @@ class Contact {
 			content,
 		});
 	}
-
-	
 
 	public async load(): Promise<ResponseType> {
 		try {
@@ -83,7 +84,6 @@ class Contact {
 						updates.posts.map(async (update) => {
 							const { tags, file } = <IPCUpdateContent>update.content;
 							const [type, fileId] = tags;
-
 							await Promise.all(
 								this.contacts.map(async (c) => {
 									const foundFile = c.files.find((f) => f.id === fileId);
