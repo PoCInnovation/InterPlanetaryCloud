@@ -14,6 +14,7 @@ import type {
 
 import { ALEPH_CHANNEL } from 'config/constants';
 import ContactFile from './contactClasses/fileContact';
+import FullContact from './fullContact';
 
 class Contact {
 	public contacts: IPCContact[];
@@ -22,13 +23,13 @@ class Contact {
 
 	public account: accounts.ethereum.ETHAccount;
 
-	public files: ContactFile;
+	public fullContact: FullContact;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
 		this.account = importedAccount;
 		this.username = '';
-		this.files = new ContactFile(this.account);
+		this.fullContact = new FullContact(this.account);
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
