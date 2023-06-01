@@ -45,7 +45,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 		const fullPath = `${folder.path}${folder.name}/`;
 
 		if (user.account) {
-			const foldersResponse = await user.contact.deleteFolder(folder);
+			const foldersResponse = await user.fullContact.contact.deleteFolder(folder);
 			setFolders(
 				folders.filter(
 					(f) => !f.path.startsWith(fullPath) && (f.path !== folder.path || f.createdAt !== folder.createdAt),
@@ -56,7 +56,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 				const filesToDelete = user.drive.files.filter((file) => file.path.startsWith(fullPath));
 				if (filesToDelete.length > 0) {
 					const filesResponse = await user.drive.delete(filesToDelete.map((file) => file.hash));
-					await user.contact.deleteFiles(
+					await user.fullContact.contact.deleteFiles(
 						filesToDelete.map((file) => file.id),
 						[],
 					);

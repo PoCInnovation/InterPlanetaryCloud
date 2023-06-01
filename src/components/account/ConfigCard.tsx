@@ -34,7 +34,7 @@ const ConfigCard = (): JSX.Element => {
 	const changeConfig = async (key: string, value: string) => {
 		setIsLoading(true);
 		try {
-			const config1 = await user.contact.updateConfig(key, value);
+			const config1 = await user.fullContact.contact.updateConfig(key, value);
 			setConfig({
 				...user.config,
 				[key]: {

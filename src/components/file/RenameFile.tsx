@@ -43,7 +43,7 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 	const renameFile = async () => {
 		setIsLoading(true);
 		if (name) {
-			const update = await user.contact.fullContact.files.updateFileName(file, name, concernedFiles);
+			const update = await user.fullContact.contact.fullContact.files.updateFileName(file, name, concernedFiles);
 			toast({ title: update.message, status: update.success ? 'success' : 'error' });
 			if (update.success) {
 				const index = files.indexOf(file);

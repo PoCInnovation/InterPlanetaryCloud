@@ -29,7 +29,6 @@ class Contact {
 		this.contacts = [];
 		this.account = importedAccount;
 		this.username = '';
-		this.fullContact = new FullContact(this.account);
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {

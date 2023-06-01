@@ -29,7 +29,7 @@ import Modal from '../Modal';
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [input, setInput] = useState<string>(user.contact.username || '');
+	const [input, setInput] = useState<string>(user.fullContact.contact.username || '');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -37,7 +37,7 @@ const AccountCard = (): JSX.Element => {
 	const changeName = async () => {
 		setIsLoading(true);
 		try {
-			const config1 = await user.contact.update(user.account.address, input);
+			const config1 = await user.fullContact.contact.update(user.account.address, input);
 			setIsOpen(false);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
@@ -92,7 +92,7 @@ const AccountCard = (): JSX.Element => {
 										]}
 									/>
 									<Text color={textColor} size="xl">
-										{user.contact.username}
+										{user.fullContact.contact.username}
 									</Text>
 								</HStack>
 								<HStack spacing="16px">

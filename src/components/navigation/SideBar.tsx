@@ -116,7 +116,7 @@ const SideBar = (): JSX.Element => {
 				</VStack>
 				{isDrawerNeeded && (
 					<ProfileBadge
-						username={user ? user.contact.username : 'IPC'}
+						username={user ? user.fullContact.contact.username : 'IPC'}
 						address={(user ? user.account.address : 'IPC') || 'IPC'}
 					/>
 				)}
