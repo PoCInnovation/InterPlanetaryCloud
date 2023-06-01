@@ -1,7 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
-import Contact from 'lib/contact/contact';
 
 import type {
 	AggregateContentType,
@@ -14,6 +13,7 @@ import type {
 } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
+import Contact from '../contact'
 
 class ContactFile extends Contact {
 
