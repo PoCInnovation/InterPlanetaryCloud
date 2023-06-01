@@ -20,7 +20,9 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 	const { path, setPath } = useDriveContext();
 	const {
 		user: {
-			contact: { username },
+			fullContact: {
+				contact: { username },
+			}
 		},
 	} = useUserContext();
 
