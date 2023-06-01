@@ -22,7 +22,9 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const { files } = useDriveContext();
 	const {
 		user: {
-			contact: { username },
+			fullContact: {
+				contact: { username },
+			}
 		},
 	} = useUserContext();
 
