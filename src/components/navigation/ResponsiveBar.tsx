@@ -83,7 +83,7 @@ export const ResponsiveBar = (): JSX.Element => {
 
 				{!isDrawerNeeded && (
 					<ProfileBadge
-						username={(user ? user.contact.username : 'IPC') || 'IPC'}
+						username={(user ? user.fullContact.contact.username : 'IPC') || 'IPC'}
 						address={(user ? user.account.address : 'IPC') || 'IPC'}
 					/>
 				)}

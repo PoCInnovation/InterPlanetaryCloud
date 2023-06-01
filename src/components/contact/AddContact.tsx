@@ -22,7 +22,7 @@ const AddContact = (): JSX.Element => {
 		try {
 			if (name && contactPublicKey) {
 				const address = EthCrypto.publicKey.toAddress(contactPublicKey.slice(2));
-				const add = await user.contact.add({
+				const add = await user.fullContact.contact.add({
 					name,
 					address,
 					publicKey: contactPublicKey,
@@ -34,7 +34,7 @@ const AddContact = (): JSX.Element => {
 				});
 
 				toast({ title: add.message, status: add.success ? 'success' : 'error' });
-				setContacts(user.contact.contacts);
+				setContacts(user.fullContact.contact.contacts);
 			} else {
 				toast({ title: 'Bad contact infos', status: 'error' });
 			}
