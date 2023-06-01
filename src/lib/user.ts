@@ -7,6 +7,7 @@ import Drive from 'lib/drive';
 
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
 import ContactFile from './contact/contactClasses/fileContact';
+import FullContact from './contact/fullContact';
 
 class User {
 	public account: accounts.ethereum.ETHAccount;
@@ -15,7 +16,7 @@ class User {
 
 	public computing: Computing;
 
-	public contact: Contact;
+	public contact: FullContact;
 
 	public config: IPCConfig;
 
@@ -24,13 +25,13 @@ class User {
 		this.config = importedConfig;
 		this.drive = new Drive(this.account);
 		this.computing = new Computing(this.account);
-		this.contact = new Contact(this.account);
+		this.contact = new FullContact(this.account);
 	}
 
 	public async loadConfig() {
 		try {
 			await Promise.all(
-				this.contact.contacts.map(async (contact) => {
+				this.contact.contact.contacts.map(async (contact) => {
 					const aggr = await aggregate.Get<AggregateType>({
 						address: contact.address,
 						keys: ['InterPlanetaryCloud'],
