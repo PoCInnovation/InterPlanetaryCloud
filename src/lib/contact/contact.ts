@@ -13,10 +13,13 @@ class Contact {
 
 	public account: accounts.ethereum.ETHAccount;
 
+	public files: ContactFile;
+
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
 		this.account = importedAccount;
 		this.username = '';
+		this.files = new ContactFile(this.account);
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
