@@ -15,7 +15,6 @@ import {
 import Avatar from 'boring-avatars';
 import { ChangeEvent, useState } from 'react';
 import { BsClipboard } from 'react-icons/bs';
-
 import Card from 'components/cards/Card';
 
 import { useUserContext } from 'contexts/user';

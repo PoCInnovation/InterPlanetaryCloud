@@ -41,7 +41,11 @@ const MoveFile = ({ file, onClosePopover }: MoveFileProps): JSX.Element => {
 	const moveFile = async () => {
 		setIsLoading(true);
 
+<<<<<<< HEAD
 		const moved = await user.fullContact.files.moveFile(file, newPath);
+=======
+		const moved = await user.fullContact.contact.moveFile(file, newPath);
+>>>>>>> 7683ed9 (feat: replace user.contact by user.fullContact.contact)
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 		const index = files.indexOf(file);

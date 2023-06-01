@@ -43,7 +43,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 
 	const shareFile = async () => {
 		setIsLoading(true);
-		const share = await user.fullContact.files.addFileToContact(contact!.address, { ...file, permission });
+		const share = await user.fullContact.files.addToContact(contact!.address, { ...file, permission });
 
 		toast({ title: share.message, status: share.success ? 'success' : 'error' });
 		onUnmount();
