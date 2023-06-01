@@ -39,7 +39,7 @@ const DrawerDetailsFile = ({
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 
 	const list: { name: string; address: string }[] = [];
-	user.contact.contacts.forEach((contact: IPCContact) => {
+	user.fullContact.contact.contacts.forEach((contact: IPCContact) => {
 		contact.files.forEach((contactFile: IPCFile) => {
 			if (contactFile.hash === file.hash) {
 				list.push({ name: contact.name, address: contact.address });

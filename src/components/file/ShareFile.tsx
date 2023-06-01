@@ -43,7 +43,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 
 	const shareFile = async () => {
 		setIsLoading(true);
-		const share = await user.contact.addFileToContact(contact!.address, { ...file, permission });
+		const share = await user.fullContact.contact.addFileToContact(contact!.address, { ...file, permission });
 
 		toast({ title: share.message, status: share.success ? 'success' : 'error' });
 		onUnmount();
@@ -116,7 +116,7 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 			>
 				<VStack spacing="16px" overflowY="auto">
 					{!contact &&
-						user.contact.contacts.map((c) => {
+						user.fullContact.contact.contacts.map((c) => {
 							if (c.address !== user.account.address)
 								return (
 									<Card
