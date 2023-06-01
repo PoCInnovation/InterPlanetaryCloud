@@ -16,7 +16,7 @@ class User {
 
 	public computing: Computing;
 
-	public contact: FullContact;
+	public fullContact: FullContact;
 
 	public config: IPCConfig;
 
@@ -25,13 +25,13 @@ class User {
 		this.config = importedConfig;
 		this.drive = new Drive(this.account);
 		this.computing = new Computing(this.account);
-		this.contact = new FullContact(this.account);
+		this.fullContact = new FullContact(this.account);
 	}
 
 	public async loadConfig() {
 		try {
 			await Promise.all(
-				this.contact.contact.contacts.map(async (contact) => {
+				this.fullContact.contact.contacts.map(async (contact) => {
 					const aggr = await aggregate.Get<AggregateType>({
 						address: contact.address,
 						keys: ['InterPlanetaryCloud'],

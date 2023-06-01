@@ -27,14 +27,14 @@ const Dashboard = (): JSX.Element => {
 	}, []);
 
 	const loadContact = async () => {
-		const load = await user.contact.load();
+		const load = await user.fullContact.contact.load();
 
 		toast({ title: load.message, status: load.success ? 'success' : 'error' });
-		setContacts(user.contact.contacts);
+		setContacts(user.fullContact.contact.contacts);
 	};
 
 	const loadUserContents = async () => {
-		const loadShared = await user.drive.loadShared(user.contact.contacts);
+		const loadShared = await user.drive.loadShared(user.fullContact.contact.contacts);
 		toast({ title: loadShared.message, status: loadShared.success ? 'success' : 'error' });
 		setFiles(user.drive.files);
 		setFolders(user.drive.folders);

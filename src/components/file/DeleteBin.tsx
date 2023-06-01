@@ -32,7 +32,7 @@ const DeleteBin = ({ files, folders, concernedFiles }: DeleteBinProps): JSX.Elem
 		if (user.account) {
 			const deleted = await user.drive.delete(files.map((file) => file.hash));
 			if (deleted.success) {
-				const removed = await user.contact.deleteFiles(
+				const removed = await user.fullContact.contact.deleteFiles(
 					files.map((file) => file.id),
 					concernedFiles,
 				);

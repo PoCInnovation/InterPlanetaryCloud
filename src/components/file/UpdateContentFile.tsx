@@ -73,7 +73,7 @@ const UpdateContentFile = ({ file, onClosePopover }: UpdateContentFileProps): JS
 		if (!upload.success || !upload.file) {
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 		} else {
-			const updated = await user.contact.files.updateFileContent(upload.file);
+			const updated = await user.fullContact.contact.files.updateFileContent(upload.file);
 			toast({ title: updated.message, status: updated.success ? 'success' : 'error' });
 			if (updated.success && upload.file) {
 				const index = files.indexOf(oldFile);
