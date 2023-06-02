@@ -26,16 +26,17 @@ class FullContact {
 
 	public files: ContactFile;
 
-	public folders: ContactFolder;
+	// public folders: ContactFolder;
 
-	public manage: ManageContact;
+	// public manage: ManageContact;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.account = importedAccount;
 		this.contact = new Contact(this.account);
+		this.contact.load();
 		this.files = new ContactFile(this.contact);
-		this.folders = new ContactFolder(this.contact);
-		this.manage = new ManageContact(this.contact);
+		// this.folders = new ContactFolder(this.contact);
+		// this.manage = new ManageContact(this.contact);
 	}	
 }
 
