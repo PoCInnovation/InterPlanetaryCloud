@@ -15,6 +15,8 @@ import type {
 import { ALEPH_CHANNEL } from 'config/constants';
 import ContactFile from './contactClasses/fileContact';
 import Contact from './contact';
+import ContactFolder from './contactClasses/folderContact';
+import ManageContact from './contactClasses/manageContact';
 
 class FullContact {
 
@@ -24,10 +26,16 @@ class FullContact {
 
 	public files: ContactFile;
 
+	public folders: ContactFolder;
+
+	public manage: ManageContact;
+
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.account = importedAccount;
 		this.contact = new Contact(this.account);
-		this.files = new ContactFile(this.account);
+		this.files = new ContactFile(this.contact);
+		this.folders = new ContactFolder(this.contact);
+		this.manage = new ManageContact(this.contact);
 	}	
 }
 
