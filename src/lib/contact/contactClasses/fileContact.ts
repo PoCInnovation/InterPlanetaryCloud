@@ -13,16 +13,28 @@ import type {
 } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
-import Contact from '../contact'
+import Contact from '../contact';
 
-class ContactFile extends Contact {
+class ContactFile {
+
+	public contacts: IPCContact[];
+	
+	public contact: Contact;
+
+	public account: accounts.ethereum.ETHAccount;
+
+	constructor(contactClass: Contact) {
+		this.contacts = contactClass.contacts;
+		this.contact = contactClass;
+		this.account = contactClass.account;
+	}
 
     public async updateFileName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			let fileFound = false;
 			await Promise.all(
-				this.contacts.map(async (contact) => {
-					const file = contact.files.find((f) => f.id === concernedFile.id);
+				this.contacts.map(async (c) => {
+					const file = c.files.find((f) => f.id === concernedFile.id);
 					if (file) {
 						file.name = newName;
 						file.logs.push({
@@ -30,7 +42,7 @@ class ContactFile extends Contact {
 							date: Date.now(),
 						});
 						fileFound = true;
-						await this.publishAggregate();
+						await this.contact.publishAggregate();
 					}
 				}),
 			);
@@ -69,7 +81,6 @@ class ContactFile extends Contact {
 				}
 			}),
 		);
-        console.log("ALLALAL");
 		return owner;
 	}
 
@@ -97,7 +108,7 @@ class ContactFile extends Contact {
 							).toString('hex'),
 						};
 						fileFound = true;
-						await this.publishAggregate();
+						await this.contact.publishAggregate();
 					}
 				}),
 			);
@@ -132,6 +143,101 @@ class ContactFile extends Contact {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to update the file content' };
+		}
+	}
+
+	public async deleteFiles(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
+		try {
+			ids.forEach(async (id) => {
+				const me = this.contacts.find((c) => c.address === this.account.address)!;
+				const file = me.files.find((f) => f.id === id);
+
+				if (file) {
+					me.files = me.files.filter((f) => f.id !== id);
+				} else {
+					const sharedFile = sharedFiles.find((f) => f.id === id);
+					if (sharedFile) {
+						post.Publish({
+							account: this.account,
+							postType: 'InterPlanetaryCloud',
+							content: { file, tags: ['delete', id] },
+							channel: 'TEST',
+							storageEngine: ItemType.ipfs,
+						});
+					}
+				}
+			});
+			this.contact.publishAggregate();
+			return { success: true, message: 'File deleted from the contact' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to delete the file from the contact' };
+		}
+	}
+
+	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
+		try {
+			const contact = this.contacts.find((c) => c.address === this.account.address);
+			console.log(this.contacts);
+			if (contact) {
+				const currentFile = contact.files.find((f) => f.id === file.id);
+				if (currentFile) {
+					currentFile.path = newPath;
+					currentFile.logs.push({
+						action: `Moved file to ${newPath}`,
+						date: Date.now(),
+					});
+					await this.contact.publishAggregate();
+					return { success: true, message: 'File moved' };
+				}
+				return { success: false, message: 'File does not exist' };
+			}
+			return { success: false, message: 'Failed to load contact' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to move the file' };
+		}
+	}
+
+	public async moveFileToBin(
+		concernedFile: IPCFile,
+		deletedAt: number | null,
+		sharedFiles: IPCFile[],
+	): Promise<ResponseType> {
+		try {
+			let fileFound = false;
+			this.contacts.forEach(async (contact) => {
+				const file = contact.files.find((f) => f.id === concernedFile.id);
+				if (file) {
+					file.deletedAt = deletedAt;
+					file.logs.push({
+						action: deletedAt ? 'Moved file to bin' : 'Restored file',
+						date: Date.now(),
+					});
+					fileFound = true;
+					await this.contact.publishAggregate();
+				}
+			});
+			if (!fileFound) {
+				const file = sharedFiles.find((f) => f.id === concernedFile.id);
+				if (!file) {
+					return { success: false, message: 'File not found' };
+				}
+				await post.Publish({
+					account: this.account,
+					postType: 'InterPlanetaryCloud',
+					content: { file: { ...concernedFile, deletedAt }, tags: ['bin', concernedFile.id] },
+					channel: 'TEST',
+					storageEngine: ItemType.ipfs,
+				});
+			}
+			return { success: true, message: `File ${deletedAt === null ? 'removed from' : 'moved to'} the bin` };
+		} catch (err) {
+			console.error(err);
+			return {
+				success: false,
+				message: `Failed to ${deletedAt === null ? 'remove the file from' : 'move the file to'} the bin`,
+			};
 		}
 	}
 }
