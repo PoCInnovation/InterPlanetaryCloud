@@ -7,7 +7,7 @@ import Contact from '../contact';
 
 class ManageContact {
 
-    public contact: Contact;
+	public contact: Contact;
 
 	constructor(contactClass: Contact) {
 		this.contact = contactClass;
