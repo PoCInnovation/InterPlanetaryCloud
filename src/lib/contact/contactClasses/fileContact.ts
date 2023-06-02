@@ -27,8 +27,9 @@ class ContactFile {
 		this.contacts = contactClass.contacts;
 		this.contact = contactClass;
 		this.account = contactClass.account;
+		// this.contact.load();
 	}
-
+	
     public async updateFileName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			let fileFound = false;
