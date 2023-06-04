@@ -42,7 +42,7 @@ const ProgramModal = ({
 
 		setIsDeployLoading(true);
 		try {
-			const upload = await user.computing.uploadProgram(
+			const upload = await user.fullContact.computing.uploadProgram(
 				{
 					id: crypto.randomUUID(),
 					name: customName || filename,
@@ -62,7 +62,7 @@ const ProgramModal = ({
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-			setPrograms(user.computing.programs);
+			setPrograms(user.fullContact.computing.programs);
 			onClose();
 		} catch (error) {
 			console.error(error);

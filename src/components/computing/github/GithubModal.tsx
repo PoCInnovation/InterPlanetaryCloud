@@ -71,9 +71,9 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 					},
 				],
 			};
-			user.computing.programs.push(newProgram);
-			await user.computing.publishAggregate();
-			setPrograms(user.computing.programs);
+			user.fullContact.computing.programs.push(newProgram);
+			await user.fullContact.computing.publishAggregate();
+			setPrograms(user.fullContact.computing.programs);
 			toast({ title: 'Upload succeeded', status: 'success' });
 			onClose();
 		} catch (err) {
