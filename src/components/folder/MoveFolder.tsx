@@ -1,6 +1,4 @@
-import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import {
-	Divider,
 	HStack,
 	Icon,
 	Text,
@@ -11,8 +9,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FcFolder } from 'react-icons/fc';
-import { MdOutlineDriveFileMove } from 'react-icons/md';
+import { IoTrashSharp } from 'react-icons/io5';
 
 import Modal from 'components/Modal';
 
@@ -23,70 +20,56 @@ import Button from 'components/Button';
 import type { IPCFolder } from 'types/types';
 import { textColorMode } from 'config/colorMode';
 
-type MoveFolderProps = {
+type DeleteFolderProps = {
 	folder: IPCFolder;
 };
 
-const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
+const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 	const { user } = useUserContext();
-	const { files, setFiles, folders, setFolders } = useDriveContext();
-	const [hasPermission, setHasPermission] = useState(false);
-	const toast = useToast({ duration: 2000, isClosable: true });
+	const { folders, setFolders, setFiles } = useDriveContext();
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
+	const toast = useToast({ duration: 2000, isClosable: true });
+	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+	const { colorMode } = useColorMode();
 
-	const [newPath, setNewPath] = useState('/');
-	const [isLoading, setIsLoading] = useState(false);
+	const [hasPermission, setHasPermission] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	useEffect(() => {
 		setHasPermission(true);
-		return () => {
-			setHasPermission(false);
-			setNewPath('/');
-		};
+		return () => setHasPermission(false);
 	}, []);
 
-	const moveFolder = async () => {
-		setIsLoading(true);
+	const deleteFolder = async () => {
 		const fullPath = `${folder.path}${folder.name}/`;
 
-		const moved = await user.fullContact.folders.move(folder, newPath);
+		if (user.account) {
+			const foldersResponse = await user.fullContact.folders.delete(folder);
+			setFolders(
+				folders.filter(
+					(f) => !f.path.startsWith(fullPath) && (f.path !== folder.path || f.createdAt !== folder.createdAt),
+				),
+			);
 
-		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
-		setFiles(
-			files.map((f) => {
-				if (f.path.startsWith(fullPath))
-					return {
-						...f,
-						path: f.path.replace(folder.path, newPath),
-						logs: [
-							...f.logs,
-							{
-								action: `Moved folder to ${fullPath}`,
-								date: Date.now(),
-							},
-						],
-					};
-				return f;
-			}),
-		);
-
-		setFolders(
-			folders.map((f) => {
-				if (f.path.startsWith(fullPath)) return { ...f, path: f.path.replace(folder.path, newPath) };
-				if (f === folder) return { ...f, path: newPath };
-				return f;
-			}),
-		);
-
-		setNewPath('/');
-		setIsLoading(false);
+			if (foldersResponse.success) {
+				const filesToDelete = user.drive.files.filter((file) => file.path.startsWith(fullPath));
+				if (filesToDelete.length > 0) {
+					const filesResponse = await user.drive.delete(filesToDelete.map((file) => file.hash));
+					await user.fullContact.files.delete(
+						filesToDelete.map((file) => file.id),
+						[],
+					);
+					foldersResponse.success = filesResponse.success;
+				}
+			}
+			toast({ title: foldersResponse.message, status: foldersResponse.success ? 'success' : 'error' });
+		} else {
+			toast({ title: 'Failed to load account', status: 'error' });
+		}
+		setFiles(user.drive.files);
 		onClose();
 	};
-
-	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
-	const { colorMode } = useColorMode();
 
 	if (!hasPermission) return <></>;
 
@@ -99,13 +82,13 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 			onClick={onOpen}
 			w="100%"
 			cursor="pointer"
-			id="ipc-dashboard-move-button"
+			id="ipc-dashboard-delete-button"
 			_hover={{
 				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
 		>
 			<Icon
-				as={MdOutlineDriveFileMove}
+				as={IoTrashSharp}
 				_groupHover={{ color: 'red.800' }}
 				w={isDrawer ? '24px' : '20px'}
 				h={isDrawer ? '24px' : '20px'}
@@ -119,73 +102,22 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 				}}
 				color={textColor}
 			>
-				Move to...
+				Delete
 			</Text>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Move folder"
+				title="Delete the folder"
 				CTA={
-					<Button
-						variant="primary"
-						size="lg"
-						onClick={moveFolder}
-						isLoading={isLoading}
-						id="ipc-dashboard-move-folder-confirm"
-					>
-						Move
+					<Button variant="primary" size="lg" onClick={deleteFolder} id="ipc-dashboard-delete-folder-button">
+						Delete
 					</Button>
 				}
 			>
-				<>
-					<Button
-						variant="secondary"
-						size="sm"
-						disabled={newPath === '/'}
-						onClick={() => setNewPath(newPath.replace(/([^/]+)\/$/, ''))}
-						id="ipc-move-folder-back-path-button"
-					>
-						<ArrowBackIcon fontSize="30" />
-					</Button>
-					<br />
-					<br />
-					{folders.filter((f) => f.path === newPath && f.createdAt !== folder.createdAt).length ? (
-						folders
-							.filter((f) => f.path === newPath)
-							.map((f) => (
-								<div key={f.createdAt}>
-									<Divider />
-									<HStack>
-										<Button
-											backgroundColor={'white'}
-											w="100%"
-											onClick={() => {
-												setNewPath(`${newPath}${f.name}/`);
-											}}
-										>
-											<FcFolder display="flex" size="30"></FcFolder>
-											{f.name}
-											<ChevronRightIcon />
-										</Button>
-									</HStack>
-									<Divider />
-								</div>
-							))
-					) : (
-						<>
-							<Divider />
-							<HStack>
-								<Button backgroundColor={'white'} w="100%">
-									No folders
-								</Button>
-							</HStack>
-							<Divider />
-						</>
-					)}
-				</>
+				<Text color={textColor}>Are you sure you want to delete this folder and all it's content ?</Text>
 			</Modal>
 		</HStack>
 	);
 };
 
-export default MoveFolder;
+export default DeleteFolder;
