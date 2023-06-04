@@ -1,12 +1,10 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 
-import Computing from 'lib/computing';
-import Contact from 'lib/contact/contact';
 import Drive from 'lib/drive';
 
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
-import ContactFile from './contact/contactClasses/fileContact';
+import Computing from './contact/contactClasses/programContact';
 import FullContact from './contact/fullContact';
 
 class User {
