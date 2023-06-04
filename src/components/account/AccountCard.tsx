@@ -37,7 +37,7 @@ const AccountCard = (): JSX.Element => {
 	const changeName = async () => {
 		setIsLoading(true);
 		try {
-			const config1 = await user.fullContact.contact.update(user.account.address, input);
+			const config1 = await user.fullContact.manage.update(user.account.address, input);
 			setIsOpen(false);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
