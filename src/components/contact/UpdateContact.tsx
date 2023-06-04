@@ -28,7 +28,7 @@ const UpdateContact = ({ contact }: UpdateContactProps): JSX.Element => {
 	const updateContact = async () => {
 		setIsLoading(true);
 		if (name) {
-			const update = await user.fullContact.contact.update(contact.address, name);
+			const update = await user.fullContact.manage.update(contact.address, name);
 			toast({ title: update.message, status: update.success ? 'success' : 'error' });
 			setContacts(user.fullContact.contact.contacts);
 		} else {
