@@ -40,9 +40,9 @@ const Dashboard = (): JSX.Element => {
 		setFolders(user.drive.folders);
 		setSharedFiles(user.drive.sharedFiles);
 
-		const loadedPrograms = await user.computing.load();
+		const loadedPrograms = await user.fullContact.computing.load();
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
-		setPrograms(user.computing.programs);
+		setPrograms(user.fullContact.computing.programs);
 
 		const loadedConfig = await user.loadConfig();
 		setConfig(user.config);
