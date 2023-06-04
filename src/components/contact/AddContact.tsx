@@ -22,7 +22,7 @@ const AddContact = (): JSX.Element => {
 		try {
 			if (name && contactPublicKey) {
 				const address = EthCrypto.publicKey.toAddress(contactPublicKey.slice(2));
-				const add = await user.fullContact.contact.add({
+				const add = await user.fullContact.manage.add({
 					name,
 					address,
 					publicKey: contactPublicKey,

@@ -45,7 +45,7 @@ const DeleteFolder = ({ folder }: DeleteFolderProps): JSX.Element => {
 		const fullPath = `${folder.path}${folder.name}/`;
 
 		if (user.account) {
-			const foldersResponse = await user.fullContact.contact.deleteFolder(folder);
+			const foldersResponse = await user.fullContact.folders.deleteFolder(folder);
 			setFolders(
 				folders.filter(
 					(f) => !f.path.startsWith(fullPath) && (f.path !== folder.path || f.createdAt !== folder.createdAt),

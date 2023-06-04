@@ -19,7 +19,7 @@ const DeleteContact = ({ contact }: DeleteContactProps): JSX.Element => {
 		const deletedContact = user.fullContact.contact.contacts.find((c) => c === contact);
 
 		if (deletedContact) {
-			const deleteResponse = await user.fullContact.contact.remove(contact.address);
+			const deleteResponse = await user.fullContact.manage.remove(contact.address);
 
 			toast({ title: deleteResponse.message, status: deleteResponse.success ? 'success' : 'error' });
 			setContacts(user.fullContact.contact.contacts);
