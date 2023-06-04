@@ -12,7 +12,7 @@ class ContactFolder {
 	constructor(contactClass: Contact) {
 		this.contact = contactClass;
 	}
-    
+
     public async createFolder(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
