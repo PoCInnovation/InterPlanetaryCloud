@@ -1,40 +1,27 @@
-import { accounts } from 'aleph-sdk-ts';
-import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { aggregate, post } from 'aleph-sdk-ts/dist/messages';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import type {
-	AggregateContentType,
 	AggregateType,
-	IPCContact,
 	IPCFile,
-	IPCFolder,
-	IPCUpdateContent,
 	ResponseType,
 } from 'types/types';
 
-import { ALEPH_CHANNEL } from 'config/constants';
 import Contact from '../contact';
 
 class ContactFile {
 
-	public contacts: IPCContact[];
-	
 	public contact: Contact;
 
-	public account: accounts.ethereum.ETHAccount;
-
 	constructor(contactClass: Contact) {
-		this.contacts = contactClass.contacts;
 		this.contact = contactClass;
-		this.account = contactClass.account;
-		// this.contact.load();
 	}
-	
+
     public async updateFileName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			let fileFound = false;
 			await Promise.all(
-				this.contacts.map(async (c) => {
+				this.contact.contacts.map(async (c) => {
 					const file = c.files.find((f) => f.id === concernedFile.id);
 					if (file) {
 						file.name = newName;
@@ -53,7 +40,7 @@ class ContactFile {
 					return { success: false, message: 'File not found' };
 				}
 				await post.Publish({
-					account: this.account,
+					account: this.contact.account,
 					postType: 'InterPlanetaryCloud',
 					content: { file: { ...concernedFile, name: newName }, tags: ['rename', concernedFile.id] },
 					channel: 'TEST',
@@ -68,15 +55,14 @@ class ContactFile {
 	}
 
     public async getFileOwner(fileId: string): Promise<string | undefined> {
-        console.log(this.contacts);
 		let owner;
 		await Promise.all(
-			this.contacts.map(async (contact) => {
+			this.contact.contacts.map(async (contact) => {
 				const aggr = await aggregate.Get<AggregateType>({
 					address: contact.address,
 					keys: ['InterPlanetaryCloud'],
 				});
-				const myContact = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.account.address);
+				const myContact = aggr.InterPlanetaryCloud.contacts.find((c) => c.address === this.contact.account.address);
 				if (myContact?.files.find((f) => f.id === fileId)) {
 					owner = contact.publicKey;
 				}
@@ -89,21 +75,21 @@ class ContactFile {
 		try {
 			let fileFound = false;
 			await Promise.all(
-				this.contacts.map(async (contact) => {
+				this.contact.contacts.map(async (contact) => {
 					const file = contact.files.find((f) => f.id === newFile.id);
 
-					if (file && this.account) {
+					if (file && this.contact.account) {
 						file.hash = newFile.hash;
 						file.encryptInfos = {
 							key: (
-								await this.account.encrypt(
-									await this.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
+								await this.contact.account.encrypt(
+									await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
 									contact.publicKey,
 								)
 							).toString('hex'),
 							iv: (
-								await this.account.encrypt(
-									await this.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
+								await this.contact.account.encrypt(
+									await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
 									contact.publicKey,
 								)
 							).toString('hex'),
@@ -114,7 +100,7 @@ class ContactFile {
 				}),
 			);
 
-			if (!fileFound && this.account) {
+			if (!fileFound && this.contact.account) {
 				const owner = await this.getFileOwner(newFile.id);
 
 				if (!owner) {
@@ -126,14 +112,14 @@ class ContactFile {
 
 				const encryptInfos = {
 					key: (
-						await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')), owner)
+						await this.contact.account.encrypt(await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')), owner)
 					).toString('hex'),
 					iv: (
-						await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')), owner)
+						await this.contact.account.encrypt(await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')), owner)
 					).toString('hex'),
 				};
 				await post.Publish({
-					account: this.account,
+					account: this.contact.account,
 					postType: 'InterPlanetaryCloud',
 					content: { file: { ...newFile, encryptInfos }, tags: ['update', newFile.id] },
 					channel: 'TEST',
@@ -150,7 +136,7 @@ class ContactFile {
 	public async deleteFiles(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
 			ids.forEach(async (id) => {
-				const me = this.contacts.find((c) => c.address === this.account.address)!;
+				const me = this.contact.contacts.find((c) => c.address === this.contact.account.address)!;
 				const file = me.files.find((f) => f.id === id);
 
 				if (file) {
@@ -159,7 +145,7 @@ class ContactFile {
 					const sharedFile = sharedFiles.find((f) => f.id === id);
 					if (sharedFile) {
 						post.Publish({
-							account: this.account,
+							account: this.contact.account,
 							postType: 'InterPlanetaryCloud',
 							content: { file, tags: ['delete', id] },
 							channel: 'TEST',
@@ -178,8 +164,8 @@ class ContactFile {
 
 	public async moveFile(file: IPCFile, newPath: string): Promise<ResponseType> {
 		try {
-			const contact = this.contacts.find((c) => c.address === this.account.address);
-			console.log(this.contacts);
+			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
+
 			if (contact) {
 				const currentFile = contact.files.find((f) => f.id === file.id);
 				if (currentFile) {
@@ -207,7 +193,7 @@ class ContactFile {
 	): Promise<ResponseType> {
 		try {
 			let fileFound = false;
-			this.contacts.forEach(async (contact) => {
+			this.contact.contacts.forEach(async (contact) => {
 				const file = contact.files.find((f) => f.id === concernedFile.id);
 				if (file) {
 					file.deletedAt = deletedAt;
@@ -225,7 +211,7 @@ class ContactFile {
 					return { success: false, message: 'File not found' };
 				}
 				await post.Publish({
-					account: this.account,
+					account: this.contact.account,
 					postType: 'InterPlanetaryCloud',
 					content: { file: { ...concernedFile, deletedAt }, tags: ['bin', concernedFile.id] },
 					channel: 'TEST',
@@ -241,6 +227,57 @@ class ContactFile {
 			};
 		}
 	}
+
+	public async addFileToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
+		try {
+			const index = this.contact.contacts.findIndex((contact) => contact.address === contactAddress);
+
+			if (index !== -1) {
+				if (this.contact.contacts[index].files.find((file) => file.id === mainFile.id)) {
+					return { success: false, message: 'The file is already shared' };
+				}
+				const newFile: IPCFile = {
+					...mainFile,
+					logs: [
+						...mainFile.logs,
+						{
+							action: `Shared file with ${this.contact.contacts[index].name}`,
+							date: Date.now(),
+						},
+					],
+					// encryptKey: (
+					// 	await this.account.encrypt(
+					// 		await this.account.decrypt(Buffer.from(mainFile.encryptKey, 'hex')),
+					// 		this.contact.contacts[index].publicKey,
+					// 	)
+					// ).toString('hex'),
+					encryptInfos: {
+						key: (
+							await this.contact.account.encrypt(
+								await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.key, 'hex')),
+								this.contact.contacts[index].publicKey,
+							)
+						).toString('hex'),
+						iv: (
+							await this.contact.account.encrypt(
+								await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.iv, 'hex')),
+								this.contact.contacts[index].publicKey,
+							)
+						).toString('hex'),
+					},
+				};
+
+				this.contact.contacts[index].files.push(newFile);
+				this.contact.publishAggregate();
+				return { success: true, message: 'File shared with the contact' };
+			}
+			return { success: false, message: 'Contact does not exist' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to share the file with the contact' };
+		}
+	}
+
 }
 
 export default ContactFile;

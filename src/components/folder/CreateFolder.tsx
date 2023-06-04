@@ -53,7 +53,7 @@ const CreateFolder = (): JSX.Element => {
 			],
 		};
 
-		const created = await user.fullContact.contact.createFolder(folder);
+		const created = await user.fullContact.folders.createFolder(folder);
 		toast({ title: created.message, status: created.success ? 'success' : 'error' });
 		if (created.success) {
 			setFolders([...folders, folder]);
