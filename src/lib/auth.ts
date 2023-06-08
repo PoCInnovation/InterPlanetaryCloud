@@ -1,12 +1,15 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { ETHAccount, GetAccountFromProvider } from 'aleph-sdk-ts/dist/accounts/ethereum';
+import { ETHLedgerAccount, GetAccountFromLedger } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
 import User from 'lib/user';
 
 import { AggregateType, IPCConfig } from 'types/types';
+import { Get } from 'aleph-sdk-ts/dist/messages/aggregate';
 
 type AuthReturnType = {
 	user: User | undefined;
@@ -97,9 +100,25 @@ class Auth {
 		}
 	}
 
-	public async loginWithProvider(importedConfig: IPCConfig): Promise<AuthReturnType> {
+	public async walletProviderLogin(importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
-			const account = await accounts.ethereum.GetAccountFromProvider(window.ethereum);
+			const provider = window.ethereum;
+			const account = await GetAccountFromProvider(provider);
+			const user = new User(account, importedConfig);
+
+			await this.createAggregate(account);
+
+			return { user, message: 'You have been logged in successfully.' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'An error occurred while logging to your account.' };
+		}
+	}
+
+	public async ledgerLogin(importedConfig: IPCConfig): Promise<AuthReturnType> {
+		try {
+			const account = await GetAccountFromLedger();
+
 			const user = new User(account, importedConfig);
 
 			await this.createAggregate(account);
