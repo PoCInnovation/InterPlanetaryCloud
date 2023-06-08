@@ -39,9 +39,24 @@ const Login = (): JSX.Element => {
 		return { success: true, message: login.message };
 	};
 
-	const loginWithAProvider = async (): Promise<ResponseType> => {
+	const loginWithAWalletProvider = async (): Promise<ResponseType> => {
 		setIsLoadingCredentials(true);
-		const login = await auth.loginWithProvider(config);
+		const login = await auth.walletProviderLogin(config);
+		setIsLoadingCredentials(false);
+
+		if (!login.user) return { success: false, message: login.message };
+		setUser(login.user);
+		await router.push('/drive');
+		await login.user.drive.autoDelete();
+		return { success: true, message: login.message };
+	};
+
+	const loginWithLedger = async (): Promise<ResponseType> => {
+		setIsLoadingCredentials(true);
+
+		console.log('config', config);
+
+		const login = await auth.ledgerLogin(config);
 		setIsLoadingCredentials(false);
 
 		if (!login.user) return { success: false, message: login.message };
@@ -83,11 +98,24 @@ const Login = (): JSX.Element => {
 							size="lg"
 							w="100%"
 							disabled={true}
-							onClick={() => loginWithAProvider()}
+							onClick={() => loginWithAWalletProvider()}
 							isLoading={isLoadingCredentials}
-							id="ipc-login-provider-button"
+							id="ipc-login-wallet-provider-button"
 						>
-							Login with a provider
+							Login with a wallet provider
+						</Button>
+					</VStack>
+					<VStack w="100%">
+						<Button
+							variant="primary"
+							size="lg"
+							w="100%"
+							disabled={true}
+							onClick={() => loginWithLedger()}
+							isLoading={isLoadingCredentials}
+							id="ipc-login-ledger-button"
+						>
+							Login with ledger hardware
 						</Button>
 						<Text size="boldMd" color={textColor}>
 							Coming soon...
