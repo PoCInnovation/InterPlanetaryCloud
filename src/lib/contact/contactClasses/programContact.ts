@@ -6,14 +6,19 @@ import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } fr
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
+import Contact from '../contact'
+
 class Computing {
 	public programs: IPCProgram[];
 
 	private readonly account: accounts.ethereum.ETHAccount;
 
-	constructor(importedAccount: accounts.ethereum.ETHAccount) {
+	public contact: Contact;
+
+	constructor(importedAccount: accounts.ethereum.ETHAccount, contactClass: Contact) {
 		this.programs = [];
 		this.account = importedAccount;
+		this.contact = contactClass;
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
@@ -50,7 +55,7 @@ class Computing {
 		}
 	}
 
-	public async deleteProgram(programHash: string): Promise<ResponseType> {
+	public async delete(programHash: string): Promise<ResponseType> {
 		try {
 			await forget.Publish({
 				channel: ALEPH_CHANNEL,
@@ -67,7 +72,7 @@ class Computing {
 		}
 	}
 
-	public async updateProgramName(concernedProgram: IPCProgram, newName: string): Promise<ResponseType> {
+	public async updateName(concernedProgram: IPCProgram, newName: string): Promise<ResponseType> {
 		try {
 			this.programs = this.programs.map((prog) => {
 				if (prog.id === concernedProgram.id) {
@@ -93,7 +98,7 @@ class Computing {
 		}
 	}
 
-	public async uploadProgram(
+	public async upload(
 		myProgram: IPCProgram,
 		uploadFile: File,
 		isRedeploy: boolean,
@@ -127,6 +132,35 @@ class Computing {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to upload program' };
+		}
+	}
+
+	public async addToContact(contactAddress: string, mainProgram: IPCProgram): Promise<ResponseType> {
+		try {
+			const index = this.contact.contacts.findIndex((contact) => contact.address === contactAddress);
+
+			if (index !== -1) {
+				if (this.contact.contacts[index].programs.find((pg) => pg.id === mainProgram.id)) {
+					return { success: false, message: 'The program is already shared' };
+				}
+				const newProgram: IPCProgram = {
+					...mainProgram,
+					logs: [
+						...mainProgram.logs,
+						{
+							action: `Shared program with ${this.contact.contacts[index].name}`,
+							date: Date.now(),
+						},
+					],
+				};
+				this.contact.contacts[index].programs.push(newProgram);
+				this.contact.publishAggregate();
+				return { success: true, message: 'Program shared with the contact' };
+			}
+			return { success: false, message: 'Contact does not exist' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to share the program with the contact' };
 		}
 	}
 }
