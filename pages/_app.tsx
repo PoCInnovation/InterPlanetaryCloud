@@ -33,6 +33,7 @@ const App = ({
 	const [sharedFiles, setSharedFiles] = useState<IPCFile[]>([]);
 	const [folders, setFolders] = useState<IPCFolder[]>([]);
 	const [programs, setPrograms] = useState<IPCProgram[]>([]);
+	const [sharedPrograms, setSharedPrograms] = useState<IPCProgram[]>([]);
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
 	const [path, setPath] = useState('/');
 	const toast = useToast();
@@ -89,6 +90,8 @@ const App = ({
 									setSharedFiles,
 									folders,
 									setFolders,
+									sharedPrograms,
+									setSharedPrograms,
 									programs,
 									setPrograms,
 									contacts,
