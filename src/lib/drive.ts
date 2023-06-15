@@ -7,7 +7,7 @@ import fileDownload from 'js-file-download';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import type { AggregateType, IPCContact, IPCFile, IPCFolder, ResponseType, UploadResponse } from 'types/types';
+import type { AggregateType, IPCContact, IPCFile, IPCFolder, IPCProgram, ResponseType, UploadResponse } from 'types/types';
 
 export const MONTH_MILLIS = 86400 * 30 * 1000;
 
@@ -15,23 +15,30 @@ class Drive {
 
 	public files: IPCFile[];
 
+	public programs: IPCProgram[];
+
 	public folders: IPCFolder[];
 
 	public sharedFiles: IPCFile[];
+
+	public sharedPrograms: IPCProgram[];
 
 	private readonly account: accounts.ethereum.ETHAccount;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
 		this.files = [];
-		this.folders = [];
 		this.sharedFiles = [];
+		this.folders = [];
 		this.account = importedAccount;
+		this.programs = [];
+		this.sharedPrograms = [];
 	}
 
 	public async loadShared(contacts: IPCContact[]): Promise<ResponseType> {
 		try {
 			if (this.account) {
 				this.sharedFiles = [];
+				this.sharedPrograms = [];
 				await Promise.all(
 					contacts.map(async (contact) => {
 						const aggr = await aggregate.Get<AggregateType>({
@@ -44,8 +51,10 @@ class Drive {
 							if (contact.address === this.account.address) {
 								this.files = found.files;
 								this.folders = found.folders;
+								this.programs = found.programs;
 							} else {
 								this.sharedFiles = this.sharedFiles.concat(found.files);
+								this.sharedPrograms = this.sharedPrograms.concat(found.programs);
 							}
 						}
 					}),

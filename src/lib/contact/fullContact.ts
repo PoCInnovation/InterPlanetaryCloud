@@ -7,7 +7,7 @@ import Computing from './contactClasses/programContact';
 
 class FullContact {
 
-	public account: accounts.ethereum.ETHAccount;
+	public readonly account: accounts.ethereum.ETHAccount;
 
 	public contact: Contact;
 
@@ -27,8 +27,8 @@ class FullContact {
 		this.files = new ContactFile(this.contact);
 		this.folders = new ContactFolder(this.contact);
 		this.manage = new ManageContact(this.contact);
-		this.computing = new Computing(this.contact.account);
-	}	
+		this.computing = new Computing(this.contact.account, this.contact);
+	}
 }
 
 export default FullContact;
