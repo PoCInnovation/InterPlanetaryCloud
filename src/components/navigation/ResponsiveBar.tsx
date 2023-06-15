@@ -83,8 +83,8 @@ export const ResponsiveBar = (): JSX.Element => {
 
 				{!isDrawerNeeded && (
 					<ProfileBadge
-						username={(user ? user.fullContact.contact.username : 'IPC') || 'IPC'}
-						address={(user ? user.account.address : 'IPC') || 'IPC'}
+						username={user?.fullContact.contact.username || 'IPC'}
+						address={user?.account.address || 'IPC'}
 					/>
 				)}
 			</HStack>

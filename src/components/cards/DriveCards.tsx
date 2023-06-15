@@ -16,21 +16,21 @@ type DriveCardsProps = {
 };
 
 const DriveCards = ({ files, folders, programs, contacts }: DriveCardsProps): JSX.Element => (
-	<VStack w="100%">
-		<PathCard />
-		{folders?.map((folder) => (
-			<FolderCard folder={folder} key={folder.createdAt} />
-		))}
-		{files?.map((file) => (
-			<FileCard file={file} key={file.id} />
-		))}
-		{programs?.map((program) => (
-			<ProgramCard program={program} key={program.createdAt} />
-		))}
-		{contacts?.map((contact) => (
-			<ContactCard contact={contact} key={contact.address} />
-		))}
-	</VStack>
+		<VStack w="100%">
+			<PathCard />
+			{folders?.map((folder) => (
+				<FolderCard folder={folder} key={folder.createdAt} />
+			))}
+			{files?.map((file) => (
+				<FileCard file={file} key={file.id} />
+			))}
+			{programs?.map((program) => (
+				<ProgramCard program={program} key={program.createdAt} />
+			))}
+			{contacts?.map((contact) => (
+				<ContactCard contact={contact} key={contact.address} />
+			))}
+		</VStack>
 );
 
 export default DriveCards;
