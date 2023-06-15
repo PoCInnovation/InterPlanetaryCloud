@@ -12,6 +12,8 @@ type DriveContextProps = {
 	setFolders: Dispatch<IPCFolder[]>;
 	programs: IPCProgram[];
 	setPrograms: Dispatch<IPCProgram[]>;
+	sharedPrograms: IPCProgram[];
+	setSharedPrograms: Dispatch<IPCProgram[]>;
 	contacts: IPCContact[];
 	setContacts: Dispatch<IPCContact[]>;
 	path: string;
