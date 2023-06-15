@@ -63,6 +63,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 				hash: result.data.item_hash,
 				createdAt: Date.now(),
 				entrypoint: result.data.entrypoint,
+				permission: 'owner',
 				size: 0,
 				logs: [
 					{

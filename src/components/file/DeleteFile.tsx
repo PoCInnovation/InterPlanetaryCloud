@@ -43,7 +43,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 			const deleted = await user.drive.delete([file.hash]);
 			toast({ title: deleted.message, status: deleted.success ? 'success' : 'error' });
 			if (deleted.success) {
-				const removed = await user.fullContact.files.deleteFiles([file.id], concernedFiles);
+				const removed = await user.fullContact.files.delete([file.id], concernedFiles);
 
 				if (!removed.success) {
 					toast({ title: removed.message, status: 'error' });
@@ -61,7 +61,7 @@ const DeleteFile = ({ file, concernedFiles, onClosePopover }: DeleteFileProps): 
 	const moveToBin = async (deletedAt: number) => {
 		setIsLoading(true);
 		if (user.account) {
-			const moved = await user.fullContact.files.moveFileToBin(file, deletedAt, concernedFiles);
+			const moved = await user.fullContact.files.moveToBin(file, deletedAt, concernedFiles);
 			toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 			const index = files.indexOf(file);

@@ -42,13 +42,14 @@ const ProgramModal = ({
 
 		setIsDeployLoading(true);
 		try {
-			const upload = await user.fullContact.computing.uploadProgram(
+			const upload = await user.fullContact.computing.upload(
 				{
 					id: crypto.randomUUID(),
 					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
 					entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
+					permission: 'owner',
 					size: fileEvent.target.files[0].size,
 					logs: [
 						{

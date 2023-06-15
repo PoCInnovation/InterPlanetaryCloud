@@ -25,7 +25,7 @@ const DeleteFile = ({ file, concernedFiles, onClose }: DeleteFileProps): JSX.Ele
 
 	const restoreFile = async () => {
 		if (user.account) {
-			const moved = await user.fullContact.files.moveFileToBin(file, null, concernedFiles);
+			const moved = await user.fullContact.files.moveToBin(file, null, concernedFiles);
 			toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 			const index = files.indexOf(file);

@@ -51,7 +51,7 @@ const MoveFolder = ({ folder }: MoveFolderProps): JSX.Element => {
 		setIsLoading(true);
 		const fullPath = `${folder.path}${folder.name}/`;
 
-		const moved = await user.fullContact.folders.moveFolder(folder, newPath);
+		const moved = await user.fullContact.folders.move(folder, newPath);
 
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 		setFiles(

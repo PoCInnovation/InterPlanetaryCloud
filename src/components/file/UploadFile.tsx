@@ -82,7 +82,7 @@ const UploadFile = (): JSX.Element => {
 					setFiles([...files, upload.file]);
 					user.drive.files.push(upload.file);
 
-					const shared = await user.fullContact.files.addFileToContact(user.account.address, upload.file);
+					const shared = await user.fullContact.files.addToContact(user.account.address, upload.file);
 					toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
 				}
 			} else toast({ title: 'Failed to load account', status: 'error' });
