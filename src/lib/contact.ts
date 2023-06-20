@@ -17,7 +17,9 @@ import { ALEPH_CHANNEL } from 'config/constants';
 
 class Contact {
 	public contacts: IPCContact[];
+
 	public username: string;
+
 	private readonly account: accounts.ethereum.ETHAccount;
 
 	constructor(importedAccount: accounts.ethereum.ETHAccount) {
