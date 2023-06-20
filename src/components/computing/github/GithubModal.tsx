@@ -62,6 +62,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 				name: customName || result.data.name,
 				hash: result.data.item_hash,
 				createdAt: Date.now(),
+				encryptInfos: {key: '', iv: ''},
 				entrypoint: result.data.entrypoint,
 				size: 0,
 				logs: [

@@ -48,6 +48,7 @@ const ProgramModal = ({
 					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
+					encryptInfos: {key: '', iv: ''},
 					entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
 					size: fileEvent.target.files[0].size,
 					logs: [
