@@ -24,6 +24,7 @@ import DeleteProgram from 'components/programs/DeleteProgram';
 import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
 import RenameProgram from 'components/programs/RenameProgram';
 import ShareProgram from 'components/programs/ShareProgram';
+import DownloadProgram from 'components/programs/DownloadProgram';
 
 const ProgramOptionsContent = ({ program }: { program: IPCProgram }) => (
 	<>
@@ -32,6 +33,7 @@ const ProgramOptionsContent = ({ program }: { program: IPCProgram }) => (
 		<RenameProgram program={program} />
 		<DeleteProgram program={program} />
 		<ShareProgram program={program} />
+		<DownloadProgram program={program} />
 	</>
 );
 

@@ -1,9 +1,9 @@
 import { accounts } from 'aleph-sdk-ts';
-import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
+import { aggregate, forget, program, store } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
-
+import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
-
+import fileDownload from 'js-file-download';
 import { ALEPH_CHANNEL } from 'config/constants';
 
 import Contact from '../contact'
@@ -119,9 +119,17 @@ class Computing {
 				file: uploadFile,
 				entrypoint: myProgram.entrypoint,
 			});
+			const programFileHash = await store.Publish({
+				account: this.account,
+				channel: 'TEST',
+				fileObject: uploadFile,
+				storageEngine: ItemType.storage,
+				APIServer: DEFAULT_API_V2
+			});
 			const newProgram: IPCProgram = {
 				...myProgram,
 				hash: programHashPublishProgram.item_hash,
+				hashFile: programFileHash.content.item_hash
 			};
 
 			this.programs.push(newProgram);
@@ -161,6 +169,18 @@ class Computing {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to share the program with the contact' };
+		}
+	}
+
+	public async download(programToDownload: IPCProgram): Promise<ResponseType> {
+		try {
+			const programStore = await store.Get({fileHash : programToDownload.hashFile });
+
+			fileDownload(programStore, programToDownload.name);
+			return { success: true, message: 'Program downloaded' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to download the program' };
 		}
 	}
 }

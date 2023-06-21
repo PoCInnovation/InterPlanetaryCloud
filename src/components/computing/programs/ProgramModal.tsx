@@ -57,6 +57,7 @@ const ProgramModal = ({
 							date: Date.now(),
 						},
 					],
+					hashFile: ''
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
