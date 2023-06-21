@@ -32,7 +32,6 @@ export type IPCProgram = {
 	permission: IPCPermission;
 	size: number;
 	logs: Log[];
-	hashFile: string;
 };
 
 export type IPCConfig = {

@@ -128,8 +128,7 @@ class Computing {
 			});
 			const newProgram: IPCProgram = {
 				...myProgram,
-				hash: programHashPublishProgram.item_hash,
-				hashFile: programFileHash.content.item_hash
+				hash: programFileHash.content.item_hash
 			};
 
 			this.programs.push(newProgram);
@@ -174,7 +173,7 @@ class Computing {
 
 	public async download(programToDownload: IPCProgram): Promise<ResponseType> {
 		try {
-			const programStore = await store.Get({fileHash : programToDownload.hashFile });
+			const programStore = await store.Get({fileHash : programToDownload.hash });
 
 			fileDownload(programStore, programToDownload.name);
 			return { success: true, message: 'Program downloaded' };

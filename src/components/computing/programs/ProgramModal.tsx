@@ -56,8 +56,7 @@ const ProgramModal = ({
 							action: 'Program created',
 							date: Date.now(),
 						},
-					],
-					hashFile: ''
+					]
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
