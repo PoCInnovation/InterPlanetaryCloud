@@ -112,7 +112,7 @@ class Computing {
 				);
 				this.programs = newProgramsArray;
 			}
-			const programHashPublishProgram = await program.publish({
+			await program.publish({
 				channel: ALEPH_CHANNEL,
 				account: this.account,
 				storageEngine: ItemType.storage,
