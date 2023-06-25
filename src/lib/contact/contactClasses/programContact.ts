@@ -12,14 +12,8 @@ import Contact from '../contact';
 class Computing {
 	public programs: IPCProgram[];
 
-	private readonly account: accounts.ethereum.ETHAccount;
-
-	public contact: Contact;
-
-	constructor(importedAccount: accounts.ethereum.ETHAccount, contactClass: Contact) {
+	constructor(private readonly account: accounts.ethereum.ETHAccount, private contact: Contact) {
 		this.programs = [];
-		this.account = importedAccount;
-		this.contact = contactClass;
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {

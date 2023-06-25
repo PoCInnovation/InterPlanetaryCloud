@@ -6,11 +6,7 @@ import type { AggregateType, IPCFile, ResponseType } from 'types/types';
 import Contact from '../contact';
 
 class ContactFile {
-	public contact: Contact;
-
-	constructor(contactClass: Contact) {
-		this.contact = contactClass;
-	}
+	constructor(private contact: Contact) {}
 
 	public async updateName(concernedFile: IPCFile, newName: string, sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
@@ -136,7 +132,7 @@ class ContactFile {
 
 	public async delete(ids: string[], sharedFiles: IPCFile[]): Promise<ResponseType> {
 		try {
-			ids.forEach(async (id) => {
+			ids.forEach((id) => {
 				const me = this.contact.contacts.find((c) => c.address === this.contact.account.address)!;
 				const file = me.files.find((f) => f.id === id);
 
@@ -194,7 +190,7 @@ class ContactFile {
 	): Promise<ResponseType> {
 		try {
 			let fileFound = false;
-			this.contact.contacts.forEach(async (contact) => {
+			this.contact.contacts.forEach((contact) => {
 				const file = contact.files.find((f) => f.id === concernedFile.id);
 				if (file) {
 					file.deletedAt = deletedAt;
@@ -203,9 +199,9 @@ class ContactFile {
 						date: Date.now(),
 					});
 					fileFound = true;
-					await this.contact.publishAggregate();
 				}
 			});
+			this.contact.publishAggregate();
 			if (!fileFound) {
 				const file = sharedFiles.find((f) => f.id === concernedFile.id);
 				if (!file) {
