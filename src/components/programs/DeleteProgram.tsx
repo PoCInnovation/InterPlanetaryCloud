@@ -3,9 +3,9 @@ import {
 	Icon,
 	Text,
 	useBreakpointValue,
-	useDisclosure,
 	useColorMode,
 	useColorModeValue,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { IoTrashSharp } from 'react-icons/io5';
@@ -35,7 +35,7 @@ const DeleteProgram = ({ program }: DeleteProgramProps): JSX.Element => {
 
 	const deleteActualProgram = async () => {
 		setIsLoading(true);
-		const update = await user.fullContact.computing.deleteProgram(program.hash);
+		const update = await user.fullContact.computing.delete(program.hash);
 		if (update.success) setPrograms(programs.filter((f) => f.hash !== program.hash));
 		setIsLoading(false);
 		onClose();

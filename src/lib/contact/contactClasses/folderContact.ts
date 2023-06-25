@@ -1,19 +1,15 @@
-import type {
-	IPCFolder,
-	ResponseType,
-} from 'types/types';
+import type { IPCFolder, ResponseType } from 'types/types';
 
 import Contact from '../contact';
 
 class ContactFolder {
-
-    public contact: Contact;
+	public contact: Contact;
 
 	constructor(contactClass: Contact) {
 		this.contact = contactClass;
 	}
 
-    public async createFolder(folder: IPCFolder): Promise<ResponseType> {
+	public async create(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
 
@@ -29,7 +25,7 @@ class ContactFolder {
 		}
 	}
 
-	public async moveFolder(folder: IPCFolder, newPath: string): Promise<ResponseType> {
+	public async move(folder: IPCFolder, newPath: string): Promise<ResponseType> {
 		try {
 			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
 			const fullPath = `${folder.path}${folder.name}/`;
@@ -66,7 +62,7 @@ class ContactFolder {
 		}
 	}
 
-	public async deleteFolder(folder: IPCFolder): Promise<ResponseType> {
+	public async delete(folder: IPCFolder): Promise<ResponseType> {
 		try {
 			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
 
@@ -86,7 +82,6 @@ class ContactFolder {
 			return { success: false, message: 'Failed to delete the folder' };
 		}
 	}
-
 }
 
 export default ContactFolder;

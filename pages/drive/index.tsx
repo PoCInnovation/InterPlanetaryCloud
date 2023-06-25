@@ -15,7 +15,7 @@ const Dashboard = (): JSX.Element => {
 	const { setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
+	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles, setSharedPrograms } = useDriveContext();
 
 	useEffect(() => {
 		(async () => {
@@ -39,6 +39,7 @@ const Dashboard = (): JSX.Element => {
 		setFiles(user.drive.files);
 		setFolders(user.drive.folders);
 		setSharedFiles(user.drive.sharedFiles);
+		setSharedPrograms(user.drive.sharedPrograms);
 
 		const loadedPrograms = await user.fullContact.computing.load();
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });

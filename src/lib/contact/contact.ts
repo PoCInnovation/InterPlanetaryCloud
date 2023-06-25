@@ -2,13 +2,7 @@ import { accounts } from 'aleph-sdk-ts';
 import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
-import type {
-	AggregateContentType,
-	AggregateType,
-	IPCContact,
-	ResponseType,
-	IPCUpdateContent
-} from 'types/types';
+import type { AggregateContentType, AggregateType, IPCContact, IPCUpdateContent, ResponseType } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 

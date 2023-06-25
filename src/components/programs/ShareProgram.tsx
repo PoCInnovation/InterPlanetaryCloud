@@ -23,14 +23,13 @@ import Button from 'components/Button';
 import Card from 'components/cards/Card';
 import { hoverColorMode, textColorMode } from 'config/colorMode';
 import colors from 'theme/foundations/colors';
-import type { IPCContact, IPCFile, IPCPermission } from 'types/types';
+import type { IPCContact, IPCProgram, IPCPermission } from 'types/types';
 
-type ShareFileProps = {
-	file: IPCFile;
-	onClosePopover: () => void;
+type ShareProgramProps = {
+	program: IPCProgram;
 };
 
-const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
+const ShareProgram = ({ program }: ShareProgramProps): JSX.Element => {
 	const { user } = useUserContext();
 
 	const [contact, setContact] = useState<IPCContact | null>(null);
@@ -41,13 +40,11 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
 
-	const shareFile = async () => {
+	const shareProgram = async () => {
 		setIsLoading(true);
-		const share = await user.fullContact.files.addToContact(contact!.address, { ...file, permission });
-
+		const share = await user.fullContact.computing.addToContact(contact!.address, { ...program, permission });
 		toast({ title: share.message, status: share.success ? 'success' : 'error' });
 		onUnmount();
-		onClosePopover();
 	};
 
 	const onUnmount = () => {
@@ -60,8 +57,6 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const hoverColor = useColorModeValue(hoverColorMode.light, hoverColorMode.dark);
 	const { colorMode } = useColorMode();
-
-	if (file.permission !== 'owner') return <></>;
 
 	return (
 		<HStack
@@ -103,8 +98,8 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 						<Button
 							variant="primary"
 							size="lg"
-							id="ipc-dashboard-confirm-share-file-button"
-							onClick={shareFile}
+							id="ipc-dashboard-confirm-share-program-button"
+							onClick={shareProgram}
 							isLoading={isLoading}
 						>
 							Share
@@ -167,4 +162,4 @@ const ShareFile = ({ file, onClosePopover }: ShareFileProps): JSX.Element => {
 	);
 };
 
-export default ShareFile;
+export default ShareProgram;

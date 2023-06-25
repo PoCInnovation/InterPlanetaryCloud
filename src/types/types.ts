@@ -29,6 +29,7 @@ export type IPCProgram = {
 	name: string;
 	createdAt: number;
 	entrypoint: string;
+	permission: IPCPermission;
 	size: number;
 	logs: Log[];
 };

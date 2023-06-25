@@ -5,10 +5,10 @@ import {
 	Icon,
 	Text,
 	useBreakpointValue,
-	useDisclosure,
-	useToast,
 	useColorMode,
 	useColorModeValue,
+	useDisclosure,
+	useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
@@ -41,7 +41,7 @@ const MoveFile = ({ file, onClosePopover }: MoveFileProps): JSX.Element => {
 	const moveFile = async () => {
 		setIsLoading(true);
 
-		const moved = await user.fullContact.files.moveFile(file, newPath);
+		const moved = await user.fullContact.files.move(file, newPath);
 		toast({ title: moved.message, status: moved.success ? 'success' : 'error' });
 
 		const index = files.indexOf(file);

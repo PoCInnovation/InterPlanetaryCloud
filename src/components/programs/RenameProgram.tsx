@@ -43,7 +43,7 @@ const RenameProgram = ({ program }: RenameProgramProps) => {
 	const updateProgramName = async () => {
 		setIsLoading(true);
 		if (name) {
-			const update = await user.fullContact.computing.updateProgramName(program, name);
+			const update = await user.fullContact.computing.updateName(program, name);
 			if (update.success) {
 				const index = programs.indexOf(program);
 				if (index !== -1) {

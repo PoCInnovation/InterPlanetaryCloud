@@ -1,13 +1,9 @@
-import type {
-	IPCContact,
-	ResponseType,
-} from 'types/types';
+import type { IPCContact, ResponseType } from 'types/types';
 
 import Contact from '../contact';
 
 class ManageContact {
-
-    public contact: Contact;
+	public contact: Contact;
 
 	constructor(contactClass: Contact) {
 		this.contact = contactClass;
