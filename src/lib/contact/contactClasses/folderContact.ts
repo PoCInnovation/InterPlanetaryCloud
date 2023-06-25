@@ -3,11 +3,7 @@ import type { IPCFolder, ResponseType } from 'types/types';
 import Contact from '../contact';
 
 class ContactFolder {
-	public contact: Contact;
-
-	constructor(contactClass: Contact) {
-		this.contact = contactClass;
-	}
+	constructor(private contact: Contact) {}
 
 	public async create(folder: IPCFolder): Promise<ResponseType> {
 		try {

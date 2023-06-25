@@ -11,11 +11,8 @@ class Contact {
 
 	public username: string;
 
-	public account: accounts.ethereum.ETHAccount;
-
-	constructor(importedAccount: accounts.ethereum.ETHAccount) {
+	constructor(public readonly account: accounts.ethereum.ETHAccount) {
 		this.contacts = [];
-		this.account = importedAccount;
 		this.username = '';
 	}
 
@@ -45,7 +42,7 @@ class Contact {
 			});
 
 			this.contacts = aggr.InterPlanetaryCloud.contacts;
-			this.username = this.contacts.find((c) => c.address === this.account.address)?.name || '';
+			this.username = this.contacts.find((c) => c.address === this.account.address)?.name ?? '';
 
 			await this.loadUpdates();
 

@@ -21,7 +21,7 @@ const ProgramCard = ({ program }: { program: IPCProgram }): JSX.Element => {
 		user: {
 			fullContact: {
 				contact: { username },
-			}
+			},
 		},
 	} = useUserContext();
 	const { isOpen: isOpenFile, onOpen: onOpenFile, onClose: onCloseFile } = useDisclosure();

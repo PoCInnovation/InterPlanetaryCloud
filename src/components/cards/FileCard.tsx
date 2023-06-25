@@ -24,7 +24,7 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 		user: {
 			fullContact: {
 				contact: { username },
-			}
+			},
 		},
 	} = useUserContext();
 

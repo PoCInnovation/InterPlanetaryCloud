@@ -22,7 +22,7 @@ const FolderCard = ({ folder }: { folder: IPCFolder }): JSX.Element => {
 		user: {
 			fullContact: {
 				contact: { username },
-			}
+			},
 		},
 	} = useUserContext();
 
