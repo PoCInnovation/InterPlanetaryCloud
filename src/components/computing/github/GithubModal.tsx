@@ -71,6 +71,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 						date: Date.now(),
 					},
 				],
+				hashFile: '',
 			};
 			user.fullContact.computing.programs.push(newProgram);
 			await user.fullContact.computing.publishAggregate();

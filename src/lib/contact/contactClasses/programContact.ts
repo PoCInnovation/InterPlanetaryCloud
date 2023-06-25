@@ -1,12 +1,13 @@
 import { accounts } from 'aleph-sdk-ts';
-import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
+import { aggregate, forget, program, store } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
+import fileDownload from 'js-file-download';
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
-import Contact from '../contact'
+import Contact from '../contact';
 
 class Computing {
 	public programs: IPCProgram[];
@@ -122,6 +123,7 @@ class Computing {
 			const newProgram: IPCProgram = {
 				...myProgram,
 				hash: programHashPublishProgram.item_hash,
+				hashFile: programHashPublishProgram.content.code.ref,
 			};
 
 			this.programs.push(newProgram);
@@ -161,6 +163,18 @@ class Computing {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to share the program with the contact' };
+		}
+	}
+
+	public async download(toDownload: IPCProgram): Promise<ResponseType> {
+		try {
+			const programStore = await store.Get({ fileHash: toDownload.hashFile });
+
+			fileDownload(programStore, toDownload.name);
+			return { success: true, message: 'Program downloaded' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to download the program' };
 		}
 	}
 }

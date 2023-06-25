@@ -1,6 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
-import ContactFile from './contactClasses/fileContact';
 import Contact from './contact';
+import ContactFile from './contactClasses/fileContact';
 import ContactFolder from './contactClasses/folderContact';
 import ManageContact from './contactClasses/manageContact';
 import Computing from './contactClasses/programContact';
