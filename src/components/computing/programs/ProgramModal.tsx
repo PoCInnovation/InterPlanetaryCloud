@@ -1,10 +1,10 @@
+import { Input, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { Input, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 
 import Modal from 'components/Modal';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 import { extractFilename } from 'utils/fileManipulation';
 
@@ -36,7 +36,7 @@ const ProgramModal = ({
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
-		if (!fileEvent || !fileEvent.target.files) return;
+		if (!fileEvent?.target.files) return;
 		const filename = extractFilename(fileEvent.target.value);
 		if (!filename) return;
 
@@ -57,6 +57,7 @@ const ProgramModal = ({
 							date: Date.now(),
 						},
 					],
+					hashFile: '',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
