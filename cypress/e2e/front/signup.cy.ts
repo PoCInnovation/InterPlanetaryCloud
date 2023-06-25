@@ -29,7 +29,7 @@ describe('Good front for Signup', () => {
 
 	it('Good name for go to dashboard button', () => {
 		cy.get('#ipc-signup-go-to-dashboard-button').should('contain', 'Go to my dashboard');
-	})
+	});
 });
 
 describe('Signup with credentials Button for Signup', () => {

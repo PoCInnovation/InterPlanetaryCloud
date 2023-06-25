@@ -14,10 +14,7 @@ const Shared = (): JSX.Element => {
 		<Navigation>
 			<VStack w="100%" spacing="48px" align="start">
 				<LabelBadge label="Share with me" />
-				<DriveCards
-  				files={sharedFiles.filter((elem) => !elem.deletedAt)}
-  				programs={sharedPrograms}
-				/>
+				<DriveCards files={sharedFiles.filter((elem) => !elem.deletedAt)} programs={sharedPrograms} />
 			</VStack>
 		</Navigation>
 	);

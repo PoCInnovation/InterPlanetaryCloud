@@ -15,7 +15,8 @@ const Dashboard = (): JSX.Element => {
 	const { setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles, setSharedPrograms } = useDriveContext();
+	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles, setSharedPrograms } =
+		useDriveContext();
 
 	useEffect(() => {
 		(async () => {
