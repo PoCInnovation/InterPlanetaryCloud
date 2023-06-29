@@ -16,13 +16,13 @@ const DeleteContact = ({ contact }: DeleteContactProps): JSX.Element => {
 	const toast = useToast({ duration: 2000, isClosable: true });
 
 	const deleteContact = async () => {
-		const deletedContact = user.contact.contacts.find((c) => c === contact);
+		const deletedContact = user.fullContact.contact.contacts.find((c) => c === contact);
 
 		if (deletedContact) {
-			const deleteResponse = await user.contact.remove(contact.address);
+			const deleteResponse = await user.fullContact.manage.remove(contact.address);
 
 			toast({ title: deleteResponse.message, status: deleteResponse.success ? 'success' : 'error' });
-			setContacts(user.contact.contacts);
+			setContacts(user.fullContact.contact.contacts);
 		} else {
 			toast({ title: 'Unable to find this contact', status: 'error' });
 		}

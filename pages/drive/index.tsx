@@ -15,7 +15,8 @@ const Dashboard = (): JSX.Element => {
 	const { setConfig } = useConfigContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles } = useDriveContext();
+	const { path, folders, files, setFiles, setFolders, setContacts, setPrograms, setSharedFiles, setSharedPrograms } =
+		useDriveContext();
 
 	useEffect(() => {
 		(async () => {
@@ -27,22 +28,23 @@ const Dashboard = (): JSX.Element => {
 	}, []);
 
 	const loadContact = async () => {
-		const load = await user.contact.load();
+		const load = await user.fullContact.contact.load();
 
 		toast({ title: load.message, status: load.success ? 'success' : 'error' });
-		setContacts(user.contact.contacts);
+		setContacts(user.fullContact.contact.contacts);
 	};
 
 	const loadUserContents = async () => {
-		const loadShared = await user.drive.loadShared(user.contact.contacts);
+		const loadShared = await user.drive.loadShared(user.fullContact.contact.contacts);
 		toast({ title: loadShared.message, status: loadShared.success ? 'success' : 'error' });
 		setFiles(user.drive.files);
 		setFolders(user.drive.folders);
 		setSharedFiles(user.drive.sharedFiles);
+		setSharedPrograms(user.drive.sharedPrograms);
 
-		const loadedPrograms = await user.computing.load();
+		const loadedPrograms = await user.fullContact.computing.load();
 		toast({ title: loadedPrograms.message, status: loadedPrograms.success ? 'success' : 'error' });
-		setPrograms(user.computing.programs);
+		setPrograms(user.fullContact.computing.programs);
 
 		const loadedConfig = await user.loadConfig();
 		setConfig(user.config);

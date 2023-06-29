@@ -1,11 +1,11 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 
-import Computing from 'lib/computing';
-import Contact from 'lib/contact';
 import Drive from 'lib/drive';
 
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
+import Computing from './contact/contactClasses/programContact';
+import FullContact from './contact/fullContact';
 
 class User {
 	public account: accounts.ethereum.ETHAccount;
@@ -14,7 +14,7 @@ class User {
 
 	public computing: Computing;
 
-	public contact: Contact;
+	public fullContact: FullContact;
 
 	public config: IPCConfig;
 
@@ -22,14 +22,14 @@ class User {
 		this.account = importedAccount;
 		this.config = importedConfig;
 		this.drive = new Drive(this.account);
-		this.computing = new Computing(this.account);
-		this.contact = new Contact(this.account);
+		this.fullContact = new FullContact(this.account);
+		this.computing = new Computing(this.account, this.fullContact.contact);
 	}
 
 	public async loadConfig() {
 		try {
 			await Promise.all(
-				this.contact.contacts.map(async (contact) => {
+				this.fullContact.contact.contacts.map(async (contact) => {
 					const aggr = await aggregate.Get<AggregateType>({
 						address: contact.address,
 						keys: ['InterPlanetaryCloud'],

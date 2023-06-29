@@ -21,8 +21,10 @@ import { useConfigContext } from 'contexts/config';
 
 import DeployProgram from 'components/computing/programs/DeployProgram';
 import DeleteProgram from 'components/programs/DeleteProgram';
+import DownloadProgram from 'components/programs/DownloadProgram';
 import GoToWebsiteProgram from 'components/programs/GoToWebsiteProgram';
 import RenameProgram from 'components/programs/RenameProgram';
+import ShareProgram from 'components/programs/ShareProgram';
 
 const ProgramOptionsContent = ({ program }: { program: IPCProgram }) => (
 	<>
@@ -30,6 +32,8 @@ const ProgramOptionsContent = ({ program }: { program: IPCProgram }) => (
 		<DeployProgram selectedProgram={program} />
 		<RenameProgram program={program} />
 		<DeleteProgram program={program} />
+		<DownloadProgram program={program} />
+		<ShareProgram program={program} />
 	</>
 );
 
@@ -101,4 +105,4 @@ const ProgramOptionsDrawer = ({
 	</Drawer>
 );
 
-export { ProgramOptionsPopover, ProgramOptionsDrawer };
+export { ProgramOptionsDrawer, ProgramOptionsPopover };

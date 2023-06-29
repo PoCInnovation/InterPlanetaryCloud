@@ -1,19 +1,19 @@
 import { accounts } from 'aleph-sdk-ts';
-import { aggregate, forget, program } from 'aleph-sdk-ts/dist/messages';
+import { aggregate, forget, program, store } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
+import fileDownload from 'js-file-download';
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
+import Contact from '../contact';
+
 class Computing {
 	public programs: IPCProgram[];
 
-	private readonly account: accounts.ethereum.ETHAccount;
-
-	constructor(importedAccount: accounts.ethereum.ETHAccount) {
+	constructor(private readonly account: accounts.ethereum.ETHAccount, private contact: Contact) {
 		this.programs = [];
-		this.account = importedAccount;
 	}
 
 	public async publishAggregate(): Promise<AggregateMessage<AggregateContentType>> {
@@ -50,7 +50,7 @@ class Computing {
 		}
 	}
 
-	public async deleteProgram(programHash: string): Promise<ResponseType> {
+	public async delete(programHash: string): Promise<ResponseType> {
 		try {
 			await forget.Publish({
 				channel: ALEPH_CHANNEL,
@@ -67,7 +67,7 @@ class Computing {
 		}
 	}
 
-	public async updateProgramName(concernedProgram: IPCProgram, newName: string): Promise<ResponseType> {
+	public async updateName(concernedProgram: IPCProgram, newName: string): Promise<ResponseType> {
 		try {
 			this.programs = this.programs.map((prog) => {
 				if (prog.id === concernedProgram.id) {
@@ -93,7 +93,7 @@ class Computing {
 		}
 	}
 
-	public async uploadProgram(
+	public async upload(
 		myProgram: IPCProgram,
 		uploadFile: File,
 		isRedeploy: boolean,
@@ -117,6 +117,7 @@ class Computing {
 			const newProgram: IPCProgram = {
 				...myProgram,
 				hash: programHashPublishProgram.item_hash,
+				hashFile: programHashPublishProgram.content.code.ref,
 			};
 
 			this.programs.push(newProgram);
@@ -127,6 +128,47 @@ class Computing {
 		} catch (err) {
 			console.error(err);
 			return { success: false, message: 'Failed to upload program' };
+		}
+	}
+
+	public async addToContact(contactAddress: string, mainProgram: IPCProgram): Promise<ResponseType> {
+		try {
+			const index = this.contact.contacts.findIndex((contact) => contact.address === contactAddress);
+
+			if (index !== -1) {
+				if (this.contact.contacts[index].programs.find((pg) => pg.id === mainProgram.id)) {
+					return { success: false, message: 'The program is already shared' };
+				}
+				const newProgram: IPCProgram = {
+					...mainProgram,
+					logs: [
+						...mainProgram.logs,
+						{
+							action: `Shared program with ${this.contact.contacts[index].name}`,
+							date: Date.now(),
+						},
+					],
+				};
+				this.contact.contacts[index].programs.push(newProgram);
+				this.contact.publishAggregate();
+				return { success: true, message: 'Program shared with the contact' };
+			}
+			return { success: false, message: 'Contact does not exist' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to share the program with the contact' };
+		}
+	}
+
+	public async download(toDownload: IPCProgram): Promise<ResponseType> {
+		try {
+			const programStore = await store.Get({ fileHash: toDownload.hashFile });
+
+			fileDownload(programStore, toDownload.name);
+			return { success: true, message: 'Program downloaded' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to download the program' };
 		}
 	}
 }

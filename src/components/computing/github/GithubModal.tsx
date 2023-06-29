@@ -63,6 +63,7 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 				hash: result.data.item_hash,
 				createdAt: Date.now(),
 				entrypoint: result.data.entrypoint,
+				permission: 'owner',
 				size: 0,
 				logs: [
 					{
@@ -70,10 +71,11 @@ const GithubModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 						date: Date.now(),
 					},
 				],
+				hashFile: '',
 			};
-			user.computing.programs.push(newProgram);
-			await user.computing.publishAggregate();
-			setPrograms(user.computing.programs);
+			user.fullContact.computing.programs.push(newProgram);
+			await user.fullContact.computing.publishAggregate();
+			setPrograms(user.fullContact.computing.programs);
 			toast({ title: 'Upload succeeded', status: 'success' });
 			onClose();
 		} catch (err) {

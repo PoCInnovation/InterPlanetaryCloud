@@ -1,10 +1,10 @@
+import { Input, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
-import { Input, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 
 import Modal from 'components/Modal';
 
-import { useUserContext } from 'contexts/user';
 import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
 
 import { extractFilename } from 'utils/fileManipulation';
 
@@ -36,19 +36,20 @@ const ProgramModal = ({
 
 	const toast = useToast({ duration: 2000, isClosable: true });
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
-		if (!fileEvent || !fileEvent.target.files) return;
+		if (!fileEvent?.target.files) return;
 		const filename = extractFilename(fileEvent.target.value);
 		if (!filename) return;
 
 		setIsDeployLoading(true);
 		try {
-			const upload = await user.computing.uploadProgram(
+			const upload = await user.fullContact.computing.upload(
 				{
 					id: crypto.randomUUID(),
 					name: customName || filename,
 					hash: '',
 					createdAt: Date.now(),
 					entrypoint: customEntrypoint || user.config?.defaultEntrypoint.value || 'main:app',
+					permission: 'owner',
 					size: fileEvent.target.files[0].size,
 					logs: [
 						{
@@ -56,13 +57,14 @@ const ProgramModal = ({
 							date: Date.now(),
 						},
 					],
+					hashFile: '',
 				},
 				fileEvent.target.files[0],
 				!!oldProgram,
 				oldProgram,
 			);
 			toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-			setPrograms(user.computing.programs);
+			setPrograms(user.fullContact.computing.programs);
 			onClose();
 		} catch (error) {
 			console.error(error);

@@ -22,7 +22,9 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 	const { files } = useDriveContext();
 	const {
 		user: {
-			contact: { username },
+			fullContact: {
+				contact: { username },
+			},
 		},
 	} = useUserContext();
 
@@ -33,7 +35,6 @@ const FileCard = ({ file }: { file: IPCFile }): JSX.Element => {
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
-
 	return (
 		<>
 			<Card
