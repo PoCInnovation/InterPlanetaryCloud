@@ -107,7 +107,6 @@ class Drive {
 					storageEngine: ItemType.ipfs,
 					APIServer: DEFAULT_API_V2,
 				});
-
 				const newFile: IPCFile = {
 					...file,
 					hash: fileHashPublishStore.content.item_hash,
@@ -158,10 +157,22 @@ class Drive {
 	public async download(file: IPCFile): Promise<ResponseType> {
 		try {
 			const storeFile = await store.Get({ fileHash: file.hash });
+			let encryptInfosKey = file.encryptInfos.key;
+			let encryptInfosIv = file.encryptInfos.iv;
 
-			const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
-			const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
-
+			if (encryptInfosKey.slice(0, 2) === "0x") {
+				encryptInfosKey = encryptInfosKey.slice(2);
+			}
+			if (encryptInfosIv.slice(0, 2) === "0x") {
+				encryptInfosIv = encryptInfosIv.slice(2);
+			}
+			console.log(encryptInfosKey);
+			console.log(encryptInfosIv);
+			console.log(Buffer.from(storeFile));
+			const decryptedKey = await this.account.decrypt(Buffer.from(encryptInfosKey, 'hex'));
+			const decryptedIv = await this.account.decrypt(Buffer.from(encryptInfosIv, 'hex'));
+			console.log(decryptedKey);
+			console.log(decryptedIv);
 			const decryptedFile = await crypto.subtle.decrypt(
 				{
 					name: 'AES-GCM',
@@ -179,6 +190,8 @@ class Drive {
 				),
 				Buffer.from(storeFile),
 			);
+			console.log("yo\n");
+			console.log(decryptedFile);
 			fileDownload(decryptedFile, file.name);
 			return { success: true, message: 'File downloaded' };
 		} catch (err) {

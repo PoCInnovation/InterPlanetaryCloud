@@ -228,7 +228,15 @@ class ContactFile {
 	public async addToContact(contactAddress: string, mainFile: IPCFile): Promise<ResponseType> {
 		try {
 			const index = this.contact.contacts.findIndex((contact) => contact.address === contactAddress);
+			let encryptInfosKey = mainFile.encryptInfos.key;
+			let encryptInfosIv = mainFile.encryptInfos.iv;
 
+			if (encryptInfosKey.slice(0, 2) === "0x") {
+				encryptInfosKey = encryptInfosKey.slice(2);
+			}
+			if (encryptInfosIv.slice(0, 2) === "0x") {
+				encryptInfosIv = encryptInfosIv.slice(2);
+			}
 			if (index !== -1) {
 				if (this.contact.contacts[index].files.find((file) => file.id === mainFile.id)) {
 					return { success: false, message: 'The file is already shared' };
@@ -251,19 +259,19 @@ class ContactFile {
 					encryptInfos: {
 						key: (
 							await this.contact.account.encrypt(
-								await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.key, 'hex')),
+								await this.contact.account.decrypt(Buffer.from(encryptInfosKey, 'hex')),
 								this.contact.contacts[index].publicKey,
 							)
 						).toString('hex'),
 						iv: (
 							await this.contact.account.encrypt(
-								await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.iv, 'hex')),
+								await this.contact.account.decrypt(Buffer.from(encryptInfosIv, 'hex')),
 								this.contact.contacts[index].publicKey,
 							)
 						).toString('hex'),
 					},
 				};
-
+				
 				this.contact.contacts[index].files.push(newFile);
 				this.contact.publishAggregate();
 				return { success: true, message: 'File shared with the contact' };
