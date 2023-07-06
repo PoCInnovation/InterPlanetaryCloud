@@ -68,6 +68,7 @@ const SideBar = (): JSX.Element => {
 			spacing="64px"
 			bg={bgColor}
 			borderRight={{ base: '', lg: `1px solid ${colors.gray['100']}` }}
+			mt="20px"
 		>
 			<VStack w="100%" px="16px" spacing="32px">
 				<VStack w="100%" spacing="16px">
