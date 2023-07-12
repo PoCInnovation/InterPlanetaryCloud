@@ -47,7 +47,6 @@ export const BarWithDrawer = ({ isOpen, onClose }: BarProps): JSX.Element => {
 
 export const ResponsiveBar = (): JSX.Element => {
 	const { user } = useUserContext();
-
 	const router = useRouter();
 	const bgColor = useColorModeValue(bgColorMode.light, bgColorMode.dark);
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
