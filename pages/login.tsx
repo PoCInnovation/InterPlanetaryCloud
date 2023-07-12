@@ -51,6 +51,18 @@ const Login = (): JSX.Element => {
 		return { success: true, message: login.message };
 	};
 
+	const loginWithLedger = async (): Promise<ResponseType> => {
+		setIsLoadingCredentials(true);
+		const login = await auth.loginWithLedger(config);
+		setIsLoadingCredentials(false);
+
+		if (!login.user) return { success: false, message: login.message };
+		setUser(login.user);
+		await router.push('/drive');
+		await login.user.drive.autoDelete();
+		return { success: true, message: login.message };
+	};
+
 	return (
 		<AuthPage>
 			<VStack w="100%" spacing="64px">
@@ -88,6 +100,20 @@ const Login = (): JSX.Element => {
 							id="ipc-login-provider-button"
 						>
 							Login with a provider
+						</Button>
+						<Text size="boldMd" color={textColor}>
+							Coming soon...
+						</Text>
+						<Button
+							variant="primary"
+							size="lg"
+							w="100%"
+							disabled={true}
+							onClick={() => loginWithAProvider()}
+							isLoading={isLoadingCredentials}
+							id="ipc-login-provider-button"
+						>
+							Login with Ledger
 						</Button>
 						<Text size="boldMd" color={textColor}>
 							Coming soon...

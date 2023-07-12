@@ -1,7 +1,7 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
-
+import { ETHLedgerAccount } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 import type { AggregateContentType, AggregateType, IPCContact, IPCUpdateContent, ResponseType } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
@@ -11,7 +11,7 @@ class Contact {
 
 	public username: string;
 
-	constructor(public readonly account: accounts.ethereum.ETHAccount) {
+	constructor(public readonly account: accounts.ethereum.ETHAccount | ETHLedgerAccount) {
 		this.contacts = [];
 		this.username = '';
 	}

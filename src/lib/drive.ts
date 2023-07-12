@@ -2,7 +2,7 @@ import { accounts } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
-
+import { ETHLedgerAccount } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 import fileDownload from 'js-file-download';
 
 import { ALEPH_CHANNEL } from 'config/constants';
@@ -30,9 +30,9 @@ class Drive {
 
 	public sharedPrograms: IPCProgram[];
 
-	private readonly account: accounts.ethereum.ETHAccount;
+	private readonly account: accounts.ethereum.ETHAccount | ETHLedgerAccount;
 
-	constructor(importedAccount: accounts.ethereum.ETHAccount) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount | ETHLedgerAccount) {
 		this.files = [];
 		this.sharedFiles = [];
 		this.folders = [];

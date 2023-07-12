@@ -4,6 +4,7 @@ import ContactFile from './contactClasses/fileContact';
 import ContactFolder from './contactClasses/folderContact';
 import ManageContact from './contactClasses/manageContact';
 import Computing from './contactClasses/programContact';
+import { ETHLedgerAccount } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 
 class FullContact {
 	public contact: Contact;
@@ -16,7 +17,7 @@ class FullContact {
 
 	public computing: Computing;
 
-	constructor(public readonly account: accounts.ethereum.ETHAccount) {
+	constructor(public readonly account: accounts.ethereum.ETHAccount | ETHLedgerAccount) {
 		this.contact = new Contact(this.account);
 		this.contact.load();
 		this.files = new ContactFile(this.contact);
