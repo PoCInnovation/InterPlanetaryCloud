@@ -9,9 +9,8 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { AiOutlineFileAdd } from 'react-icons/ai';
-
 import { extractFilename, getFileContent } from 'utils/fileManipulation';
 
 import { useDriveContext } from 'contexts/drive';
@@ -32,6 +31,22 @@ const UploadFile = (): JSX.Element => {
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true, id: 'ipc-upload-file' });
+
+	const [isDragging, setIsDragging] = useState(false);
+
+	const handleDragEnter = (event: any) => {
+		event.preventDefault();
+		setIsDragging(true);
+	};
+
+	const handleDragLeave = (event: any) => {
+		event.preventDefault();
+		setIsDragging(false);
+	};
+
+	const handleDragOver = (event: any) => {
+		event.preventDefault();
+	};
 
 	const uploadFile = async () => {
 		if (!fileEvent) return;
@@ -92,8 +107,25 @@ const UploadFile = (): JSX.Element => {
 		}
 	};
 
+	const handleDrop = (event) => {
+		event.preventDefault();
+		setIsDragging(false);
+		const fileEvents = event.dataTransfer.files[0];
+		setFileEvent({ target: { files: [fileEvents] } });
+	};
+
+	useEffect(() => {
+		if (fileEvent) {
+			uploadFile();
+		}
+	}, [fileEvent]);
+
 	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
 	const { colorMode } = useColorMode();
+
+	const draggingStyles = {
+		backgroundColor: 'blue.200',
+	};
 
 	return (
 		<HStack
@@ -102,9 +134,14 @@ const UploadFile = (): JSX.Element => {
 			borderRadius="8px"
 			role="group"
 			onClick={onOpen}
+			onDragEnter={handleDragEnter}
+			onDragLeave={handleDragLeave}
+			onDragOver={handleDragOver}
+			onDrop={handleDrop}
 			w="100%"
 			cursor="pointer"
 			id="ipc-dashboard-upload-file-button"
+			bg={isDragging ? draggingStyles : 'transparent'}
 			_hover={{
 				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
