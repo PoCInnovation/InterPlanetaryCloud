@@ -1,3 +1,5 @@
+import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
+import { AiOutlineFileAdd } from 'react-icons/ai';
 import {
 	HStack,
 	Icon,
@@ -9,15 +11,14 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { AiOutlineFileAdd } from 'react-icons/ai';
-import { extractFilename, getFileContent } from 'utils/fileManipulation';
-
-import { useDriveContext } from 'contexts/drive';
-import { useUserContext } from 'contexts/user';
 
 import Button from 'components/Button';
 import Modal from 'components/Modal';
+
+import { extractFilename, getFileContent } from 'utils/fileManipulation';
+import { useDriveContext } from 'contexts/drive';
+import { useUserContext } from 'contexts/user';
+
 import { textColorMode } from 'config/colorMode';
 import type { IPCFile } from 'types/types';
 
@@ -34,17 +35,17 @@ const UploadFile = (): JSX.Element => {
 
 	const [isDragging, setIsDragging] = useState(false);
 
-	const handleDragEnter = (event: any) => {
+	const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
 		event.preventDefault();
 		setIsDragging(true);
 	};
 
-	const handleDragLeave = (event: any) => {
+	const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
 		event.preventDefault();
 		setIsDragging(false);
 	};
 
-	const handleDragOver = (event: any) => {
+	const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
 		event.preventDefault();
 	};
 
@@ -107,11 +108,17 @@ const UploadFile = (): JSX.Element => {
 		}
 	};
 
-	const handleDrop = (event) => {
+	const handleDrop = (event: DragEvent<HTMLDivElement>) => {
 		event.preventDefault();
 		setIsDragging(false);
-		const fileEvents = event.dataTransfer.files[0];
-		setFileEvent({ target: { files: [fileEvents] } });
+		const droppedFiles = event.dataTransfer.files;
+		const fileEvents = {
+			target: {
+				files: droppedFiles,
+				value: droppedFiles[0]?.name || '',
+			},
+		} as ChangeEvent<HTMLInputElement>;
+		setFileEvent(fileEvents);
 	};
 
 	useEffect(() => {
@@ -124,7 +131,7 @@ const UploadFile = (): JSX.Element => {
 	const { colorMode } = useColorMode();
 
 	const draggingStyles = {
-		backgroundColor: 'blue.200',
+		backgroundColor: 'black',
 	};
 
 	return (
