@@ -76,9 +76,6 @@ const UploadFile = (): JSX.Element => {
 
 			if (user.account) {
 				const upload = await user.drive.upload(file, fileContent, { key: keyString, iv });
-				console.log("UPLOAD\n");
-				console.log(upload);
-				console.log(upload.success);
 				if (!upload.success || !upload.file)
 					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
 				else {
@@ -86,7 +83,6 @@ const UploadFile = (): JSX.Element => {
 					user.drive.files.push(upload.file);
 
 					const shared = await user.fullContact.files.addToContact(user.account.address, upload.file);
-					// console.log(shared);
 					toast({ title: upload.message, status: shared.success ? 'success' : 'error' });
 				}
 			} else toast({ title: 'Failed to load account', status: 'error' });

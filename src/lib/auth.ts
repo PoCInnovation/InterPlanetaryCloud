@@ -87,8 +87,6 @@ class Auth {
 			if (!mnemonic) return { user: undefined, message: 'Your mnemonic is required to login.' };
 			const importedAccount = accounts.ethereum.ImportAccountFromMnemonic(mnemonic);
 			const user = new User(importedAccount, importedConfig);
-			console.log("PUBLIC KEY\n");
-			console.log(user.account.publicKey)
 			await this.createAggregate(importedAccount);
 
 			return { user, message: 'You have been logged in successfully.' };
@@ -101,14 +99,7 @@ class Auth {
 	public async loginWithProvider(importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
 			const account = await accounts.ethereum.GetAccountFromProvider(window.ethereum);
-			if (account.publicKey === undefined) {
-				account.publicKey = "";
-				// account.askPubKey();
-			}
 			const user = new User(account, importedConfig);
-			console.log(account.publicKey);
-			console.log("ACCOUNT\n")
-			console.log(account);
 			await this.createAggregate(account);
 
 			return { user, message: 'You have been logged in successfully.' };
