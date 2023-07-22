@@ -1,3 +1,5 @@
+'use client';
+
 import { Link, Stack, useBreakpointValue } from '@chakra-ui/react';
 import { BsRocketTakeoffFill } from 'react-icons/bs';
 

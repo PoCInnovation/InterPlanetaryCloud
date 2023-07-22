@@ -1,8 +1,7 @@
 import { HStack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { IoRocketSharp } from 'react-icons/io5';
-
 import Button from 'components/Button';
 
 const NavBar = (): JSX.Element => {

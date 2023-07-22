@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -34,7 +36,11 @@ const Signup = (): JSX.Element => {
 
 		setIsLoadingCredentials(false);
 		if (!signup.user || !signup.user.account) return { success: false, message: signup.message };
-		if (!signup.mnemonic) return { success: false, message: 'We could not generate your mnemonics. Please try again.' };
+		if (!signup.mnemonic)
+			return {
+				success: false,
+				message: 'We could not generate your mnemonics. Please try again.',
+			};
 		setMnemonics(signup.mnemonic);
 		setUser(signup.user);
 		setConfig(signup.user.config);

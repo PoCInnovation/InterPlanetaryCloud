@@ -1,3 +1,5 @@
+'use client';
+
 import { VStack } from '@chakra-ui/react';
 
 import DriveCards from 'components/cards/DriveCards';
@@ -6,17 +8,18 @@ import Navigation from 'components/navigation/Navigation';
 
 import { useDriveContext } from 'contexts/drive';
 
-const Programs = (): JSX.Element => {
-	const { programs } = useDriveContext();
+const Shared = (): JSX.Element => {
+	const { sharedFiles } = useDriveContext();
+	const { sharedPrograms } = useDriveContext();
 
 	return (
 		<Navigation>
 			<VStack w="100%" spacing="48px" align="start">
-				<LabelBadge label="My programs" />
-				<DriveCards programs={programs} />
+				<LabelBadge label="Share with me" />
+				<DriveCards files={sharedFiles.filter((elem) => !elem.deletedAt)} programs={sharedPrograms} />
 			</VStack>
 		</Navigation>
 	);
 };
 
-export default Programs;
+export default Shared;

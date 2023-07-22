@@ -1,3 +1,5 @@
+'use client';
+
 import { useColorMode, useToast, VStack } from '@chakra-ui/react';
 import { useEffect } from 'react';
 

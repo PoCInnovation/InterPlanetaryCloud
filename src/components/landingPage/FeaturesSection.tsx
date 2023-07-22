@@ -1,5 +1,5 @@
 import { Box, HStack, Img, Stack, Text, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { IoRocketSharp } from 'react-icons/io5';
 

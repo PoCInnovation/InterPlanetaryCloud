@@ -1,3 +1,5 @@
+'use client';
+
 import { HStack, VStack } from '@chakra-ui/react';
 
 import DriveCards from 'components/cards/DriveCards';

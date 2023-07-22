@@ -1,3 +1,5 @@
+'use client';
+
 import { VStack } from '@chakra-ui/react';
 
 import AccountCard from 'components/account/AccountCard';

@@ -1,3 +1,5 @@
+'use client';
+
 import { VStack } from '@chakra-ui/react';
 
 import FeaturesSection from 'components/landingPage/FeaturesSection';
@@ -19,5 +21,4 @@ const Home = (): JSX.Element => (
 		<Footer />
 	</VStack>
 );
-
 export default Home;

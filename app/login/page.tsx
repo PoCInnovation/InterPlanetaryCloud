@@ -1,3 +1,5 @@
+'use client';
+
 import { Text, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

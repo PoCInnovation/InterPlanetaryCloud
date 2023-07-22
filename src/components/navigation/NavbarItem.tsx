@@ -1,5 +1,5 @@
 import { HStack, Icon, Text, useColorMode, useColorModeValue } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { NavbarType } from 'types/navbar';
 import { textColorMode } from 'config/colorMode';

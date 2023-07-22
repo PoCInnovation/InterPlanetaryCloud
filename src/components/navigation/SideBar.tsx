@@ -18,7 +18,6 @@ import useToggle from 'hooks/useToggle';
 import ProfileBadge from 'components/profile/ProfileBadge';
 import { bgColorMode } from 'config/colorMode';
 import { NavbarType } from 'types/navbar';
-import { useEffect, useState } from 'react';
 import NavbarItem from './NavbarItem';
 
 const SideBar = (): JSX.Element => {
@@ -27,7 +26,6 @@ const SideBar = (): JSX.Element => {
 	const { toggle, toggleHandler } = useToggle();
 	const bgColor = useColorModeValue(bgColorMode.light, bgColorMode.dark);
 	const { colorMode } = useColorMode();
-	const [isLoading, setIsLoading] = useState(false);
 
 	const tabs: NavbarType[] = [
 		{
@@ -62,10 +60,6 @@ const SideBar = (): JSX.Element => {
 		},
 	];
 
-	useEffect(() => {
-		setIsLoading(false);
-	}, []);
-
 	return (
 		<VStack
 			w="300px"
@@ -75,65 +69,58 @@ const SideBar = (): JSX.Element => {
 			bg={bgColor}
 			borderRight={{ base: '', lg: `1px solid ${colors.gray['100']}` }}
 		>
-			{isLoading ? (
-				<Text>Loading...</Text>
-			) : (
-				<VStack w="100%" px="16px" spacing="32px">
-					<VStack w="100%" spacing="16px">
-						<VStack w="100%" spacing="32px">
-							{isDrawerNeeded && (
-								<Text size="2xl" variant="gradient" id="ipc-sideBar-title" align="center">
-									Inter Planetary Cloud
-								</Text>
-							)}
-							<Button
-								variant="special"
-								buttonType="left-icon"
-								icon={BsPlusLg}
-								size="xl"
-								w="100%"
-								className="ipc-new-elem-button"
-								onClick={() => {
-									setIsLoading(true);
-									toggleHandler();
-								}}
-							>
-								New
-							</Button>
-						</VStack>
-						{toggle && (
-							<VStack
-								w="250px"
-								borderRadius="8px"
-								border={`2px solid ${colorMode === 'light' ? colors.blue['100'] : '#595959'}`}
-								_focus={{
-									boxShadow: 'none',
-								}}
-								spacing="4px"
-								p="8px"
-								bg={colorMode === 'light' ? 'white' : 'gray.700'}
-							>
-								<CreateFolder />
-								<UploadFile />
-								<DeployProgram />
-								<DeployGithub />
-							</VStack>
+			<VStack w="100%" px="16px" spacing="32px">
+				<VStack w="100%" spacing="16px">
+					<VStack w="100%" spacing="32px">
+						{isDrawerNeeded && (
+							<Text size="2xl" variant="gradient" id="ipc-sideBar-title" align="center">
+								Inter Planetary Cloud
+							</Text>
 						)}
+						<Button
+							variant="special"
+							buttonType="left-icon"
+							icon={BsPlusLg}
+							size="xl"
+							w="100%"
+							className="ipc-new-elem-button"
+							onClick={toggleHandler}
+						>
+							New
+						</Button>
 					</VStack>
-
-					<VStack spacing="16px" w="100%">
-						{tabs.map((item) => (
-							<NavbarItem item={item} key={item.label} />
-						))}
-					</VStack>
-					{isDrawerNeeded && (
-						<ProfileBadge
-							username={user?.fullContact.contact.username || 'IPC'}
-							address={user?.account.address || 'IPC'}
-						/>
+					{toggle && (
+						<VStack
+							w="250px"
+							borderRadius="8px"
+							border={`2px solid ${colorMode === 'light' ? colors.blue['100'] : '#595959'}`}
+							_focus={{
+								boxShadow: 'none',
+							}}
+							spacing="4px"
+							p="8px"
+							bg={colorMode === 'light' ? 'white' : 'gray.700'}
+						>
+							<CreateFolder />
+							<UploadFile />
+							<DeployProgram />
+							<DeployGithub />
+						</VStack>
 					)}
 				</VStack>
-			)}
+
+				<VStack spacing="16px" w="100%">
+					{tabs.map((item) => (
+						<NavbarItem item={item} key={item.label} />
+					))}
+				</VStack>
+				{isDrawerNeeded && (
+					<ProfileBadge
+						username={user?.fullContact.contact.username || 'IPC'}
+						address={user?.account.address || 'IPC'}
+					/>
+				)}
+			</VStack>
 		</VStack>
 	);
 };

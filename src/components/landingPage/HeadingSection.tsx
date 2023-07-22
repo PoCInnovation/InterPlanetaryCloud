@@ -1,11 +1,11 @@
 import { Box, Img, Text, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { IoRocketSharp } from 'react-icons/io5';
 
 import Button from 'components/Button';
-
 import colors from 'theme/foundations/colors';
+
 import { textColorMode } from 'config/colorMode';
 
 const HeadingSection = (): JSX.Element => {
