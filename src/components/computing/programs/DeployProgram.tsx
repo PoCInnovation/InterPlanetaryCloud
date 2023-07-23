@@ -3,9 +3,9 @@ import {
 	Icon,
 	Text,
 	useBreakpointValue,
-	useDisclosure,
 	useColorMode,
 	useColorModeValue,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { AiOutlineCode } from 'react-icons/ai';
 import { IoIosRocket } from 'react-icons/io';

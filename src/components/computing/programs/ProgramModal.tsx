@@ -1,5 +1,5 @@
-import { Input, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
+import { Input, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
 
 import Modal from 'components/Modal';
 
@@ -33,8 +33,37 @@ const ProgramModal = ({
 	const [isDeployLoading, setIsDeployLoading] = useState(false);
 	const [customName, setCustomName] = useState<string>('');
 	const [customEntrypoint, setCustomEntrypoint] = useState<string>('');
+	const [isDragging, setIsDragging] = useState(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
+
+	const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setIsDragging(true);
+	};
+
+	const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setIsDragging(false);
+	};
+
+	const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+	};
+
+	const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setIsDragging(false);
+		const droppedFiles = event.dataTransfer.files;
+		const fileEvents = {
+			target: {
+				files: droppedFiles,
+				value: droppedFiles[0]?.name || '',
+			},
+		} as ChangeEvent<HTMLInputElement>;
+		setFileEvent(fileEvents);
+	};
+
 	const uploadProgram = async (oldProgram: IPCProgram | undefined) => {
 		if (!fileEvent?.target.files) return;
 		const filename = extractFilename(fileEvent.target.value);
@@ -74,6 +103,12 @@ const ProgramModal = ({
 		setIsDeployLoading(false);
 	};
 
+	useEffect(() => {
+		if (fileEvent) {
+			uploadProgram(selectedProgram);
+		}
+	}, [fileEvent]);
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -91,7 +126,20 @@ const ProgramModal = ({
 				</Button>
 			}
 		>
-			<VStack spacing="16px" w="100%" align="start">
+			<VStack
+				spacing="16px"
+				w="100%"
+				align="start"
+				onDragEnter={handleDragEnter}
+				onDragLeave={handleDragLeave}
+				onDragOver={handleDragOver}
+				onDrop={handleDrop}
+				cursor="pointer"
+				bg={isDragging ? { backgroundColor: 'black' } : 'transparent'}
+				_hover={{
+					bg: { colorMode: 'light' ? 'blue.50' : 'gray.750' },
+				}}
+			>
 				<CustomProgram
 					customName={customName}
 					setCustomName={setCustomName}
