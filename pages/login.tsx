@@ -109,7 +109,7 @@ const Login = (): JSX.Element => {
 							size="lg"
 							w="100%"
 							disabled={true}
-							onClick={() => loginWithAProvider()}
+							onClick={() => loginWithLedger()}
 							isLoading={isLoadingCredentials}
 							id="ipc-login-provider-button"
 						>

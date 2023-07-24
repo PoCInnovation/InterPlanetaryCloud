@@ -113,7 +113,7 @@ class Auth {
 
 	public async loginWithLedger(importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
-			const account = await GetAccountFromLedger(window.ethereum);
+			const account = await GetAccountFromLedger();
 			const user = new User(account, importedConfig);
 
 			await this.createAggregate(account);
