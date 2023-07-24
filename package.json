@@ -11,6 +11,7 @@
     "@chakra-ui/theme-tools": "^2.0.18",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@ledgerhq/hw-app-eth": "^6.34.0",
     "aleph-sdk-ts": "^3.2.0",
     "axios": "^1.4.0",
     "boring-avatars": "^1.10.1",
