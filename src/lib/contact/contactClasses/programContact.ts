@@ -163,7 +163,6 @@ class Computing {
 	public async download(toDownload: IPCProgram): Promise<ResponseType> {
 		try {
 			const programStore = await store.Get({ fileHash: toDownload.hashFile });
-
 			fileDownload(programStore, toDownload.name);
 			return { success: true, message: 'Program downloaded' };
 		} catch (err) {

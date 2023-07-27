@@ -37,36 +37,6 @@ class Auth {
 		localStorage.clear();
 	}
 
-	private async createAggregate(account: accounts.ethereum.ETHAccount): Promise<void> {
-		try {
-			await aggregate.Get<AggregateType>({
-				address: account.address,
-				keys: ['InterPlanetaryCloud'],
-			});
-		} catch (error) {
-			console.error(error);
-			aggregate.Publish({
-				channel: ALEPH_CHANNEL,
-				storageEngine: ItemType.ipfs,
-				account,
-				key: 'InterPlanetaryCloud',
-				content: {
-					contacts: [
-						{
-							name: 'Owner (Me)',
-							address: account.address,
-							publicKey: account.publicKey,
-							files: [],
-							folders: [],
-							config: this.defaultConfig,
-						},
-					],
-					programs: [],
-				},
-			});
-		}
-	}
-
 	public async signup(): Promise<AuthReturnType & { mnemonic?: string }> {
 		try {
 			const { mnemonic, account } = accounts.ethereum.NewAccount();
@@ -108,6 +78,36 @@ class Auth {
 		} catch (err) {
 			console.error(err);
 			return { user: undefined, message: 'An error occurred while logging to your account.' };
+		}
+	}
+
+	private async createAggregate(account: accounts.ethereum.ETHAccount): Promise<void> {
+		try {
+			await aggregate.Get<AggregateType>({
+				address: account.address,
+				keys: ['InterPlanetaryCloud'],
+			});
+		} catch (error) {
+			console.error(error);
+			aggregate.Publish({
+				channel: ALEPH_CHANNEL,
+				storageEngine: ItemType.ipfs,
+				account,
+				key: 'InterPlanetaryCloud',
+				content: {
+					contacts: [
+						{
+							name: 'Owner (Me)',
+							address: account.address,
+							publicKey: account.publicKey,
+							files: [],
+							folders: [],
+							config: this.defaultConfig,
+						},
+					],
+					programs: [],
+				},
+			});
 		}
 	}
 }
