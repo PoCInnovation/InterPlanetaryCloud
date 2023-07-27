@@ -2,8 +2,9 @@ import { accounts } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
-
+import { ecrecover, fromRpcSig, toBuffer, sha256 } from 'ethereumjs-util';
 import fileDownload from 'js-file-download';
+import publicKey from 'eth-crypto'
 
 import { ALEPH_CHANNEL } from 'config/constants';
 
@@ -82,6 +83,31 @@ class Drive {
 	): Promise<UploadResponse> {
 		try {
 			if (content) {
+				const msg = `0x${Buffer.from(this.account.address, 'utf8').toString('hex')}`;
+				const msgHash = sha256(Buffer.from(msg.slice(2), 'hex'));
+				const prefixedSign = await window.ethereum.request({
+					method: 'personal_sign',
+					params: [msg, this.account.address],
+				});
+				// console.log("MSG")
+				// console.log(msg)
+				// console.log("ADDRESS")
+				// console.log(this.account.address)
+				const sign = prefixedSign.slice(2)
+				// console.log(sign)
+				console.log(Buffer.from(sign, 'hex'))
+				const parsedSignature = fromRpcSig(prefixedSign);
+				// console.log("HERE")
+				// console.log(toBuffer(msg))
+				// console.log(parsedSignature)
+				const publicKey = ecrecover(
+					msgHash,
+					parsedSignature.v,
+					parsedSignature.r,
+					parsedSignature.s
+				  );
+				// const publicKey = privateToPublic(Buffer.from(sign, 'hex').slice(0, 32));
+
 				const fileHashPublishStore = await store.Publish({
 					channel: ALEPH_CHANNEL,
 					account: this.account,
@@ -107,12 +133,15 @@ class Drive {
 					storageEngine: ItemType.ipfs,
 					APIServer: DEFAULT_API_V2,
 				});
+				console.log("here")
+				console.log(publicKey)
+				console.log(publicKey.toString('hex'))
 				const newFile: IPCFile = {
 					...file,
 					hash: fileHashPublishStore.content.item_hash,
 					encryptInfos: {
-						key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
-						iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
+						key: (await this.account.encrypt(Buffer.from(infos.key), publicKey.toString('hex'))).toString('hex'),
+						iv: (await this.account.encrypt(Buffer.from(infos.iv), publicKey.toString('hex'))).toString('hex'),
 					},
 				};
 				return { success: true, message: 'File uploaded', file: newFile };
