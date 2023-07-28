@@ -117,9 +117,10 @@ const UploadFolder = (): JSX.Element => {
 					h="100%"
 					w="100%"
 					p="10px"
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setFolderEvent(e)}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFolderEvent(e)}
 					id="ipc-dashboard-upload-folder"
 					multiple
+					// @ts-expect-error Webkitdirectory is needed for the upload of folders in the file explorer.
 					webkitdirectory={''}
 				/>
 			</Modal>
