@@ -66,10 +66,12 @@ const UploadFile = (): JSX.Element => {
 				path,
 				permission: 'owner',
 				deletedAt: null,
-				logs: {
-					action: 'File created',
-					date: Date.now(),
-				},
+				logs: [
+					{
+						action: 'File created',
+						date: Date.now(),
+					},
+				],
 			};
 
 			if (user.account) {

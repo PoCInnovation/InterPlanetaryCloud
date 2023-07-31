@@ -18,11 +18,13 @@ import { useUserContext } from 'contexts/user';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { textColorMode } from 'config/colorMode';
-import { IPCFolder } from '../../types/types';
+import { FolderInfo, IPCFolder } from '../../types/types';
 import { getRootFolderName } from '../../utils/fileManipulation';
+import FolderTree from '../../utils/folderTree';
 
 const UploadFolder = (): JSX.Element => {
 	const { user } = useUserContext();
+	const [name, setName] = useState('');
 	const { folders, setFolders, path } = useDriveContext();
 	const [folderEvent, setFolderEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
@@ -38,9 +40,23 @@ const UploadFolder = (): JSX.Element => {
 			setIsLoading(false);
 			return;
 		}
-
 		const folderName = getRootFolderName(folderEvent.target.files[0]);
+		const rootFolder: FolderInfo = {
+			folderName,
+			folderPath: `${folderName}/`,
+			subFolder: [],
+		};
+		const folderTree = new FolderTree(rootFolder, []);
+		const getAllSubDirectories = (files: FileList) => {
+			Array.prototype.forEach.call(files, (file) => {
+				folderTree.getFolderContent(file.webkitRelativePath);
+			});
+		};
+		getAllSubDirectories(folderEvent.target.files);
 
+		const allFolders = Object.values(folderTree);
+
+		allFolders.forEach((actualFolder) => {});
 		const folder: IPCFolder = {
 			name: folderName,
 			createdAt: Date.now(),
@@ -57,6 +73,7 @@ const UploadFolder = (): JSX.Element => {
 		if (created.success) {
 			setFolders([...folders, folder]);
 		}
+
 		setFolderEvent(undefined);
 		setIsLoading(false);
 		onClose();
@@ -117,7 +134,7 @@ const UploadFolder = (): JSX.Element => {
 					h="100%"
 					w="100%"
 					p="10px"
-					onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFolderEvent(e)}
+					onChange={(e: ChangeEvent<HTMLInputElement>) => setFolderEvent(e)}
 					id="ipc-dashboard-upload-folder"
 					multiple
 					// @ts-expect-error Webkitdirectory is needed for the upload of folders in the file explorer.
