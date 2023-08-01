@@ -108,14 +108,26 @@ class Drive {
 					APIServer: DEFAULT_API_V2,
 				});
 
-				const newFile: IPCFile = {
-					...file,
-					hash: fileHashPublishStore.content.item_hash,
-					encryptInfos: {
-						key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
-						iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
-					},
-				};
+				let newFile: IPCFile;
+				if (this.account instanceof ETHLedgerAccount) {
+					newFile = {
+						...file,
+						hash: fileHashPublishStore.content.item_hash,
+						encryptInfos: {
+							key: (Buffer.from(infos.key)).toString('hex'),
+							iv: (Buffer.from(infos.iv)).toString('hex'),
+						},
+					};
+				} else {
+					newFile = {
+						...file,
+						hash: fileHashPublishStore.content.item_hash,
+						encryptInfos: {
+							key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
+							iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
+						},
+					};
+				}
 				return { success: true, message: 'File uploaded', file: newFile };
 			}
 			return { success: false, message: 'Content is empty', file: undefined };
@@ -159,8 +171,16 @@ class Drive {
 		try {
 			const storeFile = await store.Get({ fileHash: file.hash });
 
-			const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
-			const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
+			let decryptedKey;
+			let decryptedIv;
+
+			if (this.account instanceof ETHLedgerAccount) {
+				decryptedKey = Buffer.from(file.encryptInfos.key, 'hex');
+				decryptedIv = Buffer.from(file.encryptInfos.iv, 'hex');
+			} else {
+				decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
+				decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
+			}
 
 			const decryptedFile = await crypto.subtle.decrypt(
 				{

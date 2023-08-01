@@ -78,20 +78,27 @@ class Contact {
 										else if (type === 'update') {
 											foundFile.hash = file.hash;
 											foundFile.size = file.size;
-											foundFile.encryptInfos = {
-												key: (
-													await this.account.encrypt(
-														await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex')),
-														c.publicKey,
-													)
-												).toString('hex'),
-												iv: (
-													await this.account.encrypt(
-														await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex')),
-														c.publicKey,
-													)
-												).toString('hex'),
-											};
+											if (this.account instanceof ETHLedgerAccount) {
+												foundFile.encryptInfos = {
+													key: (Buffer.from(file.encryptInfos.key, 'hex')).toString('hex'),
+													iv: (Buffer.from(file.encryptInfos.iv, 'hex')).toString('hex'),
+												};
+											} else {
+												foundFile.encryptInfos = {
+													key: (
+														await this.account.encrypt(
+															await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex')),
+															c.publicKey,
+														)
+													).toString('hex'),
+													iv: (
+														await this.account.encrypt(
+															await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex')),
+															c.publicKey,
+														)
+													).toString('hex'),
+												};
+											}
 										} else if (type === 'delete') {
 											const owner = this.contacts.find((co) => co.address === c.address)!;
 											owner.files = owner.files.filter((f) => f.id !== fileId);
