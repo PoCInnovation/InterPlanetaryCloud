@@ -108,4 +108,5 @@ export type FolderInfo = {
 export type FileInfo = {
 	fileName: string;
 	filePath: string;
+	fileSize: number;
 };

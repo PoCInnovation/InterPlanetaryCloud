@@ -10,7 +10,7 @@ class FolderTree {
 		this.files = files;
 	}
 
-	getFolderContent(filePath: string) {
+	getFolderContent(filePath: string, fileSize: number) {
 		const folders = filePath.split('/');
 		const rootName = folders[0];
 		const parentFolders = folders;
@@ -29,25 +29,36 @@ class FolderTree {
 				currentFolder = existingFolder;
 			} else {
 				const searchFinalFolder = folderPath.split('/');
-                searchFinalFolder.pop();
-                searchFinalFolder.pop();
-                folderPath = '';
-                searchFinalFolder.forEach((folderName) => {
-                    folderPath = folderPath.concat(folderName);
-                    folderPath = folderPath.concat('/');
-                })
-                const newFolder: FolderInfo = {
-                    folderName: folder,
-                    folderPath: `${rootName}/${folderPath}`,
-                    subFolder: [],
-                };
-                currentFolder.subFolder.push(newFolder);
-                currentFolder = newFolder;
+				searchFinalFolder.pop();
+				searchFinalFolder.pop();
+				folderPath = '';
+				searchFinalFolder.forEach((folderName) => {
+					folderPath = folderPath.concat(folderName);
+					folderPath = folderPath.concat('/');
+				});
+				const newFolder: FolderInfo = {
+					folderName: folder,
+					folderPath: `${rootName}/${folderPath}`,
+					subFolder: [],
+				};
+				currentFolder.subFolder.push(newFolder);
+				currentFolder = newFolder;
 			}
 		});
+		const newFilePath = filePath.split('/');
+
+		newFilePath.pop();
+
+		let newPath = '';
+		newFilePath.forEach((file) => {
+			newPath = newPath.concat('/');
+			newPath = newPath.concat(file);
+		});
+
 		const newFile: FileInfo = {
 			fileName,
-			filePath: `${rootName}/${filePath}`,
+			filePath: newPath,
+			fileSize,
 		};
 		this.files.push(newFile);
 	}

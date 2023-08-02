@@ -16,13 +16,12 @@ import { useUserContext } from 'contexts/user';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { textColorMode } from 'config/colorMode';
-import { FolderInfo, IPCFolder } from '../../types/types';
-import { getRootFolderName } from '../../utils/fileManipulation';
+import { FileInfo, FolderInfo, IPCFile, IPCFolder } from '../../types/types';
+import { getFileContent, getRootFolderName } from '../../utils/fileManipulation';
 import FolderTree from '../../utils/folderTree';
 
 const UploadFolder = (): JSX.Element => {
 	const { user } = useUserContext();
-	// const { folders, setFolders, path } = useDriveContext();
 	const [folderEvent, setFolderEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,11 +46,11 @@ const UploadFolder = (): JSX.Element => {
 		const folderTree = new FolderTree(rootFolder, []);
 		const getAllSubDirectories = (files: FileList) => {
 			Array.prototype.forEach.call(files, (file) => {
-				folderTree.getFolderContent(file.webkitRelativePath);
+				folderTree.getFolderContent(file.webkitRelativePath, file.size);
 			});
 		};
 		getAllSubDirectories(folderEvent.target.files);
-		const allFolders: IPCFolder[] = [];
+		const allIpcFolders: IPCFolder[] = [];
 		let checkRoot = true;
 
 		const getAllFolders = async (folderInfo: FolderInfo) => {
@@ -77,7 +76,7 @@ const UploadFolder = (): JSX.Element => {
 					},
 				],
 			};
-			allFolders.push(folder);
+			allIpcFolders.push(folder);
 
 			if (folderInfo.subFolder) {
 				Array.prototype.forEach.call(folderInfo.subFolder, (subFolder) => {
@@ -86,10 +85,63 @@ const UploadFolder = (): JSX.Element => {
 			}
 		};
 
-		await getAllFolders(folderTree.folders);
-		const created = await user.fullContact.folders.uploadFolders(allFolders);
+		const filesContent: ArrayBuffer[] = [];
 
-		toast({ title: created.message, status: created.success ? 'success' : 'error' });
+		const getAllFiles = async (fileInfo: FileInfo[], filesEvent: FileList) => {
+			Array.prototype.forEach.call(filesEvent, async (filesEvent_) => {
+				const fileContent = await getFileContent(filesEvent_);
+				filesContent.push(fileContent);
+			});
+
+			Array.prototype.forEach.call(fileInfo, async (file, index) => {
+				const cryptoKey = await crypto.subtle.generateKey(
+					{
+						name: 'AES-GCM',
+						length: 256,
+					},
+					true,
+					['encrypt', 'decrypt'],
+				);
+				const keyString = await crypto.subtle.exportKey('raw', cryptoKey);
+				const iv = crypto.getRandomValues(new Uint8Array(128));
+
+				const filePath = `${file.filePath}/`;
+				const newFile: IPCFile = {
+					id: crypto.randomUUID(),
+					name: file.fileName,
+					hash: '',
+					size: file.fileSize,
+					createdAt: Date.now(),
+					encryptInfos: { key: '', iv: '' },
+					path: filePath,
+					permission: 'owner',
+					deletedAt: null,
+					logs: [
+						{
+							action: 'File created',
+							date: Date.now(),
+						},
+					],
+				};
+
+				const upload = await user.drive.upload(newFile, filesContent[index], { key: keyString, iv });
+				if (!upload.success || !upload.file)
+					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
+				else {
+					user.drive.files.push(upload.file);
+
+					await user.fullContact.files.addToContact(user.account.address, upload.file);
+				}
+			});
+		};
+
+		await getAllFolders(folderTree.folders);
+
+		const createdFolder = await user.fullContact.folders.uploadFolders(allIpcFolders);
+		await getAllFiles(folderTree.files, folderEvent.target.files);
+
+		toast({ title: createdFolder.message, status: createdFolder.success ? 'success' : 'error' });
+
 		setFolderEvent(undefined);
 		setIsLoading(false);
 		onClose();
