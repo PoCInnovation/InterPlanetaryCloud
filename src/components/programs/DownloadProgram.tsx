@@ -20,10 +20,9 @@ const DownloadProgram = ({ program }: DownloadProgramProps): JSX.Element => {
 
 	const downloadProgram = async () => {
 		try {
-			const download = await user.computing.download(program);
+			const download = await  user.computing.download(program);
 			toast({ title: download.message, status: download.success ? 'success' : 'error' });
 		} catch (error) {
-			console.error(error);
 			toast({ title: 'Unable to download program', status: 'error' });
 		}
 	};

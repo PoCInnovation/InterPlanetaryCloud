@@ -11,8 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { ChangeEvent, useState } from 'react';
 import { AiFillFolderAdd } from 'react-icons/ai';
-
-import { useDriveContext } from 'contexts/drive';
 import { useUserContext } from 'contexts/user';
 
 import Button from 'components/Button';
@@ -24,8 +22,7 @@ import FolderTree from '../../utils/folderTree';
 
 const UploadFolder = (): JSX.Element => {
 	const { user } = useUserContext();
-	const [name, setName] = useState('');
-	const { folders, setFolders, path } = useDriveContext();
+	// const { folders, setFolders, path } = useDriveContext();
 	const [folderEvent, setFolderEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,10 +37,11 @@ const UploadFolder = (): JSX.Element => {
 			setIsLoading(false);
 			return;
 		}
-		const folderName = getRootFolderName(folderEvent.target.files[0]);
+
+		const rootFolderName = getRootFolderName(folderEvent.target.files[0]);
 		const rootFolder: FolderInfo = {
-			folderName,
-			folderPath: `${folderName}/`,
+			folderName: rootFolderName,
+			folderPath: `${rootFolderName}/`,
 			subFolder: [],
 		};
 		const folderTree = new FolderTree(rootFolder, []);
@@ -53,27 +51,45 @@ const UploadFolder = (): JSX.Element => {
 			});
 		};
 		getAllSubDirectories(folderEvent.target.files);
+		const allFolders: IPCFolder[] = [];
+		let checkRoot = true;
 
-		const allFolders = Object.values(folderTree);
+		const getAllFolders = async (folderInfo: FolderInfo) => {
+			let pathFolder = folderInfo.folderPath;
+			const checkPath = pathFolder.split('/');
 
-		allFolders.forEach((actualFolder) => {});
-		const folder: IPCFolder = {
-			name: folderName,
-			createdAt: Date.now(),
-			path,
-			logs: [
-				{
-					action: 'Folder created',
-					date: Date.now(),
-				},
-			],
+			checkPath.pop();
+			if (checkPath.length === 1 && checkRoot) {
+				pathFolder = '/';
+				checkRoot = false;
+			} else if (checkPath.length >= 1) {
+				pathFolder = `/${pathFolder}`;
+			}
+
+			const folder: IPCFolder = {
+				name: folderInfo.folderName,
+				createdAt: Date.now(),
+				path: pathFolder,
+				logs: [
+					{
+						action: 'Folder created',
+						date: Date.now(),
+					},
+				],
+			};
+			allFolders.push(folder);
+
+			if (folderInfo.subFolder) {
+				Array.prototype.forEach.call(folderInfo.subFolder, (subFolder) => {
+					getAllFolders(subFolder);
+				});
+			}
 		};
-		const created = await user.fullContact.folders.create(folder);
-		toast({ title: created.message, status: created.success ? 'success' : 'error' });
-		if (created.success) {
-			setFolders([...folders, folder]);
-		}
 
+		await getAllFolders(folderTree.folders);
+		const created = await user.fullContact.folders.uploadFolders(allFolders);
+
+		toast({ title: created.message, status: created.success ? 'success' : 'error' });
 		setFolderEvent(undefined);
 		setIsLoading(false);
 		onClose();

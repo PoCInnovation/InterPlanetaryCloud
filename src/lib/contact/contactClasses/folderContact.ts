@@ -78,6 +78,24 @@ class ContactFolder {
 			return { success: false, message: 'Failed to delete the folder' };
 		}
 	}
+
+	public async uploadFolders(folders: IPCFolder[]): Promise<ResponseType> {
+		try {
+			const contact = this.contact.contacts.find((c) => c.address === this.contact.account.address);
+
+			if (contact) {
+				Array.prototype.forEach.call(folders, (folder) => {
+					contact.folders.push(folder);
+				});
+				await this.contact.publishAggregate();
+				return { success: true, message: 'Folder created' };
+			}
+			return { success: false, message: 'Failed to load contact' };
+		} catch (err) {
+			console.error(err);
+			return { success: false, message: 'Failed to create the folder' };
+		}
+	}
 }
 
 export default ContactFolder;

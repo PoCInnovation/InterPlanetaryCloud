@@ -28,13 +28,21 @@ class FolderTree {
 			if (existingFolder) {
 				currentFolder = existingFolder;
 			} else {
-				const newFolder: FolderInfo = {
-					folderName: folder,
-					folderPath: `${rootName}/${folderPath}`,
-					subFolder: [],
-				};
-				currentFolder.subFolder.push(newFolder);
-				currentFolder = newFolder;
+				const searchFinalFolder = folderPath.split('/');
+                searchFinalFolder.pop();
+                searchFinalFolder.pop();
+                folderPath = '';
+                searchFinalFolder.forEach((folderName) => {
+                    folderPath = folderPath.concat(folderName);
+                    folderPath = folderPath.concat('/');
+                })
+                const newFolder: FolderInfo = {
+                    folderName: folder,
+                    folderPath: `${rootName}/${folderPath}`,
+                    subFolder: [],
+                };
+                currentFolder.subFolder.push(newFolder);
+                currentFolder = newFolder;
 			}
 		});
 		const newFile: FileInfo = {
