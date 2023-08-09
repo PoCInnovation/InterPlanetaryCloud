@@ -1,18 +1,19 @@
-'use client';
+'use client'
 
-import Auth from 'lib/auth';
-import {useEffect, useState} from 'react';
-import {ChakraProvider, ColorModeScript, useToast} from '@chakra-ui/react';
-import theme from 'theme';
-import AuthContext from 'contexts/auth';
-import User from 'lib/user';
-import ConfigContext from 'contexts/config';
-import {IPCConfig, IPCContact, IPCFile, IPCFolder, IPCProgram} from 'types/types';
-import UserContext from '../contexts/user';
-import DriveContext from '../contexts/drive';
+import {ChakraProvider, ColorModeScript, useToast} from "@chakra-ui/react";
+import {useEffect, useState} from "react";
+import theme from "../src/theme";
+import AuthContext from "../src/contexts/auth";
+import UserContext from "../src/contexts/user";
+import User from "../src/lib/user";
+import ConfigContext from "../src/contexts/config";
+import {IPCConfig, IPCContact, IPCFile, IPCFolder, IPCProgram} from "../src/types/types";
+import DriveContext from "../src/contexts/drive";
+import Auth from "../src/lib/auth";
+import '../src/theme/index.css'
 
-export default function ThemProvider({children}: { children: React.ReactNode }) {
-    const [auth, setAuth] = useState<Auth | undefined>(undefined);
+const Provider = ({children}: { children: React.ReactNode }) => {
+    const [auth, setAuth] = useState<Auth>(new Auth());
     const [user, setUser] = useState<User | undefined>(undefined);
     const [config, setConfig] = useState<IPCConfig | undefined>(undefined);
     const [error, setError] = useState<Error | unknown>(undefined);
@@ -43,6 +44,7 @@ export default function ThemProvider({children}: { children: React.ReactNode }) 
             });
         }
     }, [error]);
+
     return (
         <ChakraProvider theme={theme} resetCSS cssVarsRoot="body">
             <ColorModeScript initialColorMode={theme.config.initialColorMode}/>
@@ -73,5 +75,7 @@ export default function ThemProvider({children}: { children: React.ReactNode }) 
                 </UserContext.Provider>
             </AuthContext.Provider>
         </ChakraProvider>
-    );
+    )
 }
+
+export default Provider;

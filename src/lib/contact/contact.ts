@@ -1,6 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/types';
 
 import type { AggregateContentType, AggregateType, IPCContact, IPCUpdateContent, ResponseType } from 'types/types';
 

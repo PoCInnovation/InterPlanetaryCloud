@@ -1,7 +1,7 @@
 import { accounts } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
-import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/types';
 
 import fileDownload from 'js-file-download';
 

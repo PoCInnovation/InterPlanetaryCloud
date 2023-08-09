@@ -1,6 +1,6 @@
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate, forget, program, store } from 'aleph-sdk-ts/dist/messages';
-import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/types';
 
 import fileDownload from 'js-file-download';
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';

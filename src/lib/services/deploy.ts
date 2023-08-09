@@ -1,9 +1,9 @@
+import fs from 'node:fs';
+import child_process from 'child_process';
 import { ethereum } from 'aleph-sdk-ts/dist/accounts';
 import { program } from 'aleph-sdk-ts/dist/messages';
-import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
-import fs from 'node:fs';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/types';
 
-import child_process from 'child_process';
 
 import { ALEPH_CHANNEL } from 'config/constants';
 import { cleanup } from './git';

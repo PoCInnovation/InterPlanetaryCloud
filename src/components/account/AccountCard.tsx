@@ -13,7 +13,7 @@ import {
 	WrapItem,
 } from '@chakra-ui/react';
 import Avatar from 'boring-avatars';
-import { ChangeEvent, useState } from 'react';
+import {ChangeEvent, ReactElement, useState} from 'react';
 import { BsClipboard } from 'react-icons/bs';
 import Card from 'components/cards/Card';
 
@@ -25,7 +25,7 @@ import colors from 'theme/foundations/colors';
 
 import Modal from '../Modal';
 
-const AccountCard = (): JSX.Element => {
+const AccountCard = (): ReactElement => {
 	const { user } = useUserContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [input, setInput] = useState<string>(user.fullContact.contact.username || '');
@@ -53,7 +53,7 @@ const AccountCard = (): JSX.Element => {
 			<Modal
 				isOpen={isOpen}
 				onClose={() => setIsOpen(false)}
-				title={'Configuration modfication'}
+				title={'Configuration modification'}
 				CTA={
 					<Button
 						variant="secondary"

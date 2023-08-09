@@ -1,5 +1,5 @@
-import _clone from 'git-clone/promise';
 import node_path from 'path';
+import _clone from 'git-clone/promise';
 
 import { GITCLONE_DIR } from 'config/constants';
 

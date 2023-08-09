@@ -1,5 +1,5 @@
 import { aggregate, post } from 'aleph-sdk-ts/dist/messages';
-import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
+import { ItemType } from 'aleph-sdk-ts/dist/messages/types';
 
 import type { AggregateType, IPCFile, ResponseType } from 'types/types';
 
