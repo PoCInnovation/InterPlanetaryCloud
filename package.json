@@ -1,6 +1,7 @@
 {
   "name": "ipc-ts",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.22.5",
@@ -11,17 +12,21 @@
     "@chakra-ui/theme-tools": "^2.0.18",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@octokit/types": "^11.1.0",
+    "@octokit/webhooks": "^12.0.3",
     "aleph-sdk-ts": "^3.2.0",
     "axios": "^1.4.0",
     "boring-avatars": "^1.10.1",
     "crypto-js": "^4.1.1",
+    "dotenv": "^16.3.1",
     "eth-crypto": "^2.6.0",
     "ethers": "^5.7.2",
     "framer-motion": "^10.12.17",
     "git-clone": "^0.2.0",
     "js-file-download": "^0.4.12",
     "next": "^12.3.4",
-    "next-auth": "4.10.3",
+    "next-auth": "^4.23.1",
+    "octokit": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
@@ -35,7 +40,8 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "server": "node ./pages/api/program/push.js"
   },
   "browserslist": {
     "production": [
@@ -58,7 +64,7 @@
     "@types/react-dom": "^18.2.6",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
-    "cypress": "^11.2.0",
+    "cypress": "^4.2.0",
     "cypress-file-upload": "^5.0.8",
     "eslint": "^8.43.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -68,6 +74,7 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "smee-client": "^1.2.3"
   }
 }
