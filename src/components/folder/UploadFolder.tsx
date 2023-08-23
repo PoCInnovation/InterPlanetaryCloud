@@ -1,216 +1,230 @@
 import {
-	HStack,
-	Icon,
-	Input,
-	Text,
-	useBreakpointValue,
-	useColorMode,
-	useColorModeValue,
-	useDisclosure,
-	useToast,
+    HStack,
+    Icon,
+    Input,
+    Text,
+    useBreakpointValue,
+    useColorMode,
+    useColorModeValue,
+    useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
-import { AiFillFolderAdd } from 'react-icons/ai';
-import { useUserContext } from 'contexts/user';
+import {ChangeEvent, useState} from 'react';
+import {AiFillFolderAdd} from 'react-icons/ai';
+import {useUserContext} from 'contexts/user';
 
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import { textColorMode } from 'config/colorMode';
-import { FileInfo, FolderInfo, IPCFile, IPCFolder } from '../../types/types';
-import { getFileContent, getRootFolderName } from '../../utils/fileManipulation';
+import {textColorMode} from 'config/colorMode';
+import {FileInfo, FolderInfo, IPCFile, IPCFolder} from '../../types/types';
+import {getFileContent, getRootFolderName} from '../../utils/fileManipulation';
 import FolderTree from '../../utils/folderTree';
+import {useDriveContext} from "../../contexts/drive";
 
 const UploadFolder = (): JSX.Element => {
-	const { user } = useUserContext();
-	const [folderEvent, setFolderEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
-	const [isLoading, setIsLoading] = useState(false);
-	const { isOpen, onOpen, onClose } = useDisclosure();
+    const {user} = useUserContext();
+    const {folders, setFolders, files, setFiles} = useDriveContext();
+    const [folderEvent, setFolderEvent] = useState<ChangeEvent<HTMLInputElement> | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(false);
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
-	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
-	const toast = useToast({ duration: 2000, isClosable: true, id: 'ipc-upload-folder' });
+    const isDrawer = useBreakpointValue({base: true, sm: false}) || false;
+    const toast = useToast({duration: 2000, isClosable: true, id: 'ipc-upload-folder'});
 
-	const uploadFolder = async () => {
-		setIsLoading(true);
+    const uploadFolder = async () => {
 
-		if (!folderEvent || !folderEvent.target.files || folderEvent.target.files.length === 0) {
-			setIsLoading(false);
-			return;
-		}
 
-		const rootFolderName = getRootFolderName(folderEvent.target.files[0]);
-		const rootFolder: FolderInfo = {
-			folderName: rootFolderName,
-			folderPath: `${rootFolderName}/`,
-			subFolder: [],
-		};
-		const folderTree = new FolderTree(rootFolder, []);
-		const getAllSubDirectories = (files: FileList) => {
-			Array.prototype.forEach.call(files, (file) => {
-				folderTree.getFolderContent(file.webkitRelativePath, file.size);
-			});
-		};
-		getAllSubDirectories(folderEvent.target.files);
-		const allIpcFolders: IPCFolder[] = [];
-		let checkRoot = true;
+        if (!folderEvent || !folderEvent.target.files || folderEvent.target.files.length === 0) {
+            setIsLoading(false);
+            return;
+        }
+        setIsLoading(true);
 
-		const getAllFolders = async (folderInfo: FolderInfo) => {
-			let pathFolder = folderInfo.folderPath;
-			const checkPath = pathFolder.split('/');
+        const rootFolderName = getRootFolderName(folderEvent.target.files[0]);
+        const rootFolder: FolderInfo = {
+            folderName: rootFolderName,
+            folderPath: `${rootFolderName}/`,
+            subFolder: [],
+        };
+        const folderTree = new FolderTree(rootFolder, []);
+        const getAllSubDirectories = (Files: FileList) => {
+            Array.prototype.forEach.call(Files, (file) => {
+                folderTree.getFolderContent(file.webkitRelativePath, file.size);
+            });
+        };
+        getAllSubDirectories(folderEvent.target.files);
+        const allIpcFolders: IPCFolder[] = [];
+        const allIPCFiles: IPCFile[] = [];
+        let checkRoot = true;
 
-			checkPath.pop();
-			if (checkPath.length === 1 && checkRoot) {
-				pathFolder = '/';
-				checkRoot = false;
-			} else if (checkPath.length >= 1) {
-				pathFolder = `/${pathFolder}`;
-			}
+        const getAllFolders = async (folderInfo: FolderInfo) => {
+            let pathFolder = folderInfo.folderPath;
+            const checkPath = pathFolder.split('/');
 
-			const folder: IPCFolder = {
-				name: folderInfo.folderName,
-				createdAt: Date.now(),
-				path: pathFolder,
-				logs: [
-					{
-						action: 'Folder created',
-						date: Date.now(),
-					},
-				],
-			};
-			allIpcFolders.push(folder);
+            checkPath.pop();
+            if (checkPath.length === 1 && checkRoot) {
+                pathFolder = '/';
+                checkRoot = false;
+            } else if (checkPath.length >= 1) {
+                pathFolder = `/${pathFolder}`;
+            }
 
-			if (folderInfo.subFolder) {
-				Array.prototype.forEach.call(folderInfo.subFolder, (subFolder) => {
-					getAllFolders(subFolder);
-				});
-			}
-		};
+            const folder: IPCFolder = {
+                name: folderInfo.folderName,
+                createdAt: Date.now(),
+                path: pathFolder,
+                logs: [
+                    {
+                        action: 'Folder created',
+                        date: Date.now(),
+                    },
+                ],
+            };
+            allIpcFolders.push(folder);
 
-		const filesContent: ArrayBuffer[] = [];
+            if (folderInfo.subFolder) {
+                Array.prototype.forEach.call(folderInfo.subFolder, (subFolder) => {
+                    getAllFolders(subFolder);
+                });
+            }
+        };
 
-		const getAllFiles = async (fileInfo: FileInfo[], filesEvent: FileList) => {
-			Array.prototype.forEach.call(filesEvent, async (filesEvent_) => {
-				const fileContent = await getFileContent(filesEvent_);
-				filesContent.push(fileContent);
-			});
+        const filesContent: ArrayBuffer[] = [];
 
-			Array.prototype.forEach.call(fileInfo, async (file, index) => {
-				const cryptoKey = await crypto.subtle.generateKey(
-					{
-						name: 'AES-GCM',
-						length: 256,
-					},
-					true,
-					['encrypt', 'decrypt'],
-				);
-				const keyString = await crypto.subtle.exportKey('raw', cryptoKey);
-				const iv = crypto.getRandomValues(new Uint8Array(128));
+        const getAllFiles = async (fileInfo: FileInfo[], filesEvent: FileList) => {
+            Array.prototype.forEach.call(filesEvent, async (filesEvent_) => {
+                const fileContent = await getFileContent(filesEvent_);
+                filesContent.push(fileContent);
+            });
 
-				const filePath = `${file.filePath}/`;
-				const newFile: IPCFile = {
-					id: crypto.randomUUID(),
-					name: file.fileName,
-					hash: '',
-					size: file.fileSize,
-					createdAt: Date.now(),
-					encryptInfos: { key: '', iv: '' },
-					path: filePath,
-					permission: 'owner',
-					deletedAt: null,
-					logs: [
-						{
-							action: 'File created',
-							date: Date.now(),
-						},
-					],
-				};
+            Array.prototype.forEach.call(fileInfo, async (file, index) => {
+                const cryptoKey = await crypto.subtle.generateKey(
+                    {
+                        name: 'AES-GCM',
+                        length: 256,
+                    },
+                    true,
+                    ['encrypt', 'decrypt'],
+                );
+                const keyString = await crypto.subtle.exportKey('raw', cryptoKey);
+                const iv = crypto.getRandomValues(new Uint8Array(128));
 
-				const upload = await user.drive.upload(newFile, filesContent[index], { key: keyString, iv });
-				if (!upload.success || !upload.file)
-					toast({ title: upload.message, status: upload.success ? 'success' : 'error' });
-				else {
-					user.drive.files.push(upload.file);
+                const filePath = `${file.filePath}/`;
+                const newFile: IPCFile = {
+                    id: crypto.randomUUID(),
+                    name: file.fileName,
+                    hash: '',
+                    size: file.fileSize,
+                    createdAt: Date.now(),
+                    encryptInfos: {key: '', iv: ''},
+                    path: filePath,
+                    permission: 'owner',
+                    deletedAt: null,
+                    logs: [
+                        {
+                            action: 'File created',
+                            date: Date.now(),
+                        },
+                    ],
+                };
+                setFiles([...files, newFile]);
+                allIPCFiles.push(newFile);
 
-					await user.fullContact.files.addToContact(user.account.address, upload.file);
-				}
-			});
-		};
+                const upload = await user.drive.upload(newFile, filesContent[index], {key: keyString, iv});
+                if (!upload.success || !upload.file)
+                    toast({title: upload.message, status: upload.success ? 'success' : 'error'});
+                else {
+                    user.drive.files.push(upload.file);
 
-		await getAllFolders(folderTree.folders);
+                    await user.fullContact.files.addToContact(user.account.address, upload.file);
+                }
+            });
+        };
 
-		const createdFolder = await user.fullContact.folders.uploadFolders(allIpcFolders);
-		await getAllFiles(folderTree.files, folderEvent.target.files);
+        if (user.account) {
+            await getAllFolders(folderTree.folders);
+            const createdFolder = await user.fullContact.folders.uploadFolders(allIpcFolders);
+            await getAllFiles(folderTree.files, folderEvent.target.files);
+            Array.prototype.forEach.call(allIpcFolders, (f) => {
+                setFolders([...folders, f]);
+                console.log(folders);
+                console.log(f);
+            })
+            toast({title: createdFolder.message, status: createdFolder.success ? 'success' : 'error'});
+        } else {
+            toast({title: 'Failed to load account', status: 'error'});
+        }
 
-		toast({ title: createdFolder.message, status: createdFolder.success ? 'success' : 'error' });
 
-		setFolderEvent(undefined);
-		setIsLoading(false);
-		onClose();
-	};
+        onClose();
+        setFolderEvent(undefined);
+        setIsLoading(false);
+    };
 
-	const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
-	const { colorMode } = useColorMode();
+    const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
+    const {colorMode} = useColorMode();
 
-	return (
-		<HStack
-			spacing={isDrawer ? '24px' : '12px'}
-			p="8px 12px"
-			borderRadius="8px"
-			role="group"
-			onClick={onOpen}
-			w="100%"
-			cursor="pointer"
-			id="ipc-dashboard-upload-folder-button"
-			_hover={{
-				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
-			}}
-		>
-			<Icon
-				as={AiFillFolderAdd}
-				_groupHover={{ color: 'red.800' }}
-				w={isDrawer ? '24px' : '20px'}
-				h={isDrawer ? '24px' : '20px'}
-			/>
-			<Text
-				fontSize="16px"
-				fontWeight="400"
-				_groupHover={{
-					color: 'red.800',
-					fontWeight: '500',
-				}}
-				color={textColor}
-			>
-				Upload a folder
-			</Text>
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				title="Upload a folder"
-				CTA={
-					<Button
-						variant="primary"
-						size="lg"
-						onClick={uploadFolder}
-						isLoading={isLoading}
-						id="ipc-dashboard-upload-folder-modal-button"
-					>
-						Upload folder
-					</Button>
-				}
-			>
-				<Input
-					type="file"
-					h="100%"
-					w="100%"
-					p="10px"
-					onChange={(e: ChangeEvent<HTMLInputElement>) => setFolderEvent(e)}
-					id="ipc-dashboard-upload-folder"
-					multiple
-					// @ts-expect-error Webkitdirectory is needed for the upload of folders in the file explorer.
-					webkitdirectory={''}
-				/>
-			</Modal>
-		</HStack>
-	);
+    return (
+        <HStack
+            spacing={isDrawer ? '24px' : '12px'}
+            p="8px 12px"
+            borderRadius="8px"
+            role="group"
+            onClick={onOpen}
+            w="100%"
+            cursor="pointer"
+            id="ipc-dashboard-upload-folder-button"
+            _hover={{
+                bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
+            }}
+        >
+            <Icon
+                as={AiFillFolderAdd}
+                _groupHover={{color: 'red.800'}}
+                w={isDrawer ? '24px' : '20px'}
+                h={isDrawer ? '24px' : '20px'}
+            />
+            <Text
+                fontSize="16px"
+                fontWeight="400"
+                _groupHover={{
+                    color: 'red.800',
+                    fontWeight: '500',
+                }}
+                color={textColor}
+            >
+                Upload a folder
+            </Text>
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                title="Upload a folder"
+                CTA={
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={uploadFolder}
+                        isLoading={isLoading}
+                        id="ipc-dashboard-upload-folder-modal-button"
+                    >
+                        Upload folder
+                    </Button>
+                }
+            >
+                <Input
+                    type="file"
+                    h="100%"
+                    w="100%"
+                    p="10px"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setFolderEvent(e)}
+                    id="ipc-dashboard-upload-folder"
+                    multiple
+                    // @ts-expect-error Webkitdirectory is needed for the upload of folders in the file explorer.
+                    webkitdirectory={''}
+                />
+            </Modal>
+        </HStack>
+    );
 };
 
 export default UploadFolder;
