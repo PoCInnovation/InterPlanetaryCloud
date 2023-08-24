@@ -2716,7 +2716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/app@npm:^14.0.0":
+"@octokit/app@npm:14, @octokit/app@npm:^14.0.0":
   version: 14.0.0
   resolution: "@octokit/app@npm:14.0.0"
   dependencies:
@@ -7468,8 +7468,10 @@ __metadata:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
     "@next/eslint-plugin-next": ^12.3.4
+    "@octokit/app": 14
     "@octokit/types": ^11.1.0
     "@octokit/webhooks": ^12.0.3
+    "@octokit/webhooks-methods": ^4.0.0
     "@types/crypto-js": ^4.1.1
     "@types/git-clone": ^0.2.0
     "@types/node": ^16.18.31

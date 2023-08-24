@@ -1,7 +1,6 @@
 {
   "name": "ipc-ts",
   "version": "0.1.0",
-  "type": "module",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.22.5",
@@ -12,8 +11,10 @@
     "@chakra-ui/theme-tools": "^2.0.18",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@octokit/app": "14",
     "@octokit/types": "^11.1.0",
     "@octokit/webhooks": "^12.0.3",
+    "@octokit/webhooks-methods": "^4.0.0",
     "aleph-sdk-ts": "^3.2.0",
     "axios": "^1.4.0",
     "boring-avatars": "^1.10.1",
@@ -41,7 +42,8 @@
     "cypress:run": "cypress run",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "server": "node ./pages/api/program/push.js"
+    "server": "tsc ./pages/api/program/push.ts && node ./pages/api/program/push.js",
+    "webhook": "npx smee -u https://smee.io/JaIOjK9e1nWWDQ47 -t http://localhost:3030/api/webhook"
   },
   "browserslist": {
     "production": [
