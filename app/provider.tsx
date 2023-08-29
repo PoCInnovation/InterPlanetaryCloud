@@ -10,7 +10,6 @@ import ConfigContext from "../src/contexts/config";
 import {IPCConfig, IPCContact, IPCFile, IPCFolder, IPCProgram} from "../src/types/types";
 import DriveContext from "../src/contexts/drive";
 import Auth from "../src/lib/auth";
-import '../src/theme/index.css'
 
 const Provider = ({children}: { children: React.ReactNode }) => {
     const [auth, setAuth] = useState<Auth>(new Auth());

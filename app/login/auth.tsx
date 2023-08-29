@@ -1,7 +1,6 @@
 'use client'
 
-import {Text, Textarea, useColorModeValue, useToast, VStack} from '@chakra-ui/react';
-import Link from 'next/link';
+import {Text, useColorModeValue, useToast, VStack} from '@chakra-ui/react';
 import {useRouter} from 'next/navigation';
 import {useState} from 'react';
 
@@ -15,7 +14,6 @@ import Button from 'components/Button';
 import {ResponseType} from 'types/types';
 
 import {textColorMode} from 'config/colorMode';
-import colors from 'theme/foundations/colors';
 
 
 const AuthProvider = () => {
@@ -59,12 +57,6 @@ const AuthProvider = () => {
             <VStack w="100%" spacing="64px">
                 <VStack w="100%" spacing="32px">
                     <VStack spacing="16px" w="100%">
-                        <Textarea
-                            _focus={{boxShadow: `0px 0px 0px 2px ${colors.red[300]}`}}
-                            cursor="text"
-                            onChange={(e) => setMnemonics(e.target.value)}
-                            id="ipc-login-text-area"
-                        />
                         <Button
                             variant="primary"
                             size="lg"
@@ -97,22 +89,7 @@ const AuthProvider = () => {
                         </Text>
                     </VStack>
                 </VStack>
-                <VStack w="100%">
-                    <Text size="lg" color={textColor}>
-                        You don't have an account?
-                    </Text>
-                    <Link href="/signup">
-                        <Button
-                            variant="secondary"
-                            size="lg"
-                            w="100%"
-                            onClick={() => router.push('/signup')}
-                            id="ipc-login-signup-button"
-                        >
-                            Create an account
-                        </Button>
-                    </Link>
-                </VStack>
+
             </VStack>
         </AuthPage>
     );
