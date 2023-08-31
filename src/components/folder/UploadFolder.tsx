@@ -137,6 +137,7 @@ const UploadFolder = (): JSX.Element => {
                 if (!upload.success || !upload.file)
                     toast({title: upload.message, status: upload.success ? 'success' : 'error'});
                 else {
+                    setFiles([...files, upload.file]);
                     user.drive.files.push(upload.file);
 
                     await user.fullContact.files.addToContact(user.account.address, upload.file);
@@ -148,17 +149,11 @@ const UploadFolder = (): JSX.Element => {
             await getAllFolders(folderTree.folders);
             const createdFolder = await user.fullContact.folders.uploadFolders(allIpcFolders);
             await getAllFiles(folderTree.files, folderEvent.target.files);
-            Array.prototype.forEach.call(allIpcFolders, (f) => {
-                setFolders([...folders, f]);
-                console.log(folders);
-                console.log(f);
-            })
+            setFolders([...folders, ...allIpcFolders])
             toast({title: createdFolder.message, status: createdFolder.success ? 'success' : 'error'});
         } else {
             toast({title: 'Failed to load account', status: 'error'});
         }
-
-
         onClose();
         setFolderEvent(undefined);
         setIsLoading(false);
