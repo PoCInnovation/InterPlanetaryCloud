@@ -18,6 +18,8 @@ import AuthContext from 'contexts/auth';
 import ConfigContext from 'contexts/config';
 import DriveContext from 'contexts/drive';
 import UserContext from 'contexts/user';
+import {useRouter} from "next/router";
+import Navigation from "../src/components/navigation/Navigation";
 
 const App = ({
                  Component,
@@ -37,6 +39,7 @@ const App = ({
     const [contacts, setContacts] = useState<IPCContact[]>([]);
     const [path, setPath] = useState('/');
     const toast = useToast();
+    const route = useRouter();
 
     useEffect(() => {
         if (!auth && !error) {
@@ -102,7 +105,13 @@ const App = ({
                                 }}
                             >
                                 <SessionProvider session={session}>
-                                    <Component {...pageProps} />
+                                    {route.pathname.startsWith('/drive') ? (
+                                        <Navigation>
+                                            <Component {...pageProps} />
+                                        </Navigation>
+                                    ) : (
+                                        <Component {...pageProps} />
+                                    )}
                                 </SessionProvider>
                             </DriveContext.Provider>
                         </ConfigContext.Provider>

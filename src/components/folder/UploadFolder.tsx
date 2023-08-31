@@ -9,7 +9,7 @@ import {
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import {AiFillFolderAdd} from 'react-icons/ai';
 import {useUserContext} from 'contexts/user';
 
@@ -40,7 +40,7 @@ const UploadFolder = (): JSX.Element => {
         }
         setIsLoading(true);
 
-        const rootFolderName = getRootFolderName(folderEvent.target.files[0]);
+        const rootFolderName = getRootFolderName(folderEvent.target?.files[0]);
         const rootFolder: FolderInfo = {
             folderName: rootFolderName,
             folderPath: `${rootFolderName}/`,
@@ -92,10 +92,13 @@ const UploadFolder = (): JSX.Element => {
         const filesContent: ArrayBuffer[] = [];
 
         const getAllFiles = async (fileInfo: FileInfo[], filesEvent: FileList) => {
-            Array.prototype.forEach.call(filesEvent, async (filesEvent_) => {
+
+            for (const filesEvent_ of filesEvent) {
+                // eslint-disable-next-line no-await-in-loop
                 const fileContent = await getFileContent(filesEvent_);
                 filesContent.push(fileContent);
-            });
+            }
+
 
             Array.prototype.forEach.call(fileInfo, async (file, index) => {
                 const cryptoKey = await crypto.subtle.generateKey(
@@ -161,8 +164,15 @@ const UploadFolder = (): JSX.Element => {
         setIsLoading(false);
     };
 
+    useEffect(() => {
+        if (folderEvent) {
+            uploadFolder();
+        }
+    }, [folderEvent]);
+
     const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
     const {colorMode} = useColorMode();
+
 
     return (
         <HStack
