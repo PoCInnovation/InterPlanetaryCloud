@@ -32,14 +32,8 @@ const repo_name = "test-bschocolatine";
 
 // This adds an event handler that your code will call later. When this event handler is called, it will log the event to the console. Then, it will use GitHub's REST API to add a comment to the pull request that triggered the event.
 async function handlePush({octokit, payload}) {
-  console.log(`Received a push event for #${payload.push.number}`);
-
   try {
-    // await octokit.request(`POST /repos/${owner_repo}/${repo_name}/hooks/${appId}/tests`, {
-    //   owner: owner_repo,
-    //   repo: repo_name,
-    //   hook_id: appId
-    // })
+    console.log("Received a push event")
   } catch (error) {
     if (error.response) {
       console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)

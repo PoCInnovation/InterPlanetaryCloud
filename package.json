@@ -11,7 +11,7 @@
     "@chakra-ui/theme-tools": "^2.0.18",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@octokit/app": "14",
+    "@octokit/app": "^14.0.0",
     "@octokit/types": "^11.1.0",
     "@octokit/webhooks": "^12.0.3",
     "@octokit/webhooks-methods": "^4.0.0",
