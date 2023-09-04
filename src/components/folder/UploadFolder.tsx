@@ -30,6 +30,7 @@ const UploadFolder = (): JSX.Element => {
 
     const isDrawer = useBreakpointValue({base: true, sm: false}) || false;
     const toast = useToast({duration: 2000, isClosable: true, id: 'ipc-upload-folder'});
+    const [isDraged, setDrager] = useState(false)
 
     const uploadFolder = async () => {
 
@@ -168,7 +169,6 @@ const UploadFolder = (): JSX.Element => {
     const textColor = useColorModeValue(textColorMode.light, textColorMode.dark);
     const {colorMode} = useColorMode();
 
-
     return (
         <HStack
             spacing={isDrawer ? '24px' : '12px'}
@@ -226,6 +226,22 @@ const UploadFolder = (): JSX.Element => {
                     multiple
                     // @ts-expect-error Webkitdirectory is needed for the upload of folders in the file explorer.
                     webkitdirectory={''}
+                    onDragOver={() => setDrager(true)}
+                    onDragLeave={() => setDrager(false)}
+                    required autocomplete={"off"}
+                    style={{
+                        ...(!isDraged ? {} : {
+                                border: '2px dashed #ccc',
+                                borderRadius: '8px',
+                                textAlign: 'center',
+                                backgroundColor: 'lightgray',
+                                color: '#333',
+                                transition: 'border-color 0.3s ease, background-color 0.3s ease',
+                                cursor: 'pointer',
+                                opacity: 1
+                            }),
+                    }}
+                    title={isDraged ? "Upload a folder" : "Drag your folder here"}
                 />
             </Modal>
         </HStack>
