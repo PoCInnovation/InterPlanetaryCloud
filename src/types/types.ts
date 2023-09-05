@@ -98,3 +98,15 @@ export type GitHubRepository = {
 	};
 	html_url: string;
 };
+
+export type FolderInfo = {
+	folderName: string;
+	folderPath: string;
+	subFolder: FolderInfo[];
+};
+
+export type FileInfo = {
+	fileName: string;
+	filePath: string;
+	fileSize: number;
+};

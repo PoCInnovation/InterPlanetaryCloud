@@ -12,3 +12,10 @@ export const getFileContent = async (file: File | never[]): Promise<ArrayBuffer>
 		return new ArrayBuffer(0);
 	}
 };
+
+export const getRootFolderName = (file: File): string => {
+	const folderName = file.webkitRelativePath.split('/')[0];
+
+	if (folderName && folderName.length > 0) return folderName;
+	return '';
+};

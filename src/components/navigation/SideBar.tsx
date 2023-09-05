@@ -19,6 +19,7 @@ import ProfileBadge from 'components/profile/ProfileBadge';
 import { bgColorMode } from 'config/colorMode';
 import { NavbarType } from 'types/navbar';
 import NavbarItem from './NavbarItem';
+import UploadFolder from '../folder/UploadFolder';
 
 const SideBar = (): JSX.Element => {
 	const { user } = useUserContext();
@@ -101,6 +102,7 @@ const SideBar = (): JSX.Element => {
 							p="8px"
 							bg={colorMode === 'light' ? 'white' : 'gray.700'}
 						>
+							<UploadFolder />
 							<CreateFolder />
 							<UploadFile />
 							<DeployProgram />
