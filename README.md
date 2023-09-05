@@ -64,9 +64,10 @@ You are now ready to access to your decentralized cloud at [`http://localhost:30
 </details>
 
 <details>
-  <summary>Create folders to organize your drive</summary>
+  <summary>Create and upload folders to organize your drive</summary>
     <ul>
         <li>Files are great, but virtual folders are also available on IPC to let you organize your files the way you want 🤩</li>
+        <li>A drag and drop is also available
     </ul>
 </details>
 
