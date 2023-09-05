@@ -15,8 +15,7 @@ type DriveCardsProps = {
     contacts?: IPCContact[];
 };
 
-const DriveCards = ({files, folders, programs, contacts}: DriveCardsProps): JSX.Element => {
-    return (
+const DriveCards = ({files, folders, programs, contacts}: DriveCardsProps): JSX.Element => (
         <VStack w="100%">
             <PathCard/>
             {folders?.map((folder) => (
@@ -32,7 +31,6 @@ const DriveCards = ({files, folders, programs, contacts}: DriveCardsProps): JSX.
                 <ContactCard contact={contact} key={contact.address}/>
             ))}
         </VStack>
-    );
-}
+    )
 
 export default DriveCards;

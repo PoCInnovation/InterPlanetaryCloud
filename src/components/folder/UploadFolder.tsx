@@ -93,10 +93,11 @@ const UploadFolder = (): JSX.Element => {
         const filesContent: ArrayBuffer[] = [];
 
         const getAllFiles = async (fileInfo: FileInfo[], filesEvent: FileList) => {
-
-            for (const filesEvent_ of filesEvent) {
+            
+            // eslint-disable-next-line no-await-in-loop, no-restricted-syntax
+            for (const e of filesEvent) {
                 // eslint-disable-next-line no-await-in-loop
-                const fileContent = await getFileContent(filesEvent_);
+                const fileContent = await getFileContent(e);
                 filesContent.push(fileContent);
             }
 
