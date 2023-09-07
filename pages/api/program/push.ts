@@ -56,7 +56,6 @@ const handlePush = async ({ octokit, payload }) => {
     // Pipe the ReadableStream to the write stream using pipeline
     await pipeline(response.data, writeStream);
     console.log(`Repository ZIP archive downloaded and saved as ${payload.repository.name}.zip`);
-    sendPushNotification(`./${payload.repository.name}.zip`);
   } catch (error) {
     if (error.response) {
       console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
@@ -101,28 +100,5 @@ const server = http.createServer(async (req, res) => {
   res.writeHead(404);
   res.end();
 })
-
-
-const wsServer = new WebSocketServer({ server });
-
-// server.on('upgrade', (request, socket, head) => {
-//   wsServer.handleUpgrade(request, socket, head, (ws: WebSocket) => {
-//     wsServer.emit('connection', ws, request);
-//   });
-// });
-
-
-const sendPushNotification = (filename:string) => {
-  console.log("wsserver", wsServer.clients);
-  wsServer.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(filename);
-      console.log("sent\n");
-    }
-  });
-}
-wsServer.on('connection', function(connection) {
-  console.log("Connected\n")
-});
 
 server.listen(3030);
