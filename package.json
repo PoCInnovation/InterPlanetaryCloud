@@ -12,6 +12,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@octokit/app": "^14.0.0",
+    "@octokit/request": "^8.1.1",
     "@octokit/types": "^11.1.0",
     "@octokit/webhooks": "^12.0.3",
     "@octokit/webhooks-methods": "^4.0.0",
@@ -31,7 +32,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
+    "stream": "^0.0.2",
     "typescript": "^5.1.3",
+    "util": "^0.12.5",
+    "ws": "^8.14.0",
     "zod": "^3.21.4"
   },
   "scripts": {

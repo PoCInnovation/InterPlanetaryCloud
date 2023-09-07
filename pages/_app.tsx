@@ -37,7 +37,6 @@ const App = ({
 	const [contacts, setContacts] = useState<IPCContact[]>([]);
 	const [path, setPath] = useState('/');
 	const toast = useToast();
-
 	useEffect(() => {
 		if (!auth && !error) {
 			try {
