@@ -72,7 +72,7 @@ const UploadFile = (): JSX.Element => {
                         action: 'File created',
                         date: Date.now(),
                     },
-                ],
+                ]
             };
 
             if (user.account) {
