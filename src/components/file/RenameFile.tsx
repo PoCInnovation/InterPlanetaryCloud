@@ -1,15 +1,15 @@
 import {
-	FormControl,
-	FormLabel,
-	HStack,
-	Icon,
-	Input,
-	Text,
-	useBreakpointValue,
-	useColorMode,
-	useColorModeValue,
-	useDisclosure,
-	useToast,
+    FormControl,
+    FormLabel,
+    HStack,
+    Icon,
+    Input,
+    Text,
+    useBreakpointValue,
+    useColorMode,
+    useColorModeValue,
+    useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
 
 import { ChangeEvent, useState } from 'react';
@@ -39,6 +39,7 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const toast = useToast({ duration: 2000, isClosable: true });
+
 
 	const renameFile = async () => {
 		setIsLoading(true);
@@ -72,13 +73,13 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 	return (
 		<HStack
 			spacing={isDrawer ? '24px' : '12px'}
-			p="8px 12px"
-			borderRadius="8px"
-			role="group"
+			p='8px 12px'
+			borderRadius='8px'
+			role='group'
 			onClick={onOpen}
-			w="100%"
-			cursor="pointer"
-			id="ipc-dashboard-rename-button"
+			w='100%'
+			cursor='pointer'
+			id='ipc-dashboard-rename-button'
 			_hover={{
 				bg: colorMode === 'light' ? 'blue.50' : 'gray.750',
 			}}
@@ -90,8 +91,8 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 				h={isDrawer ? '24px' : '20px'}
 			/>
 			<Text
-				fontSize="16px"
-				fontWeight="400"
+				fontSize='16px'
+				fontWeight='400'
 				_groupHover={{
 					color: 'red.800',
 					fontWeight: '500',
@@ -103,14 +104,14 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				title="Rename the file"
+				title='Rename the file'
 				CTA={
 					<Button
-						variant="primary"
-						size="lg"
+						variant='primary'
+						size='lg'
 						onClick={renameFile}
 						isLoading={isLoading}
-						id="ipc-dashboard-update-filename-button"
+						id='ipc-dashboard-update-filename-button'
 					>
 						OK
 					</Button>
@@ -119,13 +120,13 @@ const RenameFile = ({ file, concernedFiles, onClosePopover }: RenameFileProps): 
 				<FormControl>
 					<FormLabel color={textColor}>New file name</FormLabel>
 					<Input
-						type="text"
-						w="100%"
-						p="10px"
-						my="4px"
+						type='text'
+						w='100%'
+						p='10px'
+						my='4px'
 						placeholder={file.name}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-						id="ipc-dashboard-input-update-filename"
+						id='ipc-dashboard-input-update-filename'
 					/>
 				</FormControl>
 			</Modal>
