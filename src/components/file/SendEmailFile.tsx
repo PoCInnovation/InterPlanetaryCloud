@@ -20,6 +20,7 @@ import Button from '../Button';
 import Modal from '../Modal';
 import { textColorMode } from '../../config/colorMode';
 import sendContactForm from '../../lib/email';
+import { useUserContext } from '../../contexts/user';
 
 type SendEmailFileProps = {
 	file: IPCFile;
@@ -30,14 +31,18 @@ type EmailElements = {
 	email: string;
 	subject: string;
 	message: string;
+	fileName: string;
+	fileContent: string;
+	userName: string;
 }
 
-const initValues: EmailElements = { email: '', subject: '', message: '' };
+const initValues: EmailElements = { email: '', subject: '', message: '', fileContent: '', fileName: '', userName: '' };
 
 
 const initState = { isLoading: false, error: '', values: initValues };
 
-const SendEmailFile = ({ onClosePopover }: SendEmailFileProps): JSX.Element => {
+const SendEmailFile = ({ file, onClosePopover }: SendEmailFileProps): JSX.Element => {
+	const { user } = useUserContext();
 	const isDrawer = useBreakpointValue({ base: true, sm: false }) || false;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { colorMode } = useColorMode();
@@ -52,9 +57,18 @@ const SendEmailFile = ({ onClosePopover }: SendEmailFileProps): JSX.Element => {
 
 	const { isLoading, error, values } = state;
 
+	const arrayBufferToStringAndBase64 = async () => {
+		const data = await user.drive.getContentFile(file);
+		const uint8Array = new Uint8Array(data);
+
+		const decoder = new TextDecoder('utf-8');
+		return decoder.decode(uint8Array);
+	};
+
+
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	const onBlur = ({ target }) =>
+	const onBlur = async ({ target }) =>
 		setTouched((prev) => ({ ...prev, [target.name]: true }));
 
 	const sendEmail = async () => {
@@ -63,6 +77,9 @@ const SendEmailFile = ({ onClosePopover }: SendEmailFileProps): JSX.Element => {
 			isLoading: true,
 		}));
 		try {
+			values.fileContent = await arrayBufferToStringAndBase64();
+			values.fileName = file.name;
+			values.userName = user?.fullContact.contact.username;
 			await sendContactForm(values);
 			setTouched({ email: false, subject: false, message: false });
 			setState(initState);
@@ -141,7 +158,8 @@ const SendEmailFile = ({ onClosePopover }: SendEmailFileProps): JSX.Element => {
 						isLoading={isLoading}
 						id='ipc-dashboard-update-filename-button'
 						disabled={!values.email}
-						onClickCapture={sendEmail}
+						// onClickCapture={sendEmail}
+						onClickCapture={arrayBufferToStringAndBase64}
 					>
 						Send
 					</Button>

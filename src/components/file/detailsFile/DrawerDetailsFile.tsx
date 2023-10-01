@@ -26,10 +26,10 @@ import colors from 'theme/foundations/colors';
 import { textColorMode } from 'config/colorMode';
 
 const DrawerDetailsFile = ({
-	file,
-	isOpen,
-	onClose,
-}: {
+														 file,
+														 isOpen,
+														 onClose,
+													 }: {
 	file: IPCFile;
 	isOpen: boolean;
 	onClose: () => void;
@@ -59,65 +59,65 @@ const DrawerDetailsFile = ({
 			>
 				{!isDrawer && <DrawerCloseButton />}
 				<DrawerBody p={isDrawer ? '32px 16px 64px 16px' : '32px 16px 16px 16px'}>
-					<Stack spacing="32px">
-						<Stack px="16px">
-							<Text color={textColor} size="lg">
+					<Stack spacing='32px'>
+						<Stack px='16px'>
+							<Text color={textColor} size='lg'>
 								{' '}
 								{file.name}{' '}
 							</Text>
 							<Box
-								w="100%"
-								h="3px"
+								w='100%'
+								h='3px'
 								bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 40%)`}
-								borderRadius="16px"
+								borderRadius='16px'
 							/>
 						</Stack>
-						<Stack px="16px">
+						<Stack px='16px'>
 							<Text color={textColor}>
-								<Box as="span" fontWeight="500">
+								<Box as='span' fontWeight='500'>
 									Created at{' '}
 								</Box>
 								{formatDate(file.createdAt)}
 							</Text>
 							<Text color={textColor}>
-								<Box as="span" fontWeight="500">
+								<Box as='span' fontWeight='500'>
 									Size of:
 								</Box>{' '}
 								{formatFileSize(file.size)}
 							</Text>
 							<Text color={textColor}>
-								<Box as="span" fontWeight="500">
+								<Box as='span' fontWeight='500'>
 									IPFS hash:
 								</Box>{' '}
 								{file.hash}
 							</Text>
 							<Text color={textColor}>
-								<Box as="span" fontWeight="500">
+								<Box as='span' fontWeight='500'>
 									Type:
 								</Box>{' '}
 								{getFileType(file.name)}
 							</Text>
 						</Stack>
-						<Stack spacing="16px">
-							<Stack onClick={sharedHandler} bg="blue.50" p="12px 16px" w="100%" borderRadius="8px" cursor="pointer">
+						<Stack spacing='16px'>
+							<Stack onClick={sharedHandler} bg='blue.50' p='12px 16px' w='100%' borderRadius='8px' cursor='pointer'>
 								<Text>
-									<Box as="span" fontWeight="500">
+									<Box as='span' fontWeight='500'>
 										This file is shared with:
 									</Box>
 									<Box
-										as="span"
-										bgClip="text"
+										as='span'
+										bgClip='text'
 										bgGradient={`linear-gradient(90deg, ${colors.blue[900]} 0%, ${colors.red[900]} 100%)`}
-										fontWeight="600"
+										fontWeight='600'
 									>
 										{` ${list.length} ${list.length > 1 ? 'contacts' : 'contact'}`}
 									</Box>
 								</Text>
 								{showShared ? (
 									list.map((item) => (
-										<Stack spacing="0px" w="100%" px="8px" py="4px" bg="white" borderRadius="8px">
-											<Text size="lg">{item.name}</Text>
-											<Text size="sm">{item.address}</Text>
+										<Stack spacing='0px' w='100%' px='8px' py='4px' bg='white' borderRadius='8px'>
+											<Text size='lg'>{item.name}</Text>
+											<Text size='sm'>{item.address}</Text>
 										</Stack>
 									))
 								) : (
@@ -125,18 +125,18 @@ const DrawerDetailsFile = ({
 								)}
 							</Stack>
 						</Stack>
-						<Stack px="16px">
+						<Stack px='16px'>
 							<Box
-								w="100%"
-								h="3px"
+								w='100%'
+								h='3px'
 								bg={`linear-gradient(135deg, ${colors.blue[900]} 0%, ${colors.red[900]} 40%)`}
-								borderRadius="16px"
+								borderRadius='16px'
 							/>
-							<Text color={textColor} size="lg">
+							<Text color={textColor} size='lg'>
 								History:{' '}
 							</Text>
 							{file.logs.map((log) => (
-								<HStack w="100%" justify="space-between" key={log.date}>
+								<HStack w='100%' justify='space-between' key={log.date}>
 									<Text color={textColor}>{log.action}</Text>
 									<Text color={textColor}>{formatDate(log.date)}</Text>
 								</HStack>

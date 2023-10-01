@@ -186,6 +186,35 @@ class Drive {
 			return { success: false, message: 'Failed to download the file' };
 		}
 	}
+
+	public async getContentFile(file: IPCFile) {
+		try {
+			const storeFile = await store.Get({ fileHash: file.hash });
+
+			const decryptedKey = await this.account.decrypt(Buffer.from(file.encryptInfos.key, 'hex'));
+			const decryptedIv = await this.account.decrypt(Buffer.from(file.encryptInfos.iv, 'hex'));
+
+			return await crypto.subtle.decrypt(
+				{
+					name: 'AES-GCM',
+					iv: decryptedIv,
+				},
+				await crypto.subtle.importKey(
+					'raw',
+					decryptedKey,
+					{
+						name: 'AES-GCM',
+						length: 256,
+					},
+					true,
+					['encrypt', 'decrypt'],
+				),
+				Buffer.from(storeFile),
+			);
+		} catch (err) {
+			throw new Error('Couldn\'t get file content');
+		}
+	}
 }
 
 export default Drive;
