@@ -6,13 +6,14 @@ import fileDownload from 'js-file-download';
 import type { AggregateContentType, AggregateType, IPCProgram, ResponseType } from 'types/types';
 
 import { ALEPH_CHANNEL } from 'config/constants';
+import { ETHLedgerAccount } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 
 import Contact from '../contact';
 
 class Computing {
 	public programs: IPCProgram[];
 
-	constructor(private readonly account: accounts.ethereum.ETHAccount, private contact: Contact) {
+	constructor(private readonly account: accounts.ethereum.ETHAccount | ETHLedgerAccount, private contact: Contact) {
 		this.programs = [];
 	}
 

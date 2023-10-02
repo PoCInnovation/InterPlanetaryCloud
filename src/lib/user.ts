@@ -4,11 +4,12 @@ import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import Drive from 'lib/drive';
 
 import { AggregateType, IPCConfig, IPCContact } from 'types/types';
+import { ETHLedgerAccount } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 import Computing from './contact/contactClasses/programContact';
 import FullContact from './contact/fullContact';
 
 class User {
-	public account: accounts.ethereum.ETHAccount;
+	public account: accounts.ethereum.ETHAccount | ETHLedgerAccount;
 
 	public drive: Drive;
 
@@ -18,7 +19,7 @@ class User {
 
 	public config: IPCConfig;
 
-	constructor(importedAccount: accounts.ethereum.ETHAccount, importedConfig: IPCConfig) {
+	constructor(importedAccount: accounts.ethereum.ETHAccount | ETHLedgerAccount, importedConfig: IPCConfig) {
 		this.account = importedAccount;
 		this.config = importedConfig;
 		this.drive = new Drive(this.account);

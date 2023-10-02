@@ -1,6 +1,6 @@
 import { aggregate, post } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
-
+import { ETHLedgerAccount } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 import type { AggregateType, IPCFile, ResponseType } from 'types/types';
 
 import Contact from '../contact';
@@ -71,20 +71,27 @@ class ContactFile {
 
 					if (file && this.contact.account) {
 						file.hash = newFile.hash;
-						file.encryptInfos = {
-							key: (
-								await this.contact.account.encrypt(
-									await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
-									contact.publicKey,
-								)
-							).toString('hex'),
-							iv: (
-								await this.contact.account.encrypt(
-									await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
-									contact.publicKey,
-								)
-							).toString('hex'),
-						};
+						if (this.contact.account instanceof ETHLedgerAccount) {
+							file.encryptInfos = {
+								key: Buffer.from(newFile.encryptInfos.key, 'hex').toString('hex'),
+								iv: Buffer.from(newFile.encryptInfos.iv, 'hex').toString('hex'),
+							};
+						} else {
+							file.encryptInfos = {
+								key: (
+									await this.contact.account.encrypt(
+										await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
+										contact.publicKey,
+									)
+								).toString('hex'),
+								iv: (
+									await this.contact.account.encrypt(
+										await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
+										contact.publicKey,
+									)
+								).toString('hex'),
+							};
+						}
 						fileFound = true;
 						await this.contact.publishAggregate();
 					}
@@ -101,20 +108,29 @@ class ContactFile {
 				// 	await this.account.encrypt(await this.account.decrypt(Buffer.from(newFile.encryptKey, 'hex')))
 				// ).toString('hex');
 
-				const encryptInfos = {
-					key: (
-						await this.contact.account.encrypt(
-							await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
-							owner,
-						)
-					).toString('hex'),
-					iv: (
-						await this.contact.account.encrypt(
-							await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
-							owner,
-						)
-					).toString('hex'),
-				};
+				let encryptInfos;
+
+				if (this.contact.account instanceof ETHLedgerAccount) {
+					encryptInfos = {
+						key: (Buffer.from(newFile.encryptInfos.key, 'hex')).toString('hex'),
+						iv: (Buffer.from(newFile.encryptInfos.iv, 'hex')).toString('hex'),
+					};
+				} else {
+					encryptInfos = {
+						key: (
+							await this.contact.account.encrypt(
+								await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.key, 'hex')),
+								owner,
+							)
+						).toString('hex'),
+						iv: (
+							await this.contact.account.encrypt(
+								await this.contact.account.decrypt(Buffer.from(newFile.encryptInfos.iv, 'hex')),
+								owner,
+							)
+						).toString('hex'),
+					};
+				}
 				await post.Publish({
 					account: this.contact.account,
 					postType: 'InterPlanetaryCloud',
@@ -233,37 +249,61 @@ class ContactFile {
 				if (this.contact.contacts[index].files.find((file) => file.id === mainFile.id)) {
 					return { success: false, message: 'The file is already shared' };
 				}
-				const newFile: IPCFile = {
-					...mainFile,
-					logs: [
-						...mainFile.logs,
-						{
-							action: `Shared file with ${this.contact.contacts[index].name}`,
-							date: Date.now(),
-						},
-					],
-					// encryptKey: (
-					// 	await this.account.encrypt(
-					// 		await this.account.decrypt(Buffer.from(mainFile.encryptKey, 'hex')),
-					// 		this.contact.contacts[index].publicKey,
-					// 	)
-					// ).toString('hex'),
-					encryptInfos: {
-						key: (
-							await this.contact.account.encrypt(
-								await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.key, 'hex')),
-								this.contact.contacts[index].publicKey,
-							)
-						).toString('hex'),
-						iv: (
-							await this.contact.account.encrypt(
-								await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.iv, 'hex')),
-								this.contact.contacts[index].publicKey,
-							)
-						).toString('hex'),
-					},
-				};
+				let newFile: IPCFile;
 
+				if (this.contact.account instanceof ETHLedgerAccount) {
+					newFile = {
+						...mainFile,
+						logs: [
+							...mainFile.logs,
+							{
+								action: `Shared file with ${this.contact.contacts[index].name}`,
+								date: Date.now(),
+							},
+						],
+						// encryptKey: (
+						// 	await this.account.encrypt(
+						// 		await this.account.decrypt(Buffer.from(mainFile.encryptKey, 'hex')),
+						// 		this.contact.contacts[index].publicKey,
+						// 	)
+						// ).toString('hex'),
+						encryptInfos: {
+							key: (Buffer.from(mainFile.encryptInfos.key, 'hex')).toString('hex'),
+							iv: (Buffer.from(mainFile.encryptInfos.iv, 'hex')).toString('hex'),
+						},
+					};
+				} else {
+					newFile = {
+						...mainFile,
+						logs: [
+							...mainFile.logs,
+							{
+								action: `Shared file with ${this.contact.contacts[index].name}`,
+								date: Date.now(),
+							},
+						],
+						// encryptKey: (
+						// 	await this.account.encrypt(
+						// 		await this.account.decrypt(Buffer.from(mainFile.encryptKey, 'hex')),
+						// 		this.contact.contacts[index].publicKey,
+						// 	)
+						// ).toString('hex'),
+						encryptInfos: {
+							key: (
+								await this.contact.account.encrypt(
+									await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.key, 'hex')),
+									this.contact.contacts[index].publicKey,
+								)
+							).toString('hex'),
+							iv: (
+								await this.contact.account.encrypt(
+									await this.contact.account.decrypt(Buffer.from(mainFile.encryptInfos.iv, 'hex')),
+									this.contact.contacts[index].publicKey,
+								)
+							).toString('hex'),
+						},
+					};
+				}
 				this.contact.contacts[index].files.push(newFile);
 				this.contact.publishAggregate();
 				return { success: true, message: 'File shared with the contact' };

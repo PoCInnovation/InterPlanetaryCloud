@@ -20,6 +20,7 @@ import Card from 'components/cards/Card';
 import { useUserContext } from 'contexts/user';
 
 import { textColorMode } from 'config/colorMode';
+import { accounts } from 'aleph-sdk-ts';
 
 import colors from 'theme/foundations/colors';
 
@@ -126,14 +127,14 @@ const AccountCard = (): JSX.Element => {
 										<Box as="span" fontWeight="500">
 											My public key:
 										</Box>{' '}
-										{user.account.publicKey}
+										{user.account instanceof accounts.ethereum.ETHAccount && user.account.publicKey}
 									</Text>
 									<Icon
 										as={BsClipboard}
 										w="16px"
 										h="16px"
 										cursor="pointer"
-										onClick={() => navigator.clipboard.writeText(user.account.publicKey || '')}
+										onClick={() => { if (user.account instanceof accounts.ethereum.ETHAccount) { navigator.clipboard.writeText(user.account.publicKey || '') }}}
 									/>
 								</HStack>
 							</VStack>

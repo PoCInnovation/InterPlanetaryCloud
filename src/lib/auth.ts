@@ -1,4 +1,5 @@
 import { accounts } from 'aleph-sdk-ts';
+import { ETHLedgerAccount, GetAccountFromLedger } from 'aleph-sdk-ts/dist/accounts/providers/Ledger/ethereum';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
@@ -37,7 +38,7 @@ class Auth {
 		localStorage.clear();
 	}
 
-	private async createAggregate(account: accounts.ethereum.ETHAccount): Promise<void> {
+	private async createAggregate(account: accounts.ethereum.ETHAccount | ETHLedgerAccount): Promise<void> {
 		try {
 			await aggregate.Get<AggregateType>({
 				address: account.address,
@@ -55,7 +56,7 @@ class Auth {
 						{
 							name: 'Owner (Me)',
 							address: account.address,
-							publicKey: account.publicKey,
+							publicKey: (account instanceof accounts.ethereum.ETHAccount) ? account?.publicKey : "",
 							files: [],
 							folders: [],
 							config: this.defaultConfig,
@@ -100,6 +101,20 @@ class Auth {
 	public async loginWithProvider(importedConfig: IPCConfig): Promise<AuthReturnType> {
 		try {
 			const account = await accounts.ethereum.GetAccountFromProvider(window.ethereum);
+			const user = new User(account, importedConfig);
+
+			await this.createAggregate(account);
+
+			return { user, message: 'You have been logged in successfully.' };
+		} catch (err) {
+			console.error(err);
+			return { user: undefined, message: 'An error occurred while logging to your account.' };
+		}
+	}
+
+	public async loginWithLedger(importedConfig: IPCConfig): Promise<AuthReturnType> {
+		try {
+			const account = await GetAccountFromLedger();
 			const user = new User(account, importedConfig);
 
 			await this.createAggregate(account);
